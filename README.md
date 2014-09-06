@@ -1,4 +1,4 @@
 tgi-core
 ========
 
-Core object library
+These are the core objects and functions used in the tgicloud application framework.
