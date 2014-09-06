@@ -1,0 +1,23 @@
+{
+  "name": "tgi-core",
+  "version": "0.0.0",
+  "description": "Core objects for TGIScript Application Framework.",
+  "main": "index.js",
+  "scripts": {
+    "test": "spec/node-test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tgicloud/tgi-core.git"
+  },
+  "keywords": [
+    "javascript",
+    "application",
+    "framework"
+  ],
+  "author": "Sean T. Smith",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tgicloud/tgi-core/issues"
+  }
+}
