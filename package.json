@@ -16,5 +16,8 @@
     "framework"
   ],
   "author": "Sean T. Smith",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.8.7"
+  }
 }
