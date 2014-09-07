@@ -18,6 +18,11 @@
   "author": "Sean T. Smith",
   "license": "MIT",
   "devDependencies": {
-    "gulp": "^3.8.7"
+    "gulp": "^3.8.7",
+    "gulp-concat": "^2.4.0",
+    "gulp-istanbul": "^0.2.2",
+    "gulp-jshint": "^1.8.4",
+    "gulp-rename": "^1.2.0",
+    "gulp-uglify": "^1.0.1"
   }
 }

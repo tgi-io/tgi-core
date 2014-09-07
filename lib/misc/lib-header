@@ -1,0 +1,6 @@
+/*** lib-header ***/
+(function () {
+"use strict";
+var root = this;
+/*** lib-header ***/
+

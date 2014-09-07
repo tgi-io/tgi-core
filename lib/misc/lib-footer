@@ -1,0 +1,12 @@
+/*** lib-footer ***/
+  /* istanbul ignore next */
+  if (typeof exports !== 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) {
+      exports = module.exports = tgi;
+    }
+    exports.tgi = tgi;
+  } else {
+    root.tgi = tgi;
+  }
+}).call(this);
+/*** lib-footer ***/

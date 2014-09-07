@@ -3,6 +3,9 @@
  * node-test
  */
 
-fuck = require('./../lib/tgi-core');
-
-console.log(fuck());
+tgi = require('../dist/tgi-core');
+//return 1;
+//if (tgi()=="Hello World")
+//return 0
+//
+console.log(tgi());
