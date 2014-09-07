@@ -3,6 +3,11 @@
  * gulpfile
  */
 
+var fs = require('fs');
+
+//// Lib Source Files
+var libSource = JSON.parse(fs.readFileSync('json/lib.json', 'utf8')).path;
+
 // Include gulp
 var gulp = require('gulp');
 
@@ -14,11 +19,6 @@ var jshint = require('gulp-jshint');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
-
-// Lib Source Files
-var libSource = [
-  'lib/core/tgi-core.js'
-];
 
 // libFiles
 var libFiles = libSource.slice();
