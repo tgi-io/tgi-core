@@ -1,4 +1,11 @@
 tgi-core
+
+[![Build Status](https://travis-ci.org/tgicloud/tgi-core.svg?branch=master)](https://travis-ci.org/tgicloud/tgi-core)
+
+[![Coverage Status](https://coveralls.io/repos/tgicloud/tgi-core/badge.png?branch=master)](https://coveralls.io/r/tgicloud/tgi-core?branch=master)
+
+[![Coverage Status](https://img.shields.io/coveralls/tgicloud/tgi-core.svg)](https://coveralls.io/r/tgicloud/tgi-core?branch=master)
+
 ========
 
 Core objects for TGIScript Application Framework.
