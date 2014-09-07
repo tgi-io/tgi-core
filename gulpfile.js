@@ -50,9 +50,13 @@ gulp.task('test', function (callback) {
 
 // Coverage
 gulp.task('cover', function (callback) {
-  childProcess.fork('/usr/local/bin/istanbul',['cover','spec/node-test.js'],{});
+  // todo find in path since fork fails me without it
+  childProcess.fork('/usr/local/bin/istanbul', ['cover', 'spec/node-test.js'], {});
   callback();
 });
+
+// Travis
+gulp.task('travis', ['build', 'lint']);
 
 // Default Task
 gulp.task('default', ['build', 'lint', 'test', 'cover']);
