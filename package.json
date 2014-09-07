@@ -2,7 +2,16 @@
   "name": "tgi-core",
   "version": "0.0.4",
   "description": "Core objects for TGIScript Application Framework.",
+  "contributors": [
+    {
+      "name": "Sean Smith",
+      "email": "sean@tgicloud.com"
+    }
+  ],
   "main": "index.js",
+  "dependencies": {
+    "coveralls": "~2.11.1"
+  },
   "scripts": {
     "test": "node spec/node-test.js"
   },
@@ -15,7 +24,7 @@
     "application",
     "framework"
   ],
-  "author": "Sean T. Smith",
+  "author": "Sean Smith <sean@tgicloud.com>",
   "license": "MIT",
   "devDependencies": {
     "gulp": "^3.8.7",
