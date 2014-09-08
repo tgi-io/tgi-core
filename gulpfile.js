@@ -27,25 +27,41 @@ libFiles.push('lib/misc/lib-footer');
 
 // Lint Task
 gulp.task('lint', function () {
-  return gulp.src('dist/tgi-core.js')
+  return gulp.src('dist/tgi.core.js')
     .pipe(jshint())
     .pipe(jshint.reporter('default'));
 });
 
 // Concatenate & Minify JS
-gulp.task('build', function () {
-  return gulp.src(libFiles)
-    .pipe(concat('tgi-core.js'))
+gulp.task('build', function (cb) {
+  var shit = gulp.src(libFiles)
+    .pipe(concat('tgi.core.js'))
     .pipe(gulp.dest('dist'))
-    .pipe(rename('tgi-core.min.js'))
+    .pipe(rename('tgi.core.min.js'))
     .pipe(uglify())
     .pipe(gulp.dest('dist'));
+  cb();
+
+  //return shit;
 });
 
 // Tests
+var testRunner = require('./spec/gulp-test');
 gulp.task('test', function (callback) {
-  console.log('test is done!!!');
-  callback();
+  testRunner(callback);
+});
+
+gulp.task('retest', ['build'], function (callback) {
+  childProcess.exec('node spec/node-test.js', function (error, stdout, stderr) {
+    console.log(stdout);
+    callback(error);
+  });
+});
+
+// phantomjs
+gulp.task('phantomjs', function (callback) {
+  // phantomjs spec/phantomjs-test.js
+  callback(Error('EPIC FAIL!!!'));
 });
 
 // Coverage
@@ -55,8 +71,12 @@ gulp.task('cover', function (callback) {
   callback();
 });
 
+
 // Travis
 gulp.task('travis', ['build', 'lint']);
 
 // Default Task
-gulp.task('default', ['build', 'lint', 'test', 'cover']);
+gulp.task('default', ['build', 'lint', 'cover']);
+
+// Build & Retest
+gulp.task('build & retest', ['build', 'retest']);

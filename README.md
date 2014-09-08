@@ -3,8 +3,6 @@ tgi-core [![Build Status](https://travis-ci.org/tgicloud/tgi-core.svg?branch=mas
 
 Core objects for TGIScript Application Framework.
 
-
-
 Spec:
     - tests: [Test,Test,...]
     - document: [

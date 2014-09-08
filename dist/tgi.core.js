@@ -11,7 +11,10 @@ var root = this;
  */
 
 var tgi = function () {
-  return 'Hello World';
+  return {
+    Spec: function () {
+    }
+  };
 };
 
 /*** lib-footer ***/

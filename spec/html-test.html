@@ -5,9 +5,20 @@
   <title></title>
 </head>
 <body>
-<script type="text/javascript" src="../lib/core/tgi-core.js"></script>
+<script type="text/javascript" src="../dist/tgi.core.js"></script>
+<script type="text/javascript" src="./test-runner.js"></script>
 <script>
-  document.body.innerHTML = '<p>Test results...</p><p id="testresult">' + TGI() + '</p>'
+
+  function callback(error) {
+    var results = 'OK';
+    if (error)
+      results = error;
+      document.body.innerHTML = '<p>Test results...</p><p id="testresult">' + results + '</p>'
+  }
+  runner(tgi, callback);
+
+//  document.body.innerHTML = '<p>Test results...</p><p id="testresult">' + tgi() + '</p>'
+
 </script>
 </body>
 </html>
