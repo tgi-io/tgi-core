@@ -6,7 +6,7 @@ before_script:
 script: gulp travis
 after_script:
   - export COVERALLS_SERVICE_NAME=travis-ci
-  - export COVERALLS_REPO_TOKEN=PkW7Vo2aqnDSZvBx6b3LlSPdCJelYeWUl
+  - export COVERALLS_REPO_TOKEN=y2sI0tJsaWZEiowQQVXECgHdwGr1mdxML
   - npm install -g istanbul
   - istanbul cover spec/node-test.js --report lcovonly -- -R spec
-  - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+  - cat ./build/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
