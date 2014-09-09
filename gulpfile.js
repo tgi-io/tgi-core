@@ -69,9 +69,8 @@ gulp.task('cover', function (callback) {
   callback();
 });
 
-
 // Travis
-gulp.task('travis', ['build', 'lint']);
+gulp.task('travis', ['build', 'lint', 'test']);
 
 // Default Task
 gulp.task('default', ['build', 'lint', 'cover']);

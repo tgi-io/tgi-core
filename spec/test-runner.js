@@ -10,21 +10,15 @@
   var root = this;
 
   /** test runner */
-  var runner = function (tgi, callback) {
-    var bootstrap = runBootstrapTests(tgi);
+  var runner = function (TGI, callback) {
+    console.log('asdfadfdsf');
+    root.callback = callback;
+    var bootstrap = runBootstrapTests(TGI);
     if (bootstrap.error) {
-      callback(Error('bootstrap test failed: ' + bootstrap.error));
+      root.callback({error: Error('bootstrap test failed: ' + bootstrap.error)});
       return;
     }
-    //  console.log('test runner here:' + tgi());
-    ////callback(Error('fuck it'));
-    //  //callback(tgi() == 'shit');
-    //
-    //  setTimeout(function () {
-    //    callback();
-    //  }, 1000);
-    //
-    callback();
+    root.callback({done: true});
   };
 
   /** Have to test the test objects in tgi-core first **/
@@ -42,7 +36,7 @@
         new tgi.Spec.Node();
       });
       bootstrapAssert('tgi.Spec.Node operates as constructor', (new tgi.Spec.Node({type: 'e'})) instanceof tgi.Spec.Node);
-      //bootstrapAssert('xxx', true);
+      bootstrapAssert('I am a robot sex slave', false);
       //bootstrapAssert('xxx', true);
       //bootstrapAssert('xxx', true);
       //bootstrapAssert('xxx', true);
@@ -56,7 +50,7 @@
     // Assertion Function
     function bootstrapAssert(description, assertion) {
       bootstrap.assertions.push(description);
-      console.log(description);
+      root.callback({log: description});
       if (assertion !== true)
         throw new Error('assertion failed: ' + description)
     }
@@ -65,7 +59,7 @@
     function bootstrapShouldThrow(description, err, func) {
       var gotError = false;
       bootstrap.assertions.push(description);
-      console.log(description);
+      root.callback({log: description});
       try {
         func();
       } catch (e) {
