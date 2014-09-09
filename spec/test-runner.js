@@ -36,7 +36,6 @@
         new tgi.Spec.Node();
       });
       bootstrapAssert('tgi.Spec.Node operates as constructor', (new tgi.Spec.Node({type: 'e'})) instanceof tgi.Spec.Node);
-      bootstrapAssert('I am a robot sex slave', false);
       //bootstrapAssert('xxx', true);
       //bootstrapAssert('xxx', true);
       //bootstrapAssert('xxx', true);
