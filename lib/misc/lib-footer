@@ -2,11 +2,11 @@
   /* istanbul ignore next */
   if (typeof exports !== 'undefined') {
     if (typeof module !== 'undefined' && module.exports) {
-      exports = module.exports = tgi;
+      exports = module.exports = TGI;
     }
-    exports.tgi = tgi;
+    exports.TGI = TGI;
   } else {
-    root.tgi = tgi;
+    root.TGI = TGI;
   }
 }).call(this);
 /*** lib-footer ***/

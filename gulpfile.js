@@ -33,16 +33,14 @@ gulp.task('lint', function () {
 });
 
 // Concatenate & Minify JS
-gulp.task('build', function (cb) {
-  var shit = gulp.src(libFiles)
-    .pipe(concat('tgi.core.js'))
+gulp.task('build', function (callback) {
+  gulp.src(libFiles)
+    .pipe(concat('tgi.core.js', {newLine: '\n/*--------------------------------------------------------------------------------------------------------------------*/\n'}))
     .pipe(gulp.dest('dist'))
     .pipe(rename('tgi.core.min.js'))
     .pipe(uglify())
     .pipe(gulp.dest('dist'));
-  cb();
-
-  //return shit;
+  callback();
 });
 
 // Tests
