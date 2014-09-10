@@ -27,8 +27,9 @@ other:
 test:
     heading
     paragraph
+    example xeample oeample
+
     runner?
     stop
     start
-    example xeample oeample
     show
