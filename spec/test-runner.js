@@ -57,7 +57,7 @@
       });
       bootstrapAssert('new tgi.Spec.example 2nd arg is expected results', true); // no way to test all possible values including undefined allowed
       bootstrapShouldThrow('new tgi.Spec.example 3rd arg is function (code for example)', Error('Spec.example 3rd arg is function code or undefined'), function () {
-        new tgi.Spec().example('test',true);
+        new tgi.Spec().example('test', true);
       });
 
 
@@ -106,11 +106,14 @@
         func();
       } catch (e) {
         gotError = true;
-        if (err !== undefined)
-          if (err.toString() != e.toString() && err.toString() != '*')
-            throw('expected error(' + err + ') got(' + e + ')');
+        if (err !== undefined && err.toString() != e.toString() && err.toString() != '*') {
+          console.log('shit');
+          throw('expected error(' + err + ') got(' + e + ')');
+        }
+
       }
       if (!gotError) {
+        console.log('fuck');
         throw('expected error(' + err + ')');
       }
     }
