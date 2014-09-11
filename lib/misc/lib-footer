@@ -1,4 +1,6 @@
-/*** lib-footer ***/
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/lib/misc/lib-footer
+ **/
   /* istanbul ignore next */
   if (typeof exports !== 'undefined') {
     if (typeof module !== 'undefined' && module.exports) {
@@ -9,4 +11,3 @@
     root.TGI = TGI;
   }
 }).call(this);
-/*** lib-footer ***/

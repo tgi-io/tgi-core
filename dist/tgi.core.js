@@ -1,23 +1,20 @@
-/*** lib-header ***/
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/lib/misc/lib-header
+ **/
 (function () {
 "use strict";
 var root = this;
-/*--------------------------------------------------------------------------------------------------------------------*/
-/**
- * tgi-core
- * tgi-core
- */
-
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/lib/core/tgi-core.js
+ **/
 var TGI = function () {
   return {
     Spec: Spec
   };
 };
-/*--------------------------------------------------------------------------------------------------------------------*/
-/**
- * tgi-core
- * tgi-core-spec
- */
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/lib/core/tgi-core-spec.js
+ **/
 function Spec() {
   this.nodes = []; // array of Spec.Node's
 }
@@ -73,9 +70,30 @@ Spec.prototype.example = function (text, results, callback) {
   this.nodes.push(node);
   return node;
 };
+/**
+ *
+ **/
+Spec.prototype.start = function () {
+};
+/**
+ *
+ **/
+Spec.prototype.stop = function () {
+};
+/**
+ *
+ **/
+Spec.prototype.show = function () {
+};
+/**
+ *
+ **/
+Spec.prototype.asyncResponse = function () {
+};
 
-/*--------------------------------------------------------------------------------------------------------------------*/
-/*** lib-footer ***/
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/lib/misc/lib-footer
+ **/
   /* istanbul ignore next */
   if (typeof exports !== 'undefined') {
     if (typeof module !== 'undefined' && module.exports) {
@@ -86,4 +104,3 @@ Spec.prototype.example = function (text, results, callback) {
     root.TGI = TGI;
   }
 }).call(this);
-/*** lib-footer ***/

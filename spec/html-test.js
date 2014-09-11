@@ -1,7 +1,6 @@
-/**
- * tgi-core
- * html-test
- */
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/spec/html-test.js
+ **/
 runner(TGI, function (msg) {
   function log(txt) {
     var p = document.createElement("p");

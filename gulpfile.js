@@ -35,7 +35,7 @@ gulp.task('lint', function () {
 // Concatenate & Minify JS
 gulp.task('build', function (callback) {
   gulp.src(libFiles)
-    .pipe(concat('tgi.core.js', {newLine: '\n/*--------------------------------------------------------------------------------------------------------------------*/\n'}))
+    .pipe(concat('tgi.core.js'))
     .pipe(gulp.dest('dist'))
     .pipe(rename('tgi.core.min.js'))
     .pipe(uglify())
