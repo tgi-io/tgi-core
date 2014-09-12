@@ -13,7 +13,7 @@ var TGI = function () {
   };
 };
 /**---------------------------------------------------------------------------------------------------------------------
- * tgi-core/lib/core/tgi-core-spec.js
+ * tgi-core/lib/core/tgi-core-spec.source.js
  **/
 function Spec() {
   this.nodes = []; // array of Spec.Node's

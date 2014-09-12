@@ -3,8 +3,9 @@
  **/
 module.exports = function (callback) {
   var tgi = require('../dist/tgi.core');
-  var runner = require('./test-runner');
-  runner(tgi, function (msg) {
+  var testTGI = require('../dist/tgi.core-test');
+  var runner = testTGI().runner;
+  runner(testTGI, tgi, function (msg) {
     if (msg.error) {
       console.error(msg.error);
       callback(Error(msg.error));

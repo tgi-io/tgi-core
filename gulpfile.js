@@ -3,16 +3,12 @@
  * gulpfile
  */
 
-var fs = require('fs');
-
-//// Lib Source Files
-var libSource = JSON.parse(fs.readFileSync('json/lib.json', 'utf8')).path;
-
 // Include gulp
 var gulp = require('gulp');
 
 //Other node goodies
 var childProcess = require('child_process');
+var fs = require('fs');
 
 // Gulp Plugins
 var jshint = require('gulp-jshint');
@@ -20,10 +16,32 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 
-// libFiles
-var libFiles = libSource.slice();
-libFiles.unshift('lib/misc/lib-header');
+// Create list of files for lib and tests
+var sources = JSON.parse(fs.readFileSync('data/lib.json', 'utf8')).sources;
+var libFiles = ['lib/misc/lib-header'];
+var testFiles = ['lib/misc/test-header'];
+testFiles.push('lib/test/tgi-test.js');
+testFiles.push('lib/test/tgi-test-bootstrap.js');
+testFiles.push('lib/test/tgi-test-runner.js');
+for (var i = 0; i < sources.length; i++) {
+  var source = sources[i];
+  for (var j = 0; j < source.files.length; j++) {
+    var file = source.files[j];
+    var sourceFile = 'lib/' + source.folder + '/' + file + '.source.js';
+    var testFile = 'lib/' + source.folder + '/' + file + '.test.js';
+    console.log(sourceFile + ' ' + testFile);
+  if (!fs.existsSync(sourceFile)) {
+    throw 'cannot find source file: ' + sourceFile;
+  }
+  if (!fs.existsSync(testFile)) {
+    throw 'cannot find test source file: ' + testFile;
+  }
+  libFiles.push(sourceFile);
+  testFiles.push(testFile);
+  }
+}
 libFiles.push('lib/misc/lib-footer');
+testFiles.push('lib/misc/test-footer');
 
 // Lint Task
 gulp.task('lint', function () {
@@ -39,6 +57,9 @@ gulp.task('build', function (callback) {
     .pipe(gulp.dest('dist'))
     .pipe(rename('tgi.core.min.js'))
     .pipe(uglify())
+    .pipe(gulp.dest('dist'));
+  gulp.src(testFiles)
+    .pipe(concat('tgi.core-test.js'))
     .pipe(gulp.dest('dist'));
   callback();
 });

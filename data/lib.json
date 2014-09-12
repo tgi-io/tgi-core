@@ -1,0 +1,10 @@
+{
+  "sources": [
+    {"folder": "core",
+      "files": [
+        "tgi-core",
+        "tgi-core-spec"
+      ]
+    }
+  ]
+}

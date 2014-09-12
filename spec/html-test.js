@@ -1,7 +1,7 @@
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/spec/html-test.js
  **/
-runner(TGI, function (msg) {
+TestTGI().runner(TestTGI, TGI, function (msg) {
   function log(txt) {
     var p = document.createElement("p");
     p.style.margin = '2px';
