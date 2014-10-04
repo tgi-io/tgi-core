@@ -9,7 +9,7 @@ var root = this;
  **/
 var TestTGI = function () {
   return {
-    runner: runner,
+    loadTests: loadTests,
     bootstrapTests: bootstrapTests
   };
 };
@@ -88,9 +88,9 @@ function bootstrapTests(TGI,callback) {
   }
 }
 /**---------------------------------------------------------------------------------------------------------------------
- * tgi-core/lib/test/tgi-test-runner.js
+ * tgi-core/lib/test/tgi-test-loadTests.js
  **/
-function runner(testTGI, TGI, callback) {
+function loadTests(testTGI, TGI, callback) {
   var bootstrap = testTGI().bootstrapTests(TGI,callback);
   if (bootstrap.error) {
     callback({error: Error('bootstrap test failed: ' + bootstrap.error)});
@@ -98,11 +98,10 @@ function runner(testTGI, TGI, callback) {
   }
   callback({done: true});
 }
-
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/core/tgi-core-test.js
  **/
-
+console.log('sup foo');
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/core/tgi-core-spec-test.js
  **/

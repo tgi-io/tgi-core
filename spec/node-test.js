@@ -5,7 +5,7 @@
 
 var tgi = require('../dist/tgi.core');
 var testTGI = require('../dist/tgi.core-test');
-var runner = testTGI().runner;
+var runner = testTGI().loadTests;
 
 runner(testTGI, tgi, function (msg) {
   if (msg.error) {
@@ -16,6 +16,6 @@ runner(testTGI, tgi, function (msg) {
     console.log('Testing completed with no errors');
     console.log('--------------------------------');
   } else if (msg.log) {
-    console.log(msg.log);
+    // console.log(msg.log);
   }
 });

@@ -4,7 +4,7 @@
 module.exports = function (callback) {
   var tgi = require('../dist/tgi.core');
   var testTGI = require('../dist/tgi.core-test');
-  var runner = testTGI().runner;
+  var runner = testTGI().loadTests;
   runner(testTGI, tgi, function (msg) {
     if (msg.error) {
       console.error(msg.error);
