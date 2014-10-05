@@ -1,13 +1,13 @@
 /**---------------------------------------------------------------------------------------------------------------------
- * tgi-core/lib/misc/test-footer
+ * tgi-core/lib/misc/lib-footer
  **/
   /* istanbul ignore next */
   if (typeof exports !== 'undefined') {
     if (typeof module !== 'undefined' && module.exports) {
-      exports = module.exports = TestTGI;
+      exports = module.exports = CORE;
     }
-    exports.TestTGI = TestTGI;
+    exports.CORE = CORE;
   } else {
-    root.TestTGI = TestTGI;
+    root.CORE = CORE;
   }
 }).call(this);

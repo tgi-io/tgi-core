@@ -1,6 +1,6 @@
 {
   "name": "tgi-core",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Core objects for TGIScript Application Framework.",
   "contributors": [
     {
@@ -10,10 +10,12 @@
   ],
   "main": "index.js",
   "dependencies": {
-    "coveralls": "~2.11.1"
+    "sprintf-js": "0.0.7",
+    "tgi-spec": "*",
+    "tgi-utility": "*"
   },
   "scripts": {
-    "test": "node spec/node-test.js"
+    "test": "node spec/node-runner.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +24,9 @@
   "keywords": [
     "javascript",
     "application",
+    "app",
+    "api",
+    "core",
     "framework"
   ],
   "author": "Sean Smith <sean@tgicloud.com>",
@@ -29,9 +34,9 @@
   "devDependencies": {
     "gulp": "^3.8.7",
     "gulp-concat": "^2.4.0",
-    "gulp-istanbul": "^0.2.2",
     "gulp-jshint": "^1.8.4",
     "gulp-rename": "^1.2.0",
-    "gulp-uglify": "^1.0.1"
+    "gulp-uglify": "^1.0.1",
+    "jshint-stylish": "^1.0.0"
   }
 }

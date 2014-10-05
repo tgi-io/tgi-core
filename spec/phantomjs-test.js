@@ -1,8 +1,11 @@
 /**
  * tgi-core
  * phantomjs-test
+ *
+ * TODO migrate this to project changes <broken>
  */
 
+/*
 function waitFor(testFx, onReady, timeOutMillis) {
   var maxtimeOutMillis = timeOutMillis ? timeOutMillis : 3001, //< Default Max Timeout is 3s
     start = new Date().getTime(),
@@ -56,3 +59,4 @@ page.open('spec/html-test.html', function (status) {
     });
   }
 });
+*/

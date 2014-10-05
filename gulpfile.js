@@ -1,100 +1,97 @@
-/**
- * tgi-core
- * gulpfile
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/gulpfile.js
  */
 
-// Include gulp
 var gulp = require('gulp');
-
-//Other node goodies
-var childProcess = require('child_process');
-var fs = require('fs');
-
-// Gulp Plugins
 var jshint = require('gulp-jshint');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
+var childProcess = require('child_process');
 
-// Create list of files for lib and tests
-var sources = JSON.parse(fs.readFileSync('data/lib.json', 'utf8')).sources;
-var libFiles = ['lib/misc/lib-header'];
-var testFiles = ['lib/misc/test-header'];
-testFiles.push('lib/test/tgi-test.js');
-testFiles.push('lib/test/tgi-test-bootstrap.js');
-testFiles.push('lib/test/tgi-test-runner.js');
-for (var i = 0; i < sources.length; i++) {
-  var source = sources[i];
-  for (var j = 0; j < source.files.length; j++) {
-    var file = source.files[j];
-    var sourceFile = 'lib/' + source.folder + '/' + file + '.source.js';
-    var testFile = 'lib/' + source.folder + '/' + file + '.test.js';
-    console.log(sourceFile + ' ' + testFile);
-  if (!fs.existsSync(sourceFile)) {
-    throw 'cannot find source file: ' + sourceFile;
-  }
-  if (!fs.existsSync(testFile)) {
-    throw 'cannot find test source file: ' + testFile;
-  }
-  libFiles.push(sourceFile);
-  testFiles.push(testFile);
-  }
-}
-libFiles.push('lib/misc/lib-footer');
-testFiles.push('lib/misc/test-footer');
+// Source and packaging
+var libFiles = [
+  'lib/packaging/lib-header',
+  'lib/tgi-core.source.js',
+  'lib/packaging/lib-footer'
+];
 
-// Lint Task
-gulp.task('lint', function () {
-  return gulp.src('dist/tgi.core.js')
-    .pipe(jshint())
-    .pipe(jshint.reporter('default'));
-});
+// The Spec
+var specFiles = [
+  'lib/packaging/spec-header',
+  'lib/tgi-core.spec.js',
+  'lib/packaging/spec-footer'
+];
 
-// Concatenate & Minify JS
-gulp.task('build', function (callback) {
-  gulp.src(libFiles)
+// Build Lib
+gulp.task('_buildLib', function () {
+  return gulp.src(libFiles)
     .pipe(concat('tgi.core.js'))
     .pipe(gulp.dest('dist'))
     .pipe(rename('tgi.core.min.js'))
     .pipe(uglify())
     .pipe(gulp.dest('dist'));
-  gulp.src(testFiles)
-    .pipe(concat('tgi.core-test.js'))
+});
+
+// Build Spec
+gulp.task('_buildSpec', function () {
+  return gulp.src(specFiles)
+    .pipe(concat('tgi.core.spec.js'))
     .pipe(gulp.dest('dist'));
+});
+
+// Build Task
+gulp.task('build', ['_buildLib', '_buildSpec'], function (callback) {
   callback();
 });
 
-// Tests
-var testRunner = require('./spec/gulp-test');
-gulp.task('test', function (callback) {
-  testRunner(callback);
+// Lint Lib
+gulp.task('_lintLib', ['_buildLib'], function (callback) {
+  return gulp.src('dist/tgi.core.js')
+    .pipe(jshint())
+    .pipe(jshint.reporter('jshint-stylish'))
+    .pipe(jshint.reporter('fail'));
 });
 
-gulp.task('retest', ['build'], function (callback) {
-  childProcess.exec('node spec/node-test.js', function (error, stdout, stderr) {
+// Lint Spec
+gulp.task('_lintSpec', ['_buildSpec'], function (callback) {
+  return gulp.src('dist/tgi.core.spec.js')
+    .pipe(jshint())
+    .pipe(jshint.reporter('jshint-stylish'))
+    .pipe(jshint.reporter('fail'));
+});
+
+// Lint Task
+gulp.task('lint', ['_lintLib', '_lintSpec'], function (callback) {
+  callback();
+});
+
+// Test Task
+gulp.task('test', ['lint'], function (callback) {
+  childProcess.exec('node spec/node-runner.js', function (error, stdout, stderr) {
     console.log(stdout);
     callback(error);
   });
 });
 
-// phantomjs
-gulp.task('phantomjs', function (callback) {
-  // phantomjs spec/phantomjs-test.js
-  callback(Error('EPIC FAIL!!!'));
-});
-
-// Coverage
+// Coverage Task
 gulp.task('cover', function (callback) {
-  // todo find in path since fork fails me without it
-  childProcess.fork('/usr/local/bin/istanbul', ['cover', 'spec/node-test.js'], {});
-  callback();
+  childProcess.exec('istanbul cover spec/node-runner.js', function (error, stdout, stderr) {
+    console.log(stdout);
+    console.error(stderr);
+    callback(error);
+  });
 });
 
-// Travis
-gulp.task('travis', ['build', 'lint', 'test']);
+// Spec Task
+gulp.task('spec', ['lint'], function (callback) {
+  setTimeout(function () {
+    childProcess.exec('node spec/node-make-spec-md.js', function (error, stdout, stderr) {
+      console.log(stdout);
+      callback(error);
+    });
+  }, 100); // Without this sometimes the exec runs before script is written/flushed ?
+});
 
 // Default Task
-gulp.task('default', ['build', 'lint', 'cover']);
-
-// Build & Retest
-gulp.task('build & retest', ['build', 'retest']);
+gulp.task('default', ['test']);

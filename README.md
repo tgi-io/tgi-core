@@ -2,34 +2,3 @@ tgi-core [![Build Status](https://travis-ci.org/tgicloud/tgi-core.svg?branch=mas
 ========
 
 Core objects for TGIScript Application Framework.
-
-Spec:
-    - tests: [Test,Test,...]
-    - document: [
-        heading
-        paragraph
-        example: { prettyCode, test }
-
-test / example run time:
-    assertion
-
-
-other:
-    asyncResponse - parm to test
-    show - display expression in example output
-
- x
-
-
-
-
-
-test:
-    heading
-    paragraph
-    example xeample oeample
-
-    runner?
-    stop
-    start
-    show

@@ -1,3 +1,7 @@
 /**---------------------------------------------------------------------------------------------------------------------
- * tgi-core/lib/core/tgi-core-spec-test.js
+ * tgi-core/lib/misc/test-header
  **/
+(function () {
+"use strict";
+var root = this;
+var testSpec = function(spec,CORE) {
