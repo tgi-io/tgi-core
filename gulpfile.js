@@ -19,7 +19,7 @@ var libFiles = [
 // The Spec
 var specFiles = [
   'lib/packaging/spec-header',
-  'lib/tgi-core.spec.js',
+  'lib/tgi-core.test.js',
   'lib/packaging/spec-footer'
 ];
 
