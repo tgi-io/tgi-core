@@ -13,6 +13,7 @@ var childProcess = require('child_process');
 var libFiles = [
   'lib/packaging/lib-header',
   'lib/tgi-core.source.js',
+  'lib/tgi-core-attribute.source.js',
   'lib/packaging/lib-footer'
 ];
 
@@ -20,6 +21,7 @@ var libFiles = [
 var specFiles = [
   'lib/packaging/spec-header',
   'lib/tgi-core.test.js',
+  'lib/tgi-core-attribute.test.js',
   'lib/packaging/spec-footer'
 ];
 

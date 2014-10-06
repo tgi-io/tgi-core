@@ -4,9 +4,11 @@
 var Spec = require('tgi-spec/dist/tgi.spec.js');
 var testSpec = require('../dist/tgi.core.spec');
 var spec = new Spec();
+var UTILITY = require('tgi-utility/dist/tgi.utility');
 var CORE = require('../dist/tgi.core');
 
 (function () {
+  UTILITY().injectMethods(this);
   CORE().injectMethods(this);
   testSpec(spec, CORE);
   spec.runTests(function (msg) {
@@ -24,5 +26,3 @@ var CORE = require('../dist/tgi.core');
     }
   });
 }());
-
-
