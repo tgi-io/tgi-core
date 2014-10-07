@@ -34,9 +34,10 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Spec Constructor Function'
       spec.example('objects created should be an instance of Attribute', true, function () {
         return new Attribute({name: 'name'}) instanceof Attribute;
       });
-      /*
       spec.example('should make sure new operator used', Error('new operator required'), function () {
+        /* jshint ignore:start */
         Attribute({name: 'name'});
+        /* jshint ignore:end */
       });
       spec.example('should make sure properties are valid', Error('error creating Attribute: invalid property: sex'), function () {
         new Attribute({name: 'name', sex: 'female'});
@@ -76,9 +77,7 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Spec Constructor Function'
           return new Attribute.ModelID(model).toString();
         });
       });
-      */
     });
-    /*
     spec.heading('PROPERTIES', function () {
       spec.heading('name', function () {
         spec.example('should be required', Error('error creating Attribute: name required'), function () {
@@ -93,7 +92,7 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Spec Constructor Function'
           return new Attribute({name: 'name'}).type;
         });
         spec.example('should be a valid attribute type', Error('error creating Attribute: Invalid type: Dude'), function () {
-          spec.show(T.getAttributeTypes());
+          //spec.show(T.getAttributeTypes());
           new Attribute({name: 'Bogus', type: "Dude"});
         });
         spec.example('should allow shorthand string constructor for type property', 'Date', function () {
@@ -126,8 +125,8 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Spec Constructor Function'
       });
       spec.heading('validationErrors', function () {
         spec.example('Array of errors', undefined, function () {
-          spec.assertion(new Attribute({name: 'name'}).validationErrors instanceof Array);
-          spec.assertion(new Attribute({name: 'name'}).validationErrors.length == 0);
+          this.shouldBeTrue(new Attribute({name: 'name'}).validationErrors instanceof Array);
+          this.shouldBeTrue(new Attribute({name: 'name'}).validationErrors.length === 0);
         });
       });
       spec.heading('validationMessage', function () {
@@ -149,65 +148,65 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Spec Constructor Function'
         });
         spec.heading('validationRule.required', function () {
           spec.paragraph('validationRule.required is used when a value is required for attribute');
-          spec.example('validationRule.required', spec.asyncResponse('Name required'), function (testNode, returnResponse) {
+          spec.example('validationRule.required', spec.asyncResults('Name required'), function (callback) {
             var a = new Attribute({name: 'name', validationRule: {required: true}});
             a.validate(function () {
-              returnResponse(testNode, a.validationErrors);
+              callback(a.validationErrors);
             });
           });
-          spec.example('validationRule.required for Number allows 0', spec.asyncResponse(0), function (testNode, returnResponse) {
+          spec.example('validationRule.required for Number allows 0', spec.asyncResults(0), function (callback) {
             var a = new Attribute({name: 'balance', type: 'Number', value: 0, validationRule: {required: true}});
             a.validate(function () {
-              returnResponse(testNode, a.validationErrors.length);
+              callback( a.validationErrors.length);
             });
           });
-          spec.example('validationRule.required for Boolean allows false', spec.asyncResponse(0), function (testNode, returnResponse) {
+          spec.example('validationRule.required for Boolean allows false', spec.asyncResults(0), function (callback) {
             var a = new Attribute({name: 'active', type: 'Boolean', value: false, validationRule: {required: true}});
             a.validate(function () {
-              returnResponse(testNode, a.validationErrors.length);
+              callback( a.validationErrors.length);
             });
           });
         });
         spec.heading('validationRule.range', function () {
           spec.paragraph('validationRule.range is used when value must fall within a range of values- use null to omit bound');
-          spec.example('validationRule.range lower bound only', spec.asyncResponse('Age must be at least 18'), function (testNode, returnResponse) {
+          spec.example('validationRule.range lower bound only', spec.asyncResults('Age must be at least 18'), function (callback) {
             var a = new Attribute({name: 'age', type: 'Number', value: 17, validationRule: {range: [18, null]}});
             a.validate(function () {
-              returnResponse(testNode, a.validationErrors[0]);
+              callback( a.validationErrors[0]);
             });
           });
-          spec.example('validationRule.range upper bound only', spec.asyncResponse('Age must be no more than 65'), function (testNode, returnResponse) {
+          spec.example('validationRule.range upper bound only', spec.asyncResults('Age must be no more than 65'), function (callback) {
             var a = new Attribute({name: 'age', type: 'Number', value: 77, validationRule: {range: [null, 65]}});
             a.validate(function () {
-              returnResponse(testNode, a.validationErrors[0]);
+              callback( a.validationErrors[0]);
             });
           });
-          spec.example('validationRule.range pass', spec.asyncResponse(0), function (testNode, returnResponse) {
+          spec.example('validationRule.range pass', spec.asyncResults(0), function (callback) {
             var a = new Attribute({name: 'age', type: 'Number', value: 53, validationRule: {range: [18, 65]}});
             a.validate(function () {
-              returnResponse(testNode, a.validationErrors.length);
+              callback( a.validationErrors.length);
             });
           });
-          spec.example('validationRule.range forced to array', spec.asyncResponse('Age must be at least 100'), function (testNode, returnResponse) {
+          spec.example('validationRule.range forced to array', spec.asyncResults('Age must be at least 100'), function (callback) {
             var a = new Attribute({name: 'age', type: 'Number', value: 53, validationRule: {range: 100}});
             a.validate(function () {
-              returnResponse(testNode, a.validationErrors);
+              callback( a.validationErrors);
             });
           });
         });
         spec.heading('validationRule.isOneOf', function () {
           spec.paragraph('validationRule.isOneOf is used when a value is must be on of items in array');
 
-          spec.example('validationRule.isOneOf fail', spec.asyncResponse('Age invalid'), function (testNode, returnResponse) {
+          spec.example('validationRule.isOneOf fail', spec.asyncResults('Age invalid'), function (callback) {
             var a = new Attribute({name: 'age', type: 'Number', value: 2, validationRule: {isOneOf: [1, 3]}});
             a.validate(function () {
-              returnResponse(testNode, a.validationErrors[0]);
+              callback( a.validationErrors[0]);
             });
           });
-          spec.example('validationRule.isOneOf pass', spec.asyncResponse(0), function (testNode, returnResponse) {
+          spec.example('validationRule.isOneOf pass', spec.asyncResults(0), function (callback) {
             var a = new Attribute({name: 'age', type: 'Number', value: 1, validationRule: {isOneOf: [1, 3]}});
             a.validate(function () {
-              returnResponse(testNode, a.validationErrors.length);
+              callback( a.validationErrors.length);
             });
           });
         });
@@ -215,28 +214,28 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Spec Constructor Function'
       });
       spec.heading('value', function () {
         spec.example('should accept null assignment', undefined, function () {
-          var myTypes = T.getAttributeTypes();
+          var myTypes = Attribute.getAttributeTypes();
           var record = '';
           for (var i = 0; i < myTypes.length; i++) {
             record += myTypes[i] + ':' + new Attribute({name: 'my' + myTypes[i]}).value + ' ';
           }
-          spec.show(record);
+          //spec.show(record);
           // It's the default and it passes constructor validation
         });
         spec.example('should accept assignment of correct type and validate incorrect attributeTypes',
           '7 correct assignments 91 errors thrown', function () {
             // Test all known attribute types
-            var myTypes = T.getAttributeTypes();
+            var myTypes = Attribute.getAttributeTypes();
             myTypes.shift(); // not testing ID
             myTypes.pop(); // not testing Object since it matches other types
-            spec.show(myTypes);
-            spec.show(T.getAttributeTypes());
+            //spec.show(myTypes);
+            //spec.show(T.getAttributeTypes());
 
             // Now create an array of matching values for each type into myValues
             var myModel = new Model();
             var myGroup = new Attribute({name: 'columns', type: 'Group', value: [new Attribute("Name")]});
-            var myTable = new Attribute({name: 'bills', type: 'Table', group: myGroup });
-            var myValues = ['Jane Doe', new Date, true, 18, new Attribute.ModelID(new Model()), [], myTable];
+            var myTable = new Attribute({name: 'bills', type: 'Table', group: myGroup});
+            var myValues = ['Jane Doe', new Date(), true, 18, new Attribute.ModelID(new Model()), [], myTable];
 
             // Loop thru each type
             var theGood = 0;
@@ -244,28 +243,32 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Spec Constructor Function'
             for (var i = 0; i < myTypes.length; i++)
               for (var j = 0; j < myValues.length; j++) {
                 // for the value that works it won't throw error just create and to test
-                if (i == j) {
+                if (i === j) {
                   theGood++;
                   switch (myTypes[i]) {
                     case 'Table':
                       new Attribute({name: 'my' + myTypes[i], type: myTypes[i], value: myValues[j], group: myGroup});
                       break;
                     default:
-                      new Attribute({name: 'my' + myTypes[i], type: myTypes[i], value: myValues[j] });
+                      new Attribute({name: 'my' + myTypes[i], type: myTypes[i], value: myValues[j]});
                       break;
                   }
                 } else {
                   // mismatches bad so should throw error (is caught unless no error or different error)
                   theBad++;
-                  spec.shouldThrow('*', function () {
+                  /* jshint ignore:start */
+                  this.shouldThrowError('*', function () {
                     new Attribute({name: 'my' + myTypes[i], type: myTypes[i], value: myValues[j]});
                   });
+                  /* jshint ignore:end */
                 }
                 // other objects should throw always
                 theBad++;
-                spec.shouldThrow('*', function () {
-                  new Attribute({name: 'my' + myTypes[i], type: myTypes[i], value: {} });
+                /* jshint ignore:start */
+                this.shouldThrowError('*', function () {
+                  new Attribute({name: 'my' + myTypes[i], type: myTypes[i], value: {}});
                 });
+                /* jshint ignore:end */
               }
             return theGood + ' correct assignments ' + theBad + ' errors thrown';
           });
@@ -288,14 +291,14 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Spec Constructor Function'
         spec.example('size should default to 50', 50, function () {
           return new Attribute({name: 'stuff'}).size;
         });
-        spec.example('size should be an integer', 'Error: error creating Attribute: size must be a number from 1 to 255', function () {
+        spec.example('size should be an integer', Error('error creating Attribute: size must be a number from 1 to 255'), function () {
           new Attribute({name: 'zipCode', size: "10"});
         });
         spec.example('size should be between 1 and 255', undefined, function () {
-          spec.shouldThrow(Error('error creating Attribute: size must be a number from 1 to 255'), function () {
+          this.shouldThrowError(Error('error creating Attribute: size must be a number from 1 to 255'), function () {
             new Attribute({name: 'partyLikeIts', size: 1999});
           });
-          spec.shouldThrow(Error('error creating Attribute: size must be a number from 1 to 255'), function () {
+          this.shouldThrowError(Error('error creating Attribute: size must be a number from 1 to 255'), function () {
             new Attribute({name: 'iGotNothing', size: 0});
           });
         });
@@ -327,7 +330,8 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Spec Constructor Function'
         });
         spec.example("modelType property set from constructor", 'Model', function () {
           return new Attribute(
-            {name: 'Twiggy',
+            {
+              name: 'Twiggy',
               type: 'Model',
               value: new Attribute.ModelID(new Model())
             }).modelType;
@@ -351,9 +355,9 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Spec Constructor Function'
           myVegs.value = [new Attribute('Carrot'), new Attribute('Beet')];
           myFood.value = [myFruit, myVegs];
           myStuff.value = [myFood, myCars, new Attribute('House'), new Attribute('Health')];
-          spec.show(myStuff.getObjectStateErrors());
+          //spec.show(myStuff.getObjectStateErrors());
           badApple.value = -1; // One bad apple will spoil my stuff
-          spec.show(myStuff.getObjectStateErrors());
+          //spec.show(myStuff.getObjectStateErrors());
           return myStuff.getObjectStateErrors().length;
         });
       });
@@ -365,7 +369,7 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Spec Constructor Function'
         spec.example("should have type of 'Table'", 'Table', function () {
           var name = new Attribute("Name");
           var cols = new Attribute({name: 'columns', type: 'Group', value: [name]});
-          return new Attribute({name: 'bills', type: 'Table', group: cols }).type;
+          return new Attribute({name: 'bills', type: 'Table', group: cols}).type;
         });
         spec.example("group property must be defined", Error('error creating Attribute: group property required'),
           function () {
@@ -374,7 +378,7 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Spec Constructor Function'
         spec.example("group property must not be empty array",
           Error('error creating Attribute: group property value must contain at least one Attribute'), function () {
             var cols = new Attribute({name: 'columns', type: 'Group', value: []});
-            new Attribute({name: 'details', type: 'Table', group: cols });
+            new Attribute({name: 'details', type: 'Table', group: cols});
           });
       });
       spec.heading('Object', function () {
@@ -394,57 +398,57 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Spec Constructor Function'
         spec.paragraph('Method returns the type equivalent of newValue for the owner objects type.');
         spec.example('coerce method basic usage', undefined, function () {
           var myString = new Attribute({name: 'name', size: 10});
-          var myNumber = new Attribute({name: 'age', type: 'Number' });
-          var myBool = new Attribute({name: 'active', type: 'Boolean' });
-          var myDate = new Attribute({name: 'date', type: 'Date' });
+          var myNumber = new Attribute({name: 'age', type: 'Number'});
+          var myBool = new Attribute({name: 'active', type: 'Boolean'});
+          var myDate = new Attribute({name: 'date', type: 'Date'});
           var myGroup = new Attribute({name: 'columns', type: 'Group', value: [new Attribute("Name")]});
-          var myTable = new Attribute({name: 'bills', type: 'Table', group: myGroup });
+          var myTable = new Attribute({name: 'bills', type: 'Table', group: myGroup});
 
           // Strings
-          spec.assertion(myString.coerce() === '');
-          spec.assertion(myString.coerce(false) === 'false');
-          spec.assertion(myString.coerce(12) === '12');
-          spec.assertion(myString.coerce(1 / 0) === 'Infinity');
-          spec.assertion(myString.coerce('01234567890') === '0123456789');
-          spec.assertion(myString.coerce() === '');
+          this.shouldBeTrue(myString.coerce() === '');
+          this.shouldBeTrue(myString.coerce(false) === 'false');
+          this.shouldBeTrue(myString.coerce(12) === '12');
+          this.shouldBeTrue(myString.coerce(1 / 0) === 'Infinity');
+          this.shouldBeTrue(myString.coerce('01234567890') === '0123456789');
+          this.shouldBeTrue(myString.coerce() === '');
           // Numbers
-          spec.assertion(myNumber.coerce() === 0);
-          spec.assertion(myNumber.coerce(false) === 0);
-          spec.assertion(myNumber.coerce(true) === 1);
-          spec.assertion(myNumber.coerce(' 007 ') === 7);
-          spec.assertion(myNumber.coerce(' $123,456.78 ') === 123456.78);
-          spec.assertion(myNumber.coerce(' $123, 456.78 ') === 123); // space will split
-          spec.assertion(myNumber.coerce('4/20') === 0); // slash kills it
+          this.shouldBeTrue(myNumber.coerce() === 0);
+          this.shouldBeTrue(myNumber.coerce(false) === 0);
+          this.shouldBeTrue(myNumber.coerce(true) === 1);
+          this.shouldBeTrue(myNumber.coerce(' 007 ') === 7);
+          this.shouldBeTrue(myNumber.coerce(' $123,456.78 ') === 123456.78);
+          this.shouldBeTrue(myNumber.coerce(' $123, 456.78 ') === 123); // space will split
+          this.shouldBeTrue(myNumber.coerce('4/20') === 0); // slash kills it
           // Boolean
-          spec.assertion(myBool.coerce() === false && myBool.coerce(null) === false && myBool.coerce(0) === false);
-          spec.assertion(myBool.coerce(true) === true && myBool.coerce(1) === true);
-          spec.assertion(myBool.coerce('y') && myBool.coerce('yEs') && myBool.coerce('t') && myBool.coerce('TRUE') && myBool.coerce('1'));
-          spec.assertion(!((myBool.coerce('') || (myBool.coerce('yep')))));
+          this.shouldBeTrue(myBool.coerce() === false && myBool.coerce(null) === false && myBool.coerce(0) === false);
+          this.shouldBeTrue(myBool.coerce(true) === true && myBool.coerce(1) === true);
+          this.shouldBeTrue(myBool.coerce('y') && myBool.coerce('yEs') && myBool.coerce('t') && myBool.coerce('TRUE') && myBool.coerce('1'));
+          this.shouldBeTrue(!((myBool.coerce('') || (myBool.coerce('yep')))));
           // Date
-          spec.assertion(myDate.coerce('2/21/2014').getTime() === new Date('2/21/2014').getTime());
-          spec.assertion(myDate.coerce('2/21').getTime() === new Date('2/21/2014').getTime());
+          this.shouldBeTrue(myDate.coerce('2/21/2014').getTime() === new Date('2/21/2014').getTime());
+          this.shouldBeTrue(myDate.coerce('2/21').getTime() === new Date('2/21/2014').getTime());
 
           // TODO
-          spec.shouldThrow(Error('coerce cannot determine appropriate value'), function () {
+          this.shouldThrowError(Error('coerce cannot determine appropriate value'), function () {
             new Attribute({name: 'Twiggy', type: 'Model', value: new Attribute.ModelID(new Model())}).coerce();
           });
-          spec.shouldThrow(Error('coerce cannot determine appropriate value'), function () {
+          this.shouldThrowError(Error('coerce cannot determine appropriate value'), function () {
             new Attribute(myGroup.coerce());
           });
-          spec.shouldThrow(Error('coerce cannot determine appropriate value'), function () {
+          this.shouldThrowError(Error('coerce cannot determine appropriate value'), function () {
             new Attribute(myTable.coerce());
           });
         });
       });
       spec.heading('getObjectStateErrors', function () {
         spec.example('should return array of validation errors', undefined, function () {
-          spec.assertion(new Attribute({name: 'name'}).getObjectStateErrors() instanceof Array);
+          this.shouldBeTrue(new Attribute({name: 'name'}).getObjectStateErrors() instanceof Array);
           var nameHosed = new Attribute({name: 'name'}); // No errors
-          spec.assertion(nameHosed.getObjectStateErrors().length == 0);
+          this.shouldBeTrue(nameHosed.getObjectStateErrors().length === 0);
           nameHosed.name = ''; // 1 err
-          spec.assertion(nameHosed.getObjectStateErrors().length == 1);
+          this.shouldBeTrue(nameHosed.getObjectStateErrors().length === 1);
           nameHosed.type = ''; // 2 errors
-          spec.assertion(nameHosed.getObjectStateErrors().length == 2);
+          this.shouldBeTrue(nameHosed.getObjectStateErrors().length === 2);
         });
       });
       spec.heading('onEvent', function () {
@@ -460,7 +464,7 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Spec Constructor Function'
           });
         });
         spec.example('here is a working version', undefined, function () {
-          spec.show(T.getAttributeEvents());
+          //spec.show(T.getAttributeEvents());
           // Validate - callback when attribute needs to be validated
           // StateChange -- callback when state of object (value or validation state) has changed
           new Attribute({name: 'name'}).onEvent(['Validate'], function () {
@@ -490,14 +494,15 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Spec Constructor Function'
       });
     });
     spec.heading('INTEGRATION', function () {
-      spec.example('validation usage demonstrated', spec.asyncResponse('got milk'), function (testNode, returnResponse) {
+      spec.example('validation usage demonstrated', spec.asyncResults('got milk'), function (callback) {
+        var thisCrap = this;
         var attribute = new Attribute({name: 'test'});
 
         // Monitor state changes
         attribute.onEvent('StateChange', function () {
           // When the error is got milk then test is done
-          if (attribute.validationMessage == 'got milk')
-            returnResponse(testNode, 'got milk');
+          if (attribute.validationMessage === 'got milk')
+            callback( 'got milk');
         });
 
         // validate will first make sure the object passes integrity checks
@@ -506,7 +511,7 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Spec Constructor Function'
 
         // verify error seen
         function test1() {
-          spec.assertion(attribute.validationMessage == 'name required');
+          thisCrap.shouldBeTrue(attribute.validationMessage == 'name required');
           // Create a validation rule - value must be equal to 42
           attribute.onEvent('Validate', function () {
             if (attribute.value !== 42)
@@ -517,14 +522,14 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Spec Constructor Function'
 
         // same error in message
         function test2() {
-          spec.assertion(attribute.validationMessage == 'name required');
+          thisCrap.shouldBeTrue(attribute.validationMessage == 'name required');
           attribute.name = 'answer';
           attribute.validate(test3);
         }
 
         // Now validation function error is shown
         function test3() {
-          spec.assertion(attribute.validationMessage == 'Incorrect answer');
+          thisCrap.shouldBeTrue(attribute.validationMessage == 'Incorrect answer');
           // Fix everything
           attribute.value = 42;
           attribute.validate(test4);
@@ -532,7 +537,7 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Spec Constructor Function'
 
         // Type is wrong
         function test4() {
-          spec.assertion(attribute.validationMessage == 'value must be null or a String');
+          thisCrap.shouldBeTrue(attribute.validationMessage == 'value must be null or a String');
           // Fix type
           attribute.type = 'Number';
           attribute.validate(test5);
@@ -540,7 +545,7 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Spec Constructor Function'
 
         // Should have no errors
         function test5() {
-          spec.assertion(attribute.validationMessage == '');
+          thisCrap.shouldBeTrue(attribute.validationMessage === '');
           attribute.setError('uno', 'uno failed');
           attribute.setError('milk', 'and cookies');
           attribute.setError('milk', 'got milk'); // test overwrite of same condition diff msg
@@ -549,7 +554,7 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Spec Constructor Function'
 
         // now error is first set error
         function test6() {
-          spec.assertion(attribute.validationMessage == 'uno failed');
+          thisCrap.shouldBeTrue(attribute.validationMessage == 'uno failed');
           attribute.clearError('zzz'); // delete a prop that does not exists is silent
           attribute.clearError('uno');
           attribute.validate(function () {
@@ -558,10 +563,12 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Spec Constructor Function'
         }
       });
     });
-*/
   });
-
 });
+
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/lib/tgi-core-model.test.js
+ */
 
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/misc/test-footer

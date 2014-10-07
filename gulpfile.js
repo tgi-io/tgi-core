@@ -14,6 +14,7 @@ var libFiles = [
   'lib/packaging/lib-header',
   'lib/tgi-core.source.js',
   'lib/tgi-core-attribute.source.js',
+  'lib/tgi-core-model.source.js',
   'lib/packaging/lib-footer'
 ];
 
@@ -22,6 +23,7 @@ var specFiles = [
   'lib/packaging/spec-header',
   'lib/tgi-core.test.js',
   'lib/tgi-core-attribute.test.js',
+  'lib/tgi-core-model.test.js',
   'lib/packaging/spec-footer'
 ];
 
@@ -58,7 +60,7 @@ gulp.task('_lintLib', ['_buildLib'], function (callback) {
 // Lint Spec
 gulp.task('_lintSpec', ['_buildSpec'], function (callback) {
   return gulp.src('dist/tgi.core.spec.js')
-    .pipe(jshint())
+    .pipe(jshint({validthis:true}))
     .pipe(jshint.reporter('jshint-stylish'))
     .pipe(jshint.reporter('fail'));
 });

@@ -4,7 +4,7 @@
 var spec = new Spec();
 (function () {
   UTILITY().injectMethods(this);
-  //this.inheritPrototype = UTILITY().inheritPrototype;
+  CORE().injectMethods(this);
   testSpec(spec, UTILITY);
   spec.runTests(function (msg) {
     /**
