@@ -14,6 +14,17 @@ var libFiles = [
   'lib/packaging/lib-header',
   'lib/tgi-core.source.js',
   'lib/tgi-core-attribute.source.js',
+  'lib/tgi-core-command.source.js',
+  'lib/tgi-core-delta.source.js',
+  'lib/tgi-core-interface.source.js',
+  'lib/tgi-core-list.source.js',
+  'lib/tgi-core-model.source.js',
+  'lib/tgi-core-message.source.js',
+  'lib/tgi-core-procedure.source.js',
+  'lib/tgi-core-request.source.js',
+  'lib/tgi-core-store.source.js',
+  'lib/tgi-core-transport.source.js',
+  'lib/tgi-core-model.source.js',
   'lib/tgi-core-model.source.js',
   'lib/packaging/lib-footer'
 ];
@@ -23,7 +34,16 @@ var specFiles = [
   'lib/packaging/spec-header',
   'lib/tgi-core.test.js',
   'lib/tgi-core-attribute.test.js',
+  'lib/tgi-core-command.test.js',
+  'lib/tgi-core-delta.test.js',
+  'lib/tgi-core-interface.test.js',
+  'lib/tgi-core-list.test.js',
+  'lib/tgi-core-message.test.js',
   'lib/tgi-core-model.test.js',
+  'lib/tgi-core-procedure.test.js',
+  'lib/tgi-core-request.test.js',
+  'lib/tgi-core-store.test.js',
+  'lib/tgi-core-transport.test.js',
   'lib/packaging/spec-footer'
 ];
 

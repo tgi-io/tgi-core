@@ -340,6 +340,22 @@ Attribute.getAttributeTypes = function () {
   return ['ID', 'String', 'Date', 'Boolean', 'Number', 'Model', 'Group', 'Table', 'Object'].slice(0); // copy array
 };
 /**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/xxx/tgi-core-command.source
+ */
+
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/xxx/tgi-core-delta.source
+ */
+
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/xxx/tgi-core-interface.source
+ */
+
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/xxx/tgi-core-list.source
+ */
+
+/**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-model.source.js
  */
 /**
@@ -481,7 +497,7 @@ Model.prototype.onEvent = function (events, callback) {
   for (var i in events) {
     if (events.hasOwnProperty(i))
       if (events[i] != '*')
-        if (!contains(Model.getModelEvents(), events[i]))
+        if (!contains(['StateChange', 'Validate'], events[i]))
           throw new Error('Unknown command event: ' + events[i]);
   }
   // All good add to chain
@@ -511,6 +527,26 @@ Model.prototype.clearError = function (condition) {
   if (!condition) throw new Error('condition required');
   delete this._errorConditions[condition];
 };
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/xxx/tgi-core-message.source
+ */
+
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/xxx/tgi-core-procedure.source
+ */
+
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/xxx/tgi-core-request.source
+ */
+
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/xxx/tgi-core-store.source
+ */
+
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/xxx/tgi-core-transport.source
+ */
+
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/misc/lib-footer
  **/
