@@ -678,6 +678,252 @@ function test6() {
 ```
 <blockquote>returns <strong>got milk</strong> as expected
 </blockquote>
+#### Command Class
+<p>The command design pattern is implemented with this class.  The actual execution of the command can be one of multiple types from simple code to a _Presentation Model_ applied to a _Interface_ implementation.</p>
+#### CONSTRUCTOR
+&nbsp;<b><i>objects created should be an instance of Command:</i></b>
+```javascript
+return new Command({name: 'about'}) instanceof Command;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>should make sure new operator used:</i></b>
+```javascript
+Command({name: 'about'}); // jshint ignore:line
+```
+<blockquote><strong>Error: new operator required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>should make sure argument properties are valid:</i></b>
+```javascript
+new Command({name: 'name', sex: 'female'});
+```
+<blockquote><strong>Error: error creating Command: invalid property: sex</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>defaults name to (unnamed):</i></b>
+```javascript
+return new Command().name;
+```
+<blockquote>returns <strong>(unnamed)</strong> as expected
+</blockquote>
+&nbsp;<b><i>defaults type to Stub:</i></b>
+```javascript
+return new Command({name: 'about'}).type;
+```
+<blockquote>returns <strong>Stub</strong> as expected
+</blockquote>
+#### PROPERTIES
+#### name
+&nbsp;<b><i>identifier name for command:</i></b>
+```javascript
+this.shouldThrowError(Error('name must be string'), function () {
+  new Command({name: 42});
+});
+return new Command({name: 'about'}).name;
+```
+<blockquote>returns <strong>about</strong> as expected
+</blockquote>
+#### description
+&nbsp;<b><i>more descriptive than name (for menus):</i></b>
+```javascript
+// description set to (name) Command if not specified
+return new Command({name: 'Tequila'}).description + ' : ' +
+  new Command({name: 'tequila', description: 'Tequila is a beverage made from blue agave.'}).description;
+```
+<blockquote>returns <strong>Tequila Command : Tequila is a beverage made from blue agave.</strong> as expected
+</blockquote>
+#### type
+&nbsp;<b><i>type of command must be valid:</i></b>
+```javascript
+//spec.show(T.getCommandTypes());
+new Command({name: 'about', type: 'magic' });
+```
+<blockquote><strong>Error: Invalid command type: magic</strong> thrown as expected
+</blockquote>
+#### contents
+<p>Contents is based on the type of command.  See TYPE section for more information for how it applies to each type</p>
+#### scope
+<p>Optional scope property can be used to apply a model or list to a command.</p>
+&nbsp;<b><i>scope must be a Model or a List:</i></b>
+```javascript
+new Command({name: 'archiveData', scope: true});
+```
+<blockquote><strong>Error: optional scope property must be Model or List</strong> thrown as expected
+</blockquote>
+#### status
+<p>The status property is a Number defined as negative(FAIL) positive(SUCCESS) zero(executing) null/undefined(not executing).</p>
+<p>Applications can give meaning to numeric values (lt -1 and gt 1) as long as sign is retained.</p>
+#### timeout
+<p>Will use library setting as default, override to set the default timeout for steps used in procedures. Value is milliseconds (1000 = 1 second)</p>
+&nbsp;<b><i>number required:</i></b>
+```javascript
+new Command({name: 'options', timeout: true});
+```
+<blockquote><strong>Error: timeout must be a Number</strong> thrown as expected
+</blockquote>
+#### theme
+&nbsp;<b><i>theme attribute provides visual cue:</i></b>
+```javascript
+// The good
+new Command({name: 'options', theme: 'default'});
+new Command({name: 'options', theme: 'primary'});
+new Command({name: 'options', theme: 'success'});
+new Command({name: 'options', theme: 'info'});
+new Command({name: 'options', theme: 'warning'});
+new Command({name: 'options', theme: 'danger'});
+new Command({name: 'options', theme: 'link'});
+// The bad
+this.shouldThrowError(Error('invalid theme'), function () {
+  new Command({name: 'options', theme: 'Silly'});
+});
+// The ugly
+this.shouldThrowError(Error('invalid theme'), function () {
+  new Command({name: 'options', theme: true});
+});
+```
+<blockquote></blockquote>
+#### icon
+<p>The icon attribute gives a graphical association to the command. They are interface specific and do break the abstractness of this library but can be ignored by other interfaces safely.</p>
+&nbsp;<b><i>must be string and have prefix for 2 supported icon sets http://glyphicons.com/ http://fontawesome.io/:</i></b>
+```javascript
+this.shouldThrowError(Error('invalid icon'), function () {
+  new Command({name: 'options', icon: true});
+});
+this.shouldThrowError(Error('invalid icon'), function () {
+  new Command({name: 'options', icon: 'wtf-lol'});
+});
+// Only prefix is validated
+new Command({name: 'options', icon: 'fa-whatever'});
+new Command({name: 'options', icon: 'glyphicon-who-cares'});
+// Must have something to the right of the dash
+this.shouldThrowError(Error('invalid icon'), function () {
+  new Command({name: 'options', icon: 'fa'});
+});
+```
+<blockquote></blockquote>
+#### bucket
+&nbsp;<b><i>valid property is for app use:</i></b>
+```javascript
+return 'bucket of ' + new Command({bucket: 'KFC'}).bucket;
+```
+<blockquote>returns <strong>bucket of KFC</strong> as expected
+</blockquote>
+#### TYPES
+#### menu
+<p>The menu command is passed to _Interface_ for use for in user navigation.  They are embedded in the _Application_ as the primary navigate but can be instantiated and given to _Interface_ in any context.</p>
+<p>The _Command_ contents property is an array _Command_ objects.</p>
+&nbsp;<b><i>constructor validates the contents:</i></b>
+```javascript
+this.shouldThrowError(Error('contents must be array of menu items'), function () {
+  new Command({name: 'options', type: 'Menu'});
+});
+this.shouldThrowError(Error('contents must be array of menu items'), function () {
+  new Command({name: 'options', type: 'Menu', contents: []});
+});
+this.shouldThrowError(Error('contents must be array of menu items'), function () {
+  new Command({name: 'options', type: 'Menu', contents: [42]});
+});
+// This is a working example:
+new Command({name: 'options', type: 'Menu', contents: [
+  'Stooges',                      // strings act as menu titles or non selectable choices
+  '-',                            // dash is menu separator
+  new Command({name: 'Tequila'})  // use commands for actual menu items
+]});
+```
+<blockquote></blockquote>
+#### Presentation
+&nbsp;<b><i>for Presentation type contents is a Presentation object:</i></b>
+```javascript
+this.shouldThrowError(Error('contents must be a Presentation'), function () {
+  new Command({name: 'options', type: 'Presentation'});
+});
+```
+<blockquote></blockquote>
+#### Function
+<p>contents contains a javascript function</p>
+&nbsp;<b><i>for Function type contents is a Function:</i></b>
+```javascript
+this.shouldThrowError(Error('contents must be a Function'), function () {
+  new Command({name: 'options', type: 'Function'});
+});
+```
+<blockquote></blockquote>
+#### Procedure
+&nbsp;<b><i>for Procedure type contents is a Procedure object:</i></b>
+```javascript
+this.shouldThrowError(Error('contents must be a Procedure'), function () {
+  new Command({name: 'options', type: 'Procedure'});
+});
+```
+<blockquote></blockquote>
+#### METHODS
+#### toString
+&nbsp;<b><i>returns string including name and type:</i></b>
+```javascript
+return 'I am a ' + new Command({name: 'Customer'});
+```
+<blockquote>returns <strong>I am a Stub Command: Customer</strong> as expected
+</blockquote>
+#### abort
+<p>aborts task</p>
+&nbsp;<b><i>aborted command ends with error status:</i></b>
+```javascript
+var cmd = new Command();
+cmd.abort();
+return cmd.status;
+```
+<blockquote>returns <strong>-1</strong> as expected
+</blockquote>
+#### complete
+<p>completes task</p>
+&nbsp;<b><i>call when task complete status:</i></b>
+```javascript
+var cmd = new Command();
+cmd.complete();
+return cmd.status;
+```
+<blockquote>returns <strong>1</strong> as expected
+</blockquote>
+#### execute
+<p>executes task</p>
+&nbsp;<b><i>see integration tests:</i></b>
+```javascript
+new Command().execute();
+```
+<blockquote><strong>Error: command type Stub not implemented</strong> thrown as expected
+</blockquote>
+#### onEvent
+<p>Use onEvent(events,callback)</p>
+&nbsp;<b><i>first parameter is a string or array of event subscriptions:</i></b>
+```javascript
+new Command().onEvent();
+```
+<blockquote><strong>Error: subscription string or array required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>callback is required:</i></b>
+```javascript
+new Command().onEvent([]);
+```
+<blockquote><strong>Error: callback is required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>events are checked against known types:</i></b>
+```javascript
+new Command().onEvent(['onDrunk'], function () {
+});
+```
+<blockquote><strong>Error: Unknown command event: onDrunk</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>here is a working version:</i></b>
+```javascript
+//spec.show(T.getCommandEvents());
+//  BeforeExecute - callback called before first task executed but after tasks initialized
+//  AfterExecute - callback called after initial task(s) launched (see onCompletion)
+//  Error - error occurred (return {errorClear:true})
+//  Aborted - procedure aborted - should clean up resources
+//  Completed - execution is complete check status property
+new Command().onEvent(['Completed'], function () {
+});
+```
+<blockquote></blockquote>
 #### Model Class
 <p>Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.</p>
 #### CONSTRUCTOR

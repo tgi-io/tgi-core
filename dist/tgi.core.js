@@ -11,9 +11,11 @@ var CORE = function () {
   return {
     version: '0.0.7',
     Attribute: Attribute,
+    Command: Command,
     Model: Model,
     injectMethods: function (that) {
       that.Attribute = Attribute;
+      that.Command = Command;
       that.Model = Model;
     }
   };
@@ -340,8 +342,239 @@ Attribute.getAttributeTypes = function () {
   return ['ID', 'String', 'Date', 'Boolean', 'Number', 'Model', 'Group', 'Table', 'Object'].slice(0); // copy array
 };
 /**---------------------------------------------------------------------------------------------------------------------
- * tgi-core/xxx/tgi-core-command.source
+ * tgi-core/lib/tgi-core-command.source.js
  */
+// Command Constructor
+function Presentation() {
+}
+function Procedure() {
+}
+function Command(/* does this matter */ args) {
+  if (false === (this instanceof Command)) throw new Error('new operator required');
+  if (typeof args == 'function') { // shorthand for function command
+    var theFunc = args;
+    args = {type: 'Function', contents: theFunc};
+  }
+  args = args || {};
+  var i;
+  var unusedProperties = getInvalidProperties(args,
+    ['name', 'description', 'type', 'contents', 'scope', 'timeout', 'theme', 'icon', 'bucket']);
+  var errorList = [];
+  for (i = 0; i < unusedProperties.length; i++) errorList.push('invalid property: ' + unusedProperties[i]);
+  if (errorList.length > 1) throw new Error('error creating Command: multiple errors');
+  if (errorList.length) throw new Error('error creating Command: ' + errorList[0]);
+  for (i in args) this[i] = args[i];
+  this.name = this.name || "(unnamed)"; // name is optional
+  if ('string' != typeof this.name) throw new Error('name must be string');
+  if ('undefined' == typeof this.description) this.description = this.name + ' Command';
+  if ('undefined' == typeof this.type) this.type = 'Stub';
+  if (!contains(['Stub', 'Menu', 'Presentation', 'Function', 'Procedure'], this.type)) throw new Error('Invalid command type: ' + this.type);
+  switch (this.type) {
+    case 'Stub':
+      break;
+    case 'Menu':
+      if (!(this.contents instanceof Array)) throw new Error('contents must be array of menu items');
+      if (!this.contents.length) throw new Error('contents must be array of menu items');
+      for (i in this.contents) {
+        if (this.contents.hasOwnProperty(i))
+          if (typeof this.contents[i] != 'string' && !(this.contents[i] instanceof Command))
+            throw new Error('contents must be array of menu items');
+      }
+      break;
+    case 'Presentation':
+      if (!(this.contents instanceof Presentation)) throw new Error('contents must be a Presentation');
+      break;
+    case 'Function':
+      if (typeof this.contents != 'function') throw new Error('contents must be a Function');
+      break;
+    case 'Procedure':
+      if (!(this.contents instanceof Procedure)) throw new Error('contents must be a Procedure');
+      break;
+  }
+  if ('undefined' != typeof this.scope)
+    if (!((this.scope instanceof Model) || (this.scope instanceof List)))
+      throw new Error('optional scope property must be Model or List');
+  if ('undefined' != typeof this.timeout)
+    if (typeof this.timeout != 'number') throw new Error('timeout must be a Number');
+  if ('undefined' != typeof this.timeout)
+    if (typeof this.timeout != 'number') throw new Error('timeout must be a Number');
+  if ('undefined' != typeof this.theme) {
+    if ('string' != typeof this.theme) throw new Error('invalid theme');
+    if (!contains(['default', 'primary', 'success', 'info', 'warning', 'danger', 'link'], this.theme))
+      throw new Error('invalid theme');
+  }
+  if ('undefined' != typeof this.icon) {
+    if ('string' != typeof this.icon) throw new Error('invalid icon');
+    if (!contains(['fa', 'glyphicon'], this.icon.split('-')[0]) || !this.icon.split('-')[1])
+      throw new Error('invalid icon');
+  }
+
+  // Validations done
+  this._eventListeners = [];
+}
+/*
+ * Methods
+ */
+Command.prototype.toString = function () {
+  return this.type + ' Command: ' + this.name;
+};
+Command.prototype.onEvent = function (events, callback) {
+  if (!(events instanceof Array)) {
+    if (typeof events != 'string') throw new Error('subscription string or array required');
+    events = [events]; // coerce to array
+  }
+  if (typeof callback != 'function') throw new Error('callback is required');
+  // Check known Events
+  for (var i in events) {
+    if (events.hasOwnProperty(i))
+      if (events[i] != '*')
+        if (!contains(['BeforeExecute', 'AfterExecute', 'Error', 'Aborted', 'Completed'], events[i]))
+          throw new Error('Unknown command event: ' + events[i]);
+  }
+  // All good add to chain
+  this._eventListeners.push({events: events, callback: callback});
+};
+Command.prototype._emitEvent = function (event) {
+  var i;
+  for (i in this._eventListeners) {
+    if (this._eventListeners.hasOwnProperty(i)) {
+      var subscriber = this._eventListeners[i];
+      if ((subscriber.events.length && subscriber.events[0] === '*') || contains(subscriber.events, event)) {
+        subscriber.callback.call(this, event);
+      }
+    }
+  }
+  if (event == 'Completed') // if command complete release listeners
+    this._eventListeners = [];
+};
+Command.prototype.execute = function () {
+  if (!this.type) throw new Error('command not implemented');
+  if (!contains(['Function', 'Procedure', 'Presentation'], this.type)) throw new Error('command type ' + this.type + ' not implemented');
+  var errors;
+  switch (this.type) {
+    case 'Presentation':
+      if (!(this.contents instanceof Presentation)) throw new Error('contents must be a Presentation');
+      errors = this.contents.getObjectStateErrors();
+      if (errors.length) {
+        if (errors.length > 1)
+          throw new Error('error executing Presentation: multiple errors');
+        else
+          throw new Error('error executing Presentation: ' + errors[0]);
+      }
+      break;
+  }
+  var self = this;
+  var args = arguments;
+  this._emitEvent('BeforeExecute');
+  try {
+    switch (this.type) {
+      case 'Function':
+        this.status = 0;
+        setTimeout(callFunc, 0);
+        break;
+      case 'Procedure':
+        setTimeout(procedureExecute, 0);
+        break;
+    }
+  } catch (e) {
+    this.error = e;
+    this._emitEvent('Error');
+    this._emitEvent('Completed');
+    this.status = -1;
+  }
+  this._emitEvent('AfterExecute');
+  function callFunc() {
+    try {
+      self.contents.apply(self, args); // give function this context to command object (self)
+    } catch (e) {
+      self.error = e;
+      self._emitEvent('Error');
+      self._emitEvent('Completed');
+      self.status = -1;
+    }
+  }
+
+  function procedureExecute() {
+    self.status = 0;
+    var tasks = self.contents.tasks || [];
+    for (var t = 0; t < tasks.length; t++) {
+      // shorthand for function command gets coerced into longhand
+      if (typeof tasks[t] == 'function') {
+        var theFunc = tasks[t];
+        tasks[t] = {requires: [-1], command: new Command({type: 'Function', contents: theFunc})};
+      }
+      // Initialize if not done
+      if (!tasks[t].command._parentProcedure) {
+        tasks[t].command._taskIndex = t;
+        tasks[t].command._parentProcedure = self;
+        tasks[t].command.onEvent('*', ProcedureEvents);
+      }
+      // Execute if it is time
+      var canExecute = true;
+      if (typeof (tasks[t].command.status) == 'undefined') {
+        for (var r in tasks[t].requires) {
+          if (typeof tasks[t].requires[r] == 'string') { // label of task needed to complete
+            for (var l = 0; l < tasks.length; l++) {
+              if (tasks[l].label == tasks[t].requires[r])
+                if (!tasks[l].command.status || tasks[l].command.status <= 0) {
+                  canExecute = false;
+                }
+            }
+          }
+          if (typeof tasks[t].requires[r] == 'number') {
+            if (tasks[t].requires[r] == -1) { // previous task needed to complete?
+              if (t != '0') { // first one always runs
+                if (!tasks[t - 1].command.status || tasks[t - 1].command.status <= 0) {
+                  canExecute = false;
+                }
+              }
+            } else {
+              var rq = tasks[t].requires[r];
+              if (!tasks[rq].command.status || tasks[rq].command.status <= 0) {
+                canExecute = false;
+              }
+            }
+          }
+        }
+        if (canExecute) {
+          tasks[t].command.execute();
+        }
+      }
+    }
+  }
+
+  function ProcedureEvents(event) {
+    var tasks = self.contents.tasks;
+    var allTasksDone = true; // until proved wrong ...
+    switch (event) {
+      case 'Error':
+        self._emitEvent('Error');
+        break;
+      case 'Completed':
+        for (var t in tasks) {
+          if (tasks.hasOwnProperty(t)) {
+            if (!tasks[t].command.status || tasks[t].command.status === 0) {
+              allTasksDone = false;
+            }
+          }
+        }
+        if (allTasksDone)
+          self.complete(); // todo when all run
+        else
+          procedureExecute();
+        break;
+    }
+  }
+};
+Command.prototype.abort = function () {
+  this._emitEvent('Aborted');
+  this.status = -1;
+  this._emitEvent('Completed');
+};
+Command.prototype.complete = function () {
+  this.status = 1;
+  this._emitEvent('Completed');
+};
 
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/xxx/tgi-core-delta.source
@@ -352,8 +585,109 @@ Attribute.getAttributeTypes = function () {
  */
 
 /**---------------------------------------------------------------------------------------------------------------------
- * tgi-core/xxx/tgi-core-list.source
+ * tgi-core/lib/tgi-core-list.source.js
  */
+// Constructor
+var List = function (model) {
+  if (false === (this instanceof List)) throw new Error('new operator required');
+  if (false === (model instanceof Model)) throw new Error('argument required: model');
+  this.model = model; // todo make unit test for this
+  this._items = [];
+  this._itemIndex = -1;
+};
+List.prototype.length = function () {
+  return this._items.length;
+};
+List.prototype.clear = function () {
+  this._items = [];
+  this._itemIndex = -1;
+  return this;
+};
+List.prototype.get = function (attribute) {
+  if (this._items.length < 1) throw new Error('list is empty');
+  for (var i = 0; i < this.model.attributes.length; i++) {
+    if (this.model.attributes[i].name.toUpperCase() == attribute.toUpperCase())
+      return this._items[this._itemIndex][i];
+  }
+};
+List.prototype.set = function (attribute,value) {
+  if (this._items.length < 1) throw new Error('list is empty');
+  for (var i = 0; i < this.model.attributes.length; i++) {
+    if (this.model.attributes[i].name.toUpperCase() == attribute.toUpperCase()) {
+      this._items[this._itemIndex][i] = value;
+      return;
+    }
+  }
+  throw new Error('attribute not valid for list model');
+};
+List.prototype.addItem = function (item) {
+  var i;
+  var values = [];
+  if (item) {
+    for (i in item.attributes) {
+      values.push(item.attributes[i].value);
+    }
+  } else {
+    for (i in this.model.attributes) {
+      values.push(undefined);
+    }
+  }
+  this._items.push(values);
+  this._itemIndex = this._items.length - 1;
+  return this;
+};
+List.prototype.removeItem = function (item) {
+  this._items.splice(this._itemIndex, 1);
+  this._itemIndex--;
+  return this;
+};
+List.prototype.indexedItem = function (index) {
+  if (this._items.length < 1) return false;
+  if (index < 0) return false;
+  if (index >= this._items.length) return false;
+  this._itemIndex = index;
+  return true;
+};
+List.prototype.moveNext = function () {
+  if (this._items.length < 1) return false;
+  return this.indexedItem(this._itemIndex + 1);
+};
+List.prototype.movePrevious = function () {
+  if (this._items.length < 1) return false;
+  return this.indexedItem(this._itemIndex - 1);
+};
+List.prototype.moveFirst = function () {
+  if (this._items.length < 1) return false;
+  return this.indexedItem(0);
+};
+List.prototype.moveLast = function () {
+  if (this._items.length < 1) return false;
+  return this.indexedItem(this._items.length - 1);
+};
+List.prototype.sort = function (key) {
+  var i = 0;
+  var keyvalue;
+  for (var keyName in key) {
+    if (!keyvalue) keyvalue = keyName;
+  }
+  if (!keyvalue) throw new Error('sort order required');
+  var ascendingSort = (key[keyvalue] == 1);
+  while (i < this.model.attributes.length && this.model.attributes[i].name != keyvalue) i++;
+  this._items.sort(function (a, b) {
+    if (ascendingSort) {
+      if (a[i] < b[i])
+        return -1;
+      if (a[i] > b[i])
+        return 1;
+    } else {
+      if (a[i] > b[i])
+        return -1;
+      if (a[i] < b[i])
+        return 1;
+    }
+    return 0;
+  });
+};
 
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-model.source.js
