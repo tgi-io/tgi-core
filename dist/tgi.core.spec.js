@@ -946,13 +946,123 @@ spec.test('tgi-core/lib/tgi-core-interface.spec.js', 'Interface', function (call
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-list.test.js
  */
-spec.test('tgi-core/lib/tgi-core-list.test.js', 'List', function (callback) {
+spec.test('tgi-core/lib/tgi-core-list.spec.js', 'List', function (callback) {
+  var SurrogateListClass = List;
+  spec.heading('List Class', function () {
+    spec.paragraph('Lists are an ordered collection of items.  Each item is an array of values that correspond to the attributes for model used in constructor.');
+    spec.heading('CONSTRUCTOR', function () {
+      spec.paragraph('Creation of all Collections must adhere to following examples:');
+      spec.example('objects created should be an instance of List', true, function () {
+        return new SurrogateListClass(new Model()) instanceof List;
+      });
+      spec.example('should make sure new operator used', Error('new operator required'), function () {
+        List(); // jshint ignore:line
+      });
+      spec.example('must be instantiated with model parameter.  The model attributes represent the list columns.', Error('argument required: model'), function () {
+        new List();
+      });
+    });
+    spec.heading('PROPERTIES', function () {
+    });
+    spec.heading('METHODS', function () {
+      spec.heading('length()', function () {
+        spec.example('length method returns the number of items in the list.', 0, function () {
+          return new List(new Model()).length();
+        });
+      });
+      spec.heading('clear()', function () {
+        spec.example('clear the list.', 0, function () {
+          return new List(new Model()).addItem(new Model()).clear().length();
+        });
+      });
+      spec.heading('get(attributeName)', function () {
+        spec.paragraph('Gets value of attribute for given item.');
+        spec.example('throws error if no current item', Error('list is empty'), function () {
+          new List(new Model()).get('id'); // see integration tests
+        });
+      });
+      spec.heading('set(attributeName,value)', function () {
+        spec.paragraph('Sets value of attribute for given item.');
+        spec.example('throws error if no current item', Error('list is empty'), function () {
+          new List(new Model()).set('id'); // see integration tests
+        });
+        spec.example('throws an error if the attribute does not exists', Error('attribute not valid for list model'), function () {
+          var list = new List(new Model());
+          list.addItem(new Model());
+          list.set('whatever');
+        });
+      });
+      spec.heading('addItem()', function () {
+        spec.example('add item to list verify length is correct.', 1, function () {
+          var list = new List(new Model());
+          return list.addItem(new Model()).length(); // returns ref for method chaining
+        });
+      });
+      spec.heading('removeItem()', function () {
+        spec.example('add then item to list verify length is correct.', 0, function () {
+          var list = new List(new Model());
+          return list.addItem(new Model()).removeItem().length(); // returns ref for method chaining
+        });
+      });
+      spec.heading('moveNext()', function () {
+        spec.example('move to next item in list', false, function () {
+          return new List(new Model()).moveNext(); // Returns true when move succeeds
+        });
+      });
+      spec.heading('movePrevious()', function () {
+        spec.example('move to the previous item in list', false, function () {
+          return new List(new Model()).movePrevious(); // Returns true when move succeeds
+        });
+      });
+      spec.heading('moveFirst()', function () {
+        spec.example('move to the first item in list', false, function () {
+          return new List(new Model()).moveFirst(); // Returns true when move succeeds
+        });
+      });
+      spec.heading('moveLast()', function () {
+        spec.example('move to the last item in list', false, function () {
+          return new List(new Model()).moveLast(); // Returns true when move succeeds
+        });
+      });
+      spec.heading('sort(key)', function () {
+        spec.example('sort 1,2 in reverse order and return first element', Error('sort order required'), function () {
+          new List(new Model()).sort(); // see integration tests
+        });
+      });
+    });
+    //spec.runnerListIntegration();
+  });
 });
 
 /**---------------------------------------------------------------------------------------------------------------------
- * tgi-core/lib/tgi-core-message.test.js
+ * tgi-core/lib/tgi-core-message.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-message.test.js', 'Message', function (callback) {
+spec.test('tgi-core/lib/tgi-core-message.spec.js', 'Message', function (callback) {
+  spec.heading('Message Class', function () {
+    spec.paragraph('Messages are used by Transport to send to host or UI.');
+    spec.heading('CONSTRUCTOR', function () {
+      spec.example('objects created should be an instance of Message', true, function () {
+        return new Message('Null') instanceof Message;
+      });
+      spec.example('should make sure new operator used', Error('new operator required'), function () {
+        Message('Null'); // jshint ignore:line
+      });
+      spec.example('first parameter is required', Error('message type required'), function () {
+        new Message();
+      });
+      spec.example('first parameter must be valid message type', Error('Invalid message type: http://www.youtube.com/watch?v=2o7V1f7lbk4'), function () {
+        //spec.show(T.getMessageTypes());
+        new Message('http://www.youtube.com/watch?v=2o7V1f7lbk4');
+      });
+    });
+    spec.heading('METHODS', function () {
+      spec.heading('toString()', function () {
+        spec.example('should return a description of the message', 'Null Message', function () {
+          return new Message('Null').toString();
+        });
+      });
+    });
+  });
 });
 
 /**---------------------------------------------------------------------------------------------------------------------
@@ -1194,27 +1304,462 @@ spec.test('tgi-core/lib/tgi-core-model.spec.js', 'Model', function (callback) {
 });
 
 /**---------------------------------------------------------------------------------------------------------------------
- * tgi-core/lib/tgi-core-procedure.test.js
+ * tgi-core/lib/tgi-core-procedure.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-procedure.test.js', 'Procedure', function (callback) {
+spec.test('tgi-core/lib/tgi-core-procedure.spec.js', 'Procedure', function (callback) {
+  spec.heading('Procedure Class', function () {
+    spec.paragraph('The _Procedure_ class manages a set of _Command_ objects.  It provides a pattern for handling ' +
+    'asynchronous and synchronous command execution.');
+    spec.paragraph('_Command_ objects create and manage the _Procedure_ object.');
+    spec.heading('CONSTRUCTOR', function () {
+      spec.example('objects created should be an instance of Procedure', true, function () {
+        return new Procedure() instanceof Procedure;
+      });
+      spec.example('should make sure new operator used', Error('new operator required'), function () {
+        Procedure(); // jshint ignore:line
+      });
+      spec.example('should make sure argument properties are valid', Error('error creating Procedure: invalid property: yo'), function () {
+        new Procedure({yo: 'whatup'});
+      });
+    });
+    spec.heading('PROPERTIES', function () {
+      spec.heading('tasks', function () {
+        spec.paragraph('Tasks is an array of objects that represent each step of the procedure.  See TASKS section ' +
+        'below for each property of this unnamed object (task array element).');
+        spec.example('tasks can be falsy if no tasks defined otherwise it has to be an array',
+          Error('error creating Procedure: tasks is not an array'), function () {
+            new Procedure({tasks: true});
+          });
+        spec.example('the parameters must be valid for the object in each element of the array',
+          Error('error creating Procedure: invalid task[0] property: clean'), function () {
+            new Procedure({tasks: [
+              {clean: 'room'}
+            ]});
+          });
+      });
+      spec.heading('tasksNeeded', function () {
+        spec.paragraph('Total tasks that will execute (does not include skipped tasks).');
+        spec.paragraph('_See Integration Tests for usage_');
+      });
+      spec.heading('tasksCompleted', function () {
+        spec.paragraph('Number of tasks completed and started (does not include skipped tasks)');
+        spec.paragraph('_See Integration Tests for usage_');
+      });
+    });
+    spec.heading('TASKS', function () {
+      spec.paragraph('Each element of the array tasks is an object with the following properties:');
+      spec.heading('label', function () {
+        spec.paragraph('optional label for this task task element');
+        spec.example('if used it must be a string', Error('error creating Procedure: task[0].label must be string'), function () {
+          new Procedure({tasks: [
+            {label: true}
+          ]});
+        });
+      });
+      spec.heading('command', function () {
+        spec.paragraph('Command to execute for this task');
+        spec.example('if used it must be a string', Error('error creating Procedure: task[0].command must be a Command object'), function () {
+          new Procedure({tasks: [
+            {command: true}
+          ]});
+        });
+      });
+      spec.heading('requires', function () {
+        spec.paragraph('Establish other tasks that must be complete before this task is executed.  ' +
+        'Pass as array of or single element. Can be string(for label label) or number(for array index).  ' +
+        'Use -1 for previous task, null for no dependencies');
+        spec.example('test it', undefined, function () {
+          this.shouldThrowError(Error('invalid type for requires in task[0]'), function () {
+            new Procedure({tasks: [
+              {requires: new Date() }
+            ]});
+          });
+          // if number supplied it is index in array
+          this.shouldThrowError(Error('missing task #1 for requires in task[0]'), function () {
+            new Procedure({tasks: [
+              {command: new Procedure({}), requires: 1 }
+            ]});
+          });
+          this.shouldThrowError(Error('task #-2 invalid requires in task[0]'), function () {
+            new Procedure({tasks: [
+              {command: new Procedure({}), requires: -2 }
+            ]});
+          });
+          // requires defaults to -1 which means the previous element in the array so essentially the default
+          // is sequential processing.  Set to null for no dependencies which makes it asynchronous -1 means
+          // previous element is ignored for first index and is the default
+          var proc = new Procedure({tasks: [
+            {command: new Command({})}
+          ]});
+          this.shouldBeTrue(proc.tasks[0].requires == -1);
+        });
+      });
+    });
+    spec.heading('METHODS', function () {
+      spec.heading('getObjectStateErrors', function () {
+        spec.example('should return array of validation errors', 'falsy', function () {
+          if (!new Procedure().getObjectStateErrors()) return 'falsy';
+        });
+      });
+    });
+    //spec.runnerProcedureIntegration();
+  });
 });
 
 /**---------------------------------------------------------------------------------------------------------------------
- * tgi-core/lib/tgi-core-request.test.js
+ * tgi-core/lib/tgi-core-request.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-request.test.js', 'Request', function (callback) {
+spec.test('tgi-core/lib/tgi-core-request.spec.js', 'Request', function (callback) {
+  spec.heading('Request Class', function () {
+    spec.paragraph('Requests handle the Request / Response design pattern.  They are used by the Interface class to ' +
+    'communicate with the Application Model');
+    spec.heading('CONSTRUCTOR', function () {
+      spec.example('objects created should be an instance of Request', true, function () {
+        return new Request('Null') instanceof Request;
+      });
+      spec.example('should make sure new operator used', Error('new operator required'), function () {
+        Request('Null'); // jshint ignore:line
+      });
+      spec.example('request type must be specified', Error('Request type required'), function () {
+        new Request();
+      });
+      spec.example('simple string parameter creates request of named type', 'example', function () {
+        return new Request('example').type;
+      });
+      spec.example('type can be specified when object passed', 'example', function () {
+        return new Request({type: 'example'}).type;
+      });
+      spec.example('Command type requests expect contents to contain a command object', Error('command object required'), function () {
+        return new Request({type: 'Command'});
+      });
+      spec.example('correct version', 'Command Request: Stub Command: (unnamed)', function () {
+        return new Request({type: 'Command', command: new Command()});
+      });
+    });
+    spec.heading('METHODS', function () {
+      spec.heading('toString()', function () {
+        spec.example('should return a description of the Request', 'Null Request', function () {
+          return new Request('Null').toString();
+        });
+      });
+    });
+  });
 });
 
 /**---------------------------------------------------------------------------------------------------------------------
- * tgi-core/lib/tgi-core-store.test.js
+ * tgi-core/lib/tgi-core-store.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-store.test.js', 'Store', function (callback) {
+spec.test('tgi-core/lib/tgi-core-store.spec.js', 'Store', function (callback) {
+  spec.heading('Store Class', function () {
+    spec.paragraph('The store class is used for object persistence.');
+    spec.heading('CONSTRUCTOR', function () {
+      spec.runnerStoreConstructor(Store);
+    });
+    spec.runnerStoreMethods(Store);
+  });
 });
 
+spec.runnerStoreConstructor = function (SurrogateStore) {
+  spec.example('objects created should be an instance of Store', true, function () {
+    return new SurrogateStore() instanceof Store;
+  });
+  spec.example('should make sure new operator used', Error('new operator required'), function () {
+    SurrogateStore(); // jshint ignore:line
+  });
+  spec.example('should make sure properties are valid', Error('error creating Store: invalid property: food'), function () {
+    new SurrogateStore({food: 'twinkies'});
+  });
+};
+spec.runnerStoreMethods = function (SurrogateStore, inheritanceTest) {
+  spec.heading('PROPERTIES', function () {
+    spec.heading('name', function () {
+      spec.example('name of store can be set in constructor', 'punchedCards', function () {
+        return new SurrogateStore({name: 'punchedCards'}).name;
+      });
+    });
+    spec.heading('storeType', function () {
+      spec.paragraph('storeType defaults to Store Class Name but can be set to suite the app architecture.');
+      spec.example('storeType can be set in constructor', 'legacyStorage', function () {
+        return new SurrogateStore({storeType: 'legacyStorage'}).storeType;
+      });
+    });
+  });
+  spec.heading('METHODS', function () {
+    var services = new SurrogateStore().getServices();  // TODO change to methods ASAP!!!
+    spec.example('getServices() returns an object with interface for the Store.', undefined, function () {
+      //spec.show(services);
+      //this.shouldBeTrue(services instanceof Object);
+      //this.shouldBeTrue(typeof services['isReady'] == 'boolean'); // don't use until
+      //this.shouldBeTrue(typeof services['canGetModel'] == 'boolean'); // define all allowed methods...
+      //this.shouldBeTrue(typeof services['canPutModel'] == 'boolean');
+      //this.shouldBeTrue(typeof services['canDeleteModel'] == 'boolean');
+      //this.shouldBeTrue(typeof services['canGetList'] == 'boolean');
+    });
+    spec.heading('toString()', function () {
+      spec.example('should return a description of the Store', "ConvenienceStore: 7-Eleven", function () {
+        var cStore = new SurrogateStore();
+        //spec.show(cStore.toString());
+        cStore.name = '7-Eleven';
+        cStore.storeType = 'ConvenienceStore';
+        //spec.show(cStore.toString());
+        return cStore.toString();
+      });
+    });
+    spec.heading('onConnect()', function () {
+      spec.example('must pass url string', Error('argument must a url string'), function () {
+        new SurrogateStore().onConnect();
+      });
+      spec.example('must pass callback function', Error('argument must a callback'), function () {
+        new SurrogateStore().onConnect("");
+      });
+      if (services['isReady']) {
+        spec.example('return store and undefined error upon successful connection to remote store.', spec.asyncResults(true), function (callback) {
+          new SurrogateStore().onConnect('', function (store, err) {
+            if (err) {
+              callback(err);
+            } else {
+              callback(store instanceof Store);
+            }
+          });
+        });
+      } else {
+        spec.paragraph('see integration test for ' + new SurrogateStore().storeType);
+      }
+    });
+    spec.heading('getModel()', function () {
+      if (services['canGetModel']) {
+        spec.example('must pass valid model', Error('argument must be a Model'), function () {
+          new SurrogateStore().getModel();
+        });
+        spec.example('model must have no validation errors', Error('model has validation errors'), function () {
+          var m = new Model();
+          m.attributes = null;
+          new SurrogateStore().getModel(m);
+        });
+        spec.example('ID attribute must have truthy value', Error('ID not set'), function () {
+          new SurrogateStore().getModel(new Model());
+        });
+        spec.example('callback function required', Error('callBack required'), function () {
+          var m = new Model();
+          m.attributes[0].value = 1;
+          new SurrogateStore().getModel(m);
+        });
+        if (services['isReady']) {
+          spec.example('returns error when model not found', spec.asyncResults(Error('model not found in store')), function (callback) {
+            var m = new Model();
+            m.attributes[0].value = 1;
+            new SurrogateStore().getModel(m, function (mod, err) {
+              if (err) {
+                callback(err);
+              } else {
+                callback(mod);
+              }
+            });
+          });
+        } else {
+          spec.paragraph('skipping tests since store is not ready');
+        }
+      } else {
+        spec.example('getModel() is not implemented for virtual class', Error(new SurrogateStore().storeType + ' does not provide getModel'), function () {
+          new SurrogateStore().getModel();
+        });
+      }
+    });
+    spec.heading('putModel(model)', function () {
+      if (services['canPutModel']) {
+        spec.example('must pass valid model', Error('argument must be a Model'), function () {
+          new SurrogateStore().putModel();
+        });
+        spec.example('model must have no validation errors', Error('model has validation errors'), function () {
+          var m = new Model();
+          m.attributes = null;
+          new SurrogateStore().putModel(m);
+        });
+        spec.example('callback function required', Error('callBack required'), function () {
+          var m = new Model();
+          m.attributes[0].value = 1;
+          new SurrogateStore().putModel(m);
+        });
+        if (services['isReady']) {
+          spec.example('returns error when model not found', spec.asyncResults(Error('model not found in store')), function (callback) {
+            var m = new Model();
+            m.attributes[0].value = 1;
+            new SurrogateStore().putModel(m, function (mod, err) {
+              if (err) {
+                callback(err);
+              } else {
+                callback(mod);
+              }
+            });
+          });
+          //spec.xexample('creates new model when ID is not set', spec.asyncResults(true), function (callback) {
+          //  // This works but pollutes store with crap
+          //  var m = new Model();
+          //  new SurrogateStore().putModel(m, function (mod, err) {
+          //    if (err) {
+          //      callback(err);
+          //    } else {
+          //      callback(mod.get('id') ? true : false);
+          //    }
+          //  });
+          //});
+        } else {
+          spec.paragraph('skipping tests since store is not ready');
+        }
+      } else {
+        spec.example('putModel() is not implemented for virtual class', Error('Store does not provide putModel'), function () {
+          new SurrogateStore().putModel();
+        });
+      }
+    });
+    spec.heading('deleteModel(model)', function () {
+      if (services['canDeleteModel']) {
+        spec.example('must pass valid model', Error('argument must be a Model'), function () {
+          new SurrogateStore().deleteModel();
+        });
+        spec.example('model must have no validation errors', Error('model has validation errors'), function () {
+          var m = new Model();
+          m.attributes = null;
+          new SurrogateStore().deleteModel(m);
+        });
+        spec.example('callback function required', Error('callBack required'), function () {
+          var m = new Model();
+          m.attributes[0].value = 1;
+          new SurrogateStore().deleteModel(m);
+        });
+        if (services['isReady']) {
+          spec.example('returns error when model not found', spec.asyncResults(Error('model not found in store')), function (callback) {
+            var m = new Model();
+            m.modelType = 'PeopleAreString!';
+            m.attributes[0].value = 90210;
+            new SurrogateStore().deleteModel(m, function (mod, err) {
+              if (err) {
+                callback(err);
+              } else {
+                callback(mod);
+              }
+            });
+          });
+        } else {
+          spec.paragraph('skipping tests since store is not ready');
+        }
+      } else {
+        spec.example('deleteModel() is not implemented for virtual class', Error('Store does not provide deleteModel'), function () {
+          new SurrogateStore().deleteModel();
+        });
+      }
+    });
+    spec.heading('getList(model, filter, order)', function () {
+      spec.paragraph('This method will clear and populate the list with collection from store.  ' +
+      'The **filter** property can be used to query the store.  ' +
+      'The **order** property can specify the sort order of the list.  ' +
+      '_See integration test for more info._');
+      if (services['isReady'] && services['canGetList']) {
+        spec.example('returns a List populated from store', undefined, function () {
+          spec.shouldThrow(Error('argument must be a List'), function () {
+            new SurrogateStore().getList();
+          });
+          spec.shouldThrow(Error('filter argument must be Object'), function () {
+            new SurrogateStore().getList(new List(new Model()));
+          });
+          spec.shouldThrow(Error('callBack required'), function () {
+            new SurrogateStore().getList(new List(new Model()), []);
+          });
+          // See integration tests for examples of usage
+        });
+      } else {
+        if (services['isReady'] && services['canGetList']) {
+          spec.example('returns a List populated from store', Error('Store does not provide getList'), function () {
+            return new SurrogateStore().getList();
+          });
+        } else {
+          //spec.xexample('returns a List populated from store', Error('Store does not provide getList'), function () {
+          //  return new SurrogateStore().getList();
+          //});
+        }
+      }
+    });
+  });
+  //spec.runnerStoreIntegration();
+};
 /**---------------------------------------------------------------------------------------------------------------------
- * tgi-core/lib/tgi-core-transport.test.js
+ * tgi-core/lib/tgi-core-transport.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-transport.test.js', 'Transport', function (callback) {
+spec.test('tgi-core/lib/tgi-core-transport.spec.js', 'Transport', function (callback) {
+  if (typeof io == 'undefined') return; // todo
+  spec.heading('Transport Class', function () {
+//    if (typeof io == 'undefined') {
+    //spec.examplesDisabled = true;
+    spec.paragraph('tests disabled socket.io too spammy in console');
+//      spec.paragraph('tests disabled socket.io not detected');
+//    }
+    spec.paragraph('Handle message passing between host and UI.');
+    spec.heading('CONSTRUCTOR', function () {
+      spec.example('objects created should be an instance of Transport', true, function () {
+        return new Transport("*wtf*", function () {
+          }) instanceof Transport;
+      });
+      spec.example('must be instantiated with new', Error('new operator required'), function () {
+        Transport("", function () { // jshint ignore:line
+        });
+      });
+      spec.example('must pass url string', Error('argument must a url string'), function () {
+        new Transport();
+      });
+      spec.paragraph('The connection success is signaled via callback. use function(msg){} for' +
+      'callback.  msg.Connection indications success, msg.Error for failure (msg.contents' +
+      'contains error).');
+      spec.example('must pass callback function', Error('argument must a callback'), function () {
+        new Transport('');
+      });
+      spec.example('url must be valid', spec.asyncResponse('Error Message: cannot connect'), function (testNode, returnResponse) {
+        new Transport('*url*', function (message) {
+          returnResponse(testNode, message);
+        }, this);
+      });
+    });
+    spec.heading('METHODS', function () {
+      spec.heading('send(message)', function () {
+        spec.paragraph('send() is used to send messages to host or UI.  Any errors returned are based on state checks' +
+        ' and not resulting from async errors.' +
+        ' If confirmation is needed provide callback to notify message has been sent or error has occurred.');
+        spec.example('message param required', Error('message required'), function () {
+          new Transport("", function () {
+          }).send();
+        });
+        spec.example('message param must be type Message', Error('parameter must be instance of Message'), function () {
+          new Transport("", function () {
+          }).send('money');
+        });
+        spec.example('Transport must be connected (async error message)', spec.asyncResponse('Error Message: not connected'), function (testNode, returnResponse) {
+          new Transport("*bad*", function () {
+            this.send(new Message('Null'), function (msg) {
+              returnResponse(testNode, msg);
+            });
+          });
+        });
+        spec.example('optional callback must be function', Error('argument must a callback'), function () {
+          new Transport("", function () {
+          }).send(new Message('Null'), Infinity);
+        });
+        spec.example('if callback used messages sent are acknowledged', spec.asyncResponse(true), function (testNode, returnResponse) {
+          spec.hostStore.transport.send(new Message('Null'), function (msg) {
+            returnResponse(testNode, msg);
+          });
+        });
+      });
+      spec.heading('close()', function () {
+        spec.xexample('Transport must be connected (async error message)', spec.asyncResponse('jobs done'), function (testNode, returnResponse) {
+          new Transport("", function () {
+            this.close(); // TODO can't open 2 transports to same URL so can't test this since it conflicts with hostStore
+            returnResponse(testNode, "jobs done");
+          });
+        });
+      });
+    });
+    //spec.examplesDisabled = false;
+  });
+
 });
 
 /**---------------------------------------------------------------------------------------------------------------------

@@ -80,7 +80,7 @@ gulp.task('_lintLib', ['_buildLib'], function (callback) {
 // Lint Spec
 gulp.task('_lintSpec', ['_buildSpec'], function (callback) {
   return gulp.src('dist/tgi.core.spec.js')
-    .pipe(jshint({validthis:true}))
+    .pipe(jshint({validthis: true, sub:true}))
     .pipe(jshint.reporter('jshint-stylish'))
     .pipe(jshint.reporter('fail'));
 });

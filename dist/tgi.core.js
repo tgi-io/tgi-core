@@ -15,20 +15,28 @@ var CORE = function () {
     Command: Command,
     Delta: Delta,
     Interface: Interface,
+    List: List,
+    Message: Message,
     Model: Model,
     Presentation: Presentation,
     Procedure: Procedure,
     Request: Request,
+    Store: Store,
+    Transport: Transport,
     injectMethods: function (that) {
       that.Application = Application;
       that.Attribute = Attribute;
       that.Command = Command;
       that.Delta = Delta;
       that.Interface = Interface;
+      that.List = List;
+      that.Message = Message;
       that.Model = Model;
       that.Presentation = Presentation;
       that.Procedure = Procedure;
       that.Request = Request;
+      that.Store = Store;
+      that.Transport = Transport;
     }
   };
 };
@@ -39,10 +47,7 @@ function Application() {
 }
 function Presentation() {
 }
-function Procedure() {
-}
-function Request() {
-}
+
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-attribute.source.js
  */
@@ -983,22 +988,260 @@ Model.prototype.clearError = function (condition) {
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/xxx/tgi-core-message.source
  */
+/*
+ * Constructor
+ */
+function Message(type, contents) {
+  if (false === (this instanceof Message)) throw new Error('new operator required');
+  if ('undefined' == typeof type) throw new Error('message type required');
+  if (!contains(['Null', 'Connected', 'Error', 'Sent', 'Ping', 'PutModel', 'PutModelAck', 'GetModel', 'GetModelAck', 'DeleteModel', 'DeleteModelAck', 'GetList', 'GetListAck'], type)) throw new Error('Invalid message type: ' + type);
+  this.type = type;
+  this.contents = contents;
+}
+/*
+ * Methods
+ */
+Message.prototype.toString = function () {
+  switch (this.type) {
+    case 'Null':
+      return this.type + ' Message';
+    default:
+      return this.type + ' Message: ' + this.contents;
+  }
+};
 
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/xxx/tgi-core-procedure.source
  */
+// Model Constructor
+var Procedure = function (args) {
+  if (false === (this instanceof Procedure)) throw new Error('new operator required');
+  args = args || {};
+  var i;
+  var unusedProperties = getInvalidProperties(args, ['tasks', 'tasksNeeded', 'tasksCompleted']);
+  var errorList = [];
+  for (i = 0; i < unusedProperties.length; i++) errorList.push('invalid property: ' + unusedProperties[i]);
+  if (errorList.length > 1)
+    throw new Error('error creating Procedure: multiple errors');
+  if (errorList.length) throw new Error('error creating Procedure: ' + errorList[0]);
+  // args ok, now copy to object and check for errors
+  for (i in args)
+    if (args.hasOwnProperty(i))
+      this[i] = args[i];
+  errorList = this.getObjectStateErrors(); // before leaving make sure valid Attribute
+  if (errorList) {
+    if (errorList.length > 1) throw new Error('error creating Procedure: multiple errors');
+    if (errorList.length) throw new Error('error creating Procedure: ' + errorList[0]);
+  }
+};
+Procedure.prototype.getObjectStateErrors = function () {
+  var i, j, k;
+  var unusedProperties;
+  if (this.tasks && !(this.tasks instanceof Array)) return ['tasks is not an array'];
+  var errorList = [];
+  for (i in this.tasks) {
+    if (this.tasks.hasOwnProperty(i)) {
+      var task = this.tasks[i];
+      unusedProperties = getInvalidProperties(task, ['label', 'command', 'requires', 'timeout']);
+      for (j = 0; j < unusedProperties.length; j++) errorList.push('invalid task[' + i + '] property: ' + unusedProperties[j]);
+      if (typeof task.label != 'undefined' && typeof task.label != 'string')
+        errorList.push('task[' + i + '].label must be string');
+      if (typeof task.command != 'undefined' && !(task.command instanceof Command))
+        errorList.push('task[' + i + '].command must be a Command object');
+      // make sure requires valid if specified
+      if (typeof task.requires == 'undefined')
+        task.requires = -1; // default to
+      if (!(task.requires instanceof Array)) task.requires = [task.requires]; // coerce to array
+      for (j in task.requires) {
+        if (task.requires.hasOwnProperty(j) && task.requires[j] !== null)
+          switch (typeof task.requires[j]) {
+            case 'string':
+              // make sure label exists
+              var gotLabel = false;
+              for (k=0; !gotLabel && k<this.tasks.length; k++ )
+                if (task.requires[j] == this.tasks[k].label)
+                  gotLabel = true;
+              if (!gotLabel)
+                throw new Error('missing label: ' + task.requires[j]);
+              break;
+            case 'number':
+              if (task.requires[j] >= this.tasks.length) throw new Error('missing task #' + task.requires[j] + ' for requires in task[' + i + ']');
+              if (task.requires[j] < -1) throw new Error('task #' + task.requires[j] + ' invalid requires in task[' + i + ']');
+              break;
+            default:
+              throw new Error('invalid type for requires in task[' + i + ']');
+          }
+      }
+    }
+  }
+  return errorList.length ? errorList : null;
+};
 
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/xxx/tgi-core-request.source
  */
+/*
+ * Constructor
+ */
+function Request(args) {
+  if (false === (this instanceof Request)) throw new Error('new operator required');
+  if (typeof args == 'string') {
+    var quickType = args;
+    args = {};
+    args.type = quickType;
+  }
+  args = args || {};
+  this.type = args.type || null;
+  if (!this.type || typeof this.type != 'string') throw new Error('Request type required');
+  switch (this.type) {
+    case 'Command':
+      this.command = args.command || null;
+      if (false === (this.command instanceof Command)) throw new Error('command object required');
+      break;
+  }
+}
+/*
+ * Methods
+ */
+Request.prototype.toString = function () {
+  switch (this.type) {
+    case 'Command':
+      return this.type + ' Request: ' + this.command;
+
+    default:
+      return this.type + ' Request';
+
+  }
+};
 
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/xxx/tgi-core-store.source
  */
 
+// Constructor
+var Store = function (args) {
+  if (false === (this instanceof Store)) throw new Error('new operator required');
+  args = args || {};
+  this.storeType = args.storeType || "Store";
+  this.name = args.name || 'a ' + this.storeType;
+  this.storeProperty = {
+    isReady: true,
+    canGetModel: false,
+    canPutModel: false,
+    canDeleteModel: false,
+    canGetList: false
+  };
+  var unusedProperties = getInvalidProperties(args, ['name', 'storeType']);
+  var errorList = [];
+  for (var i = 0; i < unusedProperties.length; i++) errorList.push('invalid property: ' + unusedProperties[i]);
+  if (errorList.length > 1) throw new Error('error creating Store: multiple errors');
+  if (errorList.length) throw new Error('error creating Store: ' + errorList[0]);
+};
+// Methods
+Store.prototype.toString = function () {
+  if (this.name == 'a ' + this.storeType) {
+    return this.name;
+  } else {
+    return this.storeType + ': ' +this.name;
+  }
+};
+Store.prototype.getServices = function () {
+  return this.storeProperty;
+};
+Store.prototype.onConnect = function (location, callBack) {
+  if (typeof location != 'string') throw new Error('argument must a url string');
+  if (typeof callBack != 'function') throw new Error('argument must a callback');
+  callBack(this, undefined);
+};
+Store.prototype.getModel = function () {
+  throw new Error(this.storeType + ' does not provide getModel');
+};
+Store.prototype.putModel = function () {
+  throw new Error('Store does not provide putModel');
+};
+Store.prototype.deleteModel = function () {
+  throw new Error('Store does not provide deleteModel');
+};
+Store.prototype.getList = function () {
+  throw new Error('Store does not provide getList');
+};
+
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/xxx/tgi-core-transport.source
  */
+/* istanbul ignore next */
+function Transport(location, callBack) {
+  if (false === (this instanceof Transport)) throw new Error('new operator required');
+  if (typeof location != 'string') throw new Error('argument must a url string');
+  if (typeof callBack != 'function') throw new Error('argument must a callback');
+  var self = this;
+  self.connected = false;
+  self.initialConnect = true;
+  self.location = location;
+  if (self.location==='') self.location='http host';
+  self.socket = io.connect(location);
+  self.socket.on('connect', function () {
+    self.connected = true;
+    self.initialConnect = false;
+    console.log('socket.io ('+self.location+') connected');
+    callBack.call(self, new Message('Connected', ''));
+  });
+  self.socket.on('connecting', function () {
+    console.log('socket.io ('+self.location+') connecting');
+  });
+  self.socket.on('error', function (reason) {
+    var theReason = reason;
+    if (theReason.length < 1) theReason = "(unknown)";
+    console.error('socket.io ('+self.location+') error: ' + theReason + '.');
+    // If have not ever connected then signal error
+    if (self.initialConnect) {
+      callBack.call(self, new Message('Error', 'cannot connect'));
+    }
+  });
+  self.socket.on('connect_failed', function (reason) {
+    var theReason = reason;
+    if (theReason.length < 1) theReason = "(unknown)";
+    console.error('socket.io ('+self.location+') connect_failed: ' + theReason + '.');
+    // If have not ever connected then signal error
+    if (self.initialConnect) {
+      callBack.call(self, new Message('Error', 'cannot connect'));
+    }
+  });
+  self.socket.on('message', function (obj) {
+    console.log('socket.io ('+self.location+') message: ' + obj);
+  });
+  self.socket.on('disconnect', function (reason) {
+    self.connected = false;
+    console.log('socket.io ('+self.location+') disconnect: ' + reason);
+  });
+}
+/*
+ * Methods
+ */
+/* istanbul ignore next */
+Transport.prototype.send = function (message, callBack) {
+  var self = this;
+  if (typeof message == 'undefined') throw new Error('message required');
+  if (!(message instanceof Message)) throw new Error('parameter must be instance of Message');
+  if (typeof callBack != 'undefined' && typeof callBack != 'function') throw new Error('argument must a callback');
+  if (!this.connected) {
+    callBack.call(self, new Message('Error', 'not connected'));
+    return;
+  }
+  if (typeof callBack != 'undefined') {
+    self.socket.emit('ackmessage', message, function (msg) {
+      callBack.call(self, msg);
+    });
+  } else {
+    self.socket.send(message);
+  }
+};
+/* istanbul ignore next */
+Transport.prototype.close = function () {
+  if (!this.connected)
+    throw new Error('not connected');
+  this.socket.disconnect();
+};
 
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/misc/lib-footer

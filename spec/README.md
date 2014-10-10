@@ -23,9 +23,7 @@ return new Attribute({name: 'name'}) instanceof Attribute;
 </blockquote>
 &nbsp;<b><i>should make sure new operator used:</i></b>
 ```javascript
-/* jshint ignore:start */
-Attribute({name: 'name'});
-/* jshint ignore:end */
+Attribute({name: 'name'}); // jshint ignore:line
 ```
 <blockquote><strong>Error: new operator required</strong> thrown as expected
 </blockquote>
@@ -924,6 +922,334 @@ new Command().onEvent(['Completed'], function () {
 });
 ```
 <blockquote></blockquote>
+#### Delta Class
+<p>Deltas represent changes to models.  They can be applied to a store then update the model.  They can be stored in logs as a change audit for the model.</p>
+#### CONSTRUCTOR
+&nbsp;<b><i>objects created should be an instance of Delta:</i></b>
+```javascript
+return new Delta(new Attribute.ModelID(new Model())) instanceof Delta;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>should make sure new operator used:</i></b>
+```javascript
+Delta(); // jshint ignore:line
+```
+<blockquote><strong>Error: new operator required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>Attribute.ModelID required in constructor:</i></b>
+```javascript
+new Delta();
+```
+<blockquote><strong>Error: Attribute.ModelID required in constructor</strong> thrown as expected
+</blockquote>
+#### PROPERTIES
+#### dateCreated
+&nbsp;<b><i>set to current date/time on creation:</i></b>
+```javascript
+var delta = new Delta(new Attribute.ModelID(new Model()));
+//spec.show(delta.dateCreated);
+return delta.dateCreated instanceof Date;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+#### modelID
+&nbsp;<b><i>set from constructor:</i></b>
+```javascript
+var delta = new Delta(new Attribute.ModelID(new Model()));
+//spec.show(delta.dateCreated);
+return delta.modelID.toString();
+```
+<blockquote>returns <strong>ModelID(Model:null)</strong> as expected
+</blockquote>
+#### attributeValues
+&nbsp;<b><i>created as empty object:</i></b>
+```javascript
+// attributeValues - {attribute:[before,after]}  before and after attribute values represent the model
+// attribute value changes. If the model attribute is type Table then attributeValues is array of
+// attributeValues corresponding to model -> attribute -> group....
+return typeof new Delta(new Attribute.ModelID(new Model())).attributeValues;
+```
+<blockquote>returns <strong>object</strong> as expected
+</blockquote>
+#### Interface Class
+#### CONSTRUCTOR
+&nbsp;<b><i>objects created should be an instance of SurrogateInterface:</i></b>
+```javascript
+var i = new SurrogateInterface();
+return (i instanceof SurrogateInterface) && (i instanceof Interface);
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>should make sure new operator used:</i></b>
+```javascript
+SurrogateInterface(); // jshint ignore:line
+```
+<blockquote><strong>Error: new operator required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>should make sure argument properties are valid:</i></b>
+```javascript
+new SurrogateInterface({yo: 'whatup'});
+```
+<blockquote><strong>Error: error creating Procedure: invalid property: yo</strong> thrown as expected
+</blockquote>
+#### PROPERTIES
+#### name
+&nbsp;<b><i>defaults to (unnamed):</i></b>
+```javascript
+return new SurrogateInterface().name;
+```
+<blockquote>returns <strong>(unnamed)</strong> as expected
+</blockquote>
+#### description
+&nbsp;<b><i>defaults to a SurrogateInterface:</i></b>
+```javascript
+return new SurrogateInterface().description;
+```
+<blockquote>returns <strong>a Interface</strong> as expected
+</blockquote>
+#### METHODS
+#### toString()
+&nbsp;<b><i>should return a description of the message:</i></b>
+```javascript
+return new SurrogateInterface({description: 'Punched Card SurrogateInterface'}).toString();
+```
+<blockquote>returns <strong>Punched Card SurrogateInterface</strong> as expected
+</blockquote>
+#### start()
+<p>The start method initiates the interface and passes a callback for the interface to submit requests. The callback must pass a Request object followed by an optional callback for responses to the request e.g. interface.start ( function ( request, response(callback) ) ) {}</p>
+&nbsp;<b><i>Application parameter is required:</i></b>
+```javascript
+new SurrogateInterface().start();
+```
+<blockquote><strong>Error: Application required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>presentation parameter is required:</i></b>
+```javascript
+new SurrogateInterface().start(new Application());
+```
+<blockquote><strong>Error: presentation required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>callback parameter required:</i></b>
+```javascript
+new SurrogateInterface().start(new Application(), new Presentation());
+```
+<blockquote><strong>Error: callBack required</strong> thrown as expected
+</blockquote>
+#### stop()
+<p>calling stop will end the start() processing and release any resources</p>
+&nbsp;<b><i>must pass callback function:</i></b>
+```javascript
+new SurrogateInterface().stop();
+```
+<blockquote><strong>Error: callBack required</strong> thrown as expected
+</blockquote>
+#### dispatch()
+<p>The dispatch method will accept a request and act on it or pass it to the app.</p>
+&nbsp;<b><i>must pass a Request object:</i></b>
+```javascript
+new SurrogateInterface().dispatch();
+```
+<blockquote><strong>Error: Request required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>send command without callback when no response needed:</i></b>
+```javascript
+new SurrogateInterface().dispatch(new Request({type: 'Command', command: new Command()}));
+```
+<blockquote></blockquote>
+&nbsp;<b><i>optional second parameter is the response callback:</i></b>
+```javascript
+new SurrogateInterface().dispatch(new Request({type: 'Command', command: new Command()}), true);
+```
+<blockquote><strong>Error: response callback is not a function</strong> thrown as expected
+</blockquote>
+#### notify()
+<p>The notify method sends a Request to the Interface.  This can be the result of a request sent from the start() callback.</p>
+&nbsp;<b><i>must pass a Request object:</i></b>
+```javascript
+new SurrogateInterface().notify();
+```
+<blockquote><strong>Error: Request required</strong> thrown as expected
+</blockquote>
+#### render()
+&nbsp;<b><i>first argument must be a Presentation instance:</i></b>
+```javascript
+new SurrogateInterface().render();
+```
+<blockquote><strong>Error: Presentation object required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>optional callback must be function:</i></b>
+```javascript
+new SurrogateInterface().render(new Presentation(), true);
+```
+<blockquote><strong>Error: optional second argument must a commandRequest callback function</strong> thrown as expected
+</blockquote>
+#### canMock()
+&nbsp;<b><i>returns boolean to indicate if interface has mocking ability:</i></b>
+```javascript
+var canMock = new SurrogateInterface().canMock();
+return typeof canMock;
+```
+<blockquote>returns <strong>boolean</strong> as expected
+</blockquote>
+#### mockRequest()
+&nbsp;<b><i>parameter must be request or array of requests:</i></b>
+```javascript
+var ui = new SurrogateInterface();
+this.shouldThrowError('Error: missing request parameter', function () {
+  ui.mockRequest();
+});
+// Empty Stub Commands are ignored in mocks
+ui.mockRequest(new Request(new Command())); // Send single command
+ui.mockRequest([new Request(new Command()), new Request(new Command())]); // Send array of commands
+// Test when one of array elements is bad
+this.shouldThrowError('Error: invalid request parameter', function () {
+  ui.mockRequest([new Request(new Command()), 'wtf']);
+});
+```
+<blockquote></blockquote>
+#### List Class
+<p>Lists are an ordered collection of items.  Each item is an array of values that correspond to the attributes for model used in constructor.</p>
+#### CONSTRUCTOR
+<p>Creation of all Collections must adhere to following examples:</p>
+&nbsp;<b><i>objects created should be an instance of List:</i></b>
+```javascript
+return new SurrogateListClass(new Model()) instanceof List;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>should make sure new operator used:</i></b>
+```javascript
+List(); // jshint ignore:line
+```
+<blockquote><strong>Error: new operator required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>must be instantiated with model parameter.  The model attributes represent the list columns.:</i></b>
+```javascript
+new List();
+```
+<blockquote><strong>Error: argument required: model</strong> thrown as expected
+</blockquote>
+#### PROPERTIES
+#### METHODS
+#### length()
+&nbsp;<b><i>length method returns the number of items in the list.:</i></b>
+```javascript
+return new List(new Model()).length();
+```
+<blockquote></blockquote>
+#### clear()
+&nbsp;<b><i>clear the list.:</i></b>
+```javascript
+return new List(new Model()).addItem(new Model()).clear().length();
+```
+<blockquote></blockquote>
+#### get(attributeName)
+<p>Gets value of attribute for given item.</p>
+&nbsp;<b><i>throws error if no current item:</i></b>
+```javascript
+new List(new Model()).get('id'); // see integration tests
+```
+<blockquote><strong>Error: list is empty</strong> thrown as expected
+</blockquote>
+#### set(attributeName,value)
+<p>Sets value of attribute for given item.</p>
+&nbsp;<b><i>throws error if no current item:</i></b>
+```javascript
+new List(new Model()).set('id'); // see integration tests
+```
+<blockquote><strong>Error: list is empty</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>throws an error if the attribute does not exists:</i></b>
+```javascript
+var list = new List(new Model());
+list.addItem(new Model());
+list.set('whatever');
+```
+<blockquote><strong>Error: attribute not valid for list model</strong> thrown as expected
+</blockquote>
+#### addItem()
+&nbsp;<b><i>add item to list verify length is correct.:</i></b>
+```javascript
+var list = new List(new Model());
+return list.addItem(new Model()).length(); // returns ref for method chaining
+```
+<blockquote>returns <strong>1</strong> as expected
+</blockquote>
+#### removeItem()
+&nbsp;<b><i>add then item to list verify length is correct.:</i></b>
+```javascript
+var list = new List(new Model());
+return list.addItem(new Model()).removeItem().length(); // returns ref for method chaining
+```
+<blockquote></blockquote>
+#### moveNext()
+&nbsp;<b><i>move to next item in list:</i></b>
+```javascript
+return new List(new Model()).moveNext(); // Returns true when move succeeds
+```
+<blockquote></blockquote>
+#### movePrevious()
+&nbsp;<b><i>move to the previous item in list:</i></b>
+```javascript
+return new List(new Model()).movePrevious(); // Returns true when move succeeds
+```
+<blockquote></blockquote>
+#### moveFirst()
+&nbsp;<b><i>move to the first item in list:</i></b>
+```javascript
+return new List(new Model()).moveFirst(); // Returns true when move succeeds
+```
+<blockquote></blockquote>
+#### moveLast()
+&nbsp;<b><i>move to the last item in list:</i></b>
+```javascript
+return new List(new Model()).moveLast(); // Returns true when move succeeds
+```
+<blockquote></blockquote>
+#### sort(key)
+&nbsp;<b><i>sort 1,2 in reverse order and return first element:</i></b>
+```javascript
+new List(new Model()).sort(); // see integration tests
+```
+<blockquote><strong>Error: sort order required</strong> thrown as expected
+</blockquote>
+#### Message Class
+<p>Messages are used by Transport to send to host or UI.</p>
+#### CONSTRUCTOR
+&nbsp;<b><i>objects created should be an instance of Message:</i></b>
+```javascript
+return new Message('Null') instanceof Message;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>should make sure new operator used:</i></b>
+```javascript
+Message('Null'); // jshint ignore:line
+```
+<blockquote><strong>Error: new operator required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>first parameter is required:</i></b>
+```javascript
+new Message();
+```
+<blockquote><strong>Error: message type required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>first parameter must be valid message type:</i></b>
+```javascript
+//spec.show(T.getMessageTypes());
+new Message('http://www.youtube.com/watch?v=2o7V1f7lbk4');
+```
+<blockquote><strong>Error: Invalid message type: http://www.youtube.com/watch?v=2o7V1f7lbk4</strong> thrown as expected
+</blockquote>
+#### METHODS
+#### toString()
+&nbsp;<b><i>should return a description of the message:</i></b>
+```javascript
+return new Message('Null').toString();
+```
+<blockquote>returns <strong>Null Message</strong> as expected
+</blockquote>
 #### Model Class
 <p>Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.</p>
 #### CONSTRUCTOR
@@ -1188,3 +1514,269 @@ function test4() {
 ```
 <blockquote>returns <strong>test4: 0</strong> as expected
 </blockquote>
+#### Procedure Class
+<p>The _Procedure_ class manages a set of _Command_ objects.  It provides a pattern for handling asynchronous and synchronous command execution.</p>
+<p>_Command_ objects create and manage the _Procedure_ object.</p>
+#### CONSTRUCTOR
+&nbsp;<b><i>objects created should be an instance of Procedure:</i></b>
+```javascript
+return new Procedure() instanceof Procedure;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>should make sure new operator used:</i></b>
+```javascript
+Procedure(); // jshint ignore:line
+```
+<blockquote><strong>Error: new operator required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>should make sure argument properties are valid:</i></b>
+```javascript
+new Procedure({yo: 'whatup'});
+```
+<blockquote><strong>Error: error creating Procedure: invalid property: yo</strong> thrown as expected
+</blockquote>
+#### PROPERTIES
+#### tasks
+<p>Tasks is an array of objects that represent each step of the procedure.  See TASKS section below for each property of this unnamed object (task array element).</p>
+&nbsp;<b><i>tasks can be falsy if no tasks defined otherwise it has to be an array:</i></b>
+```javascript
+new Procedure({tasks: true});
+```
+<blockquote><strong>Error: error creating Procedure: tasks is not an array</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>the parameters must be valid for the object in each element of the array:</i></b>
+```javascript
+new Procedure({tasks: [
+  {clean: 'room'}
+]});
+```
+<blockquote><strong>Error: error creating Procedure: invalid task[0] property: clean</strong> thrown as expected
+</blockquote>
+#### tasksNeeded
+<p>Total tasks that will execute (does not include skipped tasks).</p>
+<p>_See Integration Tests for usage_</p>
+#### tasksCompleted
+<p>Number of tasks completed and started (does not include skipped tasks)</p>
+<p>_See Integration Tests for usage_</p>
+#### TASKS
+<p>Each element of the array tasks is an object with the following properties:</p>
+#### label
+<p>optional label for this task task element</p>
+&nbsp;<b><i>if used it must be a string:</i></b>
+```javascript
+new Procedure({tasks: [
+  {label: true}
+]});
+```
+<blockquote><strong>Error: error creating Procedure: task[0].label must be string</strong> thrown as expected
+</blockquote>
+#### command
+<p>Command to execute for this task</p>
+&nbsp;<b><i>if used it must be a string:</i></b>
+```javascript
+new Procedure({tasks: [
+  {command: true}
+]});
+```
+<blockquote><strong>Error: error creating Procedure: task[0].command must be a Command object</strong> thrown as expected
+</blockquote>
+#### requires
+<p>Establish other tasks that must be complete before this task is executed.  Pass as array of or single element. Can be string(for label label) or number(for array index).  Use -1 for previous task, null for no dependencies</p>
+&nbsp;<b><i>test it:</i></b>
+```javascript
+this.shouldThrowError(Error('invalid type for requires in task[0]'), function () {
+  new Procedure({tasks: [
+    {requires: new Date() }
+  ]});
+});
+// if number supplied it is index in array
+this.shouldThrowError(Error('missing task #1 for requires in task[0]'), function () {
+  new Procedure({tasks: [
+    {command: new Procedure({}), requires: 1 }
+  ]});
+});
+this.shouldThrowError(Error('task #-2 invalid requires in task[0]'), function () {
+  new Procedure({tasks: [
+    {command: new Procedure({}), requires: -2 }
+  ]});
+});
+// requires defaults to -1 which means the previous element in the array so essentially the default
+// is sequential processing.  Set to null for no dependencies which makes it asynchronous -1 means
+// previous element is ignored for first index and is the default
+var proc = new Procedure({tasks: [
+  {command: new Command({})}
+]});
+this.shouldBeTrue(proc.tasks[0].requires == -1);
+```
+<blockquote></blockquote>
+#### METHODS
+#### getObjectStateErrors
+&nbsp;<b><i>should return array of validation errors:</i></b>
+```javascript
+if (!new Procedure().getObjectStateErrors()) return 'falsy';
+```
+<blockquote>returns <strong>falsy</strong> as expected
+</blockquote>
+#### Request Class
+<p>Requests handle the Request / Response design pattern.  They are used by the Interface class to communicate with the Application Model</p>
+#### CONSTRUCTOR
+&nbsp;<b><i>objects created should be an instance of Request:</i></b>
+```javascript
+return new Request('Null') instanceof Request;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>should make sure new operator used:</i></b>
+```javascript
+Request('Null'); // jshint ignore:line
+```
+<blockquote><strong>Error: new operator required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>request type must be specified:</i></b>
+```javascript
+new Request();
+```
+<blockquote><strong>Error: Request type required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>simple string parameter creates request of named type:</i></b>
+```javascript
+return new Request('example').type;
+```
+<blockquote>returns <strong>example</strong> as expected
+</blockquote>
+&nbsp;<b><i>type can be specified when object passed:</i></b>
+```javascript
+return new Request({type: 'example'}).type;
+```
+<blockquote>returns <strong>example</strong> as expected
+</blockquote>
+&nbsp;<b><i>Command type requests expect contents to contain a command object:</i></b>
+```javascript
+return new Request({type: 'Command'});
+```
+<blockquote><strong>Error: command object required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>correct version:</i></b>
+```javascript
+return new Request({type: 'Command', command: new Command()});
+```
+<blockquote>returns <strong>Command Request: Stub Command: (unnamed)</strong> as expected
+</blockquote>
+#### METHODS
+#### toString()
+&nbsp;<b><i>should return a description of the Request:</i></b>
+```javascript
+return new Request('Null').toString();
+```
+<blockquote>returns <strong>Null Request</strong> as expected
+</blockquote>
+#### Store Class
+<p>The store class is used for object persistence.</p>
+#### CONSTRUCTOR
+&nbsp;<b><i>objects created should be an instance of Store:</i></b>
+```javascript
+return new SurrogateStore() instanceof Store;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>should make sure new operator used:</i></b>
+```javascript
+SurrogateStore(); // jshint ignore:line
+```
+<blockquote><strong>Error: new operator required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>should make sure properties are valid:</i></b>
+```javascript
+new SurrogateStore({food: 'twinkies'});
+```
+<blockquote><strong>Error: error creating Store: invalid property: food</strong> thrown as expected
+</blockquote>
+#### PROPERTIES
+#### name
+&nbsp;<b><i>name of store can be set in constructor:</i></b>
+```javascript
+return new SurrogateStore({name: 'punchedCards'}).name;
+```
+<blockquote>returns <strong>punchedCards</strong> as expected
+</blockquote>
+#### storeType
+<p>storeType defaults to Store Class Name but can be set to suite the app architecture.</p>
+&nbsp;<b><i>storeType can be set in constructor:</i></b>
+```javascript
+return new SurrogateStore({storeType: 'legacyStorage'}).storeType;
+```
+<blockquote>returns <strong>legacyStorage</strong> as expected
+</blockquote>
+#### METHODS
+&nbsp;<b><i>getServices() returns an object with interface for the Store.:</i></b>
+```javascript
+//spec.show(services);
+//this.shouldBeTrue(services instanceof Object);
+//this.shouldBeTrue(typeof services['isReady'] == 'boolean'); // don't use until
+//this.shouldBeTrue(typeof services['canGetModel'] == 'boolean'); // define all allowed methods...
+//this.shouldBeTrue(typeof services['canPutModel'] == 'boolean');
+//this.shouldBeTrue(typeof services['canDeleteModel'] == 'boolean');
+//this.shouldBeTrue(typeof services['canGetList'] == 'boolean');
+```
+<blockquote></blockquote>
+#### toString()
+&nbsp;<b><i>should return a description of the Store:</i></b>
+```javascript
+var cStore = new SurrogateStore();
+//spec.show(cStore.toString());
+cStore.name = '7-Eleven';
+cStore.storeType = 'ConvenienceStore';
+//spec.show(cStore.toString());
+return cStore.toString();
+```
+<blockquote>returns <strong>ConvenienceStore: 7-Eleven</strong> as expected
+</blockquote>
+#### onConnect()
+&nbsp;<b><i>must pass url string:</i></b>
+```javascript
+new SurrogateStore().onConnect();
+```
+<blockquote><strong>Error: argument must a url string</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>must pass callback function:</i></b>
+```javascript
+new SurrogateStore().onConnect("");
+```
+<blockquote><strong>Error: argument must a callback</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>return store and undefined error upon successful connection to remote store.:</i></b>
+```javascript
+new SurrogateStore().onConnect('', function (store, err) {
+  if (err) {
+    callback(err);
+  } else {
+    callback(store instanceof Store);
+  }
+});
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+#### getModel()
+&nbsp;<b><i>getModel() is not implemented for virtual class:</i></b>
+```javascript
+new SurrogateStore().getModel();
+```
+<blockquote><strong>Error: Store does not provide getModel</strong> thrown as expected
+</blockquote>
+#### putModel(model)
+&nbsp;<b><i>putModel() is not implemented for virtual class:</i></b>
+```javascript
+new SurrogateStore().putModel();
+```
+<blockquote><strong>Error: Store does not provide putModel</strong> thrown as expected
+</blockquote>
+#### deleteModel(model)
+&nbsp;<b><i>deleteModel() is not implemented for virtual class:</i></b>
+```javascript
+new SurrogateStore().deleteModel();
+```
+<blockquote><strong>Error: Store does not provide deleteModel</strong> thrown as expected
+</blockquote>
+#### getList(model, filter, order)
+<p>This method will clear and populate the list with collection from store.  The **filter** property can be used to query the store.  The **order** property can specify the sort order of the list.  _See integration test for more info._</p>
