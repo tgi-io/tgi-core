@@ -40,13 +40,6 @@ var CORE = function () {
     }
   };
 };
-/**
- * Stubs for models
- */
-function Application() {
-}
-function Presentation() {
-}
 
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-attribute.source.js
@@ -1242,6 +1235,357 @@ Transport.prototype.close = function () {
     throw new Error('not connected');
   this.socket.disconnect();
 };
+
+/**
+ * tequila
+ * application-model
+ */
+
+// Model Constructor
+var Application = function (args) {
+  if (false === (this instanceof Application)) throw new Error('new operator required');
+  args = args || {};
+  if (!args.attributes) {
+    args.attributes = [];
+  }
+  args.attributes.push(new Attribute({name: 'name', type: 'String(20)'}));
+  args.attributes.push(new Attribute({name: 'brand', type: 'String'}));
+  Model.call(this, args);
+  this.modelType = "Application";
+  this.set('name','newApp');
+  this.set('brand','NEW APP');
+};
+Application.prototype = Object.create(Model.prototype);
+/*
+ * Methods
+ */
+Application.prototype.start = function (callBack) {
+  if (false === (this.primaryInterface instanceof Interface)) throw new Error('error starting application: interface not set');
+  if (typeof callBack != 'function') throw new Error('callBack required');
+  var self = this;
+  this.startCallback = callBack;
+  this.primaryInterface.start(self, this.presentation, this.sysPresentation, function (request) {
+    if (request.type=='Command') {
+      request.command.execute();
+    } else {
+      if (self.startCallback) {
+        self.startCallback(request);
+      }
+    }
+  });
+};
+Application.prototype.dispatch = function (request, response) {
+  if (false === (request instanceof Request)) throw new Error('Request required');
+  if (response && typeof response != 'function') throw new Error('response callback is not a function');
+  if (this.startCallback) {
+    this.startCallback(request);
+    return true;
+  }
+  return false;
+};
+Application.prototype.setInterface = function (primaryInterface) {
+  if (false === (primaryInterface instanceof Interface)) throw new Error('instance of Interface a required parameter');
+  this.primaryInterface = primaryInterface;
+};
+Application.prototype.getInterface = function () {
+  return this.primaryInterface;
+};
+Application.prototype.setPresentation = function (presentation) {
+  if (false === (presentation instanceof Presentation)) throw new Error('instance of Presentation a required parameter');
+  this.presentation = presentation;
+  if (this.startCallback) {
+    // Interface started so reload
+    this.primaryInterface.setPresentation(this.presentation);
+  }
+};
+Application.prototype.getPresentation = function () {
+  return this.presentation;
+};
+/**
+ * tequila
+ * log-model
+ */
+
+// Model Constructor
+var Log = function (args) {
+  if (false === (this instanceof Log)) throw new Error('new operator required');
+  if (typeof args == 'string') {
+    var simpleText = args;
+    args = {};
+    args.contents = simpleText;
+  }
+  args = args || {};
+  if (!args.attributes) {
+    args.attributes = [];
+  }
+  var my_logType = args.logType || 'Text';
+  var my_importance = args.importance || 'Info';
+  var my_contents = args.contents || '(no text)';
+  if (!T.contains(T.getLogTypes(), my_logType)) throw new Error('Unknown log type: ' + my_logType);
+
+  if (typeof args.logType != 'undefined') delete args.logType;
+  if (typeof args.importance != 'undefined') delete args.importance;
+  if (typeof args.contents != 'undefined') delete args.contents;
+  args.attributes.push(new Attribute({name: 'dateLogged', type: 'Date', value: new Date()}));
+  args.attributes.push(new Attribute({name: 'logType', type: 'String', value: my_logType}));
+  args.attributes.push(new Attribute({name: 'importance', type: 'String', value: my_importance}));
+  if (my_logType=='Delta')
+    args.attributes.push(new Attribute({name: 'contents', type: 'Object', value: my_contents}));
+  else
+    args.attributes.push(new Attribute({name: 'contents', type: 'String', value: my_contents}));
+  Model.call(this, args);
+  this.modelType = "Log";
+};
+Log.prototype = Object.create(Model.prototype);
+/*
+ * Methods
+ */
+Log.prototype.toString = function () {
+  if (this.get('logType')=='Delta')
+    return this.get('importance') + ': ' + '(delta)';
+  else
+    return this.get('importance') + ': ' + this.get('contents');
+};
+
+/**
+ * tequila
+ * presentation-model
+ */
+// Model Constructor
+var Presentation = function (args) {
+  if (false === (this instanceof Presentation)) throw new Error('new operator required');
+  args = args || {};
+  if (!args.attributes) {
+    args.attributes = [];
+  }
+  args.attributes.push(new Attribute({name: 'name', type: 'String'}));
+  args.attributes.push(new Attribute({name: 'modelName', type: 'String'}));
+  args.attributes.push(new Attribute({name: 'contents', type: 'Object', value: []}));
+  Model.call(this, args);
+  this.modelType = "Presentation";
+};
+Presentation.prototype = Object.create(Model.prototype);
+/*
+ * Methods
+ */
+Presentation.prototype.getObjectStateErrors = function (modelCheckOnly) {
+  var i;
+  this.validationErrors = Model.prototype.getObjectStateErrors.call(this);
+  if (!modelCheckOnly && this.validationErrors.length === 0) { // Only check if model it valid
+    var contents = this.get('contents');
+    var gotError = false;
+    if (contents instanceof Array) {
+      for (i = 0; i < contents.length; i++) {
+        if (!(contents[i] instanceof Command || contents[i] instanceof Attribute || typeof contents[i] == 'string'))
+          gotError = true;
+      }
+      if (gotError)
+        this.validationErrors.push('contents elements must be Command, Attribute or string');
+    } else {
+      this.validationErrors.push('contents must be Array');
+    }
+  }
+  this.validationMessage = this.validationErrors.length > 0 ? this.validationErrors[0] : '';
+  return this.validationErrors;
+};
+Presentation.prototype.validate = function (callBack) {
+  var presentation = this;
+  if (typeof callBack != 'function') throw new Error('callback is required');
+  this.getObjectStateErrors();
+  var e;
+  for (e in this._errorConditions) {
+    if (this._errorConditions.hasOwnProperty(e)) {
+      this.validationErrors.push(this._errorConditions[e]);
+    }
+  }
+  // validate each attribute in contents
+  var i;
+  var gotError = false;
+  var attributeCount = 0;
+  var checkCount = 0;
+  var contents = this.get('contents');
+  if (contents instanceof Array) {
+    // Count first
+    for (i = 0; i < contents.length; i++) {
+      if (contents[i] instanceof Attribute) {
+        attributeCount++;
+      }
+    }
+    // Launch validations
+    for (i = 0; i < contents.length; i++) {
+      if (contents[i] instanceof Attribute) {
+        contents[i].validate(checkAttrib);
+      }
+    }
+  }
+  function checkAttrib() {
+    checkCount++;
+    if (presentation.validationMessage)
+      gotError = true;
+    if (checkCount==checkCount) {
+      if (gotError)
+        presentation.validationErrors.push('contents has validation errors');
+      presentation.validationMessage = presentation.validationErrors.length > 0 ? presentation.validationErrors[0] : '';
+      callBack();
+    }
+  }
+};
+
+/**
+ * tequila
+ * session-model
+ */
+// Model Constructor
+var Session = function (args) {
+  if (false === (this instanceof Session)) throw new Error('new operator required');
+  args = args || {};
+  if (!args.attributes) {
+    args.attributes = [];
+  }
+  var userModelID = new Attribute.ModelID(new User());
+  args.attributes.push(new Attribute({name: 'userID', type: 'Model', value: userModelID}));
+  args.attributes.push(new Attribute({name: 'dateStarted', type: 'Date', value: new Date()}));
+  args.attributes.push(new Attribute({name: 'passCode', type: 'String(20)'}));
+  args.attributes.push(new Attribute({name: 'active', type: 'Boolean'}));
+  args.attributes.push(new Attribute({name: 'ipAddress', type: 'String'}));
+
+  Model.call(this, args);
+  this.modelType = "Session";
+  this.set('active', false);
+};
+Session.prototype = Object.create(Model.prototype);
+/*
+ * Methods
+ */
+Session.prototype.startSession = function (store, userName, password, ip, callBack) {
+  if (false === (store instanceof Store)) throw new Error('store required');
+  if (typeof userName !== 'string') throw new Error('userName required');
+  if (typeof password !== 'string') throw new Error('password required');
+  if (typeof ip !== 'string') throw new Error('ip required');
+  if (typeof callBack != 'function') throw new Error('callBack required');
+
+  // Find user in store
+  var self = this;
+  var userModel = new User();
+  store.getList(new List(userModel), {name: userName, password: password}, function (list, error) {
+    if (error) {
+      callBack(error);
+      return;
+    }
+    if (list.length() != 1) {
+      callBack(new Error('login not found'));
+      return;
+    }
+
+    // Make random passCode
+    var passCode = "";
+    var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for (var i = 0; i < 20; i++)
+      passCode += chars.charAt(Math.floor(Math.random() * chars.length));
+
+    // Got user create new session
+    // TODO: Make this server side tied to yet to be designed store integrated authentication
+    list.moveFirst();
+    self.set('userID', list.get('id'));
+    self.set('active', true);
+    self.set('passCode', passCode);
+    self.set('ipAddress', ip);
+    store.putModel(self, function (model, error) {
+      callBack(error, model);
+    });
+  });
+};
+Session.prototype.resumeSession = function (store, ip, passCode, callBack) {
+  if (false === (store instanceof Store)) throw new Error('store required');
+  if (typeof ip !== 'string') throw new Error('ip required');
+  if (typeof passCode !== 'string') throw new Error('passCode required');
+  if (typeof callBack != 'function') throw new Error('callBack required');
+
+  // Find the session in store
+  var self = this;
+  store.getList(new List(self), {ipAddress: ip, passCode: passCode}, function (list, error) {
+    if (error) {
+      callBack(error);
+      return;
+    }
+    if (list.length() != 1) {
+      callBack(new Error('session not resumed'));
+      return;
+    }
+
+    // Get model for session as shitty as this is (TODO a better way)
+    list.moveFirst();
+    self.set('id', list.get('id'));
+    self.set('userID', list.get('userID'));
+    self.set('dateStarted', list.get('dateStarted'));
+    self.set('passCode', list.get('passCode'));
+    self.set('active', list.get('active'));
+    self.set('ipAddress', list.get('ipAddress'));
+    callBack(error, self);
+  });
+
+};
+Session.prototype.endSession = function (store, callBack) {
+  if (false === (store instanceof Store)) throw new Error('store required');
+  if (typeof callBack != 'function') throw new Error('callBack required');
+
+  // If no session ID (never persisted) or is not active then silently return
+  if (!this.get('active') || !this.get('id')) {
+    callBack(this);
+  }
+  // Mark inactive and save to store
+  this.set('active', false);
+  store.putModel(this, function (model, err) {
+    callBack(err, model);
+  });
+};
+/**
+ * tequila
+ * user-core-model
+ */
+// Model Constructor
+var User = function (args) {
+  if (false === (this instanceof User)) throw new Error('new operator required');
+  args = args || {};
+  if (!args.attributes) {
+    args.attributes = [];
+  }
+  args.attributes.push(new Attribute({name: 'name', type: 'String(20)'}));
+  args.attributes.push(new Attribute({name: 'active', type: 'Boolean'}));
+  args.attributes.push(new Attribute({name: 'password', type: 'String(20)'}));
+  args.attributes.push(new Attribute({name: 'firstName', type: 'String(35)'}));
+  args.attributes.push(new Attribute({name: 'lastName', type: 'String(35)'}));
+  args.attributes.push(new Attribute({name: 'email', type: 'String(20)'}));
+  Model.call(this, args);
+  this.modelType = "User";
+  this.set('active',false);
+};
+User.prototype = Object.create(Model.prototype);
+/**
+ * tequila
+ * workspace-class
+ */
+function Workspace(args) {
+  if (false === (this instanceof Workspace)) throw new Error('new operator required');
+  args = args || {};
+  if (!args.attributes) {
+    args.attributes = [];
+  }
+  var userModelID = new Attribute.ModelID(new User());
+  args.attributes.push(new Attribute({name: 'user', type: 'Model', value: userModelID}));
+  args.attributes.push(new Attribute({name: 'deltas', type: 'Object', value: {}}));
+
+//  var delta
+//  this.deltas = [];
+
+  Model.call(this, args);
+  this.modelType = "Workspace";
+}
+Workspace.prototype = Object.create(Model.prototype);
+/*
+ * Methods
+ */
+
 
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/misc/lib-footer

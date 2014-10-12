@@ -1780,3 +1780,108 @@ new SurrogateStore().deleteModel();
 </blockquote>
 #### getList(model, filter, order)
 <p>This method will clear and populate the list with collection from store.  The **filter** property can be used to query the store.  The **order** property can specify the sort order of the list.  _See integration test for more info._</p>
+#### Application Model
+<p>Information about the application is modeled here.</p>
+#### CONSTRUCTOR
+&nbsp;<b><i>objects created should be an instance of Application:</i></b>
+```javascript
+return new Application() instanceof Application;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+#### Model tests are applied
+#### ATTRIBUTES
+<p>Application extends model and inherits the attributes property.  All Presentation objects have the following attributes:</p>
+&nbsp;<b><i>following attributes are defined::</i></b>
+```javascript
+var presentation = new Application(); // default attributes and values
+this.shouldBeTrue(presentation.get('name') === 'newApp');
+this.shouldBeTrue(presentation.get('brand') === 'NEW APP');
+```
+<blockquote></blockquote>
+#### METHODS
+#### setInterface(interface)
+<p>Setting the interface for the application determines the primary method of user interaction.</p>
+&nbsp;<b><i>must supply Interface object:</i></b>
+```javascript
+new Application().setInterface();
+```
+<blockquote><strong>Error: instance of Interface a required parameter</strong> thrown as expected
+</blockquote>
+#### getInterface()
+<p>returns primary user interface for application</p>
+&nbsp;<b><i>default is undefined:</i></b>
+```javascript
+return new Application().getInterface() === undefined;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>returns value set by set Interface:</i></b>
+```javascript
+var myInterface = new Interface();
+var myApplication = new Application();
+myApplication.setInterface(myInterface);
+return (myApplication.getInterface() === myInterface);
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+#### setPresentation(presentation)
+<p>Setting the presentation for the application determines the primary commands available to the user.</p>
+&nbsp;<b><i>must supply Presentation object:</i></b>
+```javascript
+new Application().setPresentation();
+```
+<blockquote><strong>Error: instance of Presentation a required parameter</strong> thrown as expected
+</blockquote>
+#### getPresentation()
+<p>returns primary user presentation for application</p>
+&nbsp;<b><i>default is undefined:</i></b>
+```javascript
+return new Application().getPresentation() === undefined;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>returns value set by set Presentation:</i></b>
+```javascript
+var myPresentation = new Presentation();
+var myApplication = new Application();
+myApplication.setPresentation(myPresentation);
+return (myApplication.getPresentation() === myPresentation);
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+#### start()
+<p>The start method executes the application.</p>
+&nbsp;<b><i>must set interface before starting:</i></b>
+```javascript
+new Application().start();
+```
+<blockquote><strong>Error: error starting application: interface not set</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>callback parameter required:</i></b>
+```javascript
+var app = new Application();
+app.setInterface(new Interface());
+app.start();
+```
+<blockquote><strong>Error: callBack required</strong> thrown as expected
+</blockquote>
+#### dispatch()
+<p>The dispatch method will accept a request and act on it or pass it to the app.</p>
+&nbsp;<b><i>must pass a Request object:</i></b>
+```javascript
+new Application().dispatch();
+```
+<blockquote><strong>Error: Request required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>send command without callback when no response needed:</i></b>
+```javascript
+new Application().dispatch(new Request({type: 'Command', command: new Command()}));
+```
+<blockquote></blockquote>
+&nbsp;<b><i>optional second parameter is the response callback:</i></b>
+```javascript
+new Application().dispatch(new Request({type: 'Command', command: new Command()}), true);
+```
+<blockquote><strong>Error: response callback is not a function</strong> thrown as expected
+</blockquote>

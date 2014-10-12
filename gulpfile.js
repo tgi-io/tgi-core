@@ -9,42 +9,54 @@ var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var childProcess = require('child_process');
 
-// Source and packaging
+// Source and _packaging
 var libFiles = [
-  'lib/packaging/lib-header',
+  'lib/_packaging/lib-header',
   'lib/tgi-core.source.js',
-  'lib/tgi-core-attribute.source.js',
-  'lib/tgi-core-command.source.js',
-  'lib/tgi-core-delta.source.js',
-  'lib/tgi-core-interface.source.js',
-  'lib/tgi-core-list.source.js',
-  'lib/tgi-core-model.source.js',
-  'lib/tgi-core-message.source.js',
-  'lib/tgi-core-procedure.source.js',
-  'lib/tgi-core-request.source.js',
-  'lib/tgi-core-store.source.js',
-  'lib/tgi-core-transport.source.js',
-  'lib/tgi-core-model.source.js',
-  'lib/tgi-core-model.source.js',
-  'lib/packaging/lib-footer'
+  'lib/core/tgi-core-attribute.source.js',
+  'lib/core/tgi-core-command.source.js',
+  'lib/core/tgi-core-delta.source.js',
+  'lib/core/tgi-core-interface.source.js',
+  'lib/core/tgi-core-list.source.js',
+  'lib/core/tgi-core-model.source.js',
+  'lib/core/tgi-core-message.source.js',
+  'lib/core/tgi-core-procedure.source.js',
+  'lib/core/tgi-core-request.source.js',
+  'lib/core/tgi-core-store.source.js',
+  'lib/core/tgi-core-transport.source.js',
+  'lib/core/tgi-core-model.source.js',
+  'lib/core/tgi-core-model.source.js',
+  'lib/models/tgi-core-model-application.source.js',
+  'lib/models/tgi-core-model-log.source.js',
+  'lib/models/tgi-core-model-presentation.source.js',
+  'lib/models/tgi-core-model-session.source.js',
+  'lib/models/tgi-core-model-user.source.js',
+  'lib/models/tgi-core-model-workspace.source.js',
+  'lib/_packaging/lib-footer'
 ];
 
 // The Spec
 var specFiles = [
-  'lib/packaging/spec-header',
+  'lib/_packaging/spec-header',
   'lib/tgi-core.test.js',
-  'lib/tgi-core-attribute.test.js',
-  'lib/tgi-core-command.test.js',
-  'lib/tgi-core-delta.test.js',
-  'lib/tgi-core-interface.test.js',
-  'lib/tgi-core-list.test.js',
-  'lib/tgi-core-message.test.js',
-  'lib/tgi-core-model.test.js',
-  'lib/tgi-core-procedure.test.js',
-  'lib/tgi-core-request.test.js',
-  'lib/tgi-core-store.test.js',
-  'lib/tgi-core-transport.test.js',
-  'lib/packaging/spec-footer'
+  'lib/core/tgi-core-attribute.test.js',
+  'lib/core/tgi-core-command.test.js',
+  'lib/core/tgi-core-delta.test.js',
+  'lib/core/tgi-core-interface.test.js',
+  'lib/core/tgi-core-list.test.js',
+  'lib/core/tgi-core-message.test.js',
+  'lib/core/tgi-core-model.test.js',
+  'lib/core/tgi-core-procedure.test.js',
+  'lib/core/tgi-core-request.test.js',
+  'lib/core/tgi-core-store.test.js',
+  'lib/core/tgi-core-transport.test.js',
+  'lib/models/tgi-core-model-application.test.js',
+  //'lib/models/tgi-core-model-log.test.js',
+  //'lib/models/tgi-core-model-presentation.test.js',
+  //'lib/models/tgi-core-model-session.test.js',
+  //'lib/models/tgi-core-model-user.test.js',
+  //'lib/models/tgi-core-model-workspace.test.js',
+  'lib/_packaging/spec-footer'
 ];
 
 // Build Lib
