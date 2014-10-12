@@ -1792,6 +1792,272 @@ return new Application() instanceof Application;
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
 #### Model tests are applied
+#### Model Class
+<p>Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.</p>
+#### CONSTRUCTOR
+<p>Creation of all Models must adhere to following examples:</p>
+&nbsp;<b><i>objects created should be an instance of Model:</i></b>
+```javascript
+return new SurrogateModel() instanceof Model;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>should make sure new operator used:</i></b>
+```javascript
+SurrogateModel(); // jshint ignore:line
+```
+<blockquote><strong>Error: new operator required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>should make sure properties are valid:</i></b>
+```javascript
+new SurrogateModel({sup: 'yo'});
+```
+<blockquote><strong>Error: error creating Model: invalid property: sup</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>can supply attributes in constructor in addition to ID default:</i></b>
+```javascript
+var play = new SurrogateModel({attributes: [new Attribute('game')]});
+play.set('game', 'scrabble'); // this would throw error if attribute did not exist
+return play.get('game');
+```
+<blockquote>returns <strong>scrabble</strong> as expected
+</blockquote>
+#### PROPERTIES
+#### tags
+<p>Tags are an array of strings that can be used in searching.</p>
+&nbsp;<b><i>should be an array or undefined:</i></b>
+```javascript
+var m = new SurrogateModel(); // default is undefined
+this.shouldBeTrue(m.tag === undefined && m.getObjectStateErrors().length === 0);
+m.tags = [];
+this.shouldBeTrue(m.getObjectStateErrors().length === 0);
+m.tags = 'your it';
+this.shouldBeTrue(m.getObjectStateErrors().length == 1);
+```
+<blockquote></blockquote>
+#### attributes
+<p>The attributes property is an array of Attributes.</p>
+&nbsp;<b><i>should be an array:</i></b>
+```javascript
+var goodModel = new SurrogateModel(), badModel = new SurrogateModel();
+badModel.attributes = 'wtf';
+return (goodModel.getObjectStateErrors().length === 0 && badModel.getObjectStateErrors().length == 1);
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>elements of array must be instance of Attribute:</i></b>
+```javascript
+// passing true to getObjectStateErrors() means only check model and not subclass validations
+// todo make unit test for above
+var model = new SurrogateModel();
+model.attributes = [new Attribute("ID", "ID")];
+this.shouldBeTrue(model.getObjectStateErrors(true).length === 0);
+model.attributes = [new Attribute("ID", "ID"), new SurrogateModel(), 0, 'a', {}, [], null];
+this.shouldBeTrue(model.getObjectStateErrors(true).length == 6);
+```
+<blockquote></blockquote>
+#### value
+#### METHODS
+#### toString()
+&nbsp;<b><i>should return a description of the model:</i></b>
+```javascript
+return new SurrogateModel().toString().length > 0;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+#### copy(sourceModel)
+&nbsp;<b><i>copy all attribute values of a model:</i></b>
+```javascript
+var Foo = function (args) {
+  Model.call(this, args);
+  this.modelType = "Foo";
+  this.attributes.push(new Attribute('name'));
+};
+Foo.prototype = inheritPrototype(Model.prototype);
+var m1 = new Foo();
+var m2 = new Foo();
+var m3 = m1;
+m1.set('name', 'Bar');
+m2.set('name', 'Bar');
+// First demonstrate instance ref versus another model with equal attributes
+this.shouldBeTrue(m1 === m3); // assigning one model to variable references same instance
+this.shouldBeTrue(m3.get('name') === 'Bar'); // m3 changed when m1 changed
+this.shouldBeTrue(m1 !== m2); // 2 models are not the same instance
+this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m2)); // but they are identical
+// clone m1 into m4 and demonstrate that contents equal but not same ref to object
+var m4 = new Foo();
+m4.copy(m1);
+this.shouldBeTrue(m1 !== m4); // 2 models are not the same instance
+this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m4)); // but they are identical
+```
+<blockquote></blockquote>
+#### getObjectStateErrors()
+&nbsp;<b><i>should return array of validation errors:</i></b>
+```javascript
+this.shouldBeTrue(new SurrogateModel().getObjectStateErrors() instanceof Array);
+```
+<blockquote></blockquote>
+&nbsp;<b><i>first attribute must be an ID field:</i></b>
+```javascript
+var m = new SurrogateModel();
+m.attributes = [new Attribute('spoon')];
+return m.getObjectStateErrors();
+```
+<blockquote>returns <strong>first attribute must be ID</strong> as expected
+</blockquote>
+#### onEvent
+<p>Use onEvent(events,callback)</p>
+&nbsp;<b><i>first parameter is a string or array of event subscriptions:</i></b>
+```javascript
+new SurrogateModel().onEvent();
+```
+<blockquote><strong>Error: subscription string or array required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>callback is required:</i></b>
+```javascript
+new SurrogateModel().onEvent([]);
+```
+<blockquote><strong>Error: callback is required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>events are checked against known types:</i></b>
+```javascript
+new SurrogateModel().onEvent(['onDrunk'], function () {
+});
+```
+<blockquote><strong>Error: Unknown command event: onDrunk</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>here is a working version:</i></b>
+```javascript
+//spec.show(T.getAttributeEvents());
+// Validate - callback when attribute needs to be validated
+// StateChange -- callback when state of object (value or validation state) has changed
+new Model().onEvent(['Validate'], function () {
+});
+```
+<blockquote></blockquote>
+#### get(attributeName)
+&nbsp;<b><i>returns undefined if the attribute does not exist:</i></b>
+```javascript
+this.shouldBeTrue(new SurrogateModel().get('whatever') === undefined);
+```
+<blockquote></blockquote>
+&nbsp;<b><i>returns the value for given attribute:</i></b>
+```javascript
+var question = new SurrogateModel({attributes: [new Attribute('answer', 'Number')]});
+question.attributes[1].value = 42;
+return question.get('answer');
+```
+<blockquote>returns <strong>42</strong> as expected
+</blockquote>
+#### getAttributeType(attributeName)
+&nbsp;<b><i>returns attribute type for given attribute name:</i></b>
+```javascript
+return new Model({attributes: [new Attribute('born', 'Date')]}).getAttributeType('born');
+```
+<blockquote>returns <strong>Date</strong> as expected
+</blockquote>
+#### set(attributeName,value)
+&nbsp;<b><i>throws an error if the attribute does not exists:</i></b>
+```javascript
+new SurrogateModel().set('whatever');
+```
+<blockquote><strong>Error: attribute not valid for model</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>sets the value for given attribute:</i></b>
+```javascript
+var question = new SurrogateModel({attributes: [new Attribute('answer', 'Number')]});
+question.set('answer', 42);
+return question.attributes[1].value;
+```
+<blockquote>returns <strong>42</strong> as expected
+</blockquote>
+#### validate
+<p>check valid object state and value for attribute - invoke callback for results</p>
+&nbsp;<b><i>callback is required:</i></b>
+```javascript
+new Model().validate();
+```
+<blockquote><strong>Error: callback is required</strong> thrown as expected
+</blockquote>
+#### setError
+<p>Set a error condition and descriptive message</p>
+&nbsp;<b><i>first argument condition required:</i></b>
+```javascript
+new Model().setError();
+```
+<blockquote><strong>Error: condition required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>second argument description required:</i></b>
+```javascript
+new Model().setError('login');
+```
+<blockquote><strong>Error: description required</strong> thrown as expected
+</blockquote>
+#### clearError
+<p>Clear a error condition</p>
+&nbsp;<b><i>first argument condition required:</i></b>
+```javascript
+new Model().clearError();
+```
+<blockquote><strong>Error: condition required</strong> thrown as expected
+</blockquote>
+#### INTEGRATION
+&nbsp;<b><i>model validation usage demonstrated:</i></b>
+```javascript
+// Create a model with each attribute having and error
+var model = new Model({
+  attributes: [
+    new Attribute({name: 'Name', validationRule: {required: true}}),
+    new Attribute({name: 'Age', type: 'Number', validationRule: {range: [18, null]}}),
+    new Attribute({name: 'Sex', validationRule: {required: true}})
+  ]
+});
+model.setError('danger', 'Danger Will Robinson');
+// Create a model validation where males have to be 21
+model.onEvent('Validate', function () {
+  var name = model.get('name');
+  var age = model.get('age');
+  var sex = model.get('sex');
+  if (sex != 'F' && age < 21)
+    model.validationErrors.push('Males must be 21 or over');
+});
+model.validate(test1);
+// Expect 1 error from B9 Robot (Attribute errors ignored if model state error)
+function test1() {
+  if (model.validationErrors.length == 1) {
+    model.clearError('danger');
+    model.validate(test2);
+  } else {
+    callback('test1: ' + model.validationErrors.length);
+  }
+}
+// Expect 3 errors for each attribute
+function test2() {
+  if (model.validationErrors.length == 3) {
+    model.set('name', 'John Doe');
+    model.set('age', 18);
+    model.set('sex', 'M');
+    model.validate(test3);
+  } else {
+    callback('test2: ' + model.validationErrors.length);
+  }
+}
+// Expect 1 errors since all attributes fixed but model will fail
+function test3() {
+  if (model.validationErrors.length == 1 && model.validationMessage == 'Males must be 21 or over') {
+    model.set('age', 21);
+    model.validate(test4);
+  } else {
+    callback('test3: ' + model.validationErrors.length);
+  }
+}
+// Test done should be no errors (to pass final test)
+function test4() {
+  callback('test4: ' + model.validationErrors.length);
+}
+```
+<blockquote>returns <strong>test4: 0</strong> as expected
+</blockquote>
 #### ATTRIBUTES
 <p>Application extends model and inherits the attributes property.  All Presentation objects have the following attributes:</p>
 &nbsp;<b><i>following attributes are defined::</i></b>
@@ -1887,3 +2153,1582 @@ new Application().dispatch(new Request({type: 'Command', command: new Command()}
 ```
 <blockquote><strong>Error: response callback is not a function</strong> thrown as expected
 </blockquote>
+#### Log Model
+<p>Multi purpose log model.</p>
+#### CONSTRUCTOR
+&nbsp;<b><i>objects created should be an instance of Workspace:</i></b>
+```javascript
+return new Log() instanceof Log;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+#### Model tests are applied
+#### Model Class
+<p>Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.</p>
+#### CONSTRUCTOR
+<p>Creation of all Models must adhere to following examples:</p>
+&nbsp;<b><i>objects created should be an instance of Model:</i></b>
+```javascript
+return new SurrogateModel() instanceof Model;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>should make sure new operator used:</i></b>
+```javascript
+SurrogateModel(); // jshint ignore:line
+```
+<blockquote><strong>Error: new operator required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>should make sure properties are valid:</i></b>
+```javascript
+new SurrogateModel({sup: 'yo'});
+```
+<blockquote><strong>Error: error creating Model: invalid property: sup</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>can supply attributes in constructor in addition to ID default:</i></b>
+```javascript
+var play = new SurrogateModel({attributes: [new Attribute('game')]});
+play.set('game', 'scrabble'); // this would throw error if attribute did not exist
+return play.get('game');
+```
+<blockquote>returns <strong>scrabble</strong> as expected
+</blockquote>
+#### PROPERTIES
+#### tags
+<p>Tags are an array of strings that can be used in searching.</p>
+&nbsp;<b><i>should be an array or undefined:</i></b>
+```javascript
+var m = new SurrogateModel(); // default is undefined
+this.shouldBeTrue(m.tag === undefined && m.getObjectStateErrors().length === 0);
+m.tags = [];
+this.shouldBeTrue(m.getObjectStateErrors().length === 0);
+m.tags = 'your it';
+this.shouldBeTrue(m.getObjectStateErrors().length == 1);
+```
+<blockquote></blockquote>
+#### attributes
+<p>The attributes property is an array of Attributes.</p>
+&nbsp;<b><i>should be an array:</i></b>
+```javascript
+var goodModel = new SurrogateModel(), badModel = new SurrogateModel();
+badModel.attributes = 'wtf';
+return (goodModel.getObjectStateErrors().length === 0 && badModel.getObjectStateErrors().length == 1);
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>elements of array must be instance of Attribute:</i></b>
+```javascript
+// passing true to getObjectStateErrors() means only check model and not subclass validations
+// todo make unit test for above
+var model = new SurrogateModel();
+model.attributes = [new Attribute("ID", "ID")];
+this.shouldBeTrue(model.getObjectStateErrors(true).length === 0);
+model.attributes = [new Attribute("ID", "ID"), new SurrogateModel(), 0, 'a', {}, [], null];
+this.shouldBeTrue(model.getObjectStateErrors(true).length == 6);
+```
+<blockquote></blockquote>
+#### value
+#### METHODS
+#### toString()
+&nbsp;<b><i>should return a description of the model:</i></b>
+```javascript
+return new SurrogateModel().toString().length > 0;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+#### copy(sourceModel)
+&nbsp;<b><i>copy all attribute values of a model:</i></b>
+```javascript
+var Foo = function (args) {
+  Model.call(this, args);
+  this.modelType = "Foo";
+  this.attributes.push(new Attribute('name'));
+};
+Foo.prototype = inheritPrototype(Model.prototype);
+var m1 = new Foo();
+var m2 = new Foo();
+var m3 = m1;
+m1.set('name', 'Bar');
+m2.set('name', 'Bar');
+// First demonstrate instance ref versus another model with equal attributes
+this.shouldBeTrue(m1 === m3); // assigning one model to variable references same instance
+this.shouldBeTrue(m3.get('name') === 'Bar'); // m3 changed when m1 changed
+this.shouldBeTrue(m1 !== m2); // 2 models are not the same instance
+this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m2)); // but they are identical
+// clone m1 into m4 and demonstrate that contents equal but not same ref to object
+var m4 = new Foo();
+m4.copy(m1);
+this.shouldBeTrue(m1 !== m4); // 2 models are not the same instance
+this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m4)); // but they are identical
+```
+<blockquote></blockquote>
+#### getObjectStateErrors()
+&nbsp;<b><i>should return array of validation errors:</i></b>
+```javascript
+this.shouldBeTrue(new SurrogateModel().getObjectStateErrors() instanceof Array);
+```
+<blockquote></blockquote>
+&nbsp;<b><i>first attribute must be an ID field:</i></b>
+```javascript
+var m = new SurrogateModel();
+m.attributes = [new Attribute('spoon')];
+return m.getObjectStateErrors();
+```
+<blockquote>returns <strong>first attribute must be ID</strong> as expected
+</blockquote>
+#### onEvent
+<p>Use onEvent(events,callback)</p>
+&nbsp;<b><i>first parameter is a string or array of event subscriptions:</i></b>
+```javascript
+new SurrogateModel().onEvent();
+```
+<blockquote><strong>Error: subscription string or array required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>callback is required:</i></b>
+```javascript
+new SurrogateModel().onEvent([]);
+```
+<blockquote><strong>Error: callback is required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>events are checked against known types:</i></b>
+```javascript
+new SurrogateModel().onEvent(['onDrunk'], function () {
+});
+```
+<blockquote><strong>Error: Unknown command event: onDrunk</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>here is a working version:</i></b>
+```javascript
+//spec.show(T.getAttributeEvents());
+// Validate - callback when attribute needs to be validated
+// StateChange -- callback when state of object (value or validation state) has changed
+new Model().onEvent(['Validate'], function () {
+});
+```
+<blockquote></blockquote>
+#### get(attributeName)
+&nbsp;<b><i>returns undefined if the attribute does not exist:</i></b>
+```javascript
+this.shouldBeTrue(new SurrogateModel().get('whatever') === undefined);
+```
+<blockquote></blockquote>
+&nbsp;<b><i>returns the value for given attribute:</i></b>
+```javascript
+var question = new SurrogateModel({attributes: [new Attribute('answer', 'Number')]});
+question.attributes[1].value = 42;
+return question.get('answer');
+```
+<blockquote>returns <strong>42</strong> as expected
+</blockquote>
+#### getAttributeType(attributeName)
+&nbsp;<b><i>returns attribute type for given attribute name:</i></b>
+```javascript
+return new Model({attributes: [new Attribute('born', 'Date')]}).getAttributeType('born');
+```
+<blockquote>returns <strong>Date</strong> as expected
+</blockquote>
+#### set(attributeName,value)
+&nbsp;<b><i>throws an error if the attribute does not exists:</i></b>
+```javascript
+new SurrogateModel().set('whatever');
+```
+<blockquote><strong>Error: attribute not valid for model</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>sets the value for given attribute:</i></b>
+```javascript
+var question = new SurrogateModel({attributes: [new Attribute('answer', 'Number')]});
+question.set('answer', 42);
+return question.attributes[1].value;
+```
+<blockquote>returns <strong>42</strong> as expected
+</blockquote>
+#### validate
+<p>check valid object state and value for attribute - invoke callback for results</p>
+&nbsp;<b><i>callback is required:</i></b>
+```javascript
+new Model().validate();
+```
+<blockquote><strong>Error: callback is required</strong> thrown as expected
+</blockquote>
+#### setError
+<p>Set a error condition and descriptive message</p>
+&nbsp;<b><i>first argument condition required:</i></b>
+```javascript
+new Model().setError();
+```
+<blockquote><strong>Error: condition required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>second argument description required:</i></b>
+```javascript
+new Model().setError('login');
+```
+<blockquote><strong>Error: description required</strong> thrown as expected
+</blockquote>
+#### clearError
+<p>Clear a error condition</p>
+&nbsp;<b><i>first argument condition required:</i></b>
+```javascript
+new Model().clearError();
+```
+<blockquote><strong>Error: condition required</strong> thrown as expected
+</blockquote>
+#### INTEGRATION
+&nbsp;<b><i>model validation usage demonstrated:</i></b>
+```javascript
+// Create a model with each attribute having and error
+var model = new Model({
+  attributes: [
+    new Attribute({name: 'Name', validationRule: {required: true}}),
+    new Attribute({name: 'Age', type: 'Number', validationRule: {range: [18, null]}}),
+    new Attribute({name: 'Sex', validationRule: {required: true}})
+  ]
+});
+model.setError('danger', 'Danger Will Robinson');
+// Create a model validation where males have to be 21
+model.onEvent('Validate', function () {
+  var name = model.get('name');
+  var age = model.get('age');
+  var sex = model.get('sex');
+  if (sex != 'F' && age < 21)
+    model.validationErrors.push('Males must be 21 or over');
+});
+model.validate(test1);
+// Expect 1 error from B9 Robot (Attribute errors ignored if model state error)
+function test1() {
+  if (model.validationErrors.length == 1) {
+    model.clearError('danger');
+    model.validate(test2);
+  } else {
+    callback('test1: ' + model.validationErrors.length);
+  }
+}
+// Expect 3 errors for each attribute
+function test2() {
+  if (model.validationErrors.length == 3) {
+    model.set('name', 'John Doe');
+    model.set('age', 18);
+    model.set('sex', 'M');
+    model.validate(test3);
+  } else {
+    callback('test2: ' + model.validationErrors.length);
+  }
+}
+// Expect 1 errors since all attributes fixed but model will fail
+function test3() {
+  if (model.validationErrors.length == 1 && model.validationMessage == 'Males must be 21 or over') {
+    model.set('age', 21);
+    model.validate(test4);
+  } else {
+    callback('test3: ' + model.validationErrors.length);
+  }
+}
+// Test done should be no errors (to pass final test)
+function test4() {
+  callback('test4: ' + model.validationErrors.length);
+}
+```
+<blockquote>returns <strong>test4: 0</strong> as expected
+</blockquote>
+#### ATTRIBUTES
+&nbsp;<b><i>following attributes are defined::</i></b>
+```javascript
+var log = new Log('what up'); // default attributes and values
+this.shouldBeTrue(log.get('id') !== undefined);
+this.shouldBeTrue(log.get('dateLogged') instanceof Date);
+//spec.show(log.get('dateLogged'));
+this.shouldBeTrue(log.get('logType') == 'Text');
+this.shouldBeTrue(log.get('importance') == 'Info');
+this.shouldBeTrue(log.get('contents') == 'what up');
+```
+<blockquote></blockquote>
+#### LOG TYPES
+&nbsp;<b><i>must be valid:</i></b>
+```javascript
+//spec.show(T.getLogTypes());
+new Log({logType: 'wood'}); // default attributes and values
+```
+<blockquote><strong>Error: Unknown log type: wood</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>Text simple text message:</i></b>
+```javascript
+return new Log('sup');
+```
+<blockquote>returns <strong>Info: sup</strong> as expected
+</blockquote>
+&nbsp;<b><i>Delta logged Delta (see in Core):</i></b>
+```javascript
+var delta = new Delta(new Attribute.ModelID(new Model()));
+return new Log({logType: 'Delta', contents: delta}).toString();
+```
+<blockquote>returns <strong>Info: (delta)</strong> as expected
+</blockquote>
+#### Presentation Model
+<p>The Presentation Model represents the way in which a model is to be presented to the user.  The presentation is meant to be a "hint" to a Interface object.  The specific Interface object will represent the model data according to the Presentation object.</p>
+#### CONSTRUCTOR
+&nbsp;<b><i>objects created should be an instance of Presentation:</i></b>
+```javascript
+return new Presentation() instanceof Presentation;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+#### Model tests are applied
+#### Model Class
+<p>Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.</p>
+#### CONSTRUCTOR
+<p>Creation of all Models must adhere to following examples:</p>
+&nbsp;<b><i>objects created should be an instance of Model:</i></b>
+```javascript
+return new SurrogateModel() instanceof Model;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>should make sure new operator used:</i></b>
+```javascript
+SurrogateModel(); // jshint ignore:line
+```
+<blockquote><strong>Error: new operator required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>should make sure properties are valid:</i></b>
+```javascript
+new SurrogateModel({sup: 'yo'});
+```
+<blockquote><strong>Error: error creating Model: invalid property: sup</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>can supply attributes in constructor in addition to ID default:</i></b>
+```javascript
+var play = new SurrogateModel({attributes: [new Attribute('game')]});
+play.set('game', 'scrabble'); // this would throw error if attribute did not exist
+return play.get('game');
+```
+<blockquote>returns <strong>scrabble</strong> as expected
+</blockquote>
+#### PROPERTIES
+#### tags
+<p>Tags are an array of strings that can be used in searching.</p>
+&nbsp;<b><i>should be an array or undefined:</i></b>
+```javascript
+var m = new SurrogateModel(); // default is undefined
+this.shouldBeTrue(m.tag === undefined && m.getObjectStateErrors().length === 0);
+m.tags = [];
+this.shouldBeTrue(m.getObjectStateErrors().length === 0);
+m.tags = 'your it';
+this.shouldBeTrue(m.getObjectStateErrors().length == 1);
+```
+<blockquote></blockquote>
+#### attributes
+<p>The attributes property is an array of Attributes.</p>
+&nbsp;<b><i>should be an array:</i></b>
+```javascript
+var goodModel = new SurrogateModel(), badModel = new SurrogateModel();
+badModel.attributes = 'wtf';
+return (goodModel.getObjectStateErrors().length === 0 && badModel.getObjectStateErrors().length == 1);
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>elements of array must be instance of Attribute:</i></b>
+```javascript
+// passing true to getObjectStateErrors() means only check model and not subclass validations
+// todo make unit test for above
+var model = new SurrogateModel();
+model.attributes = [new Attribute("ID", "ID")];
+this.shouldBeTrue(model.getObjectStateErrors(true).length === 0);
+model.attributes = [new Attribute("ID", "ID"), new SurrogateModel(), 0, 'a', {}, [], null];
+this.shouldBeTrue(model.getObjectStateErrors(true).length == 6);
+```
+<blockquote></blockquote>
+#### value
+#### METHODS
+#### toString()
+&nbsp;<b><i>should return a description of the model:</i></b>
+```javascript
+return new SurrogateModel().toString().length > 0;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+#### copy(sourceModel)
+&nbsp;<b><i>copy all attribute values of a model:</i></b>
+```javascript
+var Foo = function (args) {
+  Model.call(this, args);
+  this.modelType = "Foo";
+  this.attributes.push(new Attribute('name'));
+};
+Foo.prototype = inheritPrototype(Model.prototype);
+var m1 = new Foo();
+var m2 = new Foo();
+var m3 = m1;
+m1.set('name', 'Bar');
+m2.set('name', 'Bar');
+// First demonstrate instance ref versus another model with equal attributes
+this.shouldBeTrue(m1 === m3); // assigning one model to variable references same instance
+this.shouldBeTrue(m3.get('name') === 'Bar'); // m3 changed when m1 changed
+this.shouldBeTrue(m1 !== m2); // 2 models are not the same instance
+this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m2)); // but they are identical
+// clone m1 into m4 and demonstrate that contents equal but not same ref to object
+var m4 = new Foo();
+m4.copy(m1);
+this.shouldBeTrue(m1 !== m4); // 2 models are not the same instance
+this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m4)); // but they are identical
+```
+<blockquote></blockquote>
+#### getObjectStateErrors()
+&nbsp;<b><i>should return array of validation errors:</i></b>
+```javascript
+this.shouldBeTrue(new SurrogateModel().getObjectStateErrors() instanceof Array);
+```
+<blockquote></blockquote>
+&nbsp;<b><i>first attribute must be an ID field:</i></b>
+```javascript
+var m = new SurrogateModel();
+m.attributes = [new Attribute('spoon')];
+return m.getObjectStateErrors();
+```
+<blockquote>returns <strong>first attribute must be ID</strong> as expected
+</blockquote>
+#### onEvent
+<p>Use onEvent(events,callback)</p>
+&nbsp;<b><i>first parameter is a string or array of event subscriptions:</i></b>
+```javascript
+new SurrogateModel().onEvent();
+```
+<blockquote><strong>Error: subscription string or array required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>callback is required:</i></b>
+```javascript
+new SurrogateModel().onEvent([]);
+```
+<blockquote><strong>Error: callback is required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>events are checked against known types:</i></b>
+```javascript
+new SurrogateModel().onEvent(['onDrunk'], function () {
+});
+```
+<blockquote><strong>Error: Unknown command event: onDrunk</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>here is a working version:</i></b>
+```javascript
+//spec.show(T.getAttributeEvents());
+// Validate - callback when attribute needs to be validated
+// StateChange -- callback when state of object (value or validation state) has changed
+new Model().onEvent(['Validate'], function () {
+});
+```
+<blockquote></blockquote>
+#### get(attributeName)
+&nbsp;<b><i>returns undefined if the attribute does not exist:</i></b>
+```javascript
+this.shouldBeTrue(new SurrogateModel().get('whatever') === undefined);
+```
+<blockquote></blockquote>
+&nbsp;<b><i>returns the value for given attribute:</i></b>
+```javascript
+var question = new SurrogateModel({attributes: [new Attribute('answer', 'Number')]});
+question.attributes[1].value = 42;
+return question.get('answer');
+```
+<blockquote>returns <strong>42</strong> as expected
+</blockquote>
+#### getAttributeType(attributeName)
+&nbsp;<b><i>returns attribute type for given attribute name:</i></b>
+```javascript
+return new Model({attributes: [new Attribute('born', 'Date')]}).getAttributeType('born');
+```
+<blockquote>returns <strong>Date</strong> as expected
+</blockquote>
+#### set(attributeName,value)
+&nbsp;<b><i>throws an error if the attribute does not exists:</i></b>
+```javascript
+new SurrogateModel().set('whatever');
+```
+<blockquote><strong>Error: attribute not valid for model</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>sets the value for given attribute:</i></b>
+```javascript
+var question = new SurrogateModel({attributes: [new Attribute('answer', 'Number')]});
+question.set('answer', 42);
+return question.attributes[1].value;
+```
+<blockquote>returns <strong>42</strong> as expected
+</blockquote>
+#### validate
+<p>check valid object state and value for attribute - invoke callback for results</p>
+&nbsp;<b><i>callback is required:</i></b>
+```javascript
+new Model().validate();
+```
+<blockquote><strong>Error: callback is required</strong> thrown as expected
+</blockquote>
+#### setError
+<p>Set a error condition and descriptive message</p>
+&nbsp;<b><i>first argument condition required:</i></b>
+```javascript
+new Model().setError();
+```
+<blockquote><strong>Error: condition required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>second argument description required:</i></b>
+```javascript
+new Model().setError('login');
+```
+<blockquote><strong>Error: description required</strong> thrown as expected
+</blockquote>
+#### clearError
+<p>Clear a error condition</p>
+&nbsp;<b><i>first argument condition required:</i></b>
+```javascript
+new Model().clearError();
+```
+<blockquote><strong>Error: condition required</strong> thrown as expected
+</blockquote>
+#### INTEGRATION
+&nbsp;<b><i>model validation usage demonstrated:</i></b>
+```javascript
+// Create a model with each attribute having and error
+var model = new Model({
+  attributes: [
+    new Attribute({name: 'Name', validationRule: {required: true}}),
+    new Attribute({name: 'Age', type: 'Number', validationRule: {range: [18, null]}}),
+    new Attribute({name: 'Sex', validationRule: {required: true}})
+  ]
+});
+model.setError('danger', 'Danger Will Robinson');
+// Create a model validation where males have to be 21
+model.onEvent('Validate', function () {
+  var name = model.get('name');
+  var age = model.get('age');
+  var sex = model.get('sex');
+  if (sex != 'F' && age < 21)
+    model.validationErrors.push('Males must be 21 or over');
+});
+model.validate(test1);
+// Expect 1 error from B9 Robot (Attribute errors ignored if model state error)
+function test1() {
+  if (model.validationErrors.length == 1) {
+    model.clearError('danger');
+    model.validate(test2);
+  } else {
+    callback('test1: ' + model.validationErrors.length);
+  }
+}
+// Expect 3 errors for each attribute
+function test2() {
+  if (model.validationErrors.length == 3) {
+    model.set('name', 'John Doe');
+    model.set('age', 18);
+    model.set('sex', 'M');
+    model.validate(test3);
+  } else {
+    callback('test2: ' + model.validationErrors.length);
+  }
+}
+// Expect 1 errors since all attributes fixed but model will fail
+function test3() {
+  if (model.validationErrors.length == 1 && model.validationMessage == 'Males must be 21 or over') {
+    model.set('age', 21);
+    model.validate(test4);
+  } else {
+    callback('test3: ' + model.validationErrors.length);
+  }
+}
+// Test done should be no errors (to pass final test)
+function test4() {
+  callback('test4: ' + model.validationErrors.length);
+}
+```
+<blockquote>returns <strong>test4: 0</strong> as expected
+</blockquote>
+#### PROPERTIES
+#### model
+<p>This is a model instance for the presentation instance.</p>
+#### validationErrors
+&nbsp;<b><i>Array of errors:</i></b>
+```javascript
+this.shouldBeTrue(new Presentation().validationErrors instanceof Array);
+this.shouldBeTrue(new Presentation().validationErrors.length === 0);
+```
+<blockquote></blockquote>
+#### validationMessage
+&nbsp;<b><i>string description of error(s):</i></b>
+```javascript
+return new Presentation().validationMessage;
+```
+<blockquote></blockquote>
+#### ATTRIBUTES
+<p>Presentation extends model and inherits the attributes property.  All Presentation objects have the following attributes:</p>
+&nbsp;<b><i>following attributes are defined::</i></b>
+```javascript
+var presentation = new Presentation(); // default attributes and values
+this.shouldBeTrue(presentation.get('id') === null);
+this.shouldBeTrue(presentation.get('name') === null);
+this.shouldBeTrue(presentation.get('modelName') === null);
+this.shouldBeTrue(presentation.get('contents') instanceof Array);
+```
+<blockquote></blockquote>
+#### METHODS
+#### modelConstructor
+<p>This is a reference to the constructor function to create a new model</p>
+#### validate
+<p>check valid object state then extend to presentation contents</p>
+&nbsp;<b><i>callback is required -- see integration:</i></b>
+```javascript
+new Presentation().validate();
+```
+<blockquote><strong>Error: callback is required</strong> thrown as expected
+</blockquote>
+#### CONTENTS
+<p>The contents attributes provides the structure for the presentation.</p>
+&nbsp;<b><i>content must be an array:</i></b>
+```javascript
+var pres = new Presentation();
+pres.set('contents', true);
+return pres.getObjectStateErrors();
+```
+<blockquote>returns <strong>contents must be Array</strong> as expected
+</blockquote>
+&nbsp;<b><i>array elements must be Command , Attribute or String:</i></b>
+```javascript
+var pres = new Presentation();
+// strings with prefix # are heading, a dash - by itself is for a visual separator
+pres.set('contents', ['#heading', new Command(), new Attribute({name: 'meh'})]);
+this.shouldBeTrue(pres.getObjectStateErrors().length === 0);
+pres.set('contents', [new Command(), new Attribute({name: 'meh'}), true]);
+return pres.getObjectStateErrors();
+```
+<blockquote>returns <strong>contents elements must be Command, Attribute or string</strong> as expected
+</blockquote>
+#### INTEGRATION
+&nbsp;<b><i>validation usage demonstrated:</i></b>
+```javascript
+var attribute = new Attribute({name: 'test'});
+var presentation = new Presentation(); // default attributes and values
+presentation.set('contents', [
+  attribute
+]);
+attribute.setError('test', 'test error');
+presentation.validate(function () {
+  callback(presentation.validationMessage);
+});
+```
+<blockquote>returns <strong>contents has validation errors</strong> as expected
+</blockquote>
+#### Session Model
+<p>The Session Model represents the Session logged into the system. The library uses this for system access, logging and other functions.</p>
+#### CONSTRUCTOR
+&nbsp;<b><i>objects created should be an instance of Session:</i></b>
+```javascript
+return new Session() instanceof Session;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+#### Model tests are applied
+#### Model Class
+<p>Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.</p>
+#### CONSTRUCTOR
+<p>Creation of all Models must adhere to following examples:</p>
+&nbsp;<b><i>objects created should be an instance of Model:</i></b>
+```javascript
+return new SurrogateModel() instanceof Model;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>should make sure new operator used:</i></b>
+```javascript
+SurrogateModel(); // jshint ignore:line
+```
+<blockquote><strong>Error: new operator required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>should make sure properties are valid:</i></b>
+```javascript
+new SurrogateModel({sup: 'yo'});
+```
+<blockquote><strong>Error: error creating Model: invalid property: sup</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>can supply attributes in constructor in addition to ID default:</i></b>
+```javascript
+var play = new SurrogateModel({attributes: [new Attribute('game')]});
+play.set('game', 'scrabble'); // this would throw error if attribute did not exist
+return play.get('game');
+```
+<blockquote>returns <strong>scrabble</strong> as expected
+</blockquote>
+#### PROPERTIES
+#### tags
+<p>Tags are an array of strings that can be used in searching.</p>
+&nbsp;<b><i>should be an array or undefined:</i></b>
+```javascript
+var m = new SurrogateModel(); // default is undefined
+this.shouldBeTrue(m.tag === undefined && m.getObjectStateErrors().length === 0);
+m.tags = [];
+this.shouldBeTrue(m.getObjectStateErrors().length === 0);
+m.tags = 'your it';
+this.shouldBeTrue(m.getObjectStateErrors().length == 1);
+```
+<blockquote></blockquote>
+#### attributes
+<p>The attributes property is an array of Attributes.</p>
+&nbsp;<b><i>should be an array:</i></b>
+```javascript
+var goodModel = new SurrogateModel(), badModel = new SurrogateModel();
+badModel.attributes = 'wtf';
+return (goodModel.getObjectStateErrors().length === 0 && badModel.getObjectStateErrors().length == 1);
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>elements of array must be instance of Attribute:</i></b>
+```javascript
+// passing true to getObjectStateErrors() means only check model and not subclass validations
+// todo make unit test for above
+var model = new SurrogateModel();
+model.attributes = [new Attribute("ID", "ID")];
+this.shouldBeTrue(model.getObjectStateErrors(true).length === 0);
+model.attributes = [new Attribute("ID", "ID"), new SurrogateModel(), 0, 'a', {}, [], null];
+this.shouldBeTrue(model.getObjectStateErrors(true).length == 6);
+```
+<blockquote></blockquote>
+#### value
+#### METHODS
+#### toString()
+&nbsp;<b><i>should return a description of the model:</i></b>
+```javascript
+return new SurrogateModel().toString().length > 0;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+#### copy(sourceModel)
+&nbsp;<b><i>copy all attribute values of a model:</i></b>
+```javascript
+var Foo = function (args) {
+  Model.call(this, args);
+  this.modelType = "Foo";
+  this.attributes.push(new Attribute('name'));
+};
+Foo.prototype = inheritPrototype(Model.prototype);
+var m1 = new Foo();
+var m2 = new Foo();
+var m3 = m1;
+m1.set('name', 'Bar');
+m2.set('name', 'Bar');
+// First demonstrate instance ref versus another model with equal attributes
+this.shouldBeTrue(m1 === m3); // assigning one model to variable references same instance
+this.shouldBeTrue(m3.get('name') === 'Bar'); // m3 changed when m1 changed
+this.shouldBeTrue(m1 !== m2); // 2 models are not the same instance
+this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m2)); // but they are identical
+// clone m1 into m4 and demonstrate that contents equal but not same ref to object
+var m4 = new Foo();
+m4.copy(m1);
+this.shouldBeTrue(m1 !== m4); // 2 models are not the same instance
+this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m4)); // but they are identical
+```
+<blockquote></blockquote>
+#### getObjectStateErrors()
+&nbsp;<b><i>should return array of validation errors:</i></b>
+```javascript
+this.shouldBeTrue(new SurrogateModel().getObjectStateErrors() instanceof Array);
+```
+<blockquote></blockquote>
+&nbsp;<b><i>first attribute must be an ID field:</i></b>
+```javascript
+var m = new SurrogateModel();
+m.attributes = [new Attribute('spoon')];
+return m.getObjectStateErrors();
+```
+<blockquote>returns <strong>first attribute must be ID</strong> as expected
+</blockquote>
+#### onEvent
+<p>Use onEvent(events,callback)</p>
+&nbsp;<b><i>first parameter is a string or array of event subscriptions:</i></b>
+```javascript
+new SurrogateModel().onEvent();
+```
+<blockquote><strong>Error: subscription string or array required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>callback is required:</i></b>
+```javascript
+new SurrogateModel().onEvent([]);
+```
+<blockquote><strong>Error: callback is required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>events are checked against known types:</i></b>
+```javascript
+new SurrogateModel().onEvent(['onDrunk'], function () {
+});
+```
+<blockquote><strong>Error: Unknown command event: onDrunk</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>here is a working version:</i></b>
+```javascript
+//spec.show(T.getAttributeEvents());
+// Validate - callback when attribute needs to be validated
+// StateChange -- callback when state of object (value or validation state) has changed
+new Model().onEvent(['Validate'], function () {
+});
+```
+<blockquote></blockquote>
+#### get(attributeName)
+&nbsp;<b><i>returns undefined if the attribute does not exist:</i></b>
+```javascript
+this.shouldBeTrue(new SurrogateModel().get('whatever') === undefined);
+```
+<blockquote></blockquote>
+&nbsp;<b><i>returns the value for given attribute:</i></b>
+```javascript
+var question = new SurrogateModel({attributes: [new Attribute('answer', 'Number')]});
+question.attributes[1].value = 42;
+return question.get('answer');
+```
+<blockquote>returns <strong>42</strong> as expected
+</blockquote>
+#### getAttributeType(attributeName)
+&nbsp;<b><i>returns attribute type for given attribute name:</i></b>
+```javascript
+return new Model({attributes: [new Attribute('born', 'Date')]}).getAttributeType('born');
+```
+<blockquote>returns <strong>Date</strong> as expected
+</blockquote>
+#### set(attributeName,value)
+&nbsp;<b><i>throws an error if the attribute does not exists:</i></b>
+```javascript
+new SurrogateModel().set('whatever');
+```
+<blockquote><strong>Error: attribute not valid for model</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>sets the value for given attribute:</i></b>
+```javascript
+var question = new SurrogateModel({attributes: [new Attribute('answer', 'Number')]});
+question.set('answer', 42);
+return question.attributes[1].value;
+```
+<blockquote>returns <strong>42</strong> as expected
+</blockquote>
+#### validate
+<p>check valid object state and value for attribute - invoke callback for results</p>
+&nbsp;<b><i>callback is required:</i></b>
+```javascript
+new Model().validate();
+```
+<blockquote><strong>Error: callback is required</strong> thrown as expected
+</blockquote>
+#### setError
+<p>Set a error condition and descriptive message</p>
+&nbsp;<b><i>first argument condition required:</i></b>
+```javascript
+new Model().setError();
+```
+<blockquote><strong>Error: condition required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>second argument description required:</i></b>
+```javascript
+new Model().setError('login');
+```
+<blockquote><strong>Error: description required</strong> thrown as expected
+</blockquote>
+#### clearError
+<p>Clear a error condition</p>
+&nbsp;<b><i>first argument condition required:</i></b>
+```javascript
+new Model().clearError();
+```
+<blockquote><strong>Error: condition required</strong> thrown as expected
+</blockquote>
+#### INTEGRATION
+&nbsp;<b><i>model validation usage demonstrated:</i></b>
+```javascript
+// Create a model with each attribute having and error
+var model = new Model({
+  attributes: [
+    new Attribute({name: 'Name', validationRule: {required: true}}),
+    new Attribute({name: 'Age', type: 'Number', validationRule: {range: [18, null]}}),
+    new Attribute({name: 'Sex', validationRule: {required: true}})
+  ]
+});
+model.setError('danger', 'Danger Will Robinson');
+// Create a model validation where males have to be 21
+model.onEvent('Validate', function () {
+  var name = model.get('name');
+  var age = model.get('age');
+  var sex = model.get('sex');
+  if (sex != 'F' && age < 21)
+    model.validationErrors.push('Males must be 21 or over');
+});
+model.validate(test1);
+// Expect 1 error from B9 Robot (Attribute errors ignored if model state error)
+function test1() {
+  if (model.validationErrors.length == 1) {
+    model.clearError('danger');
+    model.validate(test2);
+  } else {
+    callback('test1: ' + model.validationErrors.length);
+  }
+}
+// Expect 3 errors for each attribute
+function test2() {
+  if (model.validationErrors.length == 3) {
+    model.set('name', 'John Doe');
+    model.set('age', 18);
+    model.set('sex', 'M');
+    model.validate(test3);
+  } else {
+    callback('test2: ' + model.validationErrors.length);
+  }
+}
+// Expect 1 errors since all attributes fixed but model will fail
+function test3() {
+  if (model.validationErrors.length == 1 && model.validationMessage == 'Males must be 21 or over') {
+    model.set('age', 21);
+    model.validate(test4);
+  } else {
+    callback('test3: ' + model.validationErrors.length);
+  }
+}
+// Test done should be no errors (to pass final test)
+function test4() {
+  callback('test4: ' + model.validationErrors.length);
+}
+```
+<blockquote>returns <strong>test4: 0</strong> as expected
+</blockquote>
+#### ATTRIBUTES
+&nbsp;<b><i>following attributes are defined::</i></b>
+```javascript
+var session = new Session(); // default attributes and values
+this.shouldBeTrue(session.get('id') === null);
+this.shouldBeTrue(session.get('userID') instanceof Attribute.ModelID);
+this.shouldBeTrue(session.get('userID').modelType == 'User');
+this.shouldBeTrue(session.get('dateStarted') instanceof Date);
+this.shouldBeTrue(session.get('passCode') === null);
+this.shouldBeTrue(session.get('ipAddress') === null);
+this.shouldBeTrue(session.get('active') === false);
+```
+<blockquote></blockquote>
+#### METHODS
+#### startSession()
+<p>This method will create a new session record for a user.</p>
+&nbsp;<b><i>parameters are store, user, password, IP and callback:</i></b>
+```javascript
+this.shouldThrowError(Error('store required'), function () {
+  new Session().startSession();
+});
+this.shouldThrowError(Error('userName required'), function () {
+  new Session().startSession(new Store());
+});
+this.shouldThrowError(Error('password required'), function () {
+  new Session().startSession(new Store(), 'blow');
+});
+this.shouldThrowError(Error('ip required'), function () {
+  new Session().startSession(new Store(), 'blow', 'me');
+});
+this.shouldThrowError(Error('callBack required'), function () {
+  new Session().startSession(new Store(), 'blow', 'me', 'ipman');
+});
+```
+<blockquote></blockquote>
+#### resumeSession()
+<p>This method will resume an existing session.</p>
+&nbsp;<b><i>parameters are store, IP, passcode and callback:</i></b>
+```javascript
+this.shouldThrowError(Error('store required'), function () {
+  new Session().resumeSession();
+});
+this.shouldThrowError(Error('ip required'), function () {
+  new Session().resumeSession(new Store());
+});
+this.shouldThrowError(Error('passCode required'), function () {
+  new Session().resumeSession(new Store(), 'ipman');
+});
+this.shouldThrowError(Error('callBack required'), function () {
+  new Session().resumeSession(new Store(), 'ipman', '123');
+});
+```
+<blockquote></blockquote>
+#### endSession()
+<p>Method to end session.</p>
+&nbsp;<b><i>parameters are store and callback - session object should be in memory:</i></b>
+```javascript
+this.shouldThrowError(Error('store required'), function () {
+  new Session().endSession();
+});
+this.shouldThrowError(Error('callBack required'), function () {
+  new Session().endSession(new Store());
+});
+```
+<blockquote></blockquote>
+#### User Model
+<p>The User Model represents the user logged into the system. The library uses this for system access, logging and other functions.</p>
+#### CONSTRUCTOR
+&nbsp;<b><i>objects created should be an instance of User:</i></b>
+```javascript
+return new User() instanceof User;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+#### Model tests are applied
+#### Model Class
+<p>Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.</p>
+#### CONSTRUCTOR
+<p>Creation of all Models must adhere to following examples:</p>
+&nbsp;<b><i>objects created should be an instance of Model:</i></b>
+```javascript
+return new SurrogateModel() instanceof Model;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>should make sure new operator used:</i></b>
+```javascript
+SurrogateModel(); // jshint ignore:line
+```
+<blockquote><strong>Error: new operator required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>should make sure properties are valid:</i></b>
+```javascript
+new SurrogateModel({sup: 'yo'});
+```
+<blockquote><strong>Error: error creating Model: invalid property: sup</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>can supply attributes in constructor in addition to ID default:</i></b>
+```javascript
+var play = new SurrogateModel({attributes: [new Attribute('game')]});
+play.set('game', 'scrabble'); // this would throw error if attribute did not exist
+return play.get('game');
+```
+<blockquote>returns <strong>scrabble</strong> as expected
+</blockquote>
+#### PROPERTIES
+#### tags
+<p>Tags are an array of strings that can be used in searching.</p>
+&nbsp;<b><i>should be an array or undefined:</i></b>
+```javascript
+var m = new SurrogateModel(); // default is undefined
+this.shouldBeTrue(m.tag === undefined && m.getObjectStateErrors().length === 0);
+m.tags = [];
+this.shouldBeTrue(m.getObjectStateErrors().length === 0);
+m.tags = 'your it';
+this.shouldBeTrue(m.getObjectStateErrors().length == 1);
+```
+<blockquote></blockquote>
+#### attributes
+<p>The attributes property is an array of Attributes.</p>
+&nbsp;<b><i>should be an array:</i></b>
+```javascript
+var goodModel = new SurrogateModel(), badModel = new SurrogateModel();
+badModel.attributes = 'wtf';
+return (goodModel.getObjectStateErrors().length === 0 && badModel.getObjectStateErrors().length == 1);
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>elements of array must be instance of Attribute:</i></b>
+```javascript
+// passing true to getObjectStateErrors() means only check model and not subclass validations
+// todo make unit test for above
+var model = new SurrogateModel();
+model.attributes = [new Attribute("ID", "ID")];
+this.shouldBeTrue(model.getObjectStateErrors(true).length === 0);
+model.attributes = [new Attribute("ID", "ID"), new SurrogateModel(), 0, 'a', {}, [], null];
+this.shouldBeTrue(model.getObjectStateErrors(true).length == 6);
+```
+<blockquote></blockquote>
+#### value
+#### METHODS
+#### toString()
+&nbsp;<b><i>should return a description of the model:</i></b>
+```javascript
+return new SurrogateModel().toString().length > 0;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+#### copy(sourceModel)
+&nbsp;<b><i>copy all attribute values of a model:</i></b>
+```javascript
+var Foo = function (args) {
+  Model.call(this, args);
+  this.modelType = "Foo";
+  this.attributes.push(new Attribute('name'));
+};
+Foo.prototype = inheritPrototype(Model.prototype);
+var m1 = new Foo();
+var m2 = new Foo();
+var m3 = m1;
+m1.set('name', 'Bar');
+m2.set('name', 'Bar');
+// First demonstrate instance ref versus another model with equal attributes
+this.shouldBeTrue(m1 === m3); // assigning one model to variable references same instance
+this.shouldBeTrue(m3.get('name') === 'Bar'); // m3 changed when m1 changed
+this.shouldBeTrue(m1 !== m2); // 2 models are not the same instance
+this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m2)); // but they are identical
+// clone m1 into m4 and demonstrate that contents equal but not same ref to object
+var m4 = new Foo();
+m4.copy(m1);
+this.shouldBeTrue(m1 !== m4); // 2 models are not the same instance
+this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m4)); // but they are identical
+```
+<blockquote></blockquote>
+#### getObjectStateErrors()
+&nbsp;<b><i>should return array of validation errors:</i></b>
+```javascript
+this.shouldBeTrue(new SurrogateModel().getObjectStateErrors() instanceof Array);
+```
+<blockquote></blockquote>
+&nbsp;<b><i>first attribute must be an ID field:</i></b>
+```javascript
+var m = new SurrogateModel();
+m.attributes = [new Attribute('spoon')];
+return m.getObjectStateErrors();
+```
+<blockquote>returns <strong>first attribute must be ID</strong> as expected
+</blockquote>
+#### onEvent
+<p>Use onEvent(events,callback)</p>
+&nbsp;<b><i>first parameter is a string or array of event subscriptions:</i></b>
+```javascript
+new SurrogateModel().onEvent();
+```
+<blockquote><strong>Error: subscription string or array required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>callback is required:</i></b>
+```javascript
+new SurrogateModel().onEvent([]);
+```
+<blockquote><strong>Error: callback is required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>events are checked against known types:</i></b>
+```javascript
+new SurrogateModel().onEvent(['onDrunk'], function () {
+});
+```
+<blockquote><strong>Error: Unknown command event: onDrunk</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>here is a working version:</i></b>
+```javascript
+//spec.show(T.getAttributeEvents());
+// Validate - callback when attribute needs to be validated
+// StateChange -- callback when state of object (value or validation state) has changed
+new Model().onEvent(['Validate'], function () {
+});
+```
+<blockquote></blockquote>
+#### get(attributeName)
+&nbsp;<b><i>returns undefined if the attribute does not exist:</i></b>
+```javascript
+this.shouldBeTrue(new SurrogateModel().get('whatever') === undefined);
+```
+<blockquote></blockquote>
+&nbsp;<b><i>returns the value for given attribute:</i></b>
+```javascript
+var question = new SurrogateModel({attributes: [new Attribute('answer', 'Number')]});
+question.attributes[1].value = 42;
+return question.get('answer');
+```
+<blockquote>returns <strong>42</strong> as expected
+</blockquote>
+#### getAttributeType(attributeName)
+&nbsp;<b><i>returns attribute type for given attribute name:</i></b>
+```javascript
+return new Model({attributes: [new Attribute('born', 'Date')]}).getAttributeType('born');
+```
+<blockquote>returns <strong>Date</strong> as expected
+</blockquote>
+#### set(attributeName,value)
+&nbsp;<b><i>throws an error if the attribute does not exists:</i></b>
+```javascript
+new SurrogateModel().set('whatever');
+```
+<blockquote><strong>Error: attribute not valid for model</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>sets the value for given attribute:</i></b>
+```javascript
+var question = new SurrogateModel({attributes: [new Attribute('answer', 'Number')]});
+question.set('answer', 42);
+return question.attributes[1].value;
+```
+<blockquote>returns <strong>42</strong> as expected
+</blockquote>
+#### validate
+<p>check valid object state and value for attribute - invoke callback for results</p>
+&nbsp;<b><i>callback is required:</i></b>
+```javascript
+new Model().validate();
+```
+<blockquote><strong>Error: callback is required</strong> thrown as expected
+</blockquote>
+#### setError
+<p>Set a error condition and descriptive message</p>
+&nbsp;<b><i>first argument condition required:</i></b>
+```javascript
+new Model().setError();
+```
+<blockquote><strong>Error: condition required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>second argument description required:</i></b>
+```javascript
+new Model().setError('login');
+```
+<blockquote><strong>Error: description required</strong> thrown as expected
+</blockquote>
+#### clearError
+<p>Clear a error condition</p>
+&nbsp;<b><i>first argument condition required:</i></b>
+```javascript
+new Model().clearError();
+```
+<blockquote><strong>Error: condition required</strong> thrown as expected
+</blockquote>
+#### INTEGRATION
+&nbsp;<b><i>model validation usage demonstrated:</i></b>
+```javascript
+// Create a model with each attribute having and error
+var model = new Model({
+  attributes: [
+    new Attribute({name: 'Name', validationRule: {required: true}}),
+    new Attribute({name: 'Age', type: 'Number', validationRule: {range: [18, null]}}),
+    new Attribute({name: 'Sex', validationRule: {required: true}})
+  ]
+});
+model.setError('danger', 'Danger Will Robinson');
+// Create a model validation where males have to be 21
+model.onEvent('Validate', function () {
+  var name = model.get('name');
+  var age = model.get('age');
+  var sex = model.get('sex');
+  if (sex != 'F' && age < 21)
+    model.validationErrors.push('Males must be 21 or over');
+});
+model.validate(test1);
+// Expect 1 error from B9 Robot (Attribute errors ignored if model state error)
+function test1() {
+  if (model.validationErrors.length == 1) {
+    model.clearError('danger');
+    model.validate(test2);
+  } else {
+    callback('test1: ' + model.validationErrors.length);
+  }
+}
+// Expect 3 errors for each attribute
+function test2() {
+  if (model.validationErrors.length == 3) {
+    model.set('name', 'John Doe');
+    model.set('age', 18);
+    model.set('sex', 'M');
+    model.validate(test3);
+  } else {
+    callback('test2: ' + model.validationErrors.length);
+  }
+}
+// Expect 1 errors since all attributes fixed but model will fail
+function test3() {
+  if (model.validationErrors.length == 1 && model.validationMessage == 'Males must be 21 or over') {
+    model.set('age', 21);
+    model.validate(test4);
+  } else {
+    callback('test3: ' + model.validationErrors.length);
+  }
+}
+// Test done should be no errors (to pass final test)
+function test4() {
+  callback('test4: ' + model.validationErrors.length);
+}
+```
+<blockquote>returns <strong>test4: 0</strong> as expected
+</blockquote>
+#### ATTRIBUTES
+&nbsp;<b><i>following attributes are defined::</i></b>
+```javascript
+var user = new User(); // default attributes and values
+this.shouldBeTrue(user.get('id') === null);
+this.shouldBeTrue(user.get('name') === null);
+this.shouldBeTrue(user.get('active') === false);
+this.shouldBeTrue(user.get('password') === null);
+this.shouldBeTrue(user.get('firstName') === null);
+this.shouldBeTrue(user.get('lastName') === null);
+this.shouldBeTrue(user.get('email') === null);
+```
+<blockquote></blockquote>
+#### Workspace Model
+<p>A workspace is a collection of active deltas for a user.  The GUI could represent that as opentabs for instance.  Each tab a model view.  The deltas represent the change in model state</p>
+#### CONSTRUCTOR
+&nbsp;<b><i>objects created should be an instance of Workspace:</i></b>
+```javascript
+return new Workspace() instanceof Workspace;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+#### Model tests are applied
+#### Model Class
+<p>Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.</p>
+#### CONSTRUCTOR
+<p>Creation of all Models must adhere to following examples:</p>
+&nbsp;<b><i>objects created should be an instance of Model:</i></b>
+```javascript
+return new SurrogateModel() instanceof Model;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>should make sure new operator used:</i></b>
+```javascript
+SurrogateModel(); // jshint ignore:line
+```
+<blockquote><strong>Error: new operator required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>should make sure properties are valid:</i></b>
+```javascript
+new SurrogateModel({sup: 'yo'});
+```
+<blockquote><strong>Error: error creating Model: invalid property: sup</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>can supply attributes in constructor in addition to ID default:</i></b>
+```javascript
+var play = new SurrogateModel({attributes: [new Attribute('game')]});
+play.set('game', 'scrabble'); // this would throw error if attribute did not exist
+return play.get('game');
+```
+<blockquote>returns <strong>scrabble</strong> as expected
+</blockquote>
+#### PROPERTIES
+#### tags
+<p>Tags are an array of strings that can be used in searching.</p>
+&nbsp;<b><i>should be an array or undefined:</i></b>
+```javascript
+var m = new SurrogateModel(); // default is undefined
+this.shouldBeTrue(m.tag === undefined && m.getObjectStateErrors().length === 0);
+m.tags = [];
+this.shouldBeTrue(m.getObjectStateErrors().length === 0);
+m.tags = 'your it';
+this.shouldBeTrue(m.getObjectStateErrors().length == 1);
+```
+<blockquote></blockquote>
+#### attributes
+<p>The attributes property is an array of Attributes.</p>
+&nbsp;<b><i>should be an array:</i></b>
+```javascript
+var goodModel = new SurrogateModel(), badModel = new SurrogateModel();
+badModel.attributes = 'wtf';
+return (goodModel.getObjectStateErrors().length === 0 && badModel.getObjectStateErrors().length == 1);
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>elements of array must be instance of Attribute:</i></b>
+```javascript
+// passing true to getObjectStateErrors() means only check model and not subclass validations
+// todo make unit test for above
+var model = new SurrogateModel();
+model.attributes = [new Attribute("ID", "ID")];
+this.shouldBeTrue(model.getObjectStateErrors(true).length === 0);
+model.attributes = [new Attribute("ID", "ID"), new SurrogateModel(), 0, 'a', {}, [], null];
+this.shouldBeTrue(model.getObjectStateErrors(true).length == 6);
+```
+<blockquote></blockquote>
+#### value
+#### METHODS
+#### toString()
+&nbsp;<b><i>should return a description of the model:</i></b>
+```javascript
+return new SurrogateModel().toString().length > 0;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+#### copy(sourceModel)
+&nbsp;<b><i>copy all attribute values of a model:</i></b>
+```javascript
+var Foo = function (args) {
+  Model.call(this, args);
+  this.modelType = "Foo";
+  this.attributes.push(new Attribute('name'));
+};
+Foo.prototype = inheritPrototype(Model.prototype);
+var m1 = new Foo();
+var m2 = new Foo();
+var m3 = m1;
+m1.set('name', 'Bar');
+m2.set('name', 'Bar');
+// First demonstrate instance ref versus another model with equal attributes
+this.shouldBeTrue(m1 === m3); // assigning one model to variable references same instance
+this.shouldBeTrue(m3.get('name') === 'Bar'); // m3 changed when m1 changed
+this.shouldBeTrue(m1 !== m2); // 2 models are not the same instance
+this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m2)); // but they are identical
+// clone m1 into m4 and demonstrate that contents equal but not same ref to object
+var m4 = new Foo();
+m4.copy(m1);
+this.shouldBeTrue(m1 !== m4); // 2 models are not the same instance
+this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m4)); // but they are identical
+```
+<blockquote></blockquote>
+#### getObjectStateErrors()
+&nbsp;<b><i>should return array of validation errors:</i></b>
+```javascript
+this.shouldBeTrue(new SurrogateModel().getObjectStateErrors() instanceof Array);
+```
+<blockquote></blockquote>
+&nbsp;<b><i>first attribute must be an ID field:</i></b>
+```javascript
+var m = new SurrogateModel();
+m.attributes = [new Attribute('spoon')];
+return m.getObjectStateErrors();
+```
+<blockquote>returns <strong>first attribute must be ID</strong> as expected
+</blockquote>
+#### onEvent
+<p>Use onEvent(events,callback)</p>
+&nbsp;<b><i>first parameter is a string or array of event subscriptions:</i></b>
+```javascript
+new SurrogateModel().onEvent();
+```
+<blockquote><strong>Error: subscription string or array required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>callback is required:</i></b>
+```javascript
+new SurrogateModel().onEvent([]);
+```
+<blockquote><strong>Error: callback is required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>events are checked against known types:</i></b>
+```javascript
+new SurrogateModel().onEvent(['onDrunk'], function () {
+});
+```
+<blockquote><strong>Error: Unknown command event: onDrunk</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>here is a working version:</i></b>
+```javascript
+//spec.show(T.getAttributeEvents());
+// Validate - callback when attribute needs to be validated
+// StateChange -- callback when state of object (value or validation state) has changed
+new Model().onEvent(['Validate'], function () {
+});
+```
+<blockquote></blockquote>
+#### get(attributeName)
+&nbsp;<b><i>returns undefined if the attribute does not exist:</i></b>
+```javascript
+this.shouldBeTrue(new SurrogateModel().get('whatever') === undefined);
+```
+<blockquote></blockquote>
+&nbsp;<b><i>returns the value for given attribute:</i></b>
+```javascript
+var question = new SurrogateModel({attributes: [new Attribute('answer', 'Number')]});
+question.attributes[1].value = 42;
+return question.get('answer');
+```
+<blockquote>returns <strong>42</strong> as expected
+</blockquote>
+#### getAttributeType(attributeName)
+&nbsp;<b><i>returns attribute type for given attribute name:</i></b>
+```javascript
+return new Model({attributes: [new Attribute('born', 'Date')]}).getAttributeType('born');
+```
+<blockquote>returns <strong>Date</strong> as expected
+</blockquote>
+#### set(attributeName,value)
+&nbsp;<b><i>throws an error if the attribute does not exists:</i></b>
+```javascript
+new SurrogateModel().set('whatever');
+```
+<blockquote><strong>Error: attribute not valid for model</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>sets the value for given attribute:</i></b>
+```javascript
+var question = new SurrogateModel({attributes: [new Attribute('answer', 'Number')]});
+question.set('answer', 42);
+return question.attributes[1].value;
+```
+<blockquote>returns <strong>42</strong> as expected
+</blockquote>
+#### validate
+<p>check valid object state and value for attribute - invoke callback for results</p>
+&nbsp;<b><i>callback is required:</i></b>
+```javascript
+new Model().validate();
+```
+<blockquote><strong>Error: callback is required</strong> thrown as expected
+</blockquote>
+#### setError
+<p>Set a error condition and descriptive message</p>
+&nbsp;<b><i>first argument condition required:</i></b>
+```javascript
+new Model().setError();
+```
+<blockquote><strong>Error: condition required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>second argument description required:</i></b>
+```javascript
+new Model().setError('login');
+```
+<blockquote><strong>Error: description required</strong> thrown as expected
+</blockquote>
+#### clearError
+<p>Clear a error condition</p>
+&nbsp;<b><i>first argument condition required:</i></b>
+```javascript
+new Model().clearError();
+```
+<blockquote><strong>Error: condition required</strong> thrown as expected
+</blockquote>
+#### INTEGRATION
+&nbsp;<b><i>model validation usage demonstrated:</i></b>
+```javascript
+// Create a model with each attribute having and error
+var model = new Model({
+  attributes: [
+    new Attribute({name: 'Name', validationRule: {required: true}}),
+    new Attribute({name: 'Age', type: 'Number', validationRule: {range: [18, null]}}),
+    new Attribute({name: 'Sex', validationRule: {required: true}})
+  ]
+});
+model.setError('danger', 'Danger Will Robinson');
+// Create a model validation where males have to be 21
+model.onEvent('Validate', function () {
+  var name = model.get('name');
+  var age = model.get('age');
+  var sex = model.get('sex');
+  if (sex != 'F' && age < 21)
+    model.validationErrors.push('Males must be 21 or over');
+});
+model.validate(test1);
+// Expect 1 error from B9 Robot (Attribute errors ignored if model state error)
+function test1() {
+  if (model.validationErrors.length == 1) {
+    model.clearError('danger');
+    model.validate(test2);
+  } else {
+    callback('test1: ' + model.validationErrors.length);
+  }
+}
+// Expect 3 errors for each attribute
+function test2() {
+  if (model.validationErrors.length == 3) {
+    model.set('name', 'John Doe');
+    model.set('age', 18);
+    model.set('sex', 'M');
+    model.validate(test3);
+  } else {
+    callback('test2: ' + model.validationErrors.length);
+  }
+}
+// Expect 1 errors since all attributes fixed but model will fail
+function test3() {
+  if (model.validationErrors.length == 1 && model.validationMessage == 'Males must be 21 or over') {
+    model.set('age', 21);
+    model.validate(test4);
+  } else {
+    callback('test3: ' + model.validationErrors.length);
+  }
+}
+// Test done should be no errors (to pass final test)
+function test4() {
+  callback('test4: ' + model.validationErrors.length);
+}
+```
+<blockquote>returns <strong>test4: 0</strong> as expected
+</blockquote>
+#### ATTRIBUTES
+&nbsp;<b><i>following attributes are defined::</i></b>
+```javascript
+var user = new Workspace(); // default attributes and values
+this.shouldBeTrue(user.get('id') !== undefined);
+this.shouldBeTrue(user.get('user') instanceof Attribute.ModelID);
+this.shouldBeTrue(user.get('user').modelType == 'User');
+this.shouldBeTrue(typeof user.get('deltas') == 'object');
+```
+<blockquote></blockquote>
+#### METHODS
+<p>loadUserWorkspace(user, callBack)</p>
+<p>sync</p>
+#### INTEGRATION
