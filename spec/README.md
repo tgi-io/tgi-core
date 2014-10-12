@@ -1256,25 +1256,25 @@ return new Message('Null').toString();
 <p>Creation of all Models must adhere to following examples:</p>
 &nbsp;<b><i>objects created should be an instance of Model:</i></b>
 ```javascript
-return new SurrogateModelClass() instanceof Model;
+return new SurrogateModel() instanceof Model;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
 &nbsp;<b><i>should make sure new operator used:</i></b>
 ```javascript
-SurrogateModelClass(); // jshint ignore:line
+SurrogateModel(); // jshint ignore:line
 ```
 <blockquote><strong>Error: new operator required</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>should make sure properties are valid:</i></b>
 ```javascript
-new SurrogateModelClass({sup: 'yo'});
+new SurrogateModel({sup: 'yo'});
 ```
 <blockquote><strong>Error: error creating Model: invalid property: sup</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>can supply attributes in constructor in addition to ID default:</i></b>
 ```javascript
-var play = new SurrogateModelClass({attributes: [new Attribute('game')]});
+var play = new SurrogateModel({attributes: [new Attribute('game')]});
 play.set('game', 'scrabble'); // this would throw error if attribute did not exist
 return play.get('game');
 ```
@@ -1285,7 +1285,7 @@ return play.get('game');
 <p>Tags are an array of strings that can be used in searching.</p>
 &nbsp;<b><i>should be an array or undefined:</i></b>
 ```javascript
-var m = new SurrogateModelClass(); // default is undefined
+var m = new SurrogateModel(); // default is undefined
 this.shouldBeTrue(m.tag === undefined && m.getObjectStateErrors().length === 0);
 m.tags = [];
 this.shouldBeTrue(m.getObjectStateErrors().length === 0);
@@ -1297,7 +1297,7 @@ this.shouldBeTrue(m.getObjectStateErrors().length == 1);
 <p>The attributes property is an array of Attributes.</p>
 &nbsp;<b><i>should be an array:</i></b>
 ```javascript
-var goodModel = new SurrogateModelClass(), badModel = new SurrogateModelClass();
+var goodModel = new SurrogateModel(), badModel = new SurrogateModel();
 badModel.attributes = 'wtf';
 return (goodModel.getObjectStateErrors().length === 0 && badModel.getObjectStateErrors().length == 1);
 ```
@@ -1307,10 +1307,10 @@ return (goodModel.getObjectStateErrors().length === 0 && badModel.getObjectState
 ```javascript
 // passing true to getObjectStateErrors() means only check model and not subclass validations
 // todo make unit test for above
-var model = new SurrogateModelClass();
+var model = new SurrogateModel();
 model.attributes = [new Attribute("ID", "ID")];
 this.shouldBeTrue(model.getObjectStateErrors(true).length === 0);
-model.attributes = [new Attribute("ID", "ID"), new SurrogateModelClass(), 0, 'a', {}, [], null];
+model.attributes = [new Attribute("ID", "ID"), new SurrogateModel(), 0, 'a', {}, [], null];
 this.shouldBeTrue(model.getObjectStateErrors(true).length == 6);
 ```
 <blockquote></blockquote>
@@ -1319,7 +1319,7 @@ this.shouldBeTrue(model.getObjectStateErrors(true).length == 6);
 #### toString()
 &nbsp;<b><i>should return a description of the model:</i></b>
 ```javascript
-return new SurrogateModelClass().toString().length > 0;
+return new SurrogateModel().toString().length > 0;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
@@ -1352,12 +1352,12 @@ this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m4)); // but they are id
 #### getObjectStateErrors()
 &nbsp;<b><i>should return array of validation errors:</i></b>
 ```javascript
-this.shouldBeTrue(new SurrogateModelClass().getObjectStateErrors() instanceof Array);
+this.shouldBeTrue(new SurrogateModel().getObjectStateErrors() instanceof Array);
 ```
 <blockquote></blockquote>
 &nbsp;<b><i>first attribute must be an ID field:</i></b>
 ```javascript
-var m = new SurrogateModelClass();
+var m = new SurrogateModel();
 m.attributes = [new Attribute('spoon')];
 return m.getObjectStateErrors();
 ```
@@ -1367,19 +1367,19 @@ return m.getObjectStateErrors();
 <p>Use onEvent(events,callback)</p>
 &nbsp;<b><i>first parameter is a string or array of event subscriptions:</i></b>
 ```javascript
-new SurrogateModelClass().onEvent();
+new SurrogateModel().onEvent();
 ```
 <blockquote><strong>Error: subscription string or array required</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>callback is required:</i></b>
 ```javascript
-new SurrogateModelClass().onEvent([]);
+new SurrogateModel().onEvent([]);
 ```
 <blockquote><strong>Error: callback is required</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>events are checked against known types:</i></b>
 ```javascript
-new SurrogateModelClass().onEvent(['onDrunk'], function () {
+new SurrogateModel().onEvent(['onDrunk'], function () {
 });
 ```
 <blockquote><strong>Error: Unknown command event: onDrunk</strong> thrown as expected
@@ -1396,12 +1396,12 @@ new Model().onEvent(['Validate'], function () {
 #### get(attributeName)
 &nbsp;<b><i>returns undefined if the attribute does not exist:</i></b>
 ```javascript
-this.shouldBeTrue(new SurrogateModelClass().get('whatever') === undefined);
+this.shouldBeTrue(new SurrogateModel().get('whatever') === undefined);
 ```
 <blockquote></blockquote>
 &nbsp;<b><i>returns the value for given attribute:</i></b>
 ```javascript
-var question = new SurrogateModelClass({attributes: [new Attribute('answer', 'Number')]});
+var question = new SurrogateModel({attributes: [new Attribute('answer', 'Number')]});
 question.attributes[1].value = 42;
 return question.get('answer');
 ```
@@ -1417,13 +1417,13 @@ return new Model({attributes: [new Attribute('born', 'Date')]}).getAttributeType
 #### set(attributeName,value)
 &nbsp;<b><i>throws an error if the attribute does not exists:</i></b>
 ```javascript
-new SurrogateModelClass().set('whatever');
+new SurrogateModel().set('whatever');
 ```
 <blockquote><strong>Error: attribute not valid for model</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>sets the value for given attribute:</i></b>
 ```javascript
-var question = new SurrogateModelClass({attributes: [new Attribute('answer', 'Number')]});
+var question = new SurrogateModel({attributes: [new Attribute('answer', 'Number')]});
 question.set('answer', 42);
 return question.attributes[1].value;
 ```
@@ -1463,12 +1463,14 @@ new Model().clearError();
 &nbsp;<b><i>model validation usage demonstrated:</i></b>
 ```javascript
 // Create a model with each attribute having and error
-var model = new Model({attributes: [
-  new Attribute({name: 'Name', validationRule: {required: true}}),
-  new Attribute({name: 'Age', type: 'Number', validationRule: {range: [18, null]}}),
-  new Attribute({name: 'Sex', validationRule: {required: true}})
-]});
-model.setError('danger','Danger Will Robinson');
+var model = new Model({
+  attributes: [
+    new Attribute({name: 'Name', validationRule: {required: true}}),
+    new Attribute({name: 'Age', type: 'Number', validationRule: {range: [18, null]}}),
+    new Attribute({name: 'Sex', validationRule: {required: true}})
+  ]
+});
+model.setError('danger', 'Danger Will Robinson');
 // Create a model validation where males have to be 21
 model.onEvent('Validate', function () {
   var name = model.get('name');
@@ -1495,7 +1497,7 @@ function test2() {
     model.set('sex', 'M');
     model.validate(test3);
   } else {
-    callback( 'test2: ' + model.validationErrors.length);
+    callback('test2: ' + model.validationErrors.length);
   }
 }
 // Expect 1 errors since all attributes fixed but model will fail
@@ -1504,12 +1506,12 @@ function test3() {
     model.set('age', 21);
     model.validate(test4);
   } else {
-    callback( 'test3: ' + model.validationErrors.length);
+    callback('test3: ' + model.validationErrors.length);
   }
 }
 // Test done should be no errors (to pass final test)
 function test4() {
-  callback( 'test4: ' + model.validationErrors.length);
+  callback('test4: ' + model.validationErrors.length);
 }
 ```
 <blockquote>returns <strong>test4: 0</strong> as expected
