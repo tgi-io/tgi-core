@@ -51,11 +51,11 @@ var specFiles = [
   'lib/core/tgi-core-store.test.js',
   'lib/core/tgi-core-transport.test.js',
   'lib/models/tgi-core-model-application.test.js',
-  //'lib/models/tgi-core-model-log.test.js',
-  //'lib/models/tgi-core-model-presentation.test.js',
-  //'lib/models/tgi-core-model-session.test.js',
-  //'lib/models/tgi-core-model-user.test.js',
-  //'lib/models/tgi-core-model-workspace.test.js',
+  'lib/models/tgi-core-model-log.test.js',
+  'lib/models/tgi-core-model-presentation.test.js',
+  'lib/models/tgi-core-model-session.test.js',
+  'lib/models/tgi-core-model-user.test.js',
+  'lib/models/tgi-core-model-workspace.test.js',
   'lib/_packaging/spec-footer'
 ];
 

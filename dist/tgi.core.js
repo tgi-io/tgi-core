@@ -16,13 +16,17 @@ var CORE = function () {
     Delta: Delta,
     Interface: Interface,
     List: List,
+    Log: Log,
     Message: Message,
     Model: Model,
     Presentation: Presentation,
     Procedure: Procedure,
     Request: Request,
+    Session: Session,
     Store: Store,
     Transport: Transport,
+    User: User,
+    Workspace: Workspace,
     injectMethods: function (that) {
       that.Application = Application;
       that.Attribute = Attribute;
@@ -30,13 +34,17 @@ var CORE = function () {
       that.Delta = Delta;
       that.Interface = Interface;
       that.List = List;
+      that.Log = Log;
       that.Message = Message;
       that.Model = Model;
       that.Presentation = Presentation;
       that.Procedure = Procedure;
       that.Request = Request;
       that.Store = Store;
+      that.Session = Session;
       that.Transport = Transport;
+      that.User = User;
+      that.Workspace = Workspace;
     }
   };
 };
@@ -1301,12 +1309,13 @@ Application.prototype.setPresentation = function (presentation) {
 Application.prototype.getPresentation = function () {
   return this.presentation;
 };
-/**
- * tequila
- * log-model
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/lib/models/tgi-core-model-log.source.js
  */
 
-// Model Constructor
+/**
+ * Constructor
+ */
 var Log = function (args) {
   if (false === (this instanceof Log)) throw new Error('new operator required');
   if (typeof args == 'string') {
@@ -1321,15 +1330,14 @@ var Log = function (args) {
   var my_logType = args.logType || 'Text';
   var my_importance = args.importance || 'Info';
   var my_contents = args.contents || '(no text)';
-  if (!T.contains(T.getLogTypes(), my_logType)) throw new Error('Unknown log type: ' + my_logType);
-
+  if (!contains(['Text', 'Delta'], my_logType)) throw new Error('Unknown log type: ' + my_logType);
   if (typeof args.logType != 'undefined') delete args.logType;
   if (typeof args.importance != 'undefined') delete args.importance;
   if (typeof args.contents != 'undefined') delete args.contents;
   args.attributes.push(new Attribute({name: 'dateLogged', type: 'Date', value: new Date()}));
   args.attributes.push(new Attribute({name: 'logType', type: 'String', value: my_logType}));
   args.attributes.push(new Attribute({name: 'importance', type: 'String', value: my_importance}));
-  if (my_logType=='Delta')
+  if (my_logType == 'Delta')
     args.attributes.push(new Attribute({name: 'contents', type: 'Object', value: my_contents}));
   else
     args.attributes.push(new Attribute({name: 'contents', type: 'String', value: my_contents}));
@@ -1337,11 +1345,11 @@ var Log = function (args) {
   this.modelType = "Log";
 };
 Log.prototype = Object.create(Model.prototype);
-/*
+/**
  * Methods
  */
 Log.prototype.toString = function () {
-  if (this.get('logType')=='Delta')
+  if (this.get('logType') == 'Delta')
     return this.get('importance') + ': ' + '(delta)';
   else
     return this.get('importance') + ': ' + this.get('contents');
@@ -1420,7 +1428,8 @@ Presentation.prototype.validate = function (callBack) {
   }
   function checkAttrib() {
     checkCount++;
-    if (presentation.validationMessage)
+    // this is the attribute TODO this bad usage ?
+    if (this.validationMessage) // jshint ignore:line
       gotError = true;
     if (checkCount==checkCount) {
       if (gotError)

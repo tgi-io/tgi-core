@@ -1775,7 +1775,6 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.test.js', 'Application
         return new Application() instanceof Application;
       });
       spec.heading('Model tests are applied', function () {
-        // spec.runnerModel(... ??? wtf Application, this, callback);
         spec.testModel(Application);
       });
     });
@@ -1853,6 +1852,282 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.test.js', 'Application
   });
 });
 
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/lib/models/tgi-core-model-log.test.js
+ */
+spec.test('tgi-core/lib/models/tgi-core-model-log.test.js', 'Log', function (callback) {
+  spec.heading('Log Model', function () {
+    spec.paragraph('Multi purpose log model.');
+    spec.heading('CONSTRUCTOR', function () {
+      spec.example('objects created should be an instance of Workspace', true, function () {
+        return new Log() instanceof Log;
+      });
+      spec.heading('Model tests are applied', function () {
+        spec.testModel(Log);
+      });
+      spec.heading('ATTRIBUTES', function () {
+        spec.example('following attributes are defined:', undefined, function () {
+          var log = new Log('what up'); // default attributes and values
+          this.shouldBeTrue(log.get('id') !== undefined);
+          this.shouldBeTrue(log.get('dateLogged') instanceof Date);
+          //spec.show(log.get('dateLogged'));
+          this.shouldBeTrue(log.get('logType') == 'Text');
+          this.shouldBeTrue(log.get('importance') == 'Info');
+          this.shouldBeTrue(log.get('contents') == 'what up');
+        });
+      });
+      spec.heading('LOG TYPES', function () {
+        spec.example('must be valid', Error('Unknown log type: wood'), function () {
+          //spec.show(T.getLogTypes());
+          new Log({logType: 'wood'}); // default attributes and values
+        });
+        spec.example('Text simple text message', 'Info: sup', function () {
+          return new Log('sup');
+        });
+        spec.example('Delta logged Delta (see in Core)', 'Info: (delta)', function () {
+          var delta = new Delta(new Attribute.ModelID(new Model()));
+          return new Log({logType: 'Delta', contents: delta}).toString();
+        });
+      });
+    });
+  });
+});
+
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/lib/models/tgi-core-model-presentation.test.js
+ */
+spec.test('tgi-core/lib/models/tgi-core-model-presentation.test.js', 'Presentation', function (callback) {
+  spec.heading('Presentation Model', function () {
+    spec.paragraph('The Presentation Model represents the way in which a model is to be presented to the user.  ' +
+    'The presentation is meant to be a "hint" to a Interface object.  ' +
+    'The specific Interface object will represent the model data according to the Presentation object.');
+    spec.heading('CONSTRUCTOR', function () {
+      spec.example('objects created should be an instance of Presentation', true, function () {
+        return new Presentation() instanceof Presentation;
+      });
+      spec.heading('Model tests are applied', function () {
+        spec.testModel(Presentation);
+      });
+    });
+    spec.heading('PROPERTIES', function () {
+      spec.heading('model', function () {
+        spec.paragraph('This is a model instance for the presentation instance.');
+      });
+      spec.heading('validationErrors', function () {
+        spec.example('Array of errors', undefined, function () {
+          this.shouldBeTrue(new Presentation().validationErrors instanceof Array);
+          this.shouldBeTrue(new Presentation().validationErrors.length === 0);
+        });
+      });
+      spec.heading('validationMessage', function () {
+        spec.example('string description of error(s)', '', function () {
+          return new Presentation().validationMessage;
+        });
+      });
+    });
+    spec.heading('ATTRIBUTES', function () {
+      spec.paragraph('Presentation extends model and inherits the attributes property.  All Presentation objects ' +
+      'have the following attributes:');
+      spec.example('following attributes are defined:', undefined, function () {
+        var presentation = new Presentation(); // default attributes and values
+        this.shouldBeTrue(presentation.get('id') === null);
+        this.shouldBeTrue(presentation.get('name') === null);
+        this.shouldBeTrue(presentation.get('modelName') === null);
+        this.shouldBeTrue(presentation.get('contents') instanceof Array);
+      });
+    });
+    spec.heading('METHODS', function () {
+      spec.heading('modelConstructor', function () {
+        spec.paragraph('This is a reference to the constructor function to create a new model');
+        //spec.xexample('', undefined, function () {
+        //});
+      });
+      spec.heading('validate', function () {
+        spec.paragraph('check valid object state then extend to presentation contents');
+        spec.example('callback is required -- see integration', Error('callback is required'), function () {
+          new Presentation().validate();
+        });
+      });
+    });
+    spec.heading('CONTENTS', function () {
+      spec.paragraph('The contents attributes provides the structure for the presentation.');
+      spec.example('content must be an array', 'contents must be Array', function () {
+        var pres = new Presentation();
+        pres.set('contents', true);
+        return pres.getObjectStateErrors();
+      });
+      spec.example('array elements must be Command , Attribute or String', 'contents elements must be Command, Attribute or string', function () {
+        var pres = new Presentation();
+        // strings with prefix # are heading, a dash - by itself is for a visual separator
+        pres.set('contents', ['#heading', new Command(), new Attribute({name: 'meh'})]);
+        this.shouldBeTrue(pres.getObjectStateErrors().length === 0);
+        pres.set('contents', [new Command(), new Attribute({name: 'meh'}), true]);
+        return pres.getObjectStateErrors();
+      });
+    });
+    spec.heading('INTEGRATION', function () {
+
+      spec.example('validation usage demonstrated', spec.asyncResults('contents has validation errors'), function (callback) {
+        var attribute = new Attribute({name: 'test'});
+        var presentation = new Presentation(); // default attributes and values
+        presentation.set('contents', [
+          attribute
+        ]);
+        attribute.setError('test', 'test error');
+        presentation.validate(function () {
+          callback(presentation.validationMessage);
+        });
+      });
+
+    });
+  });
+});
+
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/lib/models/tgi-core-model-log.test.js
+ */
+spec.test('tgi-core/lib/models/tgi-core-model-log.test.js', 'Log', function (callback) {
+  spec.heading('Session Model', function () {
+    spec.paragraph('The Session Model represents the Session logged into the system. The library uses this for system' +
+      ' access, logging and other functions.');
+    spec.heading('CONSTRUCTOR', function () {
+      spec.example('objects created should be an instance of Session', true, function () {
+        return new Session() instanceof Session;
+      });
+      spec.heading('Model tests are applied', function () {
+        spec.testModel(Session, true);
+      });
+    });
+    spec.heading('ATTRIBUTES', function () {
+      spec.example('following attributes are defined:', undefined, function () {
+        var session = new Session(); // default attributes and values
+        this.shouldBeTrue(session.get('id') === null);
+        this.shouldBeTrue(session.get('userID') instanceof Attribute.ModelID);
+        this.shouldBeTrue(session.get('userID').modelType == 'User');
+        this.shouldBeTrue(session.get('dateStarted') instanceof Date);
+        this.shouldBeTrue(session.get('passCode') === null);
+        this.shouldBeTrue(session.get('ipAddress') === null);
+        this.shouldBeTrue(session.get('active') === false);
+      });
+    });
+    spec.heading('METHODS', function () {
+      spec.heading('startSession()', function () {
+        spec.paragraph('This method will create a new session record for a user.');
+        spec.example('parameters are store, user, password, IP and callback', undefined, function () {
+          this.shouldThrowError(Error('store required'), function () {
+            new Session().startSession();
+          });
+          this.shouldThrowError(Error('userName required'), function () {
+            new Session().startSession(new Store());
+          });
+          this.shouldThrowError(Error('password required'), function () {
+            new Session().startSession(new Store(), 'blow');
+          });
+          this.shouldThrowError(Error('ip required'), function () {
+            new Session().startSession(new Store(), 'blow', 'me');
+          });
+          this.shouldThrowError(Error('callBack required'), function () {
+            new Session().startSession(new Store(), 'blow', 'me', 'ipman');
+          });
+        });
+      });
+      spec.heading('resumeSession()', function () {
+        spec.paragraph('This method will resume an existing session.');
+        spec.example('parameters are store, IP, passcode and callback', undefined, function () {
+          this.shouldThrowError(Error('store required'), function () {
+            new Session().resumeSession();
+          });
+          this.shouldThrowError(Error('ip required'), function () {
+            new Session().resumeSession(new Store());
+          });
+          this.shouldThrowError(Error('passCode required'), function () {
+            new Session().resumeSession(new Store(), 'ipman');
+          });
+          this.shouldThrowError(Error('callBack required'), function () {
+            new Session().resumeSession(new Store(), 'ipman', '123');
+          });
+        });
+      });
+      spec.heading('endSession()', function () {
+        spec.paragraph('Method to end session.');
+        spec.example('parameters are store and callback - session object should be in memory', undefined, function () {
+          this.shouldThrowError(Error('store required'), function () {
+            new Session().endSession();
+          });
+          this.shouldThrowError(Error('callBack required'), function () {
+            new Session().endSession(new Store());
+          });
+        });
+      });
+    });
+    // spec.runnerSessionIntegration();
+  });
+});
+
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/lib/models/tgi-core-model-user.test.js
+ */
+spec.test('tgi-core/lib/models/tgi-core-model-user.test.js', 'User', function (callback) {
+  spec.heading('User Model', function () {
+    spec.paragraph('The User Model represents the user logged into the system. The library uses this for system' +
+      ' access, logging and other functions.');
+    spec.heading('CONSTRUCTOR', function () {
+      spec.example('objects created should be an instance of User', true, function () {
+        return new User() instanceof User;
+      });
+      spec.heading('Model tests are applied', function () {
+        spec.testModel(User, true);
+      });
+    });
+    spec.heading('ATTRIBUTES', function () {
+      spec.example('following attributes are defined:', undefined, function () {
+        var user = new User(); // default attributes and values
+        this.shouldBeTrue(user.get('id') === null);
+        this.shouldBeTrue(user.get('name') === null);
+        this.shouldBeTrue(user.get('active') === false);
+        this.shouldBeTrue(user.get('password') === null);
+        this.shouldBeTrue(user.get('firstName') === null);
+        this.shouldBeTrue(user.get('lastName') === null);
+        this.shouldBeTrue(user.get('email') === null);
+      });
+    });
+  });
+});
+
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/lib/models/tgi-core-model-workspace.test.js
+ */
+spec.test('tgi-core/lib/models/tgi-core-model-workspace.test.js', 'Workspace', function (callback) {
+  spec.heading('Workspace Model', function () {
+    spec.paragraph('A workspace is a collection of active deltas for a user.  The GUI could represent that as open' +
+      'tabs for instance.  Each tab a model view.  The deltas represent the change in model state');
+    spec.heading('CONSTRUCTOR', function () {
+      spec.example('objects created should be an instance of Workspace', true, function () {
+        return new Workspace() instanceof Workspace;
+      });
+      spec.heading('Model tests are applied', function () {
+        spec.testModel(Workspace, true);
+      });
+    });
+    spec.heading('ATTRIBUTES', function () {
+      spec.example('following attributes are defined:', undefined, function () {
+        var user = new Workspace(); // default attributes and values
+        this.shouldBeTrue(user.get('id') !== undefined);
+        this.shouldBeTrue(user.get('user') instanceof Attribute.ModelID);
+        this.shouldBeTrue(user.get('user').modelType == 'User');
+        this.shouldBeTrue(typeof user.get('deltas') == 'object');
+      });
+    });
+    spec.heading('METHODS', function () {
+      spec.paragraph('loadUserWorkspace(user, callBack)');
+      spec.paragraph('sync');
+    });
+    spec.heading('INTEGRATION', function () {
+      //spec.example('Workspace usage', undefined, function () {
+      //});
+    });
+  });
+});
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/misc/test-footer
  **/
