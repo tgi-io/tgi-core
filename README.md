@@ -2,7 +2,10 @@ tgi-core
 ========
 Core Objects [read the spec](spec/README.md).
 
-Port
+Todo
 ----
-unstub Presentation
-unstub Procedure
+- fix commented out code
+- interface ?
+- remaining stores ?
+- need show in tests
+- coverage sux bad

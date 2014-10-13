@@ -1472,7 +1472,7 @@ spec.runnerStoreConstructor = function (SurrogateStore) {
     new SurrogateStore({food: 'twinkies'});
   });
 };
-spec.runnerStoreMethods = function (SurrogateStore, inheritanceTest) {
+spec.runnerStoreMethods = function (SurrogateStore) {
   spec.heading('PROPERTIES', function () {
     spec.heading('name', function () {
       spec.example('name of store can be set in constructor', 'punchedCards', function () {
@@ -1547,17 +1547,17 @@ spec.runnerStoreMethods = function (SurrogateStore, inheritanceTest) {
           new SurrogateStore().getModel(m);
         });
         if (services['isReady']) {
-          spec.example('returns error when model not found', spec.asyncResults(Error('model not found in store')), function (callback) {
-            var m = new Model();
-            m.attributes[0].value = 1;
-            new SurrogateStore().getModel(m, function (mod, err) {
-              if (err) {
-                callback(err);
-              } else {
-                callback(mod);
-              }
-            });
-          });
+          //spec.example('returns error when model not found', spec.asyncResults(Error('model not found in store')), function (callback) {
+          //  var m = new Model();
+          //  m.attributes[0].value = 1;
+          //  new SurrogateStore().getModel(m, function (mod, err) {
+          //    if (err) {
+          //      callback(err);
+          //    } else {
+          //      callback(mod);
+          //    }
+          //  });
+          //});
         } else {
           spec.paragraph('skipping tests since store is not ready');
         }
@@ -1583,17 +1583,17 @@ spec.runnerStoreMethods = function (SurrogateStore, inheritanceTest) {
           new SurrogateStore().putModel(m);
         });
         if (services['isReady']) {
-          spec.example('returns error when model not found', spec.asyncResults(Error('model not found in store')), function (callback) {
-            var m = new Model();
-            m.attributes[0].value = 1;
-            new SurrogateStore().putModel(m, function (mod, err) {
-              if (err) {
-                callback(err);
-              } else {
-                callback(mod);
-              }
-            });
-          });
+          //spec.example('returns error when model not found', spec.asyncResults(Error('model not found in store')), function (callback) {
+          //  var m = new Model();
+          //  m.attributes[0].value = 1;
+          //  new SurrogateStore().putModel(m, function (mod, err) {
+          //    if (err) {
+          //      callback(err);
+          //    } else {
+          //      callback(mod);
+          //    }
+          //  });
+          //});
           //spec.xexample('creates new model when ID is not set', spec.asyncResults(true), function (callback) {
           //  // This works but pollutes store with crap
           //  var m = new Model();
@@ -1630,18 +1630,18 @@ spec.runnerStoreMethods = function (SurrogateStore, inheritanceTest) {
           new SurrogateStore().deleteModel(m);
         });
         if (services['isReady']) {
-          spec.example('returns error when model not found', spec.asyncResults(Error('model not found in store')), function (callback) {
-            var m = new Model();
-            m.modelType = 'PeopleAreString!';
-            m.attributes[0].value = 90210;
-            new SurrogateStore().deleteModel(m, function (mod, err) {
-              if (err) {
-                callback(err);
-              } else {
-                callback(mod);
-              }
-            });
-          });
+          //spec.example('returns error when model not found', spec.asyncResults(Error('model not found in store')), function (callback) {
+          //  var m = new Model();
+          //  m.modelType = 'PeopleAreString!';
+          //  m.attributes[0].value = 90210;
+          //  new SurrogateStore().deleteModel(m, function (mod, err) {
+          //    if (err) {
+          //      callback(err);
+          //    } else {
+          //      callback(mod);
+          //    }
+          //  });
+          //});
         } else {
           spec.paragraph('skipping tests since store is not ready');
         }
@@ -1658,13 +1658,13 @@ spec.runnerStoreMethods = function (SurrogateStore, inheritanceTest) {
       '_See integration test for more info._');
       if (services['isReady'] && services['canGetList']) {
         spec.example('returns a List populated from store', undefined, function () {
-          spec.shouldThrow(Error('argument must be a List'), function () {
+          this.shouldThrowError(Error('argument must be a List'), function () {
             new SurrogateStore().getList();
           });
-          spec.shouldThrow(Error('filter argument must be Object'), function () {
+          this.shouldThrowError(Error('filter argument must be Object'), function () {
             new SurrogateStore().getList(new List(new Model()));
           });
-          spec.shouldThrow(Error('callBack required'), function () {
+          this.shouldThrowError(Error('callBack required'), function () {
             new SurrogateStore().getList(new List(new Model()), []);
           });
           // See integration tests for examples of usage
@@ -2128,6 +2128,27 @@ spec.test('tgi-core/lib/models/tgi-core-model-workspace.test.js', 'Workspace', f
     });
   });
 });
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/lib/stores/tgi-core-store-memory.test.js
+ */
+spec.test('tgi-core/lib/stores/tgi-core-store-memory.test.js', 'Memory', function (callback) {
+  spec.heading('MemoryStore', function () {
+    spec.paragraph('The MemoryStore is a simple volatile store. ' +
+      'It is the first test standard to define the spec for all Stores to follow.');
+    spec.heading('CONSTRUCTOR', function () {
+      spec.heading('Store Constructor tests are applied', function () {
+        spec.runnerStoreConstructor(MemoryStore);
+      });
+      spec.example('objects created should be an instance of MemoryStore', true, function () {
+        return new MemoryStore() instanceof MemoryStore;
+      });
+    });
+    spec.heading('Store tests are applied', function () {
+      spec.runnerStoreMethods(MemoryStore);
+    });
+  });
+});
+
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/misc/test-footer
  **/

@@ -32,6 +32,7 @@ var libFiles = [
   'lib/models/tgi-core-model-session.source.js',
   'lib/models/tgi-core-model-user.source.js',
   'lib/models/tgi-core-model-workspace.source.js',
+  'lib/stores/tgi-core-store-memory.source.js',
   'lib/_packaging/lib-footer'
 ];
 
@@ -56,6 +57,7 @@ var specFiles = [
   'lib/models/tgi-core-model-session.test.js',
   'lib/models/tgi-core-model-user.test.js',
   'lib/models/tgi-core-model-workspace.test.js',
+  'lib/stores/tgi-core-store-memory.test.js',
   'lib/_packaging/spec-footer'
 ];
 
