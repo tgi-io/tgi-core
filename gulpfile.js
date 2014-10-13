@@ -131,5 +131,6 @@ gulp.task('spec', ['lint'], function (callback) {
   }, 100); // Without this sometimes the exec runs before script is written/flushed ?
 });
 
-// Default Task
+// Default & Travis CI Task
 gulp.task('default', ['test']);
+gulp.task('travis', ['test']);
