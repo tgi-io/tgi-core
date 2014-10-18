@@ -1,7 +1,7 @@
 ## [&#9664;](#prev)&nbsp;[&#8984;](#intro)&nbsp;[&#9654;](#next) &nbsp;tgi-core
 <p>Core objects, models, stores and interfaces for the TGI framework.</p>
 #### Table of Contents
-dfgdfg
+
 - [tgi-core](#) Core Repository for TGI Framework
 - [CORE](#) exposed as public or exported (node)
 - [Attribute](#) <insert description>
