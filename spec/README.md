@@ -73,7 +73,7 @@ new Attribute({eman: 'the'}); // 2 errors: name missing and eman an unknown prop
 <blockquote><strong>Error: error creating Attribute: multiple errors</strong> thrown as expected
 </blockquote>
 #### Attribute.ModelID
-<p>Attribute.ModelID defines reference to ID in external model.</p>
+<p>Attribute.ModelID is a constructor that is used as a special type for references to IDs in external models.  Note it is a function embedded as a member of the Attribute to encapsulate.</p>
 &nbsp;<b><i>objects created should be an instance of Attribute.ModelID:</i></b>
 ```javascript
 return new Attribute.ModelID(new Model()) instanceof Attribute.ModelID;
