@@ -2,7 +2,7 @@
 <p>Core objects, models, stores and interfaces for the TGI framework.</p>
 #### Table of Contents
 
-- [tgi-core](#)Core Repository for TGI Framework
+- [tgi-core Core Repository for TGI Framework](#)
 - [CORE](#) exposed as public or exported (node)
 - [Attribute](#) <insert description>
 - [Command](#) <insert description>
