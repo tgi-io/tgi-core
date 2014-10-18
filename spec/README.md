@@ -1,9 +1,9 @@
-## [&#9664;](#prev)&nbsp;[&#8984;](#intro)&nbsp;[&#9654;](#next) &nbsp;INTRO
-<p>There be dragons.</p>
+## [&#9664;](#prev)&nbsp;[&#8984;](#intro)&nbsp;[&#9654;](#next) &nbsp;tgi-core
+<p>Core objects, models, stores and interfaces for the TGI framework.</p>
 #### Table of Contents
 
-- [INTRO](#) <insert description>
-- [Core Library](#) <insert description>
+- [tgi-core](#) Core Repository for TGI Framework
+- [CORE](#) exposed as public or exported (node)
 - [Attribute](#) <insert description>
 - [Command](#) <insert description>
 - [Delta](#) <insert description>
@@ -24,7 +24,7 @@
 - [Memory](#) <insert description>
 
 
-## [&#9664;](#prev)&nbsp;[&#8984;](#intro)&nbsp;[&#9654;](#next) &nbsp;Core Library
+## [&#9664;](#prev)&nbsp;[&#8984;](#intro)&nbsp;[&#9654;](#next) &nbsp;CORE
 #### TGI CORE
 <p>Core Objects.</p>
 &nbsp;<b><i>CORE function exposes library:</i></b>
