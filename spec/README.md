@@ -25,7 +25,7 @@
 - [Memory](#-memory) <insert description>
 
 
-## [&#9664;](#prev)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#next) &nbsp;CORE
+## [&#9664;](#-tgi-core)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-attribute) &nbsp;CORE
 #### TGI CORE
 <p>Core Objects.</p>
 &nbsp;<b><i>CORE function exposes library:</i></b>
@@ -40,7 +40,7 @@ return typeof inheritPrototype;
 ```
 <blockquote>returns <strong>function</strong> as expected
 </blockquote>
-## [&#9664;](#prev)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#next) &nbsp;Attribute
+## [&#9664;](#-core)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-command) &nbsp;Attribute
 #### Attribute Class
 <p>Attributes are the means for models to represent data of different types.  They have no dependencies on Models however and can be used without creating a model.</p>
 #### CONSTRUCTOR
@@ -705,7 +705,7 @@ function test6() {
 ```
 <blockquote>returns <strong>got milk</strong> as expected
 </blockquote>
-## [&#9664;](#prev)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#next) &nbsp;Command
+## [&#9664;](#-attribute)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-delta) &nbsp;Command
 #### Command Class
 <p>The command design pattern is implemented with this class.  The actual execution of the command can be one of multiple types from simple code to a _Presentation Model_ applied to a _Interface_ implementation.</p>
 #### CONSTRUCTOR
@@ -952,7 +952,7 @@ new Command().onEvent(['Completed'], function () {
 });
 ```
 <blockquote></blockquote>
-## [&#9664;](#prev)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#next) &nbsp;Delta
+## [&#9664;](#-command)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-interface) &nbsp;Delta
 #### Delta Class
 <p>Deltas represent changes to models.  They can be applied to a store then update the model.  They can be stored in logs as a change audit for the model.</p>
 #### CONSTRUCTOR
@@ -1003,7 +1003,7 @@ return typeof new Delta(new Attribute.ModelID(new Model())).attributeValues;
 ```
 <blockquote>returns <strong>object</strong> as expected
 </blockquote>
-## [&#9664;](#prev)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#next) &nbsp;Interface
+## [&#9664;](#-delta)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-list) &nbsp;Interface
 #### Interface Class
 #### CONSTRUCTOR
 &nbsp;<b><i>objects created should be an instance of SurrogateInterface:</i></b>
@@ -1140,7 +1140,7 @@ this.shouldThrowError('Error: invalid request parameter', function () {
 });
 ```
 <blockquote></blockquote>
-## [&#9664;](#prev)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#next) &nbsp;List
+## [&#9664;](#-interface)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-message) &nbsp;List
 #### List Class
 <p>Lists are an ordered collection of items.  Each item is an array of values that correspond to the attributes for model used in constructor.</p>
 #### CONSTRUCTOR
@@ -1247,7 +1247,7 @@ new List(new Model()).sort(); // see integration tests
 ```
 <blockquote><strong>Error: sort order required</strong> thrown as expected
 </blockquote>
-## [&#9664;](#prev)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#next) &nbsp;Message
+## [&#9664;](#-list)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-model) &nbsp;Message
 #### Message Class
 <p>Messages are used by Transport to send to host or UI.</p>
 #### CONSTRUCTOR
@@ -1284,7 +1284,7 @@ return new Message('Null').toString();
 ```
 <blockquote>returns <strong>Null Message</strong> as expected
 </blockquote>
-## [&#9664;](#prev)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#next) &nbsp;Model
+## [&#9664;](#-message)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-procedure) &nbsp;Model
 #### Model Class
 <p>Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.</p>
 #### CONSTRUCTOR
@@ -1551,7 +1551,7 @@ function test4() {
 ```
 <blockquote>returns <strong>test4: 0</strong> as expected
 </blockquote>
-## [&#9664;](#prev)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#next) &nbsp;Procedure
+## [&#9664;](#-model)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-request) &nbsp;Procedure
 #### Procedure Class
 <p>The _Procedure_ class manages a set of _Command_ objects.  It provides a pattern for handling asynchronous and synchronous command execution.</p>
 <p>_Command_ objects create and manage the _Procedure_ object.</p>
@@ -1656,7 +1656,7 @@ if (!new Procedure().getObjectStateErrors()) return 'falsy';
 ```
 <blockquote>returns <strong>falsy</strong> as expected
 </blockquote>
-## [&#9664;](#prev)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#next) &nbsp;Request
+## [&#9664;](#-procedure)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-store) &nbsp;Request
 #### Request Class
 <p>Requests handle the Request / Response design pattern.  They are used by the Interface class to communicate with the Application Model</p>
 #### CONSTRUCTOR
@@ -1710,7 +1710,7 @@ return new Request('Null').toString();
 ```
 <blockquote>returns <strong>Null Request</strong> as expected
 </blockquote>
-## [&#9664;](#prev)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#next) &nbsp;Store
+## [&#9664;](#-request)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-transport) &nbsp;Store
 #### Store Class
 <p>The store class is used for object persistence.</p>
 #### CONSTRUCTOR
@@ -1820,8 +1820,8 @@ new SurrogateStore().deleteModel();
 </blockquote>
 #### getList(model, filter, order)
 <p>This method will clear and populate the list with collection from store.  The **filter** property can be used to query the store.  The **order** property can specify the sort order of the list.  _See integration test for more info._</p>
-## [&#9664;](#prev)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#next) &nbsp;Transport
-## [&#9664;](#prev)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#next) &nbsp;Application
+## [&#9664;](#-store)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-application) &nbsp;Transport
+## [&#9664;](#-transport)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-log) &nbsp;Application
 #### Application Model
 <p>Information about the application is modeled here.</p>
 #### CONSTRUCTOR
@@ -2193,7 +2193,7 @@ new Application().dispatch(new Request({type: 'Command', command: new Command()}
 ```
 <blockquote><strong>Error: response callback is not a function</strong> thrown as expected
 </blockquote>
-## [&#9664;](#prev)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#next) &nbsp;Log
+## [&#9664;](#-application)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-presentation) &nbsp;Log
 #### Log Model
 <p>Multi purpose log model.</p>
 #### CONSTRUCTOR
@@ -2503,7 +2503,7 @@ return new Log({logType: 'Delta', contents: delta}).toString();
 ```
 <blockquote>returns <strong>Info: (delta)</strong> as expected
 </blockquote>
-## [&#9664;](#prev)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#next) &nbsp;Presentation
+## [&#9664;](#-log)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-log) &nbsp;Presentation
 #### Presentation Model
 <p>The Presentation Model represents the way in which a model is to be presented to the user.  The presentation is meant to be a "hint" to a Interface object.  The specific Interface object will represent the model data according to the Presentation object.</p>
 #### CONSTRUCTOR
@@ -2854,7 +2854,7 @@ presentation.validate(function () {
 ```
 <blockquote>returns <strong>contents has validation errors</strong> as expected
 </blockquote>
-## [&#9664;](#prev)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#next) &nbsp;Log
+## [&#9664;](#-presentation)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-user) &nbsp;Log
 #### Session Model
 <p>The Session Model represents the Session logged into the system. The library uses this for system access, logging and other functions.</p>
 #### CONSTRUCTOR
@@ -3196,7 +3196,7 @@ this.shouldThrowError(Error('callBack required'), function () {
 });
 ```
 <blockquote></blockquote>
-## [&#9664;](#prev)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#next) &nbsp;User
+## [&#9664;](#-log)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-workspace) &nbsp;User
 #### User Model
 <p>The User Model represents the user logged into the system. The library uses this for system access, logging and other functions.</p>
 #### CONSTRUCTOR
@@ -3486,7 +3486,7 @@ this.shouldBeTrue(user.get('lastName') === null);
 this.shouldBeTrue(user.get('email') === null);
 ```
 <blockquote></blockquote>
-## [&#9664;](#prev)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#next) &nbsp;Workspace
+## [&#9664;](#-user)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-memory) &nbsp;Workspace
 #### Workspace Model
 <p>A workspace is a collection of active deltas for a user.  The GUI could represent that as opentabs for instance.  Each tab a model view.  The deltas represent the change in model state</p>
 #### CONSTRUCTOR
@@ -3777,7 +3777,7 @@ this.shouldBeTrue(typeof user.get('deltas') == 'object');
 <p>loadUserWorkspace(user, callBack)</p>
 <p>sync</p>
 #### INTEGRATION
-## [&#9664;](#prev)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#next) &nbsp;Memory
+## [&#9664;](#-workspace)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#) &nbsp;Memory
 #### MemoryStore
 <p>The MemoryStore is a simple volatile store. It is the first test standard to define the spec for all Stores to follow.</p>
 #### CONSTRUCTOR
