@@ -11,13 +11,13 @@ var testSpec = function(spec,CORE) {
 /**
  * Doc Intro
  */
-spec.test('lib/tgi-spec-intro', 'INTRO', function (callback) {
+spec.test('lib/tgi-spec-intro', 'INTRO', '<insert description>', function (callback) {
   spec.paragraph('There be dragons.');
   spec.heading('Table of Contents', function () {
-    spec.generateIndex();
+    spec.index();
   });
 });
-spec.test('tgi-core/lib/tgi-core.test.js', 'Core Library', function (callback) {
+spec.test('tgi-core/lib/tgi-core.test.js', 'Core Library', '<insert description>', function (callback) {
   callback({log: 'tgi-core/lib/tgi-core.test.js'});
   spec.heading('TGI CORE', function () {
     spec.paragraph('Core Objects.');
@@ -33,7 +33,7 @@ spec.test('tgi-core/lib/tgi-core.test.js', 'Core Library', function (callback) {
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-attribute.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', function (callback) {
+spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', '<insert description>', function (callback) {
   callback({log: 'tgi-core/lib/tgi-core-attribute.spec.js'});
 
   spec.heading('Attribute Class', function () {
@@ -576,7 +576,7 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', function (call
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-command.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-command.test.js', 'Command', function (callback) {
+spec.test('tgi-core/lib/tgi-core-command.test.js', 'Command', '<insert description>', function (callback) {
 
   spec.heading('Command Class', function () {
     spec.paragraph('The command design pattern is implemented with this class.  The actual execution of the command ' +
@@ -801,7 +801,7 @@ spec.test('tgi-core/lib/tgi-core-command.test.js', 'Command', function (callback
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-delta.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-delta.spec.js', 'Delta', function (callback) {
+spec.test('tgi-core/lib/tgi-core-delta.spec.js', 'Delta', '<insert description>', function (callback) {
   spec.heading('Delta Class', function () {
     spec.paragraph('Deltas represent changes to models.  They can be applied to a store then update the model.  ' +
     'They can be stored in logs as a change audit for the model.');
@@ -847,7 +847,7 @@ spec.test('tgi-core/lib/tgi-core-delta.spec.js', 'Delta', function (callback) {
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-interface.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-interface.spec.js', 'Interface', function (callback) {
+spec.test('tgi-core/lib/tgi-core-interface.spec.js', 'Interface', '<insert description>', function (callback) {
   var SurrogateInterface = Interface;
   spec.heading('Interface Class', function () {
     spec.heading('CONSTRUCTOR', function () {
@@ -955,7 +955,7 @@ spec.test('tgi-core/lib/tgi-core-interface.spec.js', 'Interface', function (call
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-list.test.js
  */
-spec.test('tgi-core/lib/tgi-core-list.spec.js', 'List', function (callback) {
+spec.test('tgi-core/lib/tgi-core-list.spec.js', 'List', '<insert description>', function (callback) {
   var SurrogateListClass = List;
   spec.heading('List Class', function () {
     spec.paragraph('Lists are an ordered collection of items.  Each item is an array of values that correspond to the attributes for model used in constructor.');
@@ -1046,7 +1046,7 @@ spec.test('tgi-core/lib/tgi-core-list.spec.js', 'List', function (callback) {
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-message.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-message.spec.js', 'Message', function (callback) {
+spec.test('tgi-core/lib/tgi-core-message.spec.js', 'Message', '<insert description>', function (callback) {
   spec.heading('Message Class', function () {
     spec.paragraph('Messages are used by Transport to send to host or UI.');
     spec.heading('CONSTRUCTOR', function () {
@@ -1077,7 +1077,7 @@ spec.test('tgi-core/lib/tgi-core-message.spec.js', 'Message', function (callback
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-model.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-model.spec.js', 'Model', function (callback) {
+spec.test('tgi-core/lib/tgi-core-model.spec.js', 'Model', '<insert description>', function (callback) {
   callback({log: 'tgi-core/lib/tgi-core-model.spec.js'});
   spec.testModel(Model);
 });
@@ -1317,7 +1317,7 @@ spec.testModel = function (SurrogateModel) {
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-procedure.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-procedure.spec.js', 'Procedure', function (callback) {
+spec.test('tgi-core/lib/tgi-core-procedure.spec.js', 'Procedure', '<insert description>', function (callback) {
   spec.heading('Procedure Class', function () {
     spec.paragraph('The _Procedure_ class manages a set of _Command_ objects.  It provides a pattern for handling ' +
     'asynchronous and synchronous command execution.');
@@ -1420,7 +1420,7 @@ spec.test('tgi-core/lib/tgi-core-procedure.spec.js', 'Procedure', function (call
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-request.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-request.spec.js', 'Request', function (callback) {
+spec.test('tgi-core/lib/tgi-core-request.spec.js', 'Request', '<insert description>', function (callback) {
   spec.heading('Request Class', function () {
     spec.paragraph('Requests handle the Request / Response design pattern.  They are used by the Interface class to ' +
     'communicate with the Application Model');
@@ -1460,7 +1460,7 @@ spec.test('tgi-core/lib/tgi-core-request.spec.js', 'Request', function (callback
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-store.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-store.spec.js', 'Store', function (callback) {
+spec.test('tgi-core/lib/tgi-core-store.spec.js', 'Store', '<insert description>', function (callback) {
   spec.heading('Store Class', function () {
     spec.paragraph('The store class is used for object persistence.');
     spec.heading('CONSTRUCTOR', function () {
@@ -1696,7 +1696,7 @@ spec.runnerStoreMethods = function (SurrogateStore) {
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-transport.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-transport.spec.js', 'Transport', function (callback) {
+spec.test('tgi-core/lib/tgi-core-transport.spec.js', 'Transport', '<insert description>', function (callback) {
   if (typeof io == 'undefined') return; // todo
   spec.heading('Transport Class', function () {
 //    if (typeof io == 'undefined') {
@@ -1776,7 +1776,7 @@ spec.test('tgi-core/lib/tgi-core-transport.spec.js', 'Transport', function (call
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/models/tgi-core-model-application.test.js
  */
-spec.test('tgi-core/lib/models/tgi-core-model-application.test.js', 'Application', function (callback) {
+spec.test('tgi-core/lib/models/tgi-core-model-application.test.js', 'Application', '<insert description>', function (callback) {
   spec.heading('Application Model', function () {
     spec.paragraph('Information about the application is modeled here.');
     spec.heading('CONSTRUCTOR', function () {
@@ -1864,7 +1864,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.test.js', 'Application
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/models/tgi-core-model-log.test.js
  */
-spec.test('tgi-core/lib/models/tgi-core-model-log.test.js', 'Log', function (callback) {
+spec.test('tgi-core/lib/models/tgi-core-model-log.test.js', 'Log', '<insert description>', function (callback) {
   spec.heading('Log Model', function () {
     spec.paragraph('Multi purpose log model.');
     spec.heading('CONSTRUCTOR', function () {
@@ -1905,7 +1905,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-log.test.js', 'Log', function (cal
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/models/tgi-core-model-presentation.test.js
  */
-spec.test('tgi-core/lib/models/tgi-core-model-presentation.test.js', 'Presentation', function (callback) {
+spec.test('tgi-core/lib/models/tgi-core-model-presentation.test.js', 'Presentation', '<insert description>', function (callback) {
   spec.heading('Presentation Model', function () {
     spec.paragraph('The Presentation Model represents the way in which a model is to be presented to the user.  ' +
     'The presentation is meant to be a "hint" to a Interface object.  ' +
@@ -1995,7 +1995,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-presentation.test.js', 'Presentati
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/models/tgi-core-model-log.test.js
  */
-spec.test('tgi-core/lib/models/tgi-core-model-log.test.js', 'Log', function (callback) {
+spec.test('tgi-core/lib/models/tgi-core-model-log.test.js', 'Log', '<insert description>', function (callback) {
   spec.heading('Session Model', function () {
     spec.paragraph('The Session Model represents the Session logged into the system. The library uses this for system' +
       ' access, logging and other functions.');
@@ -2076,7 +2076,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-log.test.js', 'Log', function (cal
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/models/tgi-core-model-user.test.js
  */
-spec.test('tgi-core/lib/models/tgi-core-model-user.test.js', 'User', function (callback) {
+spec.test('tgi-core/lib/models/tgi-core-model-user.test.js', 'User', '<insert description>', function (callback) {
   spec.heading('User Model', function () {
     spec.paragraph('The User Model represents the user logged into the system. The library uses this for system' +
       ' access, logging and other functions.');
@@ -2106,7 +2106,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-user.test.js', 'User', function (c
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/models/tgi-core-model-workspace.test.js
  */
-spec.test('tgi-core/lib/models/tgi-core-model-workspace.test.js', 'Workspace', function (callback) {
+spec.test('tgi-core/lib/models/tgi-core-model-workspace.test.js', 'Workspace', '<insert description>', function (callback) {
   spec.heading('Workspace Model', function () {
     spec.paragraph('A workspace is a collection of active deltas for a user.  The GUI could represent that as open' +
       'tabs for instance.  Each tab a model view.  The deltas represent the change in model state');
@@ -2140,7 +2140,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-workspace.test.js', 'Workspace', f
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/stores/tgi-core-store-memory.test.js
  */
-spec.test('tgi-core/lib/stores/tgi-core-store-memory.test.js', 'Memory', function (callback) {
+spec.test('tgi-core/lib/stores/tgi-core-store-memory.test.js', 'Memory', '<insert description>', function (callback) {
   spec.heading('MemoryStore', function () {
     spec.paragraph('The MemoryStore is a simple volatile store. ' +
       'It is the first test standard to define the spec for all Stores to follow.');
