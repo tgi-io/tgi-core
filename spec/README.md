@@ -25,18 +25,25 @@
 
 
 ## [&#9664;](#-tgi-core)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-attribute) &nbsp;CORE
-<p>-tgi-core- objects are encapsulated in a namespace returned by the CORE function</p>
+<p>The CORE function exposes the tgi-core library via global or node module exports.</p>
 &nbsp;<b><i>CORE function exposes library:</i></b>
 ```javascript
 return typeof CORE;
 ```
 <blockquote>returns <strong>function</strong> as expected
 </blockquote>
+<p>Application code written in the TGI Framework does not need the CORE function since it isvisible by closure.</p>
+&nbsp;<b><i>core object Model is available in closure:</i></b>
+```javascript
+this.shouldBeTrue(Model == CORE().Model);
+```
+<blockquote></blockquote>
 &nbsp;<b><i>UTILITY functions are available in closure:</i></b>
 ```javascript
-return typeof inheritPrototype;
+// https://github.com/tgicloud/tgi-utility
+return cpad(' sup ',20,'*');
 ```
-<blockquote>returns <strong>function</strong> as expected
+<blockquote>returns <strong>******* sup ********</strong> as expected
 </blockquote>
 ## [&#9664;](#-core)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-command) &nbsp;Attribute
 #### Attribute Class
