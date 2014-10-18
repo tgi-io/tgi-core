@@ -1,6 +1,5 @@
 #tgi-core
 <p>Core objects, models, stores and interfaces for the TGI framework.</p>
-#### Table of Contents
 ###Table of Contents
 
 - [tgi-core](#-tgi-core) Core Repository for TGI Framework
@@ -26,8 +25,7 @@
 
 
 ## [&#9664;](#-tgi-core)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-attribute) &nbsp;CORE
-#### TGI CORE
-<p>Core Objects.</p>
+<p>-tgi-core- objects are encapsulated in a namespace returned by the CORE function</p>
 &nbsp;<b><i>CORE function exposes library:</i></b>
 ```javascript
 return typeof CORE;
