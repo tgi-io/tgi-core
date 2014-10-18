@@ -8,6 +8,15 @@ var testSpec = function(spec,CORE) {
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core.test.js
  **/
+/**
+ * Doc Intro
+ */
+spec.test('lib/tgi-spec-intro', 'INTRO', function (callback) {
+  spec.paragraph('There be dragons.');
+  spec.heading('Table of Contents', function () {
+    spec.generateIndex();
+  });
+});
 spec.test('tgi-core/lib/tgi-core.test.js', 'Core Library', function (callback) {
   callback({log: 'tgi-core/lib/tgi-core.test.js'});
   spec.heading('TGI CORE', function () {
