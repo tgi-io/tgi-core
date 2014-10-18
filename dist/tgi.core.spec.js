@@ -1993,9 +1993,9 @@ spec.test('tgi-core/lib/models/tgi-core-model-presentation.test.js', 'Presentati
 });
 
 /**---------------------------------------------------------------------------------------------------------------------
- * tgi-core/lib/models/tgi-core-model-log.test.js
+ * /tgi-core/lib/models/tgi-core-model-session.test.js
  */
-spec.test('tgi-core/lib/models/tgi-core-model-log.test.js', 'Log', '<insert description>', function (callback) {
+spec.test('/tgi-core/lib/models/tgi-core-model-session.test.js', 'Session', 'Model user session with host', function (callback) {
   spec.heading('Session Model', function () {
     spec.paragraph('The Session Model represents the Session logged into the system. The library uses this for system' +
       ' access, logging and other functions.');

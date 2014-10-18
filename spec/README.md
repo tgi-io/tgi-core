@@ -19,7 +19,7 @@
 - [Application](#-application) <insert description>
 - [Log](#-log) <insert description>
 - [Presentation](#-presentation) <insert description>
-- [Log](#-log) <insert description>
+- [Session](#-session) Model user session with host
 - [User](#-user) <insert description>
 - [Workspace](#-workspace) <insert description>
 - [Memory](#-memory) <insert description>
@@ -2503,7 +2503,7 @@ return new Log({logType: 'Delta', contents: delta}).toString();
 ```
 <blockquote>returns <strong>Info: (delta)</strong> as expected
 </blockquote>
-## [&#9664;](#-log)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-log) &nbsp;Presentation
+## [&#9664;](#-log)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-session) &nbsp;Presentation
 #### Presentation Model
 <p>The Presentation Model represents the way in which a model is to be presented to the user.  The presentation is meant to be a "hint" to a Interface object.  The specific Interface object will represent the model data according to the Presentation object.</p>
 #### CONSTRUCTOR
@@ -2854,7 +2854,7 @@ presentation.validate(function () {
 ```
 <blockquote>returns <strong>contents has validation errors</strong> as expected
 </blockquote>
-## [&#9664;](#-presentation)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-user) &nbsp;Log
+## [&#9664;](#-presentation)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-user) &nbsp;Session
 #### Session Model
 <p>The Session Model represents the Session logged into the system. The library uses this for system access, logging and other functions.</p>
 #### CONSTRUCTOR
@@ -3196,7 +3196,7 @@ this.shouldThrowError(Error('callBack required'), function () {
 });
 ```
 <blockquote></blockquote>
-## [&#9664;](#-log)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-workspace) &nbsp;User
+## [&#9664;](#-session)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-workspace) &nbsp;User
 #### User Model
 <p>The User Model represents the user logged into the system. The library uses this for system access, logging and other functions.</p>
 #### CONSTRUCTOR
