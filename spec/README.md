@@ -147,7 +147,7 @@ return new Attribute({name: 'name'}).type;
 </blockquote>
 &nbsp;<b><i>should be a valid attribute type:</i></b>
 ```javascript
-//spec.show(T.getAttributeTypes());
+this.log('T.getAttributeTypes()');
 new Attribute({name: 'Bogus', type: "Dude"});
 ```
 <blockquote><strong>Error: error creating Attribute: Invalid type: Dude</strong> thrown as expected
@@ -316,7 +316,7 @@ var record = '';
 for (var i = 0; i < myTypes.length; i++) {
   record += myTypes[i] + ':' + new Attribute({name: 'my' + myTypes[i]}).value + ' ';
 }
-//spec.show(record);
+this.log(record);
 // It's the default and it passes constructor validation
 ```
 <blockquote></blockquote>
@@ -326,8 +326,8 @@ for (var i = 0; i < myTypes.length; i++) {
 var myTypes = Attribute.getAttributeTypes();
 myTypes.shift(); // not testing ID
 myTypes.pop(); // not testing Object since it matches other types
-//spec.show(myTypes);
-//spec.show(T.getAttributeTypes());
+this.log(myTypes);
+this.log('T.getAttributeTypes()');
 // Now create an array of matching values for each type into myValues
 var myModel = new Model();
 var myGroup = new Attribute({name: 'columns', type: 'Group', value: [new Attribute("Name")]});
@@ -482,9 +482,9 @@ myFruit.value = [badApple, new Attribute('Peach')];
 myVegs.value = [new Attribute('Carrot'), new Attribute('Beet')];
 myFood.value = [myFruit, myVegs];
 myStuff.value = [myFood, myCars, new Attribute('House'), new Attribute('Health')];
-//spec.show(myStuff.getObjectStateErrors());
+this.log(myStuff.getObjectStateErrors());
 badApple.value = -1; // One bad apple will spoil my stuff
-//spec.show(myStuff.getObjectStateErrors());
+this.log(myStuff.getObjectStateErrors());
 return myStuff.getObjectStateErrors().length;
 ```
 <blockquote>returns <strong>1</strong> as expected
@@ -608,7 +608,7 @@ new Attribute({name: 'name'}).onEvent(['onDrunk'], function () {
 </blockquote>
 &nbsp;<b><i>here is a working version:</i></b>
 ```javascript
-//spec.show(T.getAttributeEvents());
+this.log('T.getAttributeEvents()');
 // Validate - callback when attribute needs to be validated
 // StateChange -- callback when state of object (value or validation state) has changed
 new Attribute({name: 'name'}).onEvent(['Validate'], function () {
@@ -766,7 +766,7 @@ return new Command({name: 'Tequila'}).description + ' : ' +
 #### type
 &nbsp;<b><i>type of command must be valid:</i></b>
 ```javascript
-//spec.show(T.getCommandTypes());
+this.log('T.getCommandTypes()');
 new Command({name: 'about', type: 'magic' });
 ```
 <blockquote><strong>Error: Invalid command type: magic</strong> thrown as expected
@@ -946,7 +946,7 @@ new Command().onEvent(['onDrunk'], function () {
 </blockquote>
 &nbsp;<b><i>here is a working version:</i></b>
 ```javascript
-//spec.show(T.getCommandEvents());
+this.log(T.getCommandEvents());
 //  BeforeExecute - callback called before first task executed but after tasks initialized
 //  AfterExecute - callback called after initial task(s) launched (see onCompletion)
 //  Error - error occurred (return {errorClear:true})
@@ -983,7 +983,7 @@ new Delta();
 &nbsp;<b><i>set to current date/time on creation:</i></b>
 ```javascript
 var delta = new Delta(new Attribute.ModelID(new Model()));
-//spec.show(delta.dateCreated);
+this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
 <blockquote>returns <strong>true</strong> as expected
@@ -992,7 +992,7 @@ return delta.dateCreated instanceof Date;
 &nbsp;<b><i>set from constructor:</i></b>
 ```javascript
 var delta = new Delta(new Attribute.ModelID(new Model()));
-//spec.show(delta.dateCreated);
+this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
 <blockquote>returns <strong>ModelID(Model:null)</strong> as expected
@@ -1275,7 +1275,7 @@ new Message();
 </blockquote>
 &nbsp;<b><i>first parameter must be valid message type:</i></b>
 ```javascript
-//spec.show(T.getMessageTypes());
+this.log(T.getMessageTypes());
 new Message('http://www.youtube.com/watch?v=2o7V1f7lbk4');
 ```
 <blockquote><strong>Error: Invalid message type: http://www.youtube.com/watch?v=2o7V1f7lbk4</strong> thrown as expected
@@ -1425,7 +1425,7 @@ new SurrogateModel().onEvent(['onDrunk'], function () {
 </blockquote>
 &nbsp;<b><i>here is a working version:</i></b>
 ```javascript
-//spec.show(T.getAttributeEvents());
+this.log('T.getAttributeEvents()');
 // Validate - callback when attribute needs to be validated
 // StateChange -- callback when state of object (value or validation state) has changed
 new Model().onEvent(['Validate'], function () {
@@ -1755,7 +1755,7 @@ return new SurrogateStore({storeType: 'legacyStorage'}).storeType;
 #### METHODS
 &nbsp;<b><i>getServices() returns an object with interface for the Store.:</i></b>
 ```javascript
-//spec.show(services);
+this.log(services);
 //this.shouldBeTrue(services instanceof Object);
 //this.shouldBeTrue(typeof services['isReady'] == 'boolean'); // don't use until
 //this.shouldBeTrue(typeof services['canGetModel'] == 'boolean'); // define all allowed methods...
@@ -1768,10 +1768,10 @@ return new SurrogateStore({storeType: 'legacyStorage'}).storeType;
 &nbsp;<b><i>should return a description of the Store:</i></b>
 ```javascript
 var cStore = new SurrogateStore();
-//spec.show(cStore.toString());
+this.log(cStore.toString());
 cStore.name = '7-Eleven';
 cStore.storeType = 'ConvenienceStore';
-//spec.show(cStore.toString());
+this.log(cStore.toString());
 return cStore.toString();
 ```
 <blockquote>returns <strong>ConvenienceStore: 7-Eleven</strong> as expected
@@ -1972,7 +1972,7 @@ new SurrogateModel().onEvent(['onDrunk'], function () {
 </blockquote>
 &nbsp;<b><i>here is a working version:</i></b>
 ```javascript
-//spec.show(T.getAttributeEvents());
+this.log('T.getAttributeEvents()');
 // Validate - callback when attribute needs to be validated
 // StateChange -- callback when state of object (value or validation state) has changed
 new Model().onEvent(['Validate'], function () {
@@ -2344,7 +2344,7 @@ new SurrogateModel().onEvent(['onDrunk'], function () {
 </blockquote>
 &nbsp;<b><i>here is a working version:</i></b>
 ```javascript
-//spec.show(T.getAttributeEvents());
+this.log('T.getAttributeEvents()');
 // Validate - callback when attribute needs to be validated
 // StateChange -- callback when state of object (value or validation state) has changed
 new Model().onEvent(['Validate'], function () {
@@ -2480,7 +2480,7 @@ function test4() {
 var log = new Log('what up'); // default attributes and values
 this.shouldBeTrue(log.get('id') !== undefined);
 this.shouldBeTrue(log.get('dateLogged') instanceof Date);
-//spec.show(log.get('dateLogged'));
+this.log(log.get('dateLogged'));
 this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
@@ -2489,7 +2489,7 @@ this.shouldBeTrue(log.get('contents') == 'what up');
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
-//spec.show(T.getLogTypes());
+this.log(T.getLogTypes());
 new Log({logType: 'wood'}); // default attributes and values
 ```
 <blockquote><strong>Error: Unknown log type: wood</strong> thrown as expected
@@ -2654,7 +2654,7 @@ new SurrogateModel().onEvent(['onDrunk'], function () {
 </blockquote>
 &nbsp;<b><i>here is a working version:</i></b>
 ```javascript
-//spec.show(T.getAttributeEvents());
+this.log('T.getAttributeEvents()');
 // Validate - callback when attribute needs to be validated
 // StateChange -- callback when state of object (value or validation state) has changed
 new Model().onEvent(['Validate'], function () {
@@ -3005,7 +3005,7 @@ new SurrogateModel().onEvent(['onDrunk'], function () {
 </blockquote>
 &nbsp;<b><i>here is a working version:</i></b>
 ```javascript
-//spec.show(T.getAttributeEvents());
+this.log('T.getAttributeEvents()');
 // Validate - callback when attribute needs to be validated
 // StateChange -- callback when state of object (value or validation state) has changed
 new Model().onEvent(['Validate'], function () {
@@ -3347,7 +3347,7 @@ new SurrogateModel().onEvent(['onDrunk'], function () {
 </blockquote>
 &nbsp;<b><i>here is a working version:</i></b>
 ```javascript
-//spec.show(T.getAttributeEvents());
+this.log('T.getAttributeEvents()');
 // Validate - callback when attribute needs to be validated
 // StateChange -- callback when state of object (value or validation state) has changed
 new Model().onEvent(['Validate'], function () {
@@ -3637,7 +3637,7 @@ new SurrogateModel().onEvent(['onDrunk'], function () {
 </blockquote>
 &nbsp;<b><i>here is a working version:</i></b>
 ```javascript
-//spec.show(T.getAttributeEvents());
+this.log('T.getAttributeEvents()');
 // Validate - callback when attribute needs to be validated
 // StateChange -- callback when state of object (value or validation state) has changed
 new Model().onEvent(['Validate'], function () {
@@ -3830,7 +3830,7 @@ return new SurrogateStore({storeType: 'legacyStorage'}).storeType;
 #### METHODS
 &nbsp;<b><i>getServices() returns an object with interface for the Store.:</i></b>
 ```javascript
-//spec.show(services);
+this.log(services);
 //this.shouldBeTrue(services instanceof Object);
 //this.shouldBeTrue(typeof services['isReady'] == 'boolean'); // don't use until
 //this.shouldBeTrue(typeof services['canGetModel'] == 'boolean'); // define all allowed methods...
@@ -3843,10 +3843,10 @@ return new SurrogateStore({storeType: 'legacyStorage'}).storeType;
 &nbsp;<b><i>should return a description of the Store:</i></b>
 ```javascript
 var cStore = new SurrogateStore();
-//spec.show(cStore.toString());
+this.log(cStore.toString());
 cStore.name = '7-Eleven';
 cStore.storeType = 'ConvenienceStore';
-//spec.show(cStore.toString());
+this.log(cStore.toString());
 return cStore.toString();
 ```
 <blockquote>returns <strong>ConvenienceStore: 7-Eleven</strong> as expected

@@ -101,7 +101,7 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
           return new Attribute({name: 'name'}).type;
         });
         spec.example('should be a valid attribute type', Error('error creating Attribute: Invalid type: Dude'), function () {
-          //spec.show(T.getAttributeTypes());
+          this.log('T.getAttributeTypes()');
           new Attribute({name: 'Bogus', type: "Dude"});
         });
         spec.example('should allow shorthand string constructor for type property', 'Date', function () {
@@ -228,7 +228,7 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
           for (var i = 0; i < myTypes.length; i++) {
             record += myTypes[i] + ':' + new Attribute({name: 'my' + myTypes[i]}).value + ' ';
           }
-          //spec.show(record);
+          this.log(record);
           // It's the default and it passes constructor validation
         });
         spec.example('should accept assignment of correct type and validate incorrect attributeTypes',
@@ -237,8 +237,8 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
             var myTypes = Attribute.getAttributeTypes();
             myTypes.shift(); // not testing ID
             myTypes.pop(); // not testing Object since it matches other types
-            //spec.show(myTypes);
-            //spec.show(T.getAttributeTypes());
+            this.log(myTypes);
+            this.log('T.getAttributeTypes()');
 
             // Now create an array of matching values for each type into myValues
             var myModel = new Model();
@@ -364,9 +364,9 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
           myVegs.value = [new Attribute('Carrot'), new Attribute('Beet')];
           myFood.value = [myFruit, myVegs];
           myStuff.value = [myFood, myCars, new Attribute('House'), new Attribute('Health')];
-          //spec.show(myStuff.getObjectStateErrors());
+          this.log(myStuff.getObjectStateErrors());
           badApple.value = -1; // One bad apple will spoil my stuff
-          //spec.show(myStuff.getObjectStateErrors());
+          this.log(myStuff.getObjectStateErrors());
           return myStuff.getObjectStateErrors().length;
         });
       });
@@ -473,7 +473,7 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
           });
         });
         spec.example('here is a working version', undefined, function () {
-          //spec.show(T.getAttributeEvents());
+          this.log('T.getAttributeEvents()');
           // Validate - callback when attribute needs to be validated
           // StateChange -- callback when state of object (value or validation state) has changed
           new Attribute({name: 'name'}).onEvent(['Validate'], function () {
@@ -578,11 +578,11 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-command.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-command.spec.js', 'Command', '<insert description>', function (callback) {
-
-  spec.heading('Command Class', function () {
-    spec.paragraph('The command design pattern is implemented with this class.  The actual execution of the command ' +
-    'can be one of multiple types from simple code to a _Presentation Model_ applied to a _Interface_ implementation.');
+spec.test('tgi-core/lib/tgi-core-command.spec.js', 'Command', 'encapsulates task execution', function (callback) {
+    spec.paragraph('Command is an abstraction for command execution.  It provides for multi methods of task execution' +
+    'and control over invocation and state monitoring.  The primary use is to have a simple API method to respond to ' +
+    'UI tasks.  It can be used for processing / validation / storage / reporting type of use cases since ' +
+    'it handles the asynchronous nature of javascript and abstracts in a way to easily incorporate business logic.');
     spec.heading('CONSTRUCTOR', function () {
       spec.example('objects created should be an instance of Command', true, function () {
         return new Command({name: 'about'}) instanceof Command;
@@ -618,7 +618,7 @@ spec.test('tgi-core/lib/tgi-core-command.spec.js', 'Command', '<insert descripti
       });
       spec.heading('type', function () {
         spec.example('type of command must be valid', Error('Invalid command type: magic'), function () {
-          //spec.show(T.getCommandTypes());
+          this.log('T.getCommandTypes()');
           new Command({name: 'about', type: 'magic' });
         });
       });
@@ -782,7 +782,7 @@ spec.test('tgi-core/lib/tgi-core-command.spec.js', 'Command', '<insert descripti
           });
         });
         spec.example('here is a working version', undefined, function () {
-          //spec.show(T.getCommandEvents());
+          this.log('T.getCommandEvents()');
           //  BeforeExecute - callback called before first task executed but after tasks initialized
           //  AfterExecute - callback called after initial task(s) launched (see onCompletion)
           //  Error - error occurred (return {errorClear:true})
@@ -794,10 +794,8 @@ spec.test('tgi-core/lib/tgi-core-command.spec.js', 'Command', '<insert descripti
       });
 
     });
-    // spec.runnerCommandIntegration();
-  });
-  
 
+    // spec.runnerCommandIntegration();
 });
 
 /**---------------------------------------------------------------------------------------------------------------------
@@ -822,14 +820,14 @@ spec.test('tgi-core/lib/tgi-core-delta.spec.js', 'Delta', '<insert description>'
       spec.heading('dateCreated', function () {
         spec.example('set to current date/time on creation', true, function () {
           var delta = new Delta(new Attribute.ModelID(new Model()));
-          //spec.show(delta.dateCreated);
+          this.log(delta.dateCreated);
           return delta.dateCreated instanceof Date;
         });
       });
       spec.heading('modelID', function () {
         spec.example('set from constructor', "ModelID(Model:null)", function () {
           var delta = new Delta(new Attribute.ModelID(new Model()));
-          //spec.show(delta.dateCreated);
+          this.log(delta.dateCreated);
           return delta.modelID.toString();
         });
       });
@@ -1062,7 +1060,7 @@ spec.test('tgi-core/lib/tgi-core-message.spec.js', 'Message', '<insert descripti
         new Message();
       });
       spec.example('first parameter must be valid message type', Error('Invalid message type: http://www.youtube.com/watch?v=2o7V1f7lbk4'), function () {
-        //spec.show(T.getMessageTypes());
+        this.log('T.getMessageTypes()');
         new Message('http://www.youtube.com/watch?v=2o7V1f7lbk4');
       });
     });
@@ -1195,7 +1193,7 @@ spec.testModel = function (SurrogateModel) {
           });
         });
         spec.example('here is a working version', undefined, function () {
-          //spec.show(T.getAttributeEvents());
+          this.log('T.getAttributeEvents()');
           // Validate - callback when attribute needs to be validated
           // StateChange -- callback when state of object (value or validation state) has changed
           new Model().onEvent(['Validate'], function () {
@@ -1500,7 +1498,7 @@ spec.runnerStoreMethods = function (SurrogateStore) {
   spec.heading('METHODS', function () {
     var services = new SurrogateStore().getServices();  // TODO change to methods ASAP!!!
     spec.example('getServices() returns an object with interface for the Store.', undefined, function () {
-      //spec.show(services);
+      this.log(services);
       //this.shouldBeTrue(services instanceof Object);
       //this.shouldBeTrue(typeof services['isReady'] == 'boolean'); // don't use until
       //this.shouldBeTrue(typeof services['canGetModel'] == 'boolean'); // define all allowed methods...
@@ -1511,10 +1509,10 @@ spec.runnerStoreMethods = function (SurrogateStore) {
     spec.heading('toString()', function () {
       spec.example('should return a description of the Store', "ConvenienceStore: 7-Eleven", function () {
         var cStore = new SurrogateStore();
-        //spec.show(cStore.toString());
+        this.log(cStore.toString());
         cStore.name = '7-Eleven';
         cStore.storeType = 'ConvenienceStore';
-        //spec.show(cStore.toString());
+        this.log(cStore.toString());
         return cStore.toString();
       });
     });
@@ -1881,7 +1879,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-log.spec.js', 'Log', '<insert desc
           var log = new Log('what up'); // default attributes and values
           this.shouldBeTrue(log.get('id') !== undefined);
           this.shouldBeTrue(log.get('dateLogged') instanceof Date);
-          //spec.show(log.get('dateLogged'));
+          this.log(log.get('dateLogged'));
           this.shouldBeTrue(log.get('logType') == 'Text');
           this.shouldBeTrue(log.get('importance') == 'Info');
           this.shouldBeTrue(log.get('contents') == 'what up');
@@ -1889,7 +1887,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-log.spec.js', 'Log', '<insert desc
       });
       spec.heading('LOG TYPES', function () {
         spec.example('must be valid', Error('Unknown log type: wood'), function () {
-          //spec.show(T.getLogTypes());
+          this.log('T.getLogTypes()');
           new Log({logType: 'wood'}); // default attributes and values
         });
         spec.example('Text simple text message', 'Info: sup', function () {
