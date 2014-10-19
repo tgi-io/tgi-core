@@ -4,7 +4,7 @@
 
 - [CORE](#-core) exposed as public or exported (node)
 - [Attribute](#-attribute) defines data types - needed by Model
-- [Command](#-command) <insert description>
+- [Command](#-command) encapsulates task execution
 - [Delta](#-delta) <insert description>
 - [Interface](#-interface) <insert description>
 - [List](#-list) <insert description>
@@ -36,7 +36,6 @@ return typeof CORE;
 ```javascript
 this.shouldBeTrue(Model == CORE().Model);
 ```
-<blockquote></blockquote>
 &nbsp;<b><i>UTILITY functions are available in closure:</i></b>
 ```javascript
 // https://github.com/tgicloud/tgi-utility
@@ -150,7 +149,7 @@ return new Attribute({name: 'name'}).type;
 this.log('T.getAttributeTypes()');
 new Attribute({name: 'Bogus', type: "Dude"});
 ```
-<blockquote><strong>Error: error creating Attribute: Invalid type: Dude</strong> thrown as expected
+<blockquote><strong>log: </strong>T.getAttributeTypes()<br><strong>Error: error creating Attribute: Invalid type: Dude</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>should allow shorthand string constructor for type property:</i></b>
 ```javascript
@@ -199,13 +198,11 @@ return new Attribute({name: 'stooge', quickPick: ['moe', 'larry', 'curly']}).qui
 this.shouldBeTrue(new Attribute({name: 'name'}).validationErrors instanceof Array);
 this.shouldBeTrue(new Attribute({name: 'name'}).validationErrors.length === 0);
 ```
-<blockquote></blockquote>
 #### validationMessage
 &nbsp;<b><i>string description of error(s):</i></b>
 ```javascript
 return new Attribute({name: 'name'}).validationMessage;
 ```
-<blockquote></blockquote>
 #### validationRule
 <p>The validationRule property provides validation rules for attribute.  For additional validation see the *Validate* event in onEvent method.</p>
 &nbsp;<b><i>initialized to empty object:</i></b>
@@ -218,7 +215,6 @@ return typeof new Attribute({name: 'name'}).validationRule;
 ```javascript
 new Attribute({name: 'name', validationRule: {}});
 ```
-<blockquote></blockquote>
 &nbsp;<b><i>validation rule is validated:</i></b>
 ```javascript
 new Attribute({name: 'name', validationRule: {age: 18, required: true}});
@@ -243,7 +239,6 @@ a.validate(function () {
   callback( a.validationErrors.length);
 });
 ```
-<blockquote></blockquote>
 &nbsp;<b><i>validationRule.required for Boolean allows false:</i></b>
 ```javascript
 var a = new Attribute({name: 'active', type: 'Boolean', value: false, validationRule: {required: true}});
@@ -251,7 +246,6 @@ a.validate(function () {
   callback( a.validationErrors.length);
 });
 ```
-<blockquote></blockquote>
 #### validationRule.range
 <p>validationRule.range is used when value must fall within a range of values- use null to omit bound</p>
 &nbsp;<b><i>validationRule.range lower bound only:</i></b>
@@ -279,7 +273,6 @@ a.validate(function () {
   callback( a.validationErrors.length);
 });
 ```
-<blockquote></blockquote>
 &nbsp;<b><i>validationRule.range forced to array:</i></b>
 ```javascript
 var a = new Attribute({name: 'age', type: 'Number', value: 53, validationRule: {range: 100}});
@@ -307,7 +300,6 @@ a.validate(function () {
   callback( a.validationErrors.length);
 });
 ```
-<blockquote></blockquote>
 #### value
 &nbsp;<b><i>should accept null assignment:</i></b>
 ```javascript
@@ -319,7 +311,7 @@ for (var i = 0; i < myTypes.length; i++) {
 this.log(record);
 // It's the default and it passes constructor validation
 ```
-<blockquote></blockquote>
+<blockquote><strong>log: </strong>ID:null String:null Date:null Boolean:null Number:null Model:null Group:null Table:null Object:null <br></blockquote>
 &nbsp;<b><i>should accept assignment of correct type and validate incorrect attributeTypes:</i></b>
 ```javascript
 // Test all known attribute types
@@ -368,7 +360,7 @@ for (var i = 0; i < myTypes.length; i++)
   }
 return theGood + ' correct assignments ' + theBad + ' errors thrown';
 ```
-<blockquote>returns <strong>7 correct assignments 91 errors thrown</strong> as expected
+<blockquote><strong>log: </strong>T.getAttributeTypes()<br><strong>log: </strong>String,Date,Boolean,Number,Model,Group,Table<br>returns <strong>7 correct assignments 91 errors thrown</strong> as expected
 </blockquote>
 #### TYPES
 #### ID
@@ -413,7 +405,6 @@ this.shouldThrowError(Error('error creating Attribute: size must be a number fro
   new Attribute({name: 'iGotNothing', size: 0});
 });
 ```
-<blockquote></blockquote>
 &nbsp;<b><i>size should accept format shorthand with parens:</i></b>
 ```javascript
 return new Attribute({name: 'comments', type: 'String(255)'}).size;
@@ -487,7 +478,7 @@ badApple.value = -1; // One bad apple will spoil my stuff
 this.log(myStuff.getObjectStateErrors());
 return myStuff.getObjectStateErrors().length;
 ```
-<blockquote>returns <strong>1</strong> as expected
+<blockquote><strong>log: </strong>group contains invalid members<br><strong>log: </strong><br>returns <strong>1</strong> as expected
 </blockquote>
 #### Table
 <p>Table types are used to store an array of values (rows) each of which is an array of values (columns).  Each column value is associated with the corresponding element in the Table property group which is set when creating a Table.</p>
@@ -572,7 +563,6 @@ this.shouldThrowError(Error('coerce cannot determine appropriate value'), functi
   new Attribute(myTable.coerce());
 });
 ```
-<blockquote></blockquote>
 #### getObjectStateErrors
 &nbsp;<b><i>should return array of validation errors:</i></b>
 ```javascript
@@ -584,7 +574,6 @@ this.shouldBeTrue(nameHosed.getObjectStateErrors().length === 1);
 nameHosed.type = ''; // 2 errors
 this.shouldBeTrue(nameHosed.getObjectStateErrors().length === 2);
 ```
-<blockquote></blockquote>
 #### onEvent
 <p>Use onEvent(events,callback)</p>
 &nbsp;<b><i>first parameter is a string or array of event subscriptions:</i></b>
@@ -614,7 +603,7 @@ this.log('T.getAttributeEvents()');
 new Attribute({name: 'name'}).onEvent(['Validate'], function () {
 });
 ```
-<blockquote></blockquote>
+<blockquote><strong>log: </strong>T.getAttributeEvents()<br></blockquote>
 #### validate
 <p>check valid object state and value for attribute - invoke callback for results</p>
 &nbsp;<b><i>callback is required:</i></b>
@@ -710,8 +699,7 @@ function test6() {
 <blockquote>returns <strong>got milk</strong> as expected
 </blockquote>
 ## [&#9664;](#-attribute)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-delta) &nbsp;Command
-#### Command Class
-<p>The command design pattern is implemented with this class.  The actual execution of the command can be one of multiple types from simple code to a _Presentation Model_ applied to a _Interface_ implementation.</p>
+<p>Command is an abstraction for command execution.  It provides for multi methods of task executionand control over invocation and state monitoring.  The primary use is to have a simple API method to respond to UI tasks.  It can be used for processing / validation / storage / reporting type of use cases since it handles the asynchronous nature of javascript and abstracts in a way to easily incorporate business logic.</p>
 #### CONSTRUCTOR
 &nbsp;<b><i>objects created should be an instance of Command:</i></b>
 ```javascript
@@ -769,7 +757,7 @@ return new Command({name: 'Tequila'}).description + ' : ' +
 this.log('T.getCommandTypes()');
 new Command({name: 'about', type: 'magic' });
 ```
-<blockquote><strong>Error: Invalid command type: magic</strong> thrown as expected
+<blockquote><strong>log: </strong>T.getCommandTypes()<br><strong>Error: Invalid command type: magic</strong> thrown as expected
 </blockquote>
 #### contents
 <p>Contents is based on the type of command.  See TYPE section for more information for how it applies to each type</p>
@@ -812,7 +800,6 @@ this.shouldThrowError(Error('invalid theme'), function () {
   new Command({name: 'options', theme: true});
 });
 ```
-<blockquote></blockquote>
 #### icon
 <p>The icon attribute gives a graphical association to the command. They are interface specific and do break the abstractness of this library but can be ignored by other interfaces safely.</p>
 &nbsp;<b><i>must be string and have prefix for 2 supported icon sets http://glyphicons.com/ http://fontawesome.io/:</i></b>
@@ -831,7 +818,6 @@ this.shouldThrowError(Error('invalid icon'), function () {
   new Command({name: 'options', icon: 'fa'});
 });
 ```
-<blockquote></blockquote>
 #### bucket
 &nbsp;<b><i>valid property is for app use:</i></b>
 ```javascript
@@ -861,7 +847,6 @@ new Command({name: 'options', type: 'Menu', contents: [
   new Command({name: 'Tequila'})  // use commands for actual menu items
 ]});
 ```
-<blockquote></blockquote>
 #### Presentation
 &nbsp;<b><i>for Presentation type contents is a Presentation object:</i></b>
 ```javascript
@@ -869,7 +854,6 @@ this.shouldThrowError(Error('contents must be a Presentation'), function () {
   new Command({name: 'options', type: 'Presentation'});
 });
 ```
-<blockquote></blockquote>
 #### Function
 <p>contents contains a javascript function</p>
 &nbsp;<b><i>for Function type contents is a Function:</i></b>
@@ -878,7 +862,6 @@ this.shouldThrowError(Error('contents must be a Function'), function () {
   new Command({name: 'options', type: 'Function'});
 });
 ```
-<blockquote></blockquote>
 #### Procedure
 &nbsp;<b><i>for Procedure type contents is a Procedure object:</i></b>
 ```javascript
@@ -886,7 +869,6 @@ this.shouldThrowError(Error('contents must be a Procedure'), function () {
   new Command({name: 'options', type: 'Procedure'});
 });
 ```
-<blockquote></blockquote>
 #### METHODS
 #### toString
 &nbsp;<b><i>returns string including name and type:</i></b>
@@ -946,7 +928,7 @@ new Command().onEvent(['onDrunk'], function () {
 </blockquote>
 &nbsp;<b><i>here is a working version:</i></b>
 ```javascript
-this.log(T.getCommandEvents());
+this.log('T.getCommandEvents()');
 //  BeforeExecute - callback called before first task executed but after tasks initialized
 //  AfterExecute - callback called after initial task(s) launched (see onCompletion)
 //  Error - error occurred (return {errorClear:true})
@@ -955,7 +937,7 @@ this.log(T.getCommandEvents());
 new Command().onEvent(['Completed'], function () {
 });
 ```
-<blockquote></blockquote>
+<blockquote><strong>log: </strong>T.getCommandEvents()<br></blockquote>
 ## [&#9664;](#-command)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-interface) &nbsp;Delta
 #### Delta Class
 <p>Deltas represent changes to models.  They can be applied to a store then update the model.  They can be stored in logs as a change audit for the model.</p>
@@ -986,7 +968,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Sun Oct 19 2014 12:17:35 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -995,7 +977,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Sun Oct 19 2014 12:17:35 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -1092,7 +1074,6 @@ new SurrogateInterface().dispatch();
 ```javascript
 new SurrogateInterface().dispatch(new Request({type: 'Command', command: new Command()}));
 ```
-<blockquote></blockquote>
 &nbsp;<b><i>optional second parameter is the response callback:</i></b>
 ```javascript
 new SurrogateInterface().dispatch(new Request({type: 'Command', command: new Command()}), true);
@@ -1143,7 +1124,6 @@ this.shouldThrowError('Error: invalid request parameter', function () {
   ui.mockRequest([new Request(new Command()), 'wtf']);
 });
 ```
-<blockquote></blockquote>
 ## [&#9664;](#-interface)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-message) &nbsp;List
 #### List Class
 <p>Lists are an ordered collection of items.  Each item is an array of values that correspond to the attributes for model used in constructor.</p>
@@ -1174,13 +1154,11 @@ new List();
 ```javascript
 return new List(new Model()).length();
 ```
-<blockquote></blockquote>
 #### clear()
 &nbsp;<b><i>clear the list.:</i></b>
 ```javascript
 return new List(new Model()).addItem(new Model()).clear().length();
 ```
-<blockquote></blockquote>
 #### get(attributeName)
 <p>Gets value of attribute for given item.</p>
 &nbsp;<b><i>throws error if no current item:</i></b>
@@ -1219,31 +1197,26 @@ return list.addItem(new Model()).length(); // returns ref for method chaining
 var list = new List(new Model());
 return list.addItem(new Model()).removeItem().length(); // returns ref for method chaining
 ```
-<blockquote></blockquote>
 #### moveNext()
 &nbsp;<b><i>move to next item in list:</i></b>
 ```javascript
 return new List(new Model()).moveNext(); // Returns true when move succeeds
 ```
-<blockquote></blockquote>
 #### movePrevious()
 &nbsp;<b><i>move to the previous item in list:</i></b>
 ```javascript
 return new List(new Model()).movePrevious(); // Returns true when move succeeds
 ```
-<blockquote></blockquote>
 #### moveFirst()
 &nbsp;<b><i>move to the first item in list:</i></b>
 ```javascript
 return new List(new Model()).moveFirst(); // Returns true when move succeeds
 ```
-<blockquote></blockquote>
 #### moveLast()
 &nbsp;<b><i>move to the last item in list:</i></b>
 ```javascript
 return new List(new Model()).moveLast(); // Returns true when move succeeds
 ```
-<blockquote></blockquote>
 #### sort(key)
 &nbsp;<b><i>sort 1,2 in reverse order and return first element:</i></b>
 ```javascript
@@ -1275,10 +1248,10 @@ new Message();
 </blockquote>
 &nbsp;<b><i>first parameter must be valid message type:</i></b>
 ```javascript
-this.log(T.getMessageTypes());
+this.log('T.getMessageTypes()');
 new Message('http://www.youtube.com/watch?v=2o7V1f7lbk4');
 ```
-<blockquote><strong>Error: Invalid message type: http://www.youtube.com/watch?v=2o7V1f7lbk4</strong> thrown as expected
+<blockquote><strong>log: </strong>T.getMessageTypes()<br><strong>Error: Invalid message type: http://www.youtube.com/watch?v=2o7V1f7lbk4</strong> thrown as expected
 </blockquote>
 #### METHODS
 #### toString()
@@ -1331,7 +1304,6 @@ this.shouldBeTrue(m.getObjectStateErrors().length === 0);
 m.tags = 'your it';
 this.shouldBeTrue(m.getObjectStateErrors().length == 1);
 ```
-<blockquote></blockquote>
 #### attributes
 <p>The attributes property is an array of Attributes.</p>
 &nbsp;<b><i>should be an array:</i></b>
@@ -1352,7 +1324,6 @@ this.shouldBeTrue(model.getObjectStateErrors(true).length === 0);
 model.attributes = [new Attribute("ID", "ID"), new SurrogateModel(), 0, 'a', {}, [], null];
 this.shouldBeTrue(model.getObjectStateErrors(true).length == 6);
 ```
-<blockquote></blockquote>
 #### value
 #### METHODS
 #### toString()
@@ -1387,13 +1358,11 @@ m4.copy(m1);
 this.shouldBeTrue(m1 !== m4); // 2 models are not the same instance
 this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m4)); // but they are identical
 ```
-<blockquote></blockquote>
 #### getObjectStateErrors()
 &nbsp;<b><i>should return array of validation errors:</i></b>
 ```javascript
 this.shouldBeTrue(new SurrogateModel().getObjectStateErrors() instanceof Array);
 ```
-<blockquote></blockquote>
 &nbsp;<b><i>first attribute must be an ID field:</i></b>
 ```javascript
 var m = new SurrogateModel();
@@ -1431,13 +1400,12 @@ this.log('T.getAttributeEvents()');
 new Model().onEvent(['Validate'], function () {
 });
 ```
-<blockquote></blockquote>
+<blockquote><strong>log: </strong>T.getAttributeEvents()<br></blockquote>
 #### get(attributeName)
 &nbsp;<b><i>returns undefined if the attribute does not exist:</i></b>
 ```javascript
 this.shouldBeTrue(new SurrogateModel().get('whatever') === undefined);
 ```
-<blockquote></blockquote>
 &nbsp;<b><i>returns the value for given attribute:</i></b>
 ```javascript
 var question = new SurrogateModel({attributes: [new Attribute('answer', 'Number')]});
@@ -1651,7 +1619,6 @@ var proc = new Procedure({tasks: [
 ]});
 this.shouldBeTrue(proc.tasks[0].requires == -1);
 ```
-<blockquote></blockquote>
 #### METHODS
 #### getObjectStateErrors
 &nbsp;<b><i>should return array of validation errors:</i></b>
@@ -1763,7 +1730,7 @@ this.log(services);
 //this.shouldBeTrue(typeof services['canDeleteModel'] == 'boolean');
 //this.shouldBeTrue(typeof services['canGetList'] == 'boolean');
 ```
-<blockquote></blockquote>
+<blockquote><strong>log: </strong>[object Object]<br></blockquote>
 #### toString()
 &nbsp;<b><i>should return a description of the Store:</i></b>
 ```javascript
@@ -1774,7 +1741,7 @@ cStore.storeType = 'ConvenienceStore';
 this.log(cStore.toString());
 return cStore.toString();
 ```
-<blockquote>returns <strong>ConvenienceStore: 7-Eleven</strong> as expected
+<blockquote><strong>log: </strong>ConvenienceStore: 7-Eleven<br><strong>log: </strong>a Store<br>returns <strong>ConvenienceStore: 7-Eleven</strong> as expected
 </blockquote>
 #### onConnect()
 &nbsp;<b><i>must pass url string:</i></b>
@@ -1878,7 +1845,6 @@ this.shouldBeTrue(m.getObjectStateErrors().length === 0);
 m.tags = 'your it';
 this.shouldBeTrue(m.getObjectStateErrors().length == 1);
 ```
-<blockquote></blockquote>
 #### attributes
 <p>The attributes property is an array of Attributes.</p>
 &nbsp;<b><i>should be an array:</i></b>
@@ -1899,7 +1865,6 @@ this.shouldBeTrue(model.getObjectStateErrors(true).length === 0);
 model.attributes = [new Attribute("ID", "ID"), new SurrogateModel(), 0, 'a', {}, [], null];
 this.shouldBeTrue(model.getObjectStateErrors(true).length == 6);
 ```
-<blockquote></blockquote>
 #### value
 #### METHODS
 #### toString()
@@ -1934,13 +1899,11 @@ m4.copy(m1);
 this.shouldBeTrue(m1 !== m4); // 2 models are not the same instance
 this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m4)); // but they are identical
 ```
-<blockquote></blockquote>
 #### getObjectStateErrors()
 &nbsp;<b><i>should return array of validation errors:</i></b>
 ```javascript
 this.shouldBeTrue(new SurrogateModel().getObjectStateErrors() instanceof Array);
 ```
-<blockquote></blockquote>
 &nbsp;<b><i>first attribute must be an ID field:</i></b>
 ```javascript
 var m = new SurrogateModel();
@@ -1978,13 +1941,12 @@ this.log('T.getAttributeEvents()');
 new Model().onEvent(['Validate'], function () {
 });
 ```
-<blockquote></blockquote>
+<blockquote><strong>log: </strong>T.getAttributeEvents()<br></blockquote>
 #### get(attributeName)
 &nbsp;<b><i>returns undefined if the attribute does not exist:</i></b>
 ```javascript
 this.shouldBeTrue(new SurrogateModel().get('whatever') === undefined);
 ```
-<blockquote></blockquote>
 &nbsp;<b><i>returns the value for given attribute:</i></b>
 ```javascript
 var question = new SurrogateModel({attributes: [new Attribute('answer', 'Number')]});
@@ -2110,7 +2072,6 @@ var presentation = new Application(); // default attributes and values
 this.shouldBeTrue(presentation.get('name') === 'newApp');
 this.shouldBeTrue(presentation.get('brand') === 'NEW APP');
 ```
-<blockquote></blockquote>
 #### METHODS
 #### setInterface(interface)
 <p>Setting the interface for the application determines the primary method of user interaction.</p>
@@ -2190,7 +2151,6 @@ new Application().dispatch();
 ```javascript
 new Application().dispatch(new Request({type: 'Command', command: new Command()}));
 ```
-<blockquote></blockquote>
 &nbsp;<b><i>optional second parameter is the response callback:</i></b>
 ```javascript
 new Application().dispatch(new Request({type: 'Command', command: new Command()}), true);
@@ -2250,7 +2210,6 @@ this.shouldBeTrue(m.getObjectStateErrors().length === 0);
 m.tags = 'your it';
 this.shouldBeTrue(m.getObjectStateErrors().length == 1);
 ```
-<blockquote></blockquote>
 #### attributes
 <p>The attributes property is an array of Attributes.</p>
 &nbsp;<b><i>should be an array:</i></b>
@@ -2271,7 +2230,6 @@ this.shouldBeTrue(model.getObjectStateErrors(true).length === 0);
 model.attributes = [new Attribute("ID", "ID"), new SurrogateModel(), 0, 'a', {}, [], null];
 this.shouldBeTrue(model.getObjectStateErrors(true).length == 6);
 ```
-<blockquote></blockquote>
 #### value
 #### METHODS
 #### toString()
@@ -2306,13 +2264,11 @@ m4.copy(m1);
 this.shouldBeTrue(m1 !== m4); // 2 models are not the same instance
 this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m4)); // but they are identical
 ```
-<blockquote></blockquote>
 #### getObjectStateErrors()
 &nbsp;<b><i>should return array of validation errors:</i></b>
 ```javascript
 this.shouldBeTrue(new SurrogateModel().getObjectStateErrors() instanceof Array);
 ```
-<blockquote></blockquote>
 &nbsp;<b><i>first attribute must be an ID field:</i></b>
 ```javascript
 var m = new SurrogateModel();
@@ -2350,13 +2306,12 @@ this.log('T.getAttributeEvents()');
 new Model().onEvent(['Validate'], function () {
 });
 ```
-<blockquote></blockquote>
+<blockquote><strong>log: </strong>T.getAttributeEvents()<br></blockquote>
 #### get(attributeName)
 &nbsp;<b><i>returns undefined if the attribute does not exist:</i></b>
 ```javascript
 this.shouldBeTrue(new SurrogateModel().get('whatever') === undefined);
 ```
-<blockquote></blockquote>
 &nbsp;<b><i>returns the value for given attribute:</i></b>
 ```javascript
 var question = new SurrogateModel({attributes: [new Attribute('answer', 'Number')]});
@@ -2485,14 +2440,14 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote></blockquote>
+<blockquote><strong>log: </strong>Sun Oct 19 2014 12:17:35 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
-this.log(T.getLogTypes());
+this.log('T.getLogTypes()');
 new Log({logType: 'wood'}); // default attributes and values
 ```
-<blockquote><strong>Error: Unknown log type: wood</strong> thrown as expected
+<blockquote><strong>log: </strong>T.getLogTypes()<br><strong>Error: Unknown log type: wood</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>Text simple text message:</i></b>
 ```javascript
@@ -2560,7 +2515,6 @@ this.shouldBeTrue(m.getObjectStateErrors().length === 0);
 m.tags = 'your it';
 this.shouldBeTrue(m.getObjectStateErrors().length == 1);
 ```
-<blockquote></blockquote>
 #### attributes
 <p>The attributes property is an array of Attributes.</p>
 &nbsp;<b><i>should be an array:</i></b>
@@ -2581,7 +2535,6 @@ this.shouldBeTrue(model.getObjectStateErrors(true).length === 0);
 model.attributes = [new Attribute("ID", "ID"), new SurrogateModel(), 0, 'a', {}, [], null];
 this.shouldBeTrue(model.getObjectStateErrors(true).length == 6);
 ```
-<blockquote></blockquote>
 #### value
 #### METHODS
 #### toString()
@@ -2616,13 +2569,11 @@ m4.copy(m1);
 this.shouldBeTrue(m1 !== m4); // 2 models are not the same instance
 this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m4)); // but they are identical
 ```
-<blockquote></blockquote>
 #### getObjectStateErrors()
 &nbsp;<b><i>should return array of validation errors:</i></b>
 ```javascript
 this.shouldBeTrue(new SurrogateModel().getObjectStateErrors() instanceof Array);
 ```
-<blockquote></blockquote>
 &nbsp;<b><i>first attribute must be an ID field:</i></b>
 ```javascript
 var m = new SurrogateModel();
@@ -2660,13 +2611,12 @@ this.log('T.getAttributeEvents()');
 new Model().onEvent(['Validate'], function () {
 });
 ```
-<blockquote></blockquote>
+<blockquote><strong>log: </strong>T.getAttributeEvents()<br></blockquote>
 #### get(attributeName)
 &nbsp;<b><i>returns undefined if the attribute does not exist:</i></b>
 ```javascript
 this.shouldBeTrue(new SurrogateModel().get('whatever') === undefined);
 ```
-<blockquote></blockquote>
 &nbsp;<b><i>returns the value for given attribute:</i></b>
 ```javascript
 var question = new SurrogateModel({attributes: [new Attribute('answer', 'Number')]});
@@ -2793,13 +2743,11 @@ function test4() {
 this.shouldBeTrue(new Presentation().validationErrors instanceof Array);
 this.shouldBeTrue(new Presentation().validationErrors.length === 0);
 ```
-<blockquote></blockquote>
 #### validationMessage
 &nbsp;<b><i>string description of error(s):</i></b>
 ```javascript
 return new Presentation().validationMessage;
 ```
-<blockquote></blockquote>
 #### ATTRIBUTES
 <p>Presentation extends model and inherits the attributes property.  All Presentation objects have the following attributes:</p>
 &nbsp;<b><i>following attributes are defined::</i></b>
@@ -2810,7 +2758,6 @@ this.shouldBeTrue(presentation.get('name') === null);
 this.shouldBeTrue(presentation.get('modelName') === null);
 this.shouldBeTrue(presentation.get('contents') instanceof Array);
 ```
-<blockquote></blockquote>
 #### METHODS
 #### modelConstructor
 <p>This is a reference to the constructor function to create a new model</p>
@@ -2911,7 +2858,6 @@ this.shouldBeTrue(m.getObjectStateErrors().length === 0);
 m.tags = 'your it';
 this.shouldBeTrue(m.getObjectStateErrors().length == 1);
 ```
-<blockquote></blockquote>
 #### attributes
 <p>The attributes property is an array of Attributes.</p>
 &nbsp;<b><i>should be an array:</i></b>
@@ -2932,7 +2878,6 @@ this.shouldBeTrue(model.getObjectStateErrors(true).length === 0);
 model.attributes = [new Attribute("ID", "ID"), new SurrogateModel(), 0, 'a', {}, [], null];
 this.shouldBeTrue(model.getObjectStateErrors(true).length == 6);
 ```
-<blockquote></blockquote>
 #### value
 #### METHODS
 #### toString()
@@ -2967,13 +2912,11 @@ m4.copy(m1);
 this.shouldBeTrue(m1 !== m4); // 2 models are not the same instance
 this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m4)); // but they are identical
 ```
-<blockquote></blockquote>
 #### getObjectStateErrors()
 &nbsp;<b><i>should return array of validation errors:</i></b>
 ```javascript
 this.shouldBeTrue(new SurrogateModel().getObjectStateErrors() instanceof Array);
 ```
-<blockquote></blockquote>
 &nbsp;<b><i>first attribute must be an ID field:</i></b>
 ```javascript
 var m = new SurrogateModel();
@@ -3011,13 +2954,12 @@ this.log('T.getAttributeEvents()');
 new Model().onEvent(['Validate'], function () {
 });
 ```
-<blockquote></blockquote>
+<blockquote><strong>log: </strong>T.getAttributeEvents()<br></blockquote>
 #### get(attributeName)
 &nbsp;<b><i>returns undefined if the attribute does not exist:</i></b>
 ```javascript
 this.shouldBeTrue(new SurrogateModel().get('whatever') === undefined);
 ```
-<blockquote></blockquote>
 &nbsp;<b><i>returns the value for given attribute:</i></b>
 ```javascript
 var question = new SurrogateModel({attributes: [new Attribute('answer', 'Number')]});
@@ -3147,7 +3089,6 @@ this.shouldBeTrue(session.get('passCode') === null);
 this.shouldBeTrue(session.get('ipAddress') === null);
 this.shouldBeTrue(session.get('active') === false);
 ```
-<blockquote></blockquote>
 #### METHODS
 #### startSession()
 <p>This method will create a new session record for a user.</p>
@@ -3169,7 +3110,6 @@ this.shouldThrowError(Error('callBack required'), function () {
   new Session().startSession(new Store(), 'blow', 'me', 'ipman');
 });
 ```
-<blockquote></blockquote>
 #### resumeSession()
 <p>This method will resume an existing session.</p>
 &nbsp;<b><i>parameters are store, IP, passcode and callback:</i></b>
@@ -3187,7 +3127,6 @@ this.shouldThrowError(Error('callBack required'), function () {
   new Session().resumeSession(new Store(), 'ipman', '123');
 });
 ```
-<blockquote></blockquote>
 #### endSession()
 <p>Method to end session.</p>
 &nbsp;<b><i>parameters are store and callback - session object should be in memory:</i></b>
@@ -3199,7 +3138,6 @@ this.shouldThrowError(Error('callBack required'), function () {
   new Session().endSession(new Store());
 });
 ```
-<blockquote></blockquote>
 ## [&#9664;](#-session)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-workspace) &nbsp;User
 #### User Model
 <p>The User Model represents the user logged into the system. The library uses this for system access, logging and other functions.</p>
@@ -3253,7 +3191,6 @@ this.shouldBeTrue(m.getObjectStateErrors().length === 0);
 m.tags = 'your it';
 this.shouldBeTrue(m.getObjectStateErrors().length == 1);
 ```
-<blockquote></blockquote>
 #### attributes
 <p>The attributes property is an array of Attributes.</p>
 &nbsp;<b><i>should be an array:</i></b>
@@ -3274,7 +3211,6 @@ this.shouldBeTrue(model.getObjectStateErrors(true).length === 0);
 model.attributes = [new Attribute("ID", "ID"), new SurrogateModel(), 0, 'a', {}, [], null];
 this.shouldBeTrue(model.getObjectStateErrors(true).length == 6);
 ```
-<blockquote></blockquote>
 #### value
 #### METHODS
 #### toString()
@@ -3309,13 +3245,11 @@ m4.copy(m1);
 this.shouldBeTrue(m1 !== m4); // 2 models are not the same instance
 this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m4)); // but they are identical
 ```
-<blockquote></blockquote>
 #### getObjectStateErrors()
 &nbsp;<b><i>should return array of validation errors:</i></b>
 ```javascript
 this.shouldBeTrue(new SurrogateModel().getObjectStateErrors() instanceof Array);
 ```
-<blockquote></blockquote>
 &nbsp;<b><i>first attribute must be an ID field:</i></b>
 ```javascript
 var m = new SurrogateModel();
@@ -3353,13 +3287,12 @@ this.log('T.getAttributeEvents()');
 new Model().onEvent(['Validate'], function () {
 });
 ```
-<blockquote></blockquote>
+<blockquote><strong>log: </strong>T.getAttributeEvents()<br></blockquote>
 #### get(attributeName)
 &nbsp;<b><i>returns undefined if the attribute does not exist:</i></b>
 ```javascript
 this.shouldBeTrue(new SurrogateModel().get('whatever') === undefined);
 ```
-<blockquote></blockquote>
 &nbsp;<b><i>returns the value for given attribute:</i></b>
 ```javascript
 var question = new SurrogateModel({attributes: [new Attribute('answer', 'Number')]});
@@ -3489,7 +3422,6 @@ this.shouldBeTrue(user.get('firstName') === null);
 this.shouldBeTrue(user.get('lastName') === null);
 this.shouldBeTrue(user.get('email') === null);
 ```
-<blockquote></blockquote>
 ## [&#9664;](#-user)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-memory) &nbsp;Workspace
 #### Workspace Model
 <p>A workspace is a collection of active deltas for a user.  The GUI could represent that as opentabs for instance.  Each tab a model view.  The deltas represent the change in model state</p>
@@ -3543,7 +3475,6 @@ this.shouldBeTrue(m.getObjectStateErrors().length === 0);
 m.tags = 'your it';
 this.shouldBeTrue(m.getObjectStateErrors().length == 1);
 ```
-<blockquote></blockquote>
 #### attributes
 <p>The attributes property is an array of Attributes.</p>
 &nbsp;<b><i>should be an array:</i></b>
@@ -3564,7 +3495,6 @@ this.shouldBeTrue(model.getObjectStateErrors(true).length === 0);
 model.attributes = [new Attribute("ID", "ID"), new SurrogateModel(), 0, 'a', {}, [], null];
 this.shouldBeTrue(model.getObjectStateErrors(true).length == 6);
 ```
-<blockquote></blockquote>
 #### value
 #### METHODS
 #### toString()
@@ -3599,13 +3529,11 @@ m4.copy(m1);
 this.shouldBeTrue(m1 !== m4); // 2 models are not the same instance
 this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m4)); // but they are identical
 ```
-<blockquote></blockquote>
 #### getObjectStateErrors()
 &nbsp;<b><i>should return array of validation errors:</i></b>
 ```javascript
 this.shouldBeTrue(new SurrogateModel().getObjectStateErrors() instanceof Array);
 ```
-<blockquote></blockquote>
 &nbsp;<b><i>first attribute must be an ID field:</i></b>
 ```javascript
 var m = new SurrogateModel();
@@ -3643,13 +3571,12 @@ this.log('T.getAttributeEvents()');
 new Model().onEvent(['Validate'], function () {
 });
 ```
-<blockquote></blockquote>
+<blockquote><strong>log: </strong>T.getAttributeEvents()<br></blockquote>
 #### get(attributeName)
 &nbsp;<b><i>returns undefined if the attribute does not exist:</i></b>
 ```javascript
 this.shouldBeTrue(new SurrogateModel().get('whatever') === undefined);
 ```
-<blockquote></blockquote>
 &nbsp;<b><i>returns the value for given attribute:</i></b>
 ```javascript
 var question = new SurrogateModel({attributes: [new Attribute('answer', 'Number')]});
@@ -3776,7 +3703,6 @@ this.shouldBeTrue(user.get('user') instanceof Attribute.ModelID);
 this.shouldBeTrue(user.get('user').modelType == 'User');
 this.shouldBeTrue(typeof user.get('deltas') == 'object');
 ```
-<blockquote></blockquote>
 #### METHODS
 <p>loadUserWorkspace(user, callBack)</p>
 <p>sync</p>
@@ -3838,7 +3764,7 @@ this.log(services);
 //this.shouldBeTrue(typeof services['canDeleteModel'] == 'boolean');
 //this.shouldBeTrue(typeof services['canGetList'] == 'boolean');
 ```
-<blockquote></blockquote>
+<blockquote><strong>log: </strong>[object Object]<br></blockquote>
 #### toString()
 &nbsp;<b><i>should return a description of the Store:</i></b>
 ```javascript
@@ -3849,7 +3775,7 @@ cStore.storeType = 'ConvenienceStore';
 this.log(cStore.toString());
 return cStore.toString();
 ```
-<blockquote>returns <strong>ConvenienceStore: 7-Eleven</strong> as expected
+<blockquote><strong>log: </strong>ConvenienceStore: 7-Eleven<br><strong>log: </strong>a MemoryStore<br>returns <strong>ConvenienceStore: 7-Eleven</strong> as expected
 </blockquote>
 #### onConnect()
 &nbsp;<b><i>must pass url string:</i></b>
@@ -3966,4 +3892,3 @@ this.shouldThrowError(Error('callBack required'), function () {
 });
 // See integration tests for examples of usage
 ```
-<blockquote></blockquote>
