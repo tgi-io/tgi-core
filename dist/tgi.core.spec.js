@@ -34,10 +34,10 @@ spec.test('tgi-core/lib/tgi-core.test.js', 'CORE', 'exposed as public or exporte
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-attribute.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', '<insert description>', function (callback) {
+spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data types - needed by Model', function (callback) {
   callback({log: 'tgi-core/lib/tgi-core-attribute.spec.js'});
 
-  spec.heading('Attribute Class', function () {
+  spec.heading('Attribute', function () {
     spec.paragraph('Attributes are the means for models to represent data of different types.  They have no' +
     ' dependencies on Models however and can be used without creating a model.');
     spec.heading('CONSTRUCTOR', function () {
@@ -55,7 +55,7 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', '<insert descr
       });
       spec.heading('Attribute.ModelID', function () {
         spec.paragraph('Attribute.ModelID is a constructor that is used as a special type for references to IDs in external models.' +
-        '  Note it is a function embedded as a member of the Attribute to encapsulate.');
+        '  Note it is a function embedded as a member of the Attribute to encapsulate it.');
         spec.example('objects created should be an instance of Attribute.ModelID', true, function () {
           return new Attribute.ModelID(new Model()) instanceof Attribute.ModelID;
         });
