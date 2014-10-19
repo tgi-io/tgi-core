@@ -369,7 +369,7 @@ Attribute.prototype.clearError = function (condition) {
   if (!condition) throw new Error('condition required');
   delete this._errorConditions[condition];
 };
-Attribute.getAttributeTypes = function () {
+Attribute.getTypes = function () {
   return ['ID', 'String', 'Date', 'Boolean', 'Number', 'Model', 'Group', 'Table', 'Object'].slice(0); // copy array
 };
 /**---------------------------------------------------------------------------------------------------------------------

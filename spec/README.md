@@ -44,7 +44,6 @@ return cpad(' sup ',20,'*');
 <blockquote>returns <strong>******* sup ********</strong> as expected
 </blockquote>
 ## [&#9664;](#-core)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-command) &nbsp;Attribute
-#### Attribute
 <p>Attributes are the means for models to represent data of different types.  They have no dependencies on Models however and can be used without creating a model.</p>
 #### CONSTRUCTOR
 &nbsp;<b><i>objects created should be an instance of Attribute:</i></b>
@@ -146,10 +145,10 @@ return new Attribute({name: 'name'}).type;
 </blockquote>
 &nbsp;<b><i>should be a valid attribute type:</i></b>
 ```javascript
-this.log('T.getAttributeTypes()');
+this.log('T.getTypes()');
 new Attribute({name: 'Bogus', type: "Dude"});
 ```
-<blockquote><strong>log: </strong>T.getAttributeTypes()<br><strong>Error: error creating Attribute: Invalid type: Dude</strong> thrown as expected
+<blockquote><strong>log: </strong>T.getTypes()<br><strong>Error: error creating Attribute: Invalid type: Dude</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>should allow shorthand string constructor for type property:</i></b>
 ```javascript
@@ -303,7 +302,7 @@ a.validate(function () {
 #### value
 &nbsp;<b><i>should accept null assignment:</i></b>
 ```javascript
-var myTypes = Attribute.getAttributeTypes();
+var myTypes = Attribute.getTypes();
 var record = '';
 for (var i = 0; i < myTypes.length; i++) {
   record += myTypes[i] + ':' + new Attribute({name: 'my' + myTypes[i]}).value + ' ';
@@ -315,11 +314,11 @@ this.log(record);
 &nbsp;<b><i>should accept assignment of correct type and validate incorrect attributeTypes:</i></b>
 ```javascript
 // Test all known attribute types
-var myTypes = Attribute.getAttributeTypes();
+var myTypes = Attribute.getTypes();
 myTypes.shift(); // not testing ID
 myTypes.pop(); // not testing Object since it matches other types
 this.log(myTypes);
-this.log('T.getAttributeTypes()');
+this.log('T.getTypes()');
 // Now create an array of matching values for each type into myValues
 var myModel = new Model();
 var myGroup = new Attribute({name: 'columns', type: 'Group', value: [new Attribute("Name")]});
@@ -360,7 +359,7 @@ for (var i = 0; i < myTypes.length; i++)
   }
 return theGood + ' correct assignments ' + theBad + ' errors thrown';
 ```
-<blockquote><strong>log: </strong>T.getAttributeTypes()<br><strong>log: </strong>String,Date,Boolean,Number,Model,Group,Table<br>returns <strong>7 correct assignments 91 errors thrown</strong> as expected
+<blockquote><strong>log: </strong>T.getTypes()<br><strong>log: </strong>String,Date,Boolean,Number,Model,Group,Table<br>returns <strong>7 correct assignments 91 errors thrown</strong> as expected
 </blockquote>
 #### TYPES
 #### ID
@@ -634,6 +633,13 @@ new Attribute({name: 'status'}).clearError();
 ```
 <blockquote><strong>Error: condition required</strong> thrown as expected
 </blockquote>
+#### Attribute.getTypes
+<p>This helper function returns an array of valid Attribute types.  This is a inner function - not a prototype method.</p>
+&nbsp;<b><i>show the types:</i></b>
+```javascript
+this.log(Attribute.getTypes());
+```
+<blockquote><strong>log: </strong>ID,String,Date,Boolean,Number,Model,Group,Table,Object<br></blockquote>
 #### INTEGRATION
 &nbsp;<b><i>validation usage demonstrated:</i></b>
 ```javascript
@@ -699,7 +705,7 @@ function test6() {
 <blockquote>returns <strong>got milk</strong> as expected
 </blockquote>
 ## [&#9664;](#-attribute)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-delta) &nbsp;Command
-<p>Command is an abstraction for command execution.  It provides for multi methods of task executionand control over invocation and state monitoring.  The primary use is to have a simple API method to respond to UI tasks.  It can be used for processing / validation / storage / reporting type of use cases since it handles the asynchronous nature of javascript and abstracts in a way to easily incorporate business logic.</p>
+<p>Command is an abstraction for command execution.  It provides for multi methods of task executionand control over invocation and state monitoring.  The primary use is to have a simple API method to respond to UI tasks.  It can be used for processing / validation / storage / reporting type of use cases since it handles the asynchronous nature of javascript and abstracts in a way to easily incorporate application logic.</p>
 #### CONSTRUCTOR
 &nbsp;<b><i>objects created should be an instance of Command:</i></b>
 ```javascript
@@ -968,7 +974,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Sun Oct 19 2014 12:17:35 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Sun Oct 19 2014 17:08:46 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -977,7 +983,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Sun Oct 19 2014 12:17:35 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Sun Oct 19 2014 17:08:46 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2440,7 +2446,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Sun Oct 19 2014 12:17:35 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Sun Oct 19 2014 17:08:46 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript

@@ -35,9 +35,6 @@ spec.test('tgi-core/lib/tgi-core.test.js', 'CORE', 'exposed as public or exporte
  * tgi-core/lib/tgi-core-attribute.spec.js
  */
 spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data types - needed by Model', function (callback) {
-  callback({log: 'tgi-core/lib/tgi-core-attribute.spec.js'});
-
-  spec.heading('Attribute', function () {
     spec.paragraph('Attributes are the means for models to represent data of different types.  They have no' +
     ' dependencies on Models however and can be used without creating a model.');
     spec.heading('CONSTRUCTOR', function () {
@@ -101,7 +98,7 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
           return new Attribute({name: 'name'}).type;
         });
         spec.example('should be a valid attribute type', Error('error creating Attribute: Invalid type: Dude'), function () {
-          this.log('T.getAttributeTypes()');
+          this.log('T.getTypes()');
           new Attribute({name: 'Bogus', type: "Dude"});
         });
         spec.example('should allow shorthand string constructor for type property', 'Date', function () {
@@ -223,7 +220,7 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
       });
       spec.heading('value', function () {
         spec.example('should accept null assignment', undefined, function () {
-          var myTypes = Attribute.getAttributeTypes();
+          var myTypes = Attribute.getTypes();
           var record = '';
           for (var i = 0; i < myTypes.length; i++) {
             record += myTypes[i] + ':' + new Attribute({name: 'my' + myTypes[i]}).value + ' ';
@@ -234,11 +231,11 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
         spec.example('should accept assignment of correct type and validate incorrect attributeTypes',
           '7 correct assignments 91 errors thrown', function () {
             // Test all known attribute types
-            var myTypes = Attribute.getAttributeTypes();
+            var myTypes = Attribute.getTypes();
             myTypes.shift(); // not testing ID
             myTypes.pop(); // not testing Object since it matches other types
             this.log(myTypes);
-            this.log('T.getAttributeTypes()');
+            this.log('T.getTypes()');
 
             // Now create an array of matching values for each type into myValues
             var myModel = new Model();
@@ -501,6 +498,13 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
           new Attribute({name: 'status'}).clearError();
         });
       });
+      spec.heading('Attribute.getTypes', function () {
+        spec.paragraph('This helper function returns an array of valid Attribute types.  This is a inner function - not a prototype method.');
+        spec.example('show the types', undefined, function () {
+          this.log(Attribute.getTypes());
+        });
+      });
+
     });
     spec.heading('INTEGRATION', function () {
       spec.example('validation usage demonstrated', spec.asyncResults('got milk'), function (callback) {
@@ -572,7 +576,6 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
         }
       });
     });
-  });
 });
 
 /**---------------------------------------------------------------------------------------------------------------------
@@ -582,7 +585,7 @@ spec.test('tgi-core/lib/tgi-core-command.spec.js', 'Command', 'encapsulates task
     spec.paragraph('Command is an abstraction for command execution.  It provides for multi methods of task execution' +
     'and control over invocation and state monitoring.  The primary use is to have a simple API method to respond to ' +
     'UI tasks.  It can be used for processing / validation / storage / reporting type of use cases since ' +
-    'it handles the asynchronous nature of javascript and abstracts in a way to easily incorporate business logic.');
+    'it handles the asynchronous nature of javascript and abstracts in a way to easily incorporate application logic.');
     spec.heading('CONSTRUCTOR', function () {
       spec.example('objects created should be an instance of Command', true, function () {
         return new Command({name: 'about'}) instanceof Command;
