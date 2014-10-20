@@ -98,7 +98,7 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
           return new Attribute({name: 'name'}).type;
         });
         spec.example('should be a valid attribute type', Error('error creating Attribute: Invalid type: Dude'), function () {
-          this.log('T.getTypes()');
+          this.log(Attribute.getTypes());
           new Attribute({name: 'Bogus', type: "Dude"});
         });
         spec.example('should allow shorthand string constructor for type property', 'Date', function () {
@@ -136,8 +136,10 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
         });
       });
       spec.heading('validationMessage', function () {
-        spec.example('string description of error(s)', '*', function () {
-          return '*' + new Attribute({name: 'name'}).validationMessage;
+        spec.example('string description of error(s) is empty string (falsy) when no errors', '""', function () {
+          var errs = new Attribute({name: 'name'}).validationMessage;
+          this.shouldBeFalsy(errs);
+          return cpad(errs,2,'"');
         });
       });
       spec.heading('validationRule', function () {
@@ -235,7 +237,6 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
             myTypes.shift(); // not testing ID
             myTypes.pop(); // not testing Object since it matches other types
             this.log(myTypes);
-            this.log('T.getTypes()');
 
             // Now create an array of matching values for each type into myValues
             var myModel = new Model();

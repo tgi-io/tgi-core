@@ -151,10 +151,10 @@ return new Attribute({name: 'name'}).type;
 </blockquote>
 &nbsp;<b><i>should be a valid attribute type:</i></b>
 ```javascript
-this.log('T.getTypes()');
+this.log(Attribute.getTypes());
 new Attribute({name: 'Bogus', type: "Dude"});
 ```
-<blockquote><strong>log: </strong>T.getTypes()<br><strong>Error: error creating Attribute: Invalid type: Dude</strong> thrown as expected
+<blockquote><strong>log: </strong>ID,String,Date,Boolean,Number,Model,Group,Table,Object<br><strong>Error: error creating Attribute: Invalid type: Dude</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>should allow shorthand string constructor for type property:</i></b>
 ```javascript
@@ -205,11 +205,13 @@ this.shouldBeTrue(new Attribute({name: 'name'}).validationErrors instanceof Arra
 this.shouldBeTrue(new Attribute({name: 'name'}).validationErrors.length === 0);
 ```
 #### validationMessage
-&nbsp;<b><i>string description of error(s):</i></b>
+&nbsp;<b><i>string description of error(s) is empty string (falsy) when no errors:</i></b>
 ```javascript
-return '*' + new Attribute({name: 'name'}).validationMessage;
+var errs = new Attribute({name: 'name'}).validationMessage;
+this.shouldBeFalsy(errs);
+return cpad(errs,2,'"');
 ```
-<blockquote>returns <strong>*</strong> as expected
+<blockquote>returns <strong>""</strong> as expected
 </blockquote>
 #### validationRule
 The validationRule property provides validation rules for attribute.  For additional validation see the *Validate* event in onEvent method.    
@@ -331,7 +333,6 @@ var myTypes = Attribute.getTypes();
 myTypes.shift(); // not testing ID
 myTypes.pop(); // not testing Object since it matches other types
 this.log(myTypes);
-this.log('T.getTypes()');
 // Now create an array of matching values for each type into myValues
 var myModel = new Model();
 var myGroup = new Attribute({name: 'columns', type: 'Group', value: [new Attribute("Name")]});
@@ -372,7 +373,7 @@ for (var i = 0; i < myTypes.length; i++)
   }
 return theGood + ' correct assignments ' + theBad + ' errors thrown';
 ```
-<blockquote><strong>log: </strong>T.getTypes()<br><strong>log: </strong>String,Date,Boolean,Number,Model,Group,Table<br>returns <strong>7 correct assignments 91 errors thrown</strong> as expected
+<blockquote><strong>log: </strong>String,Date,Boolean,Number,Model,Group,Table<br>returns <strong>7 correct assignments 91 errors thrown</strong> as expected
 </blockquote>
 #### TYPES
 #### ID
@@ -1015,7 +1016,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Sun Oct 19 2014 22:09:29 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Mon Oct 20 2014 10:23:11 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1024,7 +1025,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Sun Oct 19 2014 22:09:29 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Mon Oct 20 2014 10:23:11 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2544,7 +2545,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Sun Oct 19 2014 22:09:29 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Mon Oct 20 2014 10:23:11 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
