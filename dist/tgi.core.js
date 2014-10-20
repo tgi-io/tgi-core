@@ -638,7 +638,7 @@ function Delta(modelID) {
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-interface.source.js
  */
-/*
+/**
  * Constructor
  */
 function Interface(args) {
@@ -661,7 +661,7 @@ function Interface(args) {
   // args ok, now copy to object
   for (i in args) this[i] = args[i];
 }
-/*
+/**
  * Methods
  */
 Interface.prototype.toString = function () {
