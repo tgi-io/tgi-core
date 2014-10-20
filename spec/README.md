@@ -21,6 +21,7 @@
 - [User](#-user) <insert description>
 - [Workspace](#-workspace) <insert description>
 - [Memory](#-memory) <insert description>
+- [Summary](#-summary) for this spec.
 
 
 ## [&#9664;](#-tgi-core)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-attribute) &nbsp;CORE
@@ -200,8 +201,10 @@ this.shouldBeTrue(new Attribute({name: 'name'}).validationErrors.length === 0);
 #### validationMessage
 &nbsp;<b><i>string description of error(s):</i></b>
 ```javascript
-return new Attribute({name: 'name'}).validationMessage;
+return '*' + new Attribute({name: 'name'}).validationMessage;
 ```
+<blockquote>returns <strong>*</strong> as expected
+</blockquote>
 #### validationRule
 <p>The validationRule property provides validation rules for attribute.  For additional validation see the *Validate* event in onEvent method.</p>
 &nbsp;<b><i>initialized to empty object:</i></b>
@@ -974,7 +977,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Sun Oct 19 2014 17:08:46 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Sun Oct 19 2014 21:56:22 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -983,7 +986,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Sun Oct 19 2014 17:08:46 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Sun Oct 19 2014 21:56:22 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2446,7 +2449,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Sun Oct 19 2014 17:08:46 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Sun Oct 19 2014 21:56:22 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -3713,7 +3716,7 @@ this.shouldBeTrue(typeof user.get('deltas') == 'object');
 <p>loadUserWorkspace(user, callBack)</p>
 <p>sync</p>
 #### INTEGRATION
-## [&#9664;](#-workspace)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#) &nbsp;Memory
+## [&#9664;](#-workspace)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-summary) &nbsp;Memory
 #### MemoryStore
 <p>The MemoryStore is a simple volatile store. It is the first test standard to define the spec for all Stores to follow.</p>
 #### CONSTRUCTOR
@@ -3898,3 +3901,5 @@ this.shouldThrowError(Error('callBack required'), function () {
 });
 // See integration tests for examples of usage
 ```
+## [&#9664;](#-memory)&nbsp;[&#8984;](#table-of-contents) &nbsp;Summary
+<p>This documentation generated with https://github.com/tgicloud/tgi-spec.<br>TODO put testin stats here.</p>

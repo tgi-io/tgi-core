@@ -136,8 +136,8 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
         });
       });
       spec.heading('validationMessage', function () {
-        spec.example('string description of error(s)', '', function () {
-          return new Attribute({name: 'name'}).validationMessage;
+        spec.example('string description of error(s)', '*', function () {
+          return '*' + new Attribute({name: 'name'}).validationMessage;
         });
       });
       spec.heading('validationRule', function () {
