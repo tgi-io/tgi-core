@@ -624,7 +624,7 @@ Command.getEvents = function () {
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-delta.source.js
  */
-/*
+/**
  * Constructor
  */
 function Delta(modelID) {
