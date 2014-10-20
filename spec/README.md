@@ -616,13 +616,13 @@ new Attribute({name: 'name'}).onEvent(['onDrunk'], function () {
 </blockquote>
 &nbsp;<b><i>here is a working version:</i></b>
 ```javascript
-this.log('T.getAttributeEvents()');
+this.log(Attribute.getEvents());
 // Validate - callback when attribute needs to be validated
 // StateChange -- callback when state of object (value or validation state) has changed
 new Attribute({name: 'name'}).onEvent(['Validate'], function () {
 });
 ```
-<blockquote><strong>log: </strong>T.getAttributeEvents()<br></blockquote>
+<blockquote><strong>log: </strong>StateChange,Validate<br></blockquote>
 #### validate
 check valid object state and value for attribute - invoke callback for results    
 
@@ -657,13 +657,21 @@ new Attribute({name: 'status'}).clearError();
 <blockquote><strong>Error: condition required</strong> thrown as expected
 </blockquote>
 #### Attribute.getTypes
-This helper function returns an array of valid Attribute types.  This is a inner function - not a prototype method.    
+This helper function returns an array of valid Attribute types.  This is just a function - not a prototype method.    
 
 &nbsp;<b><i>show the types:</i></b>
 ```javascript
 this.log(Attribute.getTypes());
 ```
 <blockquote><strong>log: </strong>ID,String,Date,Boolean,Number,Model,Group,Table,Object<br></blockquote>
+#### Attribute.getEvents
+This helper function returns an array of valid Attribute events.  This is just a function - not a prototype method.    
+
+&nbsp;<b><i>show the events:</i></b>
+```javascript
+this.log(Attribute.getEvents());
+```
+<blockquote><strong>log: </strong>StateChange,Validate<br></blockquote>
 #### INTEGRATION
 &nbsp;<b><i>validation usage demonstrated:</i></b>
 ```javascript
@@ -1016,7 +1024,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Mon Oct 20 2014 10:23:11 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Mon Oct 20 2014 10:41:46 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1025,7 +1033,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Mon Oct 20 2014 10:23:11 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Mon Oct 20 2014 10:41:46 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2545,7 +2553,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Mon Oct 20 2014 10:23:11 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Mon Oct 20 2014 10:41:46 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript

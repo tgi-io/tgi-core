@@ -54,10 +54,10 @@ var CORE = function () {
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-attribute.source.js
  */
-/*
+/**
  * Constructor
  */
-function Attribute(args, arg2) {
+ function Attribute(args, arg2) {
   var splitTypes; // For String(30) type
   if (false === (this instanceof Attribute)) throw new Error('new operator required');
   if (typeof args == 'string') {
@@ -148,7 +148,7 @@ function Attribute(args, arg2) {
   this._eventListeners = [];
   this._errorConditions = {};
 }
-/*
+/**
  * Additional Constructors
  */
 Attribute.ModelID = function (model) {
@@ -164,7 +164,7 @@ Attribute.ModelID.prototype.toString = function () {
   else
     return 'ModelID(' + this.modelType + ':' + this.value + ')';
 };
-/*
+/**
  * Methods
  */
 Attribute.prototype.toString = function () {
@@ -369,8 +369,14 @@ Attribute.prototype.clearError = function (condition) {
   if (!condition) throw new Error('condition required');
   delete this._errorConditions[condition];
 };
+/**
+ * Simple functions
+ */
 Attribute.getTypes = function () {
   return ['ID', 'String', 'Date', 'Boolean', 'Number', 'Model', 'Group', 'Table', 'Object'].slice(0); // copy array
+};
+Attribute.getEvents = function () {
+  return ['StateChange', 'Validate'].slice(0); // copy array
 };
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-command.source.js

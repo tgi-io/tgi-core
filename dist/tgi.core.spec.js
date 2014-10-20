@@ -471,7 +471,7 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
           });
         });
         spec.example('here is a working version', undefined, function () {
-          this.log('T.getAttributeEvents()');
+          this.log(Attribute.getEvents());
           // Validate - callback when attribute needs to be validated
           // StateChange -- callback when state of object (value or validation state) has changed
           new Attribute({name: 'name'}).onEvent(['Validate'], function () {
@@ -500,9 +500,15 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
         });
       });
       spec.heading('Attribute.getTypes', function () {
-        spec.paragraph('This helper function returns an array of valid Attribute types.  This is a inner function - not a prototype method.');
+        spec.paragraph('This helper function returns an array of valid Attribute types.  This is just a function - not a prototype method.');
         spec.example('show the types', undefined, function () {
           this.log(Attribute.getTypes());
+        });
+      });
+      spec.heading('Attribute.getEvents', function () {
+        spec.paragraph('This helper function returns an array of valid Attribute events.  This is just a function - not a prototype method.');
+        spec.example('show the events', undefined, function () {
+          this.log(Attribute.getEvents());
         });
       });
 
