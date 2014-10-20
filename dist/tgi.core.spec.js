@@ -835,7 +835,7 @@ spec.test('tgi-core/lib/tgi-core-command.spec.js', 'Command', 'encapsulates task
       cmd.execute();
     });
 
-    // Menu
+    // Menu todo - placeholder or not needed?
     spec.example('Menu', Error('command type Menu not implemented'), function () {
       var cmd = new Command({
         name: 'menuCommand',
@@ -924,17 +924,17 @@ spec.test('tgi-core/lib/tgi-core-command.spec.js', 'Command', 'encapsulates task
       cmd.bucket += ' Adious!';
     });
 
-    //// Procedure
-    //spec.xexample('Procedure', Error('command type Procedure not implemented'), function () {
-    //  var cmd = new Command({
-    //    name: 'procedureCommand',
-    //    description: 'procedure command test',
-    //    type: 'Procedure',
-    //    contents: new Procedure()
-    //  });
-    //  this.log(cmd);
-    //  cmd.execute();
-    //});
+    // Procedure
+    spec.example('Procedure', undefined, function () {
+      var cmd = new Command({
+        name: 'procedureCommand',
+        description: 'procedure command test',
+        type: 'Procedure',
+        contents: new Procedure()
+      });
+      this.log(cmd);
+      cmd.execute();
+    });
 
   });
 });
