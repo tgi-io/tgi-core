@@ -1,5 +1,6 @@
 #tgi-core
-<p>Core objects, models, stores and interfaces for the TGI framework.</p>
+Core objects, models, stores and interfaces for the TGI framework.    
+
 ###Table of Contents
 
 - [CORE](#-core) exposed as public or exported (node)
@@ -25,14 +26,16 @@
 
 
 ## [&#9664;](#-tgi-core)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-attribute) &nbsp;CORE
-<p>The CORE function exposes the tgi-core library via global or node module exports.</p>
+The CORE function exposes the tgi-core library via global or node module exports.    
+
 &nbsp;<b><i>CORE function exposes library:</i></b>
 ```javascript
 return typeof CORE;
 ```
 <blockquote>returns <strong>function</strong> as expected
 </blockquote>
-<p>Application code written in the TGI Framework does not need the CORE function since it isvisible by closure.</p>
+Application code written in the TGI Framework does not need the CORE function since it isvisible by closure.    
+
 &nbsp;<b><i>core object Model is available in closure:</i></b>
 ```javascript
 this.shouldBeTrue(Model == CORE().Model);
@@ -45,7 +48,8 @@ return cpad(' sup ',20,'*');
 <blockquote>returns <strong>******* sup ********</strong> as expected
 </blockquote>
 ## [&#9664;](#-core)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-command) &nbsp;Attribute
-<p>Attributes are the means for models to represent data of different types.  They have no dependencies on Models however and can be used without creating a model.</p>
+Attributes are the means for models to represent data of different types.  They have no dependencies on Models however and can be used without creating a model.    
+
 #### CONSTRUCTOR
 &nbsp;<b><i>objects created should be an instance of Attribute:</i></b>
 ```javascript
@@ -72,7 +76,8 @@ new Attribute({eman: 'the'}); // 2 errors: name missing and eman an unknown prop
 <blockquote><strong>Error: error creating Attribute: multiple errors</strong> thrown as expected
 </blockquote>
 #### Attribute.ModelID
-<p>Attribute.ModelID is a constructor that is used as a special type for references to IDs in external models.  Note it is a function embedded as a member of the Attribute to encapsulate it.</p>
+Attribute.ModelID is a constructor that is used as a special type for references to IDs in external models.  Note it is a function embedded as a member of the Attribute to encapsulate it.    
+
 &nbsp;<b><i>objects created should be an instance of Attribute.ModelID:</i></b>
 ```javascript
 return new Attribute.ModelID(new Model()) instanceof Attribute.ModelID;
@@ -178,7 +183,8 @@ return new Attribute({name: 'ssn', placeHolder: '###-##-####'}).placeHolder;
 <blockquote>returns <strong>###-##-####</strong> as expected
 </blockquote>
 #### hint
-<p>hint properties give guidance in handling of the attribute</p>
+hint properties give guidance in handling of the attribute    
+
 &nbsp;<b><i>initialized to empty object:</i></b>
 ```javascript
 return typeof new Attribute({name: 'name', label: 'Name'}).hint;
@@ -206,7 +212,8 @@ return '*' + new Attribute({name: 'name'}).validationMessage;
 <blockquote>returns <strong>*</strong> as expected
 </blockquote>
 #### validationRule
-<p>The validationRule property provides validation rules for attribute.  For additional validation see the *Validate* event in onEvent method.</p>
+The validationRule property provides validation rules for attribute.  For additional validation see the *Validate* event in onEvent method.    
+
 &nbsp;<b><i>initialized to empty object:</i></b>
 ```javascript
 return typeof new Attribute({name: 'name'}).validationRule;
@@ -224,7 +231,8 @@ new Attribute({name: 'name', validationRule: {age: 18, required: true}});
 <blockquote><strong>Error: error creating Attribute: invalid validationRule: age</strong> thrown as expected
 </blockquote>
 #### validationRule.required
-<p>validationRule.required is used when a value is required for attribute</p>
+validationRule.required is used when a value is required for attribute    
+
 &nbsp;<b><i>validationRule.required:</i></b>
 ```javascript
 var a = new Attribute({name: 'name', validationRule: {required: true}});
@@ -249,7 +257,8 @@ a.validate(function () {
 });
 ```
 #### validationRule.range
-<p>validationRule.range is used when value must fall within a range of values- use null to omit bound</p>
+validationRule.range is used when value must fall within a range of values- use null to omit bound    
+
 &nbsp;<b><i>validationRule.range lower bound only:</i></b>
 ```javascript
 var a = new Attribute({name: 'age', type: 'Number', value: 17, validationRule: {range: [18, null]}});
@@ -285,7 +294,8 @@ a.validate(function () {
 <blockquote>returns <strong>Age must be at least 100</strong> as expected
 </blockquote>
 #### validationRule.isOneOf
-<p>validationRule.isOneOf is used when a value is must be on of items in array</p>
+validationRule.isOneOf is used when a value is must be on of items in array    
+
 &nbsp;<b><i>validationRule.isOneOf fail:</i></b>
 ```javascript
 var a = new Attribute({name: 'age', type: 'Number', value: 2, validationRule: {isOneOf: [1, 3]}});
@@ -435,7 +445,8 @@ return new Attribute({name: 'bored', type: 'Boolean'}).type;
 <blockquote>returns <strong>Boolean</strong> as expected
 </blockquote>
 #### Model
-<p>Parameter type Model is used to store a reference to another model instance.  The value attribute is a Attribute.ModelID reference to the Model.</p>
+Parameter type Model is used to store a reference to another model instance.  The value attribute is a Attribute.ModelID reference to the Model.    
+
 &nbsp;<b><i>must construct with Attribute.ModelID in value:</i></b>
 ```javascript
 new Attribute({name: 'Twiggy', type: 'Model'});
@@ -454,7 +465,8 @@ return new Attribute(
 <blockquote>returns <strong>Model</strong> as expected
 </blockquote>
 #### Group
-<p>Groups are used to keep attributes together for presentation purposes.</p>
+Groups are used to keep attributes together for presentation purposes.    
+
 &nbsp;<b><i>should have type of 'Group':</i></b>
 ```javascript
 return new Attribute({name: 'stuff', type: 'Group'}).type;
@@ -483,7 +495,8 @@ return myStuff.getObjectStateErrors().length;
 <blockquote><strong>log: </strong>group contains invalid members<br><strong>log: </strong><br>returns <strong>1</strong> as expected
 </blockquote>
 #### Table
-<p>Table types are used to store an array of values (rows) each of which is an array of values (columns).  Each column value is associated with the corresponding element in the Table property group which is set when creating a Table.</p>
+Table types are used to store an array of values (rows) each of which is an array of values (columns).  Each column value is associated with the corresponding element in the Table property group which is set when creating a Table.    
+
 &nbsp;<b><i>should have type of 'Table':</i></b>
 ```javascript
 var name = new Attribute("Name");
@@ -506,7 +519,8 @@ new Attribute({name: 'details', type: 'Table', group: cols});
 <blockquote><strong>Error: error creating Attribute: group property value must contain at least one Attribute</strong> thrown as expected
 </blockquote>
 #### Object
-<p>Javascript objects ... structure user defined</p>
+Javascript objects ... structure user defined    
+
 &nbsp;<b><i>should have type of 'Object':</i></b>
 ```javascript
 return new Attribute({name: 'stuff', type: 'Object'}).type;
@@ -522,7 +536,8 @@ return new Attribute({name: 'name'}).toString();
 <blockquote>returns <strong>Attribute: name</strong> as expected
 </blockquote>
 #### coerce(newValue)
-<p>Method returns the type equivalent of newValue for the owner objects type.</p>
+Method returns the type equivalent of newValue for the owner objects type.    
+
 &nbsp;<b><i>coerce method basic usage:</i></b>
 ```javascript
 var myString = new Attribute({name: 'name', size: 10});
@@ -577,7 +592,8 @@ nameHosed.type = ''; // 2 errors
 this.shouldBeTrue(nameHosed.getObjectStateErrors().length === 2);
 ```
 #### onEvent
-<p>Use onEvent(events,callback)</p>
+Use onEvent(events,callback)    
+
 &nbsp;<b><i>first parameter is a string or array of event subscriptions:</i></b>
 ```javascript
 new Attribute({name: 'name'}).onEvent();
@@ -607,7 +623,8 @@ new Attribute({name: 'name'}).onEvent(['Validate'], function () {
 ```
 <blockquote><strong>log: </strong>T.getAttributeEvents()<br></blockquote>
 #### validate
-<p>check valid object state and value for attribute - invoke callback for results</p>
+check valid object state and value for attribute - invoke callback for results    
+
 &nbsp;<b><i>callback is required:</i></b>
 ```javascript
 new Attribute({name: 'name'}).validate();
@@ -615,7 +632,8 @@ new Attribute({name: 'name'}).validate();
 <blockquote><strong>Error: callback is required</strong> thrown as expected
 </blockquote>
 #### setError
-<p>Set a error condition and descriptive message</p>
+Set a error condition and descriptive message    
+
 &nbsp;<b><i>first argument condition required:</i></b>
 ```javascript
 new Attribute({name: 'status'}).setError();
@@ -629,7 +647,8 @@ new Attribute({name: 'status'}).setError('login');
 <blockquote><strong>Error: description required</strong> thrown as expected
 </blockquote>
 #### clearError
-<p>Clear a error condition</p>
+Clear a error condition    
+
 &nbsp;<b><i>first argument condition required:</i></b>
 ```javascript
 new Attribute({name: 'status'}).clearError();
@@ -637,7 +656,8 @@ new Attribute({name: 'status'}).clearError();
 <blockquote><strong>Error: condition required</strong> thrown as expected
 </blockquote>
 #### Attribute.getTypes
-<p>This helper function returns an array of valid Attribute types.  This is a inner function - not a prototype method.</p>
+This helper function returns an array of valid Attribute types.  This is a inner function - not a prototype method.    
+
 &nbsp;<b><i>show the types:</i></b>
 ```javascript
 this.log(Attribute.getTypes());
@@ -708,7 +728,8 @@ function test6() {
 <blockquote>returns <strong>got milk</strong> as expected
 </blockquote>
 ## [&#9664;](#-attribute)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-delta) &nbsp;Command
-<p>Command is an abstraction for command execution.  It provides for multi methods of task executionand control over invocation and state monitoring.  The primary use is to have a simple API method to respond to UI tasks.  It can be used for processing / validation / storage / reporting type of use cases since it handles the asynchronous nature of javascript and abstracts in a way to easily incorporate application logic.</p>
+Command is an abstraction for command execution.  It provides for multi methods of task executionand control over invocation and state monitoring.  The primary use is to have a simple API method to respond to UI tasks.  It can be used for processing / validation / storage / reporting type of use cases since it handles the asynchronous nature of javascript and abstracts in a way to easily incorporate application logic.    
+
 #### CONSTRUCTOR
 &nbsp;<b><i>objects created should be an instance of Command:</i></b>
 ```javascript
@@ -769,9 +790,11 @@ new Command({name: 'about', type: 'magic' });
 <blockquote><strong>log: </strong>T.getCommandTypes()<br><strong>Error: Invalid command type: magic</strong> thrown as expected
 </blockquote>
 #### contents
-<p>Contents is based on the type of command.  See TYPE section for more information for how it applies to each type</p>
+Contents is based on the type of command.  See TYPE section for more information for how it applies to each type    
+
 #### scope
-<p>Optional scope property can be used to apply a model or list to a command.</p>
+Optional scope property can be used to apply a model or list to a command.    
+
 &nbsp;<b><i>scope must be a Model or a List:</i></b>
 ```javascript
 new Command({name: 'archiveData', scope: true});
@@ -779,10 +802,13 @@ new Command({name: 'archiveData', scope: true});
 <blockquote><strong>Error: optional scope property must be Model or List</strong> thrown as expected
 </blockquote>
 #### status
-<p>The status property is a Number defined as negative(FAIL) positive(SUCCESS) zero(executing) null/undefined(not executing).</p>
-<p>Applications can give meaning to numeric values (lt -1 and gt 1) as long as sign is retained.</p>
+The status property is a Number defined as negative(FAIL) positive(SUCCESS) zero(executing) null/undefined(not executing).    
+
+Applications can give meaning to numeric values (lt -1 and gt 1) as long as sign is retained.    
+
 #### timeout
-<p>Will use library setting as default, override to set the default timeout for steps used in procedures. Value is milliseconds (1000 = 1 second)</p>
+Will use library setting as default, override to set the default timeout for steps used in procedures. Value is milliseconds (1000 = 1 second)    
+
 &nbsp;<b><i>number required:</i></b>
 ```javascript
 new Command({name: 'options', timeout: true});
@@ -790,6 +816,8 @@ new Command({name: 'options', timeout: true});
 <blockquote><strong>Error: timeout must be a Number</strong> thrown as expected
 </blockquote>
 #### theme
+Valid themes listed in example.  These were inspired by bootstrap so fit that well and is optional for implementation but should follow if possible.  Example PDF is b/w and may ignore ot more likely will never apply.    
+
 &nbsp;<b><i>theme attribute provides visual cue:</i></b>
 ```javascript
 // The good
@@ -810,7 +838,8 @@ this.shouldThrowError(Error('invalid theme'), function () {
 });
 ```
 #### icon
-<p>The icon attribute gives a graphical association to the command. They are interface specific and do break the abstractness of this library but can be ignored by other interfaces safely.</p>
+The icon attribute gives a graphical association to the command. They are interface specific and do break the abstractness of this library but can be ignored by other interfaces safely.    
+
 &nbsp;<b><i>must be string and have prefix for 2 supported icon sets http://glyphicons.com/ http://fontawesome.io/:</i></b>
 ```javascript
 this.shouldThrowError(Error('invalid icon'), function () {
@@ -830,14 +859,17 @@ this.shouldThrowError(Error('invalid icon'), function () {
 #### bucket
 &nbsp;<b><i>valid property is for app use:</i></b>
 ```javascript
+// no real test but library will never use this word in general (TODO expand somehow ... ?).
 return 'bucket of ' + new Command({bucket: 'KFC'}).bucket;
 ```
 <blockquote>returns <strong>bucket of KFC</strong> as expected
 </blockquote>
 #### TYPES
 #### menu
-<p>The menu command is passed to _Interface_ for use for in user navigation.  They are embedded in the _Application_ as the primary navigate but can be instantiated and given to _Interface_ in any context.</p>
-<p>The _Command_ contents property is an array _Command_ objects.</p>
+The menu command is passed to _Interface_ for use for in user navigation.  They are embedded in the _Application_ as the primary navigate but can be instantiated and given to _Interface_ in any context.    
+
+The _Command_ contents property is an array _Command_ objects.    
+
 &nbsp;<b><i>constructor validates the contents:</i></b>
 ```javascript
 this.shouldThrowError(Error('contents must be array of menu items'), function () {
@@ -864,7 +896,8 @@ this.shouldThrowError(Error('contents must be a Presentation'), function () {
 });
 ```
 #### Function
-<p>contents contains a javascript function</p>
+contents contains a javascript function    
+
 &nbsp;<b><i>for Function type contents is a Function:</i></b>
 ```javascript
 this.shouldThrowError(Error('contents must be a Function'), function () {
@@ -887,7 +920,8 @@ return 'I am a ' + new Command({name: 'Customer'});
 <blockquote>returns <strong>I am a Stub Command: Customer</strong> as expected
 </blockquote>
 #### abort
-<p>aborts task</p>
+aborts task    
+
 &nbsp;<b><i>aborted command ends with error status:</i></b>
 ```javascript
 var cmd = new Command();
@@ -897,7 +931,8 @@ return cmd.status;
 <blockquote>returns <strong>-1</strong> as expected
 </blockquote>
 #### complete
-<p>completes task</p>
+completes task    
+
 &nbsp;<b><i>call when task complete status:</i></b>
 ```javascript
 var cmd = new Command();
@@ -907,7 +942,8 @@ return cmd.status;
 <blockquote>returns <strong>1</strong> as expected
 </blockquote>
 #### execute
-<p>executes task</p>
+executes task    
+
 &nbsp;<b><i>see integration tests:</i></b>
 ```javascript
 new Command().execute();
@@ -915,7 +951,8 @@ new Command().execute();
 <blockquote><strong>Error: command type Stub not implemented</strong> thrown as expected
 </blockquote>
 #### onEvent
-<p>Use onEvent(events,callback)</p>
+Use onEvent(events,callback)    
+
 &nbsp;<b><i>first parameter is a string or array of event subscriptions:</i></b>
 ```javascript
 new Command().onEvent();
@@ -949,7 +986,8 @@ new Command().onEvent(['Completed'], function () {
 <blockquote><strong>log: </strong>T.getCommandEvents()<br></blockquote>
 ## [&#9664;](#-command)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-interface) &nbsp;Delta
 #### Delta Class
-<p>Deltas represent changes to models.  They can be applied to a store then update the model.  They can be stored in logs as a change audit for the model.</p>
+Deltas represent changes to models.  They can be applied to a store then update the model.  They can be stored in logs as a change audit for the model.    
+
 #### CONSTRUCTOR
 &nbsp;<b><i>objects created should be an instance of Delta:</i></b>
 ```javascript
@@ -977,7 +1015,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Sun Oct 19 2014 21:56:22 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Sun Oct 19 2014 22:09:29 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -986,7 +1024,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Sun Oct 19 2014 21:56:22 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Sun Oct 19 2014 22:09:29 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -1044,7 +1082,8 @@ return new SurrogateInterface({description: 'Punched Card SurrogateInterface'}).
 <blockquote>returns <strong>Punched Card SurrogateInterface</strong> as expected
 </blockquote>
 #### start()
-<p>The start method initiates the interface and passes a callback for the interface to submit requests. The callback must pass a Request object followed by an optional callback for responses to the request e.g. interface.start ( function ( request, response(callback) ) ) {}</p>
+The start method initiates the interface and passes a callback for the interface to submit requests. The callback must pass a Request object followed by an optional callback for responses to the request e.g. interface.start ( function ( request, response(callback) ) ) {}    
+
 &nbsp;<b><i>Application parameter is required:</i></b>
 ```javascript
 new SurrogateInterface().start();
@@ -1064,7 +1103,8 @@ new SurrogateInterface().start(new Application(), new Presentation());
 <blockquote><strong>Error: callBack required</strong> thrown as expected
 </blockquote>
 #### stop()
-<p>calling stop will end the start() processing and release any resources</p>
+calling stop will end the start() processing and release any resources    
+
 &nbsp;<b><i>must pass callback function:</i></b>
 ```javascript
 new SurrogateInterface().stop();
@@ -1072,7 +1112,8 @@ new SurrogateInterface().stop();
 <blockquote><strong>Error: callBack required</strong> thrown as expected
 </blockquote>
 #### dispatch()
-<p>The dispatch method will accept a request and act on it or pass it to the app.</p>
+The dispatch method will accept a request and act on it or pass it to the app.    
+
 &nbsp;<b><i>must pass a Request object:</i></b>
 ```javascript
 new SurrogateInterface().dispatch();
@@ -1090,7 +1131,8 @@ new SurrogateInterface().dispatch(new Request({type: 'Command', command: new Com
 <blockquote><strong>Error: response callback is not a function</strong> thrown as expected
 </blockquote>
 #### notify()
-<p>The notify method sends a Request to the Interface.  This can be the result of a request sent from the start() callback.</p>
+The notify method sends a Request to the Interface.  This can be the result of a request sent from the start() callback.    
+
 &nbsp;<b><i>must pass a Request object:</i></b>
 ```javascript
 new SurrogateInterface().notify();
@@ -1135,9 +1177,11 @@ this.shouldThrowError('Error: invalid request parameter', function () {
 ```
 ## [&#9664;](#-interface)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-message) &nbsp;List
 #### List Class
-<p>Lists are an ordered collection of items.  Each item is an array of values that correspond to the attributes for model used in constructor.</p>
+Lists are an ordered collection of items.  Each item is an array of values that correspond to the attributes for model used in constructor.    
+
 #### CONSTRUCTOR
-<p>Creation of all Collections must adhere to following examples:</p>
+Creation of all Collections must adhere to following examples:    
+
 &nbsp;<b><i>objects created should be an instance of List:</i></b>
 ```javascript
 return new SurrogateListClass(new Model()) instanceof List;
@@ -1169,7 +1213,8 @@ return new List(new Model()).length();
 return new List(new Model()).addItem(new Model()).clear().length();
 ```
 #### get(attributeName)
-<p>Gets value of attribute for given item.</p>
+Gets value of attribute for given item.    
+
 &nbsp;<b><i>throws error if no current item:</i></b>
 ```javascript
 new List(new Model()).get('id'); // see integration tests
@@ -1177,7 +1222,8 @@ new List(new Model()).get('id'); // see integration tests
 <blockquote><strong>Error: list is empty</strong> thrown as expected
 </blockquote>
 #### set(attributeName,value)
-<p>Sets value of attribute for given item.</p>
+Sets value of attribute for given item.    
+
 &nbsp;<b><i>throws error if no current item:</i></b>
 ```javascript
 new List(new Model()).set('id'); // see integration tests
@@ -1235,7 +1281,8 @@ new List(new Model()).sort(); // see integration tests
 </blockquote>
 ## [&#9664;](#-list)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-model) &nbsp;Message
 #### Message Class
-<p>Messages are used by Transport to send to host or UI.</p>
+Messages are used by Transport to send to host or UI.    
+
 #### CONSTRUCTOR
 &nbsp;<b><i>objects created should be an instance of Message:</i></b>
 ```javascript
@@ -1272,9 +1319,11 @@ return new Message('Null').toString();
 </blockquote>
 ## [&#9664;](#-message)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-procedure) &nbsp;Model
 #### Model Class
-<p>Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.</p>
+Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.    
+
 #### CONSTRUCTOR
-<p>Creation of all Models must adhere to following examples:</p>
+Creation of all Models must adhere to following examples:    
+
 &nbsp;<b><i>objects created should be an instance of Model:</i></b>
 ```javascript
 return new SurrogateModel() instanceof Model;
@@ -1303,7 +1352,8 @@ return play.get('game');
 </blockquote>
 #### PROPERTIES
 #### tags
-<p>Tags are an array of strings that can be used in searching.</p>
+Tags are an array of strings that can be used in searching.    
+
 &nbsp;<b><i>should be an array or undefined:</i></b>
 ```javascript
 var m = new SurrogateModel(); // default is undefined
@@ -1314,7 +1364,8 @@ m.tags = 'your it';
 this.shouldBeTrue(m.getObjectStateErrors().length == 1);
 ```
 #### attributes
-<p>The attributes property is an array of Attributes.</p>
+The attributes property is an array of Attributes.    
+
 &nbsp;<b><i>should be an array:</i></b>
 ```javascript
 var goodModel = new SurrogateModel(), badModel = new SurrogateModel();
@@ -1381,7 +1432,8 @@ return m.getObjectStateErrors();
 <blockquote>returns <strong>first attribute must be ID</strong> as expected
 </blockquote>
 #### onEvent
-<p>Use onEvent(events,callback)</p>
+Use onEvent(events,callback)    
+
 &nbsp;<b><i>first parameter is a string or array of event subscriptions:</i></b>
 ```javascript
 new SurrogateModel().onEvent();
@@ -1446,7 +1498,8 @@ return question.attributes[1].value;
 <blockquote>returns <strong>42</strong> as expected
 </blockquote>
 #### validate
-<p>check valid object state and value for attribute - invoke callback for results</p>
+check valid object state and value for attribute - invoke callback for results    
+
 &nbsp;<b><i>callback is required:</i></b>
 ```javascript
 new Model().validate();
@@ -1454,7 +1507,8 @@ new Model().validate();
 <blockquote><strong>Error: callback is required</strong> thrown as expected
 </blockquote>
 #### setError
-<p>Set a error condition and descriptive message</p>
+Set a error condition and descriptive message    
+
 &nbsp;<b><i>first argument condition required:</i></b>
 ```javascript
 new Model().setError();
@@ -1468,7 +1522,8 @@ new Model().setError('login');
 <blockquote><strong>Error: description required</strong> thrown as expected
 </blockquote>
 #### clearError
-<p>Clear a error condition</p>
+Clear a error condition    
+
 &nbsp;<b><i>first argument condition required:</i></b>
 ```javascript
 new Model().clearError();
@@ -1534,8 +1589,10 @@ function test4() {
 </blockquote>
 ## [&#9664;](#-model)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-request) &nbsp;Procedure
 #### Procedure Class
-<p>The _Procedure_ class manages a set of _Command_ objects.  It provides a pattern for handling asynchronous and synchronous command execution.</p>
-<p>_Command_ objects create and manage the _Procedure_ object.</p>
+The _Procedure_ class manages a set of _Command_ objects.  It provides a pattern for handling asynchronous and synchronous command execution.    
+
+_Command_ objects create and manage the _Procedure_ object.    
+
 #### CONSTRUCTOR
 &nbsp;<b><i>objects created should be an instance of Procedure:</i></b>
 ```javascript
@@ -1557,7 +1614,8 @@ new Procedure({yo: 'whatup'});
 </blockquote>
 #### PROPERTIES
 #### tasks
-<p>Tasks is an array of objects that represent each step of the procedure.  See TASKS section below for each property of this unnamed object (task array element).</p>
+Tasks is an array of objects that represent each step of the procedure.  See TASKS section below for each property of this unnamed object (task array element).    
+
 &nbsp;<b><i>tasks can be falsy if no tasks defined otherwise it has to be an array:</i></b>
 ```javascript
 new Procedure({tasks: true});
@@ -1573,15 +1631,21 @@ new Procedure({tasks: [
 <blockquote><strong>Error: error creating Procedure: invalid task[0] property: clean</strong> thrown as expected
 </blockquote>
 #### tasksNeeded
-<p>Total tasks that will execute (does not include skipped tasks).</p>
-<p>_See Integration Tests for usage_</p>
+Total tasks that will execute (does not include skipped tasks).    
+
+_See Integration Tests for usage_    
+
 #### tasksCompleted
-<p>Number of tasks completed and started (does not include skipped tasks)</p>
-<p>_See Integration Tests for usage_</p>
+Number of tasks completed and started (does not include skipped tasks)    
+
+_See Integration Tests for usage_    
+
 #### TASKS
-<p>Each element of the array tasks is an object with the following properties:</p>
+Each element of the array tasks is an object with the following properties:    
+
 #### label
-<p>optional label for this task task element</p>
+optional label for this task task element    
+
 &nbsp;<b><i>if used it must be a string:</i></b>
 ```javascript
 new Procedure({tasks: [
@@ -1591,7 +1655,8 @@ new Procedure({tasks: [
 <blockquote><strong>Error: error creating Procedure: task[0].label must be string</strong> thrown as expected
 </blockquote>
 #### command
-<p>Command to execute for this task</p>
+Command to execute for this task    
+
 &nbsp;<b><i>if used it must be a string:</i></b>
 ```javascript
 new Procedure({tasks: [
@@ -1601,7 +1666,8 @@ new Procedure({tasks: [
 <blockquote><strong>Error: error creating Procedure: task[0].command must be a Command object</strong> thrown as expected
 </blockquote>
 #### requires
-<p>Establish other tasks that must be complete before this task is executed.  Pass as array of or single element. Can be string(for label label) or number(for array index).  Use -1 for previous task, null for no dependencies</p>
+Establish other tasks that must be complete before this task is executed.  Pass as array of or single element. Can be string(for label label) or number(for array index).  Use -1 for previous task, null for no dependencies    
+
 &nbsp;<b><i>test it:</i></b>
 ```javascript
 this.shouldThrowError(Error('invalid type for requires in task[0]'), function () {
@@ -1638,7 +1704,8 @@ if (!new Procedure().getObjectStateErrors()) return 'falsy';
 </blockquote>
 ## [&#9664;](#-procedure)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-store) &nbsp;Request
 #### Request Class
-<p>Requests handle the Request / Response design pattern.  They are used by the Interface class to communicate with the Application Model</p>
+Requests handle the Request / Response design pattern.  They are used by the Interface class to communicate with the Application Model    
+
 #### CONSTRUCTOR
 &nbsp;<b><i>objects created should be an instance of Request:</i></b>
 ```javascript
@@ -1692,7 +1759,8 @@ return new Request('Null').toString();
 </blockquote>
 ## [&#9664;](#-request)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-transport) &nbsp;Store
 #### Store Class
-<p>The store class is used for object persistence.</p>
+The store class is used for object persistence.    
+
 #### CONSTRUCTOR
 &nbsp;<b><i>objects created should be an instance of Store:</i></b>
 ```javascript
@@ -1721,7 +1789,8 @@ return new SurrogateStore({name: 'punchedCards'}).name;
 <blockquote>returns <strong>punchedCards</strong> as expected
 </blockquote>
 #### storeType
-<p>storeType defaults to Store Class Name but can be set to suite the app architecture.</p>
+storeType defaults to Store Class Name but can be set to suite the app architecture.    
+
 &nbsp;<b><i>storeType can be set in constructor:</i></b>
 ```javascript
 return new SurrogateStore({storeType: 'legacyStorage'}).storeType;
@@ -1799,11 +1868,13 @@ new SurrogateStore().deleteModel();
 <blockquote><strong>Error: Store does not provide deleteModel</strong> thrown as expected
 </blockquote>
 #### getList(model, filter, order)
-<p>This method will clear and populate the list with collection from store.  The **filter** property can be used to query the store.  The **order** property can specify the sort order of the list.  _See integration test for more info._</p>
+This method will clear and populate the list with collection from store.  The **filter** property can be used to query the store.  The **order** property can specify the sort order of the list.  _See integration test for more info._    
+
 ## [&#9664;](#-store)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-application) &nbsp;Transport
 ## [&#9664;](#-transport)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-log) &nbsp;Application
 #### Application Model
-<p>Information about the application is modeled here.</p>
+Information about the application is modeled here.    
+
 #### CONSTRUCTOR
 &nbsp;<b><i>objects created should be an instance of Application:</i></b>
 ```javascript
@@ -1813,9 +1884,11 @@ return new Application() instanceof Application;
 </blockquote>
 #### Model tests are applied
 #### Model Class
-<p>Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.</p>
+Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.    
+
 #### CONSTRUCTOR
-<p>Creation of all Models must adhere to following examples:</p>
+Creation of all Models must adhere to following examples:    
+
 &nbsp;<b><i>objects created should be an instance of Model:</i></b>
 ```javascript
 return new SurrogateModel() instanceof Model;
@@ -1844,7 +1917,8 @@ return play.get('game');
 </blockquote>
 #### PROPERTIES
 #### tags
-<p>Tags are an array of strings that can be used in searching.</p>
+Tags are an array of strings that can be used in searching.    
+
 &nbsp;<b><i>should be an array or undefined:</i></b>
 ```javascript
 var m = new SurrogateModel(); // default is undefined
@@ -1855,7 +1929,8 @@ m.tags = 'your it';
 this.shouldBeTrue(m.getObjectStateErrors().length == 1);
 ```
 #### attributes
-<p>The attributes property is an array of Attributes.</p>
+The attributes property is an array of Attributes.    
+
 &nbsp;<b><i>should be an array:</i></b>
 ```javascript
 var goodModel = new SurrogateModel(), badModel = new SurrogateModel();
@@ -1922,7 +1997,8 @@ return m.getObjectStateErrors();
 <blockquote>returns <strong>first attribute must be ID</strong> as expected
 </blockquote>
 #### onEvent
-<p>Use onEvent(events,callback)</p>
+Use onEvent(events,callback)    
+
 &nbsp;<b><i>first parameter is a string or array of event subscriptions:</i></b>
 ```javascript
 new SurrogateModel().onEvent();
@@ -1987,7 +2063,8 @@ return question.attributes[1].value;
 <blockquote>returns <strong>42</strong> as expected
 </blockquote>
 #### validate
-<p>check valid object state and value for attribute - invoke callback for results</p>
+check valid object state and value for attribute - invoke callback for results    
+
 &nbsp;<b><i>callback is required:</i></b>
 ```javascript
 new Model().validate();
@@ -1995,7 +2072,8 @@ new Model().validate();
 <blockquote><strong>Error: callback is required</strong> thrown as expected
 </blockquote>
 #### setError
-<p>Set a error condition and descriptive message</p>
+Set a error condition and descriptive message    
+
 &nbsp;<b><i>first argument condition required:</i></b>
 ```javascript
 new Model().setError();
@@ -2009,7 +2087,8 @@ new Model().setError('login');
 <blockquote><strong>Error: description required</strong> thrown as expected
 </blockquote>
 #### clearError
-<p>Clear a error condition</p>
+Clear a error condition    
+
 &nbsp;<b><i>first argument condition required:</i></b>
 ```javascript
 new Model().clearError();
@@ -2074,7 +2153,8 @@ function test4() {
 <blockquote>returns <strong>test4: 0</strong> as expected
 </blockquote>
 #### ATTRIBUTES
-<p>Application extends model and inherits the attributes property.  All Presentation objects have the following attributes:</p>
+Application extends model and inherits the attributes property.  All Presentation objects have the following attributes:    
+
 &nbsp;<b><i>following attributes are defined::</i></b>
 ```javascript
 var presentation = new Application(); // default attributes and values
@@ -2083,7 +2163,8 @@ this.shouldBeTrue(presentation.get('brand') === 'NEW APP');
 ```
 #### METHODS
 #### setInterface(interface)
-<p>Setting the interface for the application determines the primary method of user interaction.</p>
+Setting the interface for the application determines the primary method of user interaction.    
+
 &nbsp;<b><i>must supply Interface object:</i></b>
 ```javascript
 new Application().setInterface();
@@ -2091,7 +2172,8 @@ new Application().setInterface();
 <blockquote><strong>Error: instance of Interface a required parameter</strong> thrown as expected
 </blockquote>
 #### getInterface()
-<p>returns primary user interface for application</p>
+returns primary user interface for application    
+
 &nbsp;<b><i>default is undefined:</i></b>
 ```javascript
 return new Application().getInterface() === undefined;
@@ -2108,7 +2190,8 @@ return (myApplication.getInterface() === myInterface);
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
 #### setPresentation(presentation)
-<p>Setting the presentation for the application determines the primary commands available to the user.</p>
+Setting the presentation for the application determines the primary commands available to the user.    
+
 &nbsp;<b><i>must supply Presentation object:</i></b>
 ```javascript
 new Application().setPresentation();
@@ -2116,7 +2199,8 @@ new Application().setPresentation();
 <blockquote><strong>Error: instance of Presentation a required parameter</strong> thrown as expected
 </blockquote>
 #### getPresentation()
-<p>returns primary user presentation for application</p>
+returns primary user presentation for application    
+
 &nbsp;<b><i>default is undefined:</i></b>
 ```javascript
 return new Application().getPresentation() === undefined;
@@ -2133,7 +2217,8 @@ return (myApplication.getPresentation() === myPresentation);
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
 #### start()
-<p>The start method executes the application.</p>
+The start method executes the application.    
+
 &nbsp;<b><i>must set interface before starting:</i></b>
 ```javascript
 new Application().start();
@@ -2149,7 +2234,8 @@ app.start();
 <blockquote><strong>Error: callBack required</strong> thrown as expected
 </blockquote>
 #### dispatch()
-<p>The dispatch method will accept a request and act on it or pass it to the app.</p>
+The dispatch method will accept a request and act on it or pass it to the app.    
+
 &nbsp;<b><i>must pass a Request object:</i></b>
 ```javascript
 new Application().dispatch();
@@ -2168,7 +2254,8 @@ new Application().dispatch(new Request({type: 'Command', command: new Command()}
 </blockquote>
 ## [&#9664;](#-application)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-presentation) &nbsp;Log
 #### Log Model
-<p>Multi purpose log model.</p>
+Multi purpose log model.    
+
 #### CONSTRUCTOR
 &nbsp;<b><i>objects created should be an instance of Workspace:</i></b>
 ```javascript
@@ -2178,9 +2265,11 @@ return new Log() instanceof Log;
 </blockquote>
 #### Model tests are applied
 #### Model Class
-<p>Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.</p>
+Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.    
+
 #### CONSTRUCTOR
-<p>Creation of all Models must adhere to following examples:</p>
+Creation of all Models must adhere to following examples:    
+
 &nbsp;<b><i>objects created should be an instance of Model:</i></b>
 ```javascript
 return new SurrogateModel() instanceof Model;
@@ -2209,7 +2298,8 @@ return play.get('game');
 </blockquote>
 #### PROPERTIES
 #### tags
-<p>Tags are an array of strings that can be used in searching.</p>
+Tags are an array of strings that can be used in searching.    
+
 &nbsp;<b><i>should be an array or undefined:</i></b>
 ```javascript
 var m = new SurrogateModel(); // default is undefined
@@ -2220,7 +2310,8 @@ m.tags = 'your it';
 this.shouldBeTrue(m.getObjectStateErrors().length == 1);
 ```
 #### attributes
-<p>The attributes property is an array of Attributes.</p>
+The attributes property is an array of Attributes.    
+
 &nbsp;<b><i>should be an array:</i></b>
 ```javascript
 var goodModel = new SurrogateModel(), badModel = new SurrogateModel();
@@ -2287,7 +2378,8 @@ return m.getObjectStateErrors();
 <blockquote>returns <strong>first attribute must be ID</strong> as expected
 </blockquote>
 #### onEvent
-<p>Use onEvent(events,callback)</p>
+Use onEvent(events,callback)    
+
 &nbsp;<b><i>first parameter is a string or array of event subscriptions:</i></b>
 ```javascript
 new SurrogateModel().onEvent();
@@ -2352,7 +2444,8 @@ return question.attributes[1].value;
 <blockquote>returns <strong>42</strong> as expected
 </blockquote>
 #### validate
-<p>check valid object state and value for attribute - invoke callback for results</p>
+check valid object state and value for attribute - invoke callback for results    
+
 &nbsp;<b><i>callback is required:</i></b>
 ```javascript
 new Model().validate();
@@ -2360,7 +2453,8 @@ new Model().validate();
 <blockquote><strong>Error: callback is required</strong> thrown as expected
 </blockquote>
 #### setError
-<p>Set a error condition and descriptive message</p>
+Set a error condition and descriptive message    
+
 &nbsp;<b><i>first argument condition required:</i></b>
 ```javascript
 new Model().setError();
@@ -2374,7 +2468,8 @@ new Model().setError('login');
 <blockquote><strong>Error: description required</strong> thrown as expected
 </blockquote>
 #### clearError
-<p>Clear a error condition</p>
+Clear a error condition    
+
 &nbsp;<b><i>first argument condition required:</i></b>
 ```javascript
 new Model().clearError();
@@ -2449,7 +2544,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Sun Oct 19 2014 21:56:22 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Sun Oct 19 2014 22:09:29 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -2473,7 +2568,8 @@ return new Log({logType: 'Delta', contents: delta}).toString();
 </blockquote>
 ## [&#9664;](#-log)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-session) &nbsp;Presentation
 #### Presentation Model
-<p>The Presentation Model represents the way in which a model is to be presented to the user.  The presentation is meant to be a "hint" to a Interface object.  The specific Interface object will represent the model data according to the Presentation object.</p>
+The Presentation Model represents the way in which a model is to be presented to the user.  The presentation is meant to be a "hint" to a Interface object.  The specific Interface object will represent the model data according to the Presentation object.    
+
 #### CONSTRUCTOR
 &nbsp;<b><i>objects created should be an instance of Presentation:</i></b>
 ```javascript
@@ -2483,9 +2579,11 @@ return new Presentation() instanceof Presentation;
 </blockquote>
 #### Model tests are applied
 #### Model Class
-<p>Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.</p>
+Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.    
+
 #### CONSTRUCTOR
-<p>Creation of all Models must adhere to following examples:</p>
+Creation of all Models must adhere to following examples:    
+
 &nbsp;<b><i>objects created should be an instance of Model:</i></b>
 ```javascript
 return new SurrogateModel() instanceof Model;
@@ -2514,7 +2612,8 @@ return play.get('game');
 </blockquote>
 #### PROPERTIES
 #### tags
-<p>Tags are an array of strings that can be used in searching.</p>
+Tags are an array of strings that can be used in searching.    
+
 &nbsp;<b><i>should be an array or undefined:</i></b>
 ```javascript
 var m = new SurrogateModel(); // default is undefined
@@ -2525,7 +2624,8 @@ m.tags = 'your it';
 this.shouldBeTrue(m.getObjectStateErrors().length == 1);
 ```
 #### attributes
-<p>The attributes property is an array of Attributes.</p>
+The attributes property is an array of Attributes.    
+
 &nbsp;<b><i>should be an array:</i></b>
 ```javascript
 var goodModel = new SurrogateModel(), badModel = new SurrogateModel();
@@ -2592,7 +2692,8 @@ return m.getObjectStateErrors();
 <blockquote>returns <strong>first attribute must be ID</strong> as expected
 </blockquote>
 #### onEvent
-<p>Use onEvent(events,callback)</p>
+Use onEvent(events,callback)    
+
 &nbsp;<b><i>first parameter is a string or array of event subscriptions:</i></b>
 ```javascript
 new SurrogateModel().onEvent();
@@ -2657,7 +2758,8 @@ return question.attributes[1].value;
 <blockquote>returns <strong>42</strong> as expected
 </blockquote>
 #### validate
-<p>check valid object state and value for attribute - invoke callback for results</p>
+check valid object state and value for attribute - invoke callback for results    
+
 &nbsp;<b><i>callback is required:</i></b>
 ```javascript
 new Model().validate();
@@ -2665,7 +2767,8 @@ new Model().validate();
 <blockquote><strong>Error: callback is required</strong> thrown as expected
 </blockquote>
 #### setError
-<p>Set a error condition and descriptive message</p>
+Set a error condition and descriptive message    
+
 &nbsp;<b><i>first argument condition required:</i></b>
 ```javascript
 new Model().setError();
@@ -2679,7 +2782,8 @@ new Model().setError('login');
 <blockquote><strong>Error: description required</strong> thrown as expected
 </blockquote>
 #### clearError
-<p>Clear a error condition</p>
+Clear a error condition    
+
 &nbsp;<b><i>first argument condition required:</i></b>
 ```javascript
 new Model().clearError();
@@ -2745,7 +2849,8 @@ function test4() {
 </blockquote>
 #### PROPERTIES
 #### model
-<p>This is a model instance for the presentation instance.</p>
+This is a model instance for the presentation instance.    
+
 #### validationErrors
 &nbsp;<b><i>Array of errors:</i></b>
 ```javascript
@@ -2758,7 +2863,8 @@ this.shouldBeTrue(new Presentation().validationErrors.length === 0);
 return new Presentation().validationMessage;
 ```
 #### ATTRIBUTES
-<p>Presentation extends model and inherits the attributes property.  All Presentation objects have the following attributes:</p>
+Presentation extends model and inherits the attributes property.  All Presentation objects have the following attributes:    
+
 &nbsp;<b><i>following attributes are defined::</i></b>
 ```javascript
 var presentation = new Presentation(); // default attributes and values
@@ -2769,9 +2875,11 @@ this.shouldBeTrue(presentation.get('contents') instanceof Array);
 ```
 #### METHODS
 #### modelConstructor
-<p>This is a reference to the constructor function to create a new model</p>
+This is a reference to the constructor function to create a new model    
+
 #### validate
-<p>check valid object state then extend to presentation contents</p>
+check valid object state then extend to presentation contents    
+
 &nbsp;<b><i>callback is required -- see integration:</i></b>
 ```javascript
 new Presentation().validate();
@@ -2779,7 +2887,8 @@ new Presentation().validate();
 <blockquote><strong>Error: callback is required</strong> thrown as expected
 </blockquote>
 #### CONTENTS
-<p>The contents attributes provides the structure for the presentation.</p>
+The contents attributes provides the structure for the presentation.    
+
 &nbsp;<b><i>content must be an array:</i></b>
 ```javascript
 var pres = new Presentation();
@@ -2816,7 +2925,8 @@ presentation.validate(function () {
 </blockquote>
 ## [&#9664;](#-presentation)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-user) &nbsp;Session
 #### Session Model
-<p>The Session Model represents the Session logged into the system. The library uses this for system access, logging and other functions.</p>
+The Session Model represents the Session logged into the system. The library uses this for system access, logging and other functions.    
+
 #### CONSTRUCTOR
 &nbsp;<b><i>objects created should be an instance of Session:</i></b>
 ```javascript
@@ -2826,9 +2936,11 @@ return new Session() instanceof Session;
 </blockquote>
 #### Model tests are applied
 #### Model Class
-<p>Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.</p>
+Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.    
+
 #### CONSTRUCTOR
-<p>Creation of all Models must adhere to following examples:</p>
+Creation of all Models must adhere to following examples:    
+
 &nbsp;<b><i>objects created should be an instance of Model:</i></b>
 ```javascript
 return new SurrogateModel() instanceof Model;
@@ -2857,7 +2969,8 @@ return play.get('game');
 </blockquote>
 #### PROPERTIES
 #### tags
-<p>Tags are an array of strings that can be used in searching.</p>
+Tags are an array of strings that can be used in searching.    
+
 &nbsp;<b><i>should be an array or undefined:</i></b>
 ```javascript
 var m = new SurrogateModel(); // default is undefined
@@ -2868,7 +2981,8 @@ m.tags = 'your it';
 this.shouldBeTrue(m.getObjectStateErrors().length == 1);
 ```
 #### attributes
-<p>The attributes property is an array of Attributes.</p>
+The attributes property is an array of Attributes.    
+
 &nbsp;<b><i>should be an array:</i></b>
 ```javascript
 var goodModel = new SurrogateModel(), badModel = new SurrogateModel();
@@ -2935,7 +3049,8 @@ return m.getObjectStateErrors();
 <blockquote>returns <strong>first attribute must be ID</strong> as expected
 </blockquote>
 #### onEvent
-<p>Use onEvent(events,callback)</p>
+Use onEvent(events,callback)    
+
 &nbsp;<b><i>first parameter is a string or array of event subscriptions:</i></b>
 ```javascript
 new SurrogateModel().onEvent();
@@ -3000,7 +3115,8 @@ return question.attributes[1].value;
 <blockquote>returns <strong>42</strong> as expected
 </blockquote>
 #### validate
-<p>check valid object state and value for attribute - invoke callback for results</p>
+check valid object state and value for attribute - invoke callback for results    
+
 &nbsp;<b><i>callback is required:</i></b>
 ```javascript
 new Model().validate();
@@ -3008,7 +3124,8 @@ new Model().validate();
 <blockquote><strong>Error: callback is required</strong> thrown as expected
 </blockquote>
 #### setError
-<p>Set a error condition and descriptive message</p>
+Set a error condition and descriptive message    
+
 &nbsp;<b><i>first argument condition required:</i></b>
 ```javascript
 new Model().setError();
@@ -3022,7 +3139,8 @@ new Model().setError('login');
 <blockquote><strong>Error: description required</strong> thrown as expected
 </blockquote>
 #### clearError
-<p>Clear a error condition</p>
+Clear a error condition    
+
 &nbsp;<b><i>first argument condition required:</i></b>
 ```javascript
 new Model().clearError();
@@ -3100,7 +3218,8 @@ this.shouldBeTrue(session.get('active') === false);
 ```
 #### METHODS
 #### startSession()
-<p>This method will create a new session record for a user.</p>
+This method will create a new session record for a user.    
+
 &nbsp;<b><i>parameters are store, user, password, IP and callback:</i></b>
 ```javascript
 this.shouldThrowError(Error('store required'), function () {
@@ -3120,7 +3239,8 @@ this.shouldThrowError(Error('callBack required'), function () {
 });
 ```
 #### resumeSession()
-<p>This method will resume an existing session.</p>
+This method will resume an existing session.    
+
 &nbsp;<b><i>parameters are store, IP, passcode and callback:</i></b>
 ```javascript
 this.shouldThrowError(Error('store required'), function () {
@@ -3137,7 +3257,8 @@ this.shouldThrowError(Error('callBack required'), function () {
 });
 ```
 #### endSession()
-<p>Method to end session.</p>
+Method to end session.    
+
 &nbsp;<b><i>parameters are store and callback - session object should be in memory:</i></b>
 ```javascript
 this.shouldThrowError(Error('store required'), function () {
@@ -3149,7 +3270,8 @@ this.shouldThrowError(Error('callBack required'), function () {
 ```
 ## [&#9664;](#-session)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-workspace) &nbsp;User
 #### User Model
-<p>The User Model represents the user logged into the system. The library uses this for system access, logging and other functions.</p>
+The User Model represents the user logged into the system. The library uses this for system access, logging and other functions.    
+
 #### CONSTRUCTOR
 &nbsp;<b><i>objects created should be an instance of User:</i></b>
 ```javascript
@@ -3159,9 +3281,11 @@ return new User() instanceof User;
 </blockquote>
 #### Model tests are applied
 #### Model Class
-<p>Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.</p>
+Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.    
+
 #### CONSTRUCTOR
-<p>Creation of all Models must adhere to following examples:</p>
+Creation of all Models must adhere to following examples:    
+
 &nbsp;<b><i>objects created should be an instance of Model:</i></b>
 ```javascript
 return new SurrogateModel() instanceof Model;
@@ -3190,7 +3314,8 @@ return play.get('game');
 </blockquote>
 #### PROPERTIES
 #### tags
-<p>Tags are an array of strings that can be used in searching.</p>
+Tags are an array of strings that can be used in searching.    
+
 &nbsp;<b><i>should be an array or undefined:</i></b>
 ```javascript
 var m = new SurrogateModel(); // default is undefined
@@ -3201,7 +3326,8 @@ m.tags = 'your it';
 this.shouldBeTrue(m.getObjectStateErrors().length == 1);
 ```
 #### attributes
-<p>The attributes property is an array of Attributes.</p>
+The attributes property is an array of Attributes.    
+
 &nbsp;<b><i>should be an array:</i></b>
 ```javascript
 var goodModel = new SurrogateModel(), badModel = new SurrogateModel();
@@ -3268,7 +3394,8 @@ return m.getObjectStateErrors();
 <blockquote>returns <strong>first attribute must be ID</strong> as expected
 </blockquote>
 #### onEvent
-<p>Use onEvent(events,callback)</p>
+Use onEvent(events,callback)    
+
 &nbsp;<b><i>first parameter is a string or array of event subscriptions:</i></b>
 ```javascript
 new SurrogateModel().onEvent();
@@ -3333,7 +3460,8 @@ return question.attributes[1].value;
 <blockquote>returns <strong>42</strong> as expected
 </blockquote>
 #### validate
-<p>check valid object state and value for attribute - invoke callback for results</p>
+check valid object state and value for attribute - invoke callback for results    
+
 &nbsp;<b><i>callback is required:</i></b>
 ```javascript
 new Model().validate();
@@ -3341,7 +3469,8 @@ new Model().validate();
 <blockquote><strong>Error: callback is required</strong> thrown as expected
 </blockquote>
 #### setError
-<p>Set a error condition and descriptive message</p>
+Set a error condition and descriptive message    
+
 &nbsp;<b><i>first argument condition required:</i></b>
 ```javascript
 new Model().setError();
@@ -3355,7 +3484,8 @@ new Model().setError('login');
 <blockquote><strong>Error: description required</strong> thrown as expected
 </blockquote>
 #### clearError
-<p>Clear a error condition</p>
+Clear a error condition    
+
 &nbsp;<b><i>first argument condition required:</i></b>
 ```javascript
 new Model().clearError();
@@ -3433,7 +3563,8 @@ this.shouldBeTrue(user.get('email') === null);
 ```
 ## [&#9664;](#-user)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-memory) &nbsp;Workspace
 #### Workspace Model
-<p>A workspace is a collection of active deltas for a user.  The GUI could represent that as opentabs for instance.  Each tab a model view.  The deltas represent the change in model state</p>
+A workspace is a collection of active deltas for a user.  The GUI could represent that as opentabs for instance.  Each tab a model view.  The deltas represent the change in model state    
+
 #### CONSTRUCTOR
 &nbsp;<b><i>objects created should be an instance of Workspace:</i></b>
 ```javascript
@@ -3443,9 +3574,11 @@ return new Workspace() instanceof Workspace;
 </blockquote>
 #### Model tests are applied
 #### Model Class
-<p>Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.</p>
+Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.    
+
 #### CONSTRUCTOR
-<p>Creation of all Models must adhere to following examples:</p>
+Creation of all Models must adhere to following examples:    
+
 &nbsp;<b><i>objects created should be an instance of Model:</i></b>
 ```javascript
 return new SurrogateModel() instanceof Model;
@@ -3474,7 +3607,8 @@ return play.get('game');
 </blockquote>
 #### PROPERTIES
 #### tags
-<p>Tags are an array of strings that can be used in searching.</p>
+Tags are an array of strings that can be used in searching.    
+
 &nbsp;<b><i>should be an array or undefined:</i></b>
 ```javascript
 var m = new SurrogateModel(); // default is undefined
@@ -3485,7 +3619,8 @@ m.tags = 'your it';
 this.shouldBeTrue(m.getObjectStateErrors().length == 1);
 ```
 #### attributes
-<p>The attributes property is an array of Attributes.</p>
+The attributes property is an array of Attributes.    
+
 &nbsp;<b><i>should be an array:</i></b>
 ```javascript
 var goodModel = new SurrogateModel(), badModel = new SurrogateModel();
@@ -3552,7 +3687,8 @@ return m.getObjectStateErrors();
 <blockquote>returns <strong>first attribute must be ID</strong> as expected
 </blockquote>
 #### onEvent
-<p>Use onEvent(events,callback)</p>
+Use onEvent(events,callback)    
+
 &nbsp;<b><i>first parameter is a string or array of event subscriptions:</i></b>
 ```javascript
 new SurrogateModel().onEvent();
@@ -3617,7 +3753,8 @@ return question.attributes[1].value;
 <blockquote>returns <strong>42</strong> as expected
 </blockquote>
 #### validate
-<p>check valid object state and value for attribute - invoke callback for results</p>
+check valid object state and value for attribute - invoke callback for results    
+
 &nbsp;<b><i>callback is required:</i></b>
 ```javascript
 new Model().validate();
@@ -3625,7 +3762,8 @@ new Model().validate();
 <blockquote><strong>Error: callback is required</strong> thrown as expected
 </blockquote>
 #### setError
-<p>Set a error condition and descriptive message</p>
+Set a error condition and descriptive message    
+
 &nbsp;<b><i>first argument condition required:</i></b>
 ```javascript
 new Model().setError();
@@ -3639,7 +3777,8 @@ new Model().setError('login');
 <blockquote><strong>Error: description required</strong> thrown as expected
 </blockquote>
 #### clearError
-<p>Clear a error condition</p>
+Clear a error condition    
+
 &nbsp;<b><i>first argument condition required:</i></b>
 ```javascript
 new Model().clearError();
@@ -3713,12 +3852,15 @@ this.shouldBeTrue(user.get('user').modelType == 'User');
 this.shouldBeTrue(typeof user.get('deltas') == 'object');
 ```
 #### METHODS
-<p>loadUserWorkspace(user, callBack)</p>
-<p>sync</p>
+loadUserWorkspace(user, callBack)    
+
+sync    
+
 #### INTEGRATION
 ## [&#9664;](#-workspace)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-summary) &nbsp;Memory
 #### MemoryStore
-<p>The MemoryStore is a simple volatile store. It is the first test standard to define the spec for all Stores to follow.</p>
+The MemoryStore is a simple volatile store. It is the first test standard to define the spec for all Stores to follow.    
+
 #### CONSTRUCTOR
 #### Store Constructor tests are applied
 &nbsp;<b><i>objects created should be an instance of Store:</i></b>
@@ -3755,7 +3897,8 @@ return new SurrogateStore({name: 'punchedCards'}).name;
 <blockquote>returns <strong>punchedCards</strong> as expected
 </blockquote>
 #### storeType
-<p>storeType defaults to Store Class Name but can be set to suite the app architecture.</p>
+storeType defaults to Store Class Name but can be set to suite the app architecture.    
+
 &nbsp;<b><i>storeType can be set in constructor:</i></b>
 ```javascript
 return new SurrogateStore({storeType: 'legacyStorage'}).storeType;
@@ -3887,7 +4030,8 @@ new SurrogateStore().deleteModel(m);
 <blockquote><strong>Error: callBack required</strong> thrown as expected
 </blockquote>
 #### getList(model, filter, order)
-<p>This method will clear and populate the list with collection from store.  The **filter** property can be used to query the store.  The **order** property can specify the sort order of the list.  _See integration test for more info._</p>
+This method will clear and populate the list with collection from store.  The **filter** property can be used to query the store.  The **order** property can specify the sort order of the list.  _See integration test for more info._    
+
 &nbsp;<b><i>returns a List populated from store:</i></b>
 ```javascript
 this.shouldThrowError(Error('argument must be a List'), function () {
@@ -3902,4 +4046,4 @@ this.shouldThrowError(Error('callBack required'), function () {
 // See integration tests for examples of usage
 ```
 ## [&#9664;](#-memory)&nbsp;[&#8984;](#table-of-contents) &nbsp;Summary
-<p>This documentation generated with https://github.com/tgicloud/tgi-spec.<br>TODO put testin stats here.</p>
+This documentation generated with https://github.com/tgicloud/tgi-spec.<br>TODO put testin stats here.    
