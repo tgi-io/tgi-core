@@ -6,7 +6,7 @@ Core objects, models, stores and interfaces for the TGI framework.
 - [CORE](#-core) exposed as public or exported (node)
 - [Attribute](#-attribute) defines data types - needed by Model
 - [Command](#-command) encapsulates task execution
-- [Delta](#-delta) <insert description>
+- [Delta](#-delta) represent changes to models
 - [Interface](#-interface) <insert description>
 - [List](#-list) <insert description>
 - [Message](#-message) <insert description>
@@ -1132,7 +1132,6 @@ cmd.execute();
 ```
 <blockquote><strong>log: </strong>Procedure Command: procedureCommand<br></blockquote>
 ## [&#9664;](#-command)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-interface) &nbsp;Delta
-#### Delta Class
 Deltas represent changes to models.  They can be applied to a store then update the model.  They can be stored in logs as a change audit for the model.    
 
 #### CONSTRUCTOR
@@ -1162,7 +1161,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Mon Oct 20 2014 11:50:08 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Mon Oct 20 2014 16:10:52 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1171,7 +1170,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Mon Oct 20 2014 11:50:08 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Mon Oct 20 2014 16:10:52 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2691,7 +2690,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Mon Oct 20 2014 11:50:08 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Mon Oct 20 2014 16:10:52 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
