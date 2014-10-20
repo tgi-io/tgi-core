@@ -793,10 +793,10 @@ return new Command({name: 'Tequila'}).description + ' : ' +
 #### type
 &nbsp;<b><i>type of command must be valid:</i></b>
 ```javascript
-this.log('T.getCommandTypes()');
-new Command({name: 'about', type: 'magic' });
+this.log(Command.getTypes());
+new Command({name: 'about', type: 'magic'});
 ```
-<blockquote><strong>log: </strong>T.getCommandTypes()<br><strong>Error: Invalid command type: magic</strong> thrown as expected
+<blockquote><strong>log: </strong>ID,String,Date,Boolean,Number,Model,Group,Table,Object<br><strong>Error: Invalid command type: magic</strong> thrown as expected
 </blockquote>
 #### contents
 Contents is based on the type of command.  See TYPE section for more information for how it applies to each type    
@@ -891,11 +891,13 @@ this.shouldThrowError(Error('contents must be array of menu items'), function ()
   new Command({name: 'options', type: 'Menu', contents: [42]});
 });
 // This is a working example:
-new Command({name: 'options', type: 'Menu', contents: [
-  'Stooges',                      // strings act as menu titles or non selectable choices
-  '-',                            // dash is menu separator
-  new Command({name: 'Tequila'})  // use commands for actual menu items
-]});
+new Command({
+  name: 'options', type: 'Menu', contents: [
+    'Stooges',                      // strings act as menu titles or non selectable choices
+    '-',                            // dash is menu separator
+    new Command({name: 'Tequila'})  // use commands for actual menu items
+  ]
+});
 ```
 #### Presentation
 &nbsp;<b><i>for Presentation type contents is a Presentation object:</i></b>
@@ -983,7 +985,7 @@ new Command().onEvent(['onDrunk'], function () {
 </blockquote>
 &nbsp;<b><i>here is a working version:</i></b>
 ```javascript
-this.log('T.getCommandEvents()');
+this.log(Command.getEvents());
 //  BeforeExecute - callback called before first task executed but after tasks initialized
 //  AfterExecute - callback called after initial task(s) launched (see onCompletion)
 //  Error - error occurred (return {errorClear:true})
@@ -992,7 +994,130 @@ this.log('T.getCommandEvents()');
 new Command().onEvent(['Completed'], function () {
 });
 ```
-<blockquote><strong>log: </strong>T.getCommandEvents()<br></blockquote>
+<blockquote><strong>log: </strong>BeforeExecute,AfterExecute,Error,Aborted,Completed<br></blockquote>
+#### Command.getTypes
+This helper function returns an array of valid Command types.  This is just a function - not a prototype method.    
+
+&nbsp;<b><i>show the types:</i></b>
+```javascript
+this.log(Command.getTypes());
+```
+<blockquote><strong>log: </strong>ID,String,Date,Boolean,Number,Model,Group,Table,Object<br></blockquote>
+#### Command.getEvents
+This helper function returns an array of valid Command events.  This is just a function - not a prototype method.    
+
+&nbsp;<b><i>show the events:</i></b>
+```javascript
+this.log(Command.getEvents());
+```
+<blockquote><strong>log: </strong>BeforeExecute,AfterExecute,Error,Aborted,Completed<br></blockquote>
+#### INTEGRATION
+test each command type    
+
+&nbsp;<b><i>Stub:</i></b>
+```javascript
+var cmd = new Command({
+  name: 'stubCommand',
+  description: 'stub command test',
+  type: 'Stub'
+});
+this.log(cmd);
+cmd.execute();
+```
+<blockquote><strong>log: </strong>Stub Command: stubCommand<br><strong>Error: command type Stub not implemented</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>Menu:</i></b>
+```javascript
+var cmd = new Command({
+  name: 'menuCommand',
+  description: 'menu command test',
+  type: 'Menu',
+  contents: ['Hello World']
+});
+this.log(cmd);
+cmd.execute();
+```
+<blockquote><strong>log: </strong>Menu Command: menuCommand<br><strong>Error: command type Menu not implemented</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>Presentation:</i></b>
+```javascript
+var cmd = new Command({
+  name: 'presentationCommand',
+  description: 'presentation command test',
+  type: 'Presentation',
+  contents: new Presentation()
+});
+this.shouldThrowError(Error('contents must be a Presentation'), function () {
+  cmd.contents = 123;
+  cmd.execute();
+});
+this.shouldThrowError(Error('error executing Presentation: contents elements must be Command, Attribute or string'), function () {
+  cmd.contents = new Presentation();
+  cmd.contents.set('contents', [new Command(), new Attribute({name: 'meh'}), true]);
+  cmd.execute();
+});
+```
+&nbsp;<b><i>Function test straight up:</i></b>
+```javascript
+var cmd = new Command({
+  type: 'Function',
+  contents: function () {
+    this.bucket += ' funk';
+    this.complete();
+  }
+});
+cmd.bucket = 'Hola!';
+// Monitor all events
+cmd.onEvent(['BeforeExecute', 'AfterExecute', 'Error', 'Aborted', 'Completed'], function (event) {
+  this.bucket += ' ' + event;
+  if (event == 'Completed')
+    callback(this.bucket);
+});
+cmd.execute();
+cmd.bucket += ' Adious!';
+```
+<blockquote>returns <strong>Hola! BeforeExecute AfterExecute Adious! funk Completed</strong> as expected
+</blockquote>
+&nbsp;<b><i>Function test with error:</i></b>
+```javascript
+var cmd = new Command({
+  type: 'Function',
+  contents: function () {
+    this.bucket += ' funk';
+    throw new Error('function go boom!');
+  }
+});
+cmd.bucket = 'Hola!';
+// Monitor all events
+cmd.onEvent('*', function (event) { // * for all events
+  this.bucket += ' ' + event;
+  if (event == 'Completed') callback(this.bucket);
+});
+cmd.execute();
+cmd.bucket += ' Adious!';
+```
+<blockquote>returns <strong>Hola! BeforeExecute AfterExecute Adious! funk Error Completed</strong> as expected
+</blockquote>
+&nbsp;<b><i>Function test with abort:</i></b>
+```javascript
+var cmd = new Command({
+  type: 'Function',
+  contents: function () {
+    this.bucket += ' funk';
+    this.abort();
+  }
+});
+cmd.bucket = 'Hola!';
+// Monitor all events
+cmd.onEvent(['BeforeExecute', 'AfterExecute', 'Error', 'Aborted', 'Completed'], function (event) {
+  this.bucket += ' ' + event;
+  if (event == 'Completed') callback(this.bucket);
+});
+cmd.execute();
+cmd.bucket += ' Adious!';
+```
+<blockquote>returns <strong>Hola! BeforeExecute AfterExecute Adious! funk Aborted Completed</strong> as expected
+</blockquote>
 ## [&#9664;](#-command)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-interface) &nbsp;Delta
 #### Delta Class
 Deltas represent changes to models.  They can be applied to a store then update the model.  They can be stored in logs as a change audit for the model.    
@@ -1024,7 +1149,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Mon Oct 20 2014 10:41:46 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Mon Oct 20 2014 11:35:58 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1033,7 +1158,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Mon Oct 20 2014 10:41:46 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Mon Oct 20 2014 11:35:58 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2553,7 +2678,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Mon Oct 20 2014 10:41:46 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Mon Oct 20 2014 11:35:58 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript

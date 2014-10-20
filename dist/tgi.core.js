@@ -381,8 +381,10 @@ Attribute.getEvents = function () {
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-command.source.js
  */
-// Command Constructor
-function Command(/* does this matter */ args) {
+/**
+ * Command Constructor
+ */
+function Command(args) {
   if (false === (this instanceof Command)) throw new Error('new operator required');
   if (typeof args == 'function') { // shorthand for function command
     var theFunc = args;
@@ -423,6 +425,8 @@ function Command(/* does this matter */ args) {
     case 'Procedure':
       if (!(this.contents instanceof Procedure)) throw new Error('contents must be a Procedure');
       break;
+    default:
+      throw new TypeError();
   }
   if ('undefined' != typeof this.scope)
     if (!((this.scope instanceof Model) || (this.scope instanceof List)))
@@ -445,7 +449,7 @@ function Command(/* does this matter */ args) {
   // Validations done
   this._eventListeners = [];
 }
-/*
+/**
  * Methods
  */
 Command.prototype.toString = function () {
@@ -608,7 +612,15 @@ Command.prototype.complete = function () {
   this.status = 1;
   this._emitEvent('Completed');
 };
-
+/**
+ * Simple functions
+ */
+Command.getTypes = function () {
+  return ['ID', 'String', 'Date', 'Boolean', 'Number', 'Model', 'Group', 'Table', 'Object'].slice(0); // copy array
+};
+Command.getEvents = function () {
+  return ['BeforeExecute', 'AfterExecute', 'Error', 'Aborted', 'Completed'].slice(0); // copy array
+};
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-delta.source.js
  */
