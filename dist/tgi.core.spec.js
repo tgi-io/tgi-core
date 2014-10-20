@@ -934,6 +934,7 @@ spec.test('tgi-core/lib/tgi-core-command.spec.js', 'Command', 'encapsulates task
       });
       this.log(cmd);
       cmd.execute();
+      // Better example: https://github.com/tgicloud/tgi-core/tree/master/spec#-procedure
     });
 
   });
