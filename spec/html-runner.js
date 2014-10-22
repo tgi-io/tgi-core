@@ -5,7 +5,7 @@ var spec = new Spec();
 (function () {
   UTILITY().injectMethods(this);
   CORE().injectMethods(this);
-  testSpec(spec, UTILITY);
+  testSpec(spec, CORE);
   spec.runTests(function (msg) {
     /**
      * msg callback events msg.error, msg.log, msg.done

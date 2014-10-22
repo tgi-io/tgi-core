@@ -1161,7 +1161,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Wed Oct 22 2014 10:47:42 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Wed Oct 22 2014 11:19:23 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1170,7 +1170,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Wed Oct 22 2014 10:47:42 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Wed Oct 22 2014 11:19:23 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -1345,7 +1345,6 @@ testInterface.mockRequest(cmds);
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
 ## [&#9664;](#-interface)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-message) &nbsp;List
-#### List Class
 Lists are an ordered collection of items.  Each item is an array of values that correspond to the attributes for model used in constructor.    
 
 #### CONSTRUCTOR
@@ -1447,6 +1446,274 @@ return new List(new Model()).moveLast(); // Returns true when move succeeds
 new List(new Model()).sort(); // see integration tests
 ```
 <blockquote><strong>Error: sort order required</strong> thrown as expected
+</blockquote>
+#### List Integration
+#### List methods are tested here
+&nbsp;<b><i>list movement and sorting:</i></b>
+```javascript
+var test = this;
+// Create actor class
+var Actor = function (args) {
+  Model.call(this, args);
+  this.modelType = "Actor";
+  this.attributes.push(new Attribute('name'));
+  this.attributes.push(new Attribute('born', 'Number'));
+  this.attributes.push(new Attribute('isMale', 'Boolean'));
+};
+Actor.prototype = inheritPrototype(Model.prototype);
+// Create list of actors
+var actor = new Actor();
+var actors = new List(actor);
+var actorsInfo = [
+  // Actor              Born  Male
+  ['Jack Nicholson', 1937, true],
+  ['Meryl Streep', 1949, false],
+  ['Marlon Brando', 1924, true],
+  ['Cate Blanchett', 1969, false],
+  ['Robert De Niro', 1943, true],
+  ['Judi Dench', 1934, false],
+  ['Al Pacino', 1940, true],
+  ['Nicole Kidman', 1967, false],
+  ['Daniel Day-Lewis', 1957, true],
+  ['Shirley MacLaine', 1934, false],
+  ['Dustin Hoffman', 1937, true],
+  ['Jodie Foster', 1962, false],
+  ['Tom Hanks', 1956, true],
+  ['Kate Winslet', 1975, false],
+  ['Anthony Hopkins', 1937, true],
+  ['Angelina Jolie', 1975, false],
+  ['Paul Newman', 1925, true],
+  ['Sandra Bullock', 1964, false],
+  ['Denzel Washington', 1954, true],
+  ['Renée Zellweger', 1969, false]
+];
+// Build List
+for (var i in actorsInfo) {
+  if (actorsInfo.hasOwnProperty(i)) {
+    if (actorsInfo[i][2]) { // for some populate model then add to list
+      actor.set('name', actorsInfo[i][0]);
+      actor.set('born', actorsInfo[i][1]);
+      actor.set('isMale', actorsInfo[i][2]);
+      actors.addItem(actor);
+    } else {
+      actors.addItem(); // add blank then set attribs
+      actors.set('name', actorsInfo[i][0]);
+      actors.set('born', actorsInfo[i][1]);
+      actors.set('isMale', actorsInfo[i][2]);
+    }
+  }
+}
+// Test movement thru list
+actors.moveFirst();
+test.shouldBeTrue(actors.get('name') == 'Jack Nicholson');
+actors.moveNext();
+test.log(actors.get('name'));
+test.shouldBeTrue(actors.get('name') == 'Meryl Streep');
+actors.moveLast();
+test.log(actors.get('name'));
+test.shouldBeTrue(actors.get('name') == 'Renée Zellweger');
+// Sort the list
+actors.sort({born: -1});  // Youngest actor
+actors.moveFirst();
+test.shouldBeTrue(actors.get('name') == 'Kate Winslet' || actor.get('name') == 'Angelina Jolie');
+actors.sort({born: 1});  // Oldest actor
+actors.moveFirst();
+test.shouldBeTrue(actors.get('name') == 'Marlon Brando');
+```
+<blockquote><strong>log: </strong>Renée Zellweger<br><strong>log: </strong>Meryl Streep<br></blockquote>
+&nbsp;<b><i>Test variations on getList method.:</i></b>
+```javascript
+var test = this;
+
+var storeBeingTested = new MemoryStore(); // spec.integrationStore.name + ' ' + spec.integrationStore.storeType;
+test.log(storeBeingTested);
+// Create list of actors
+test.actorsInfo = [
+  // Actor Born Male Oscards
+  ['Jack Nicholson', new Date("01/01/1937"), true, 3],
+  ['Meryl Streep', Date("01/01/1949"), false, 3],
+  ['Marlon Brando', Date("01/01/1924"), true, 2],
+  ['Cate Blanchett', Date("01/01/1969"), false, 1],
+  ['Robert De Niro', Date("01/01/1943"), true, 2],
+  ['Judi Dench', Date("01/01/1934"), false, 1],
+  ['Al Pacino', Date("01/01/1940"), true, 1],
+  ['Nicole Kidman', Date("01/01/1967"), false, null],
+  ['Daniel Day-Lewis', Date("01/01/1957"), true, null],
+  ['Shirley MacLaine', Date("01/01/1934"), false, null],
+  ['Dustin Hoffman', Date("01/01/1937"), true, null],
+  ['Jodie Foster', Date("01/01/1962"), false, null],
+  ['Tom Hanks', Date("01/01/1956"), true, null],
+  ['Kate Winslet', Date("01/01/1975"), false, null],
+  ['Anthony Hopkins', Date("01/01/1937"), true, null],
+  ['Angelina Jolie', Date("01/01/1975"), false, null],
+  ['Paul Newman', Date("01/01/1925"), true, null],
+  ['Sandra Bullock', Date("01/01/1964"), false, null],
+  ['Denzel Washington', Date("01/01/1954"), true, null],
+  ['Renée Zellweger', Date("01/01/1969"), false, null]
+];
+// Create actor class
+test.Actor = function (args) {
+  Model.call(this, args);
+  this.modelType = "Actor";
+  this.attributes.push(new Attribute('name'));
+  this.attributes.push(new Attribute('born', 'Date'));
+  this.attributes.push(new Attribute('isMale', 'Boolean'));
+  this.attributes.push(new Attribute('oscarWs', 'Number'));
+};
+test.Actor.prototype = inheritPrototype(Model.prototype);
+test.actor = new test.Actor(); // instance to use for stuff
+// Make sure store starts in known state.  Stores such as mongoStore will retain test values.
+// So... use getList to get all Actors then delete them from the Store
+test.list = new List(new test.Actor());
+test.oldActorsKilled = 0;
+test.oldActorsFound = 0;
+try {
+  test.killhim = new test.Actor();
+  storeBeingTested.getList(test.list, [], function (list, error) {
+    if (typeof error != 'undefined') {
+      callback(error);
+      return;
+    }
+    if (list._items.length < 1)
+      storeActors();
+    else {
+      test.oldActorsFound = list._items.length;
+      for (var i = 0; i < list._items.length; i++) {
+        test.killhim.set('id', list._items[i][0]);
+        // jshint ignore:start
+        storeBeingTested.deleteModel(test.killhim, function (model, error) {
+          if (++test.oldActorsKilled >= test.oldActorsFound) {
+            storeActors();
+          }
+        })
+        // jshint ignore:end
+      }
+    }
+  });
+}
+catch (err) {
+  callback(err);
+  return;
+}
+// Callback after model cleaned
+// now, build List and add to store
+function storeActors() {
+  test.actorsStored = 0;
+  for (var i=0; i<test.actorsInfo.length; i++) {
+    test.actor.set('ID', null);
+    test.actor.set('name', test.actorsInfo[i][0]);
+    test.actor.set('born', test.actorsInfo[i][1]);
+    test.actor.set('isMale', test.actorsInfo[i][2]);
+    storeBeingTested.putModel(test.actor, actorStored);
+  }
+}
+// Callback after actor stored
+function actorStored(model, error) {
+  if (typeof error != 'undefined') {
+    callback(error);
+    return;
+  }
+  if (++test.actorsStored >= test.actorsInfo.length) {
+    getAllActors();
+  }
+}
+// test getting all 20
+function getAllActors() {
+  try {
+    storeBeingTested.getList(test.list, {}, function (list, error) {
+      if (typeof error != 'undefined') {
+        callback(error);
+        return;
+      }
+      test.shouldBeTrue(list._items.length == 20,'20');
+      getTomHanks();
+    });
+  }
+  catch (err) {
+    callback(err);
+    return;
+  }
+}
+// only one Tom Hanks
+function getTomHanks() {
+  try {
+    storeBeingTested.getList(test.list, {name: "Tom Hanks"}, function (list, error) {
+      if (typeof error != 'undefined') {
+        callback(error);
+        return;
+      }
+      test.shouldBeTrue(list._items.length == 1,('1 not ' + list._items.length));
+      getD();
+    });
+  }
+  catch (err) {
+    callback(err);
+    return;
+  }
+}
+// 3 names begin with D
+// test RegExp
+function getD() {
+  try {
+    storeBeingTested.getList(test.list, {name: /^D/}, function (list, error) {
+      if (typeof error != 'undefined') {
+        callback(error);
+        return;
+      }
+      test.shouldBeTrue(list._items.length == 3,('3 not ' + list._items.length));
+      getRZ();
+    });
+  }
+  catch (err) {
+    callback(err);
+    return;
+  }
+}
+// Renée Zellweger only female starting name with 'R'
+// test filter 2 properties (logical AND)
+function getRZ() {
+  try {
+    storeBeingTested.getList(test.list, {name: /^R/, isMale: false}, function (list, error) {
+      if (typeof error != 'undefined') {
+        callback(error);
+        return;
+      }
+      test.shouldBeTrue(list._items.length == 1,('1 not ' + list._items.length));
+      //list._items.length && test.shouldBeTrue(list.get('name') == 'Renée Zellweger','rz');
+      getAlphabetical();
+    });
+  }
+  catch (err) {
+    callback(err);
+    return;
+  }
+}
+// Retrieve list alphabetically by name
+// test order parameter
+function getAlphabetical() {
+  try {
+    storeBeingTested.getList(test.list, {}, { name: 1 }, function (list, error) {
+      if (typeof error != 'undefined') {
+        callback(error);
+        return;
+      }
+      // Verify each move returns true when move succeeds
+      test.shouldBeTrue(list.moveFirst(),'moveFirst');
+      test.shouldBeTrue(!list.movePrevious(),'movePrevious');
+      test.shouldBeTrue(list.get('name') == 'Al Pacino','AP');
+      test.shouldBeTrue(list.moveLast(),'moveLast');
+      test.shouldBeTrue(!list.moveNext(),'moveNext');
+      test.shouldBeTrue(list.get('name') == 'Tom Hanks','TH');
+      callback(true);
+    });
+  }
+  catch (err) {
+    callback(err);
+    return;
+  }
+}
+```
+<blockquote><strong>log: </strong>a MemoryStore<br>returns <strong>true</strong> as expected
 </blockquote>
 ## [&#9664;](#-list)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-model) &nbsp;Message
 #### Message Class
@@ -2713,7 +2980,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Wed Oct 22 2014 10:47:42 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Wed Oct 22 2014 11:19:23 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
