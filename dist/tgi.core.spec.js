@@ -1520,8 +1520,7 @@ spec.test('tgi-core/lib/tgi-core-message.spec.js', 'Message', 'between host and 
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-model.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-model.spec.js', 'Model', '<insert description>', function (callback) {
-  callback({log: 'tgi-core/lib/tgi-core-model.spec.js'});
+spec.test('tgi-core/lib/tgi-core-model.spec.js', 'Model', 'represents application abstract entities with a ordered list of attributes', function (callback) {
   spec.testModel(Model);
 });
 

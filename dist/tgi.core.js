@@ -1007,19 +1007,19 @@ Model.prototype.clearError = function (condition) {
   delete this._errorConditions[condition];
 };
 /**---------------------------------------------------------------------------------------------------------------------
- * tgi-core/xxx/tgi-core-message.source
+ * tgi-core/lib/core/tgi-core-message.source.js
  */
-/*
+/**
  * Constructor
  */
 function Message(type, contents) {
   if (false === (this instanceof Message)) throw new Error('new operator required');
   if ('undefined' == typeof type) throw new Error('message type required');
-  if (!contains(['Null', 'Connected', 'Error', 'Sent', 'Ping', 'PutModel', 'PutModelAck', 'GetModel', 'GetModelAck', 'DeleteModel', 'DeleteModelAck', 'GetList', 'GetListAck'], type)) throw new Error('Invalid message type: ' + type);
+  if (!contains(Message.getTypes(), type)) throw new Error('Invalid message type: ' + type);
   this.type = type;
   this.contents = contents;
 }
-/*
+/**
  * Methods
  */
 Message.prototype.toString = function () {
@@ -1029,6 +1029,26 @@ Message.prototype.toString = function () {
     default:
       return this.type + ' Message: ' + this.contents;
   }
+};
+/**
+ * Simple functions
+ */
+Message.getTypes = function () {
+  return [
+    'Null',
+    'Connected',
+    'Error',
+    'Sent',
+    'Ping',
+    'PutModel',
+    'PutModelAck',
+    'GetModel',
+    'GetModelAck',
+    'DeleteModel',
+    'DeleteModelAck',
+    'GetList',
+    'GetListAck'
+  ].slice(0); // copy array
 };
 
 /**---------------------------------------------------------------------------------------------------------------------
