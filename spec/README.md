@@ -9,7 +9,7 @@ Core objects, models, stores and interfaces for the TGI framework.
 - [Delta](#-delta) represents changes to models
 - [Interface](#-interface) with humans and such
 - [List](#-list) of items
-- [Message](#-message) <insert description>
+- [Message](#-message) between host and client
 - [Model](#-model) <insert description>
 - [Procedure](#-procedure) <insert description>
 - [Request](#-request) <insert description>
@@ -1161,7 +1161,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Wed Oct 22 2014 11:19:23 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Wed Oct 22 2014 11:43:36 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1170,7 +1170,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Wed Oct 22 2014 11:19:23 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Wed Oct 22 2014 11:43:36 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -1740,10 +1740,9 @@ new Message();
 </blockquote>
 &nbsp;<b><i>first parameter must be valid message type:</i></b>
 ```javascript
-this.log('T.getMessageTypes()');
 new Message('http://www.youtube.com/watch?v=2o7V1f7lbk4');
 ```
-<blockquote><strong>log: </strong>T.getMessageTypes()<br><strong>Error: Invalid message type: http://www.youtube.com/watch?v=2o7V1f7lbk4</strong> thrown as expected
+<blockquote><strong>Error: Invalid message type: http://www.youtube.com/watch?v=2o7V1f7lbk4</strong> thrown as expected
 </blockquote>
 #### METHODS
 #### toString()
@@ -1753,6 +1752,14 @@ return new Message('Null').toString();
 ```
 <blockquote>returns <strong>Null Message</strong> as expected
 </blockquote>
+#### Attribute.getTypes
+This helper function returns an array of valid Message types.  This is just a function - not a prototype method.    
+
+&nbsp;<b><i>show the types:</i></b>
+```javascript
+this.log(Message.getTypes());
+```
+<blockquote><strong>log: </strong>Null,Connected,Error,Sent,Ping,PutModel,PutModelAck,GetModel,GetModelAck,DeleteModel,DeleteModelAck,GetList,GetListAck<br></blockquote>
 ## [&#9664;](#-message)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-procedure) &nbsp;Model
 #### Model Class
 Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.    
@@ -2980,7 +2987,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Wed Oct 22 2014 11:19:23 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Wed Oct 22 2014 11:43:36 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript

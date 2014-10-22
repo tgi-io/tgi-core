@@ -1484,7 +1484,7 @@ spec.test('tgi-core/lib/tgi-core-list.spec.js', 'List', 'of items', function (ca
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-message.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-message.spec.js', 'Message', '<insert description>', function (callback) {
+spec.test('tgi-core/lib/tgi-core-message.spec.js', 'Message', 'between host and client', function (callback) {
   spec.heading('Message Class', function () {
     spec.paragraph('Messages are used by Transport to send to host or UI.');
     spec.heading('CONSTRUCTOR', function () {
@@ -1498,7 +1498,6 @@ spec.test('tgi-core/lib/tgi-core-message.spec.js', 'Message', '<insert descripti
         new Message();
       });
       spec.example('first parameter must be valid message type', Error('Invalid message type: http://www.youtube.com/watch?v=2o7V1f7lbk4'), function () {
-        this.log('T.getMessageTypes()');
         new Message('http://www.youtube.com/watch?v=2o7V1f7lbk4');
       });
     });
@@ -1506,6 +1505,12 @@ spec.test('tgi-core/lib/tgi-core-message.spec.js', 'Message', '<insert descripti
       spec.heading('toString()', function () {
         spec.example('should return a description of the message', 'Null Message', function () {
           return new Message('Null').toString();
+        });
+      });
+      spec.heading('Attribute.getTypes', function () {
+        spec.paragraph('This helper function returns an array of valid Message types.  This is just a function - not a prototype method.');
+        spec.example('show the types', undefined, function () {
+          this.log(Message.getTypes());
         });
       });
     });
