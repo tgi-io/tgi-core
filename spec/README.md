@@ -8,7 +8,7 @@ Core objects, models, stores and interfaces for the TGI framework.
 - [Command](#-command) encapsulates task execution
 - [Delta](#-delta) represents changes to models
 - [Interface](#-interface) with humans and such
-- [List](#-list) <insert description>
+- [List](#-list) of items
 - [Message](#-message) <insert description>
 - [Model](#-model) <insert description>
 - [Procedure](#-procedure) <insert description>
@@ -1161,7 +1161,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Mon Oct 20 2014 19:52:00 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Wed Oct 22 2014 10:47:42 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1170,7 +1170,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Mon Oct 20 2014 19:52:00 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Wed Oct 22 2014 10:47:42 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -1183,6 +1183,8 @@ return typeof new Delta(new Attribute.ModelID(new Model())).attributeValues;
 <blockquote>returns <strong>object</strong> as expected
 </blockquote>
 ## [&#9664;](#-delta)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-list) &nbsp;Interface
+The Interface core constructor is a prototype for user or system interaction with the application. The SurrogateInterface is a reference to Interface being tested in the suite.    
+
 #### CONSTRUCTOR
 &nbsp;<b><i>objects created should be an instance of SurrogateInterface:</i></b>
 ```javascript
@@ -1320,6 +1322,28 @@ this.shouldThrowError('Error: invalid request parameter', function () {
   ui.mockRequest([new Request(new Command()), 'wtf']);
 });
 ```
+#### Interface Integration
+&nbsp;<b><i>Test command execution mocking:</i></b>
+```javascript
+// Send 4 mocks and make sure we get 4 callback calls
+var self = this;
+self.callbackCount = 0;
+var testInterface = new Interface();
+testInterface.start(new Application(), new Presentation(), function (request) {
+  if (request.type == 'mock count')
+    self.callbackCount++;
+  if (self.callbackCount > 3)
+    callback(true);
+});
+var cmds = [];
+var i;
+for (i = 0; i < 4; i++) {
+  cmds.push(new Request('mock count'));
+}
+testInterface.mockRequest(cmds);
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
 ## [&#9664;](#-interface)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-message) &nbsp;List
 #### List Class
 Lists are an ordered collection of items.  Each item is an array of values that correspond to the attributes for model used in constructor.    
@@ -2689,7 +2713,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Mon Oct 20 2014 19:52:00 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Wed Oct 22 2014 10:47:42 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
