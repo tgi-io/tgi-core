@@ -20,8 +20,8 @@ spec.test('tgi-core/lib/tgi-core.test.js', 'CORE', 'exposed as public or exporte
   spec.example('CORE function exposes library', 'function', function () {
     return typeof CORE;
   });
-  spec.paragraph('Application code written in the TGI Framework does not need the CORE function since it is' +
-  'visible by closure.');
+  spec.paragraph('Application code written in the TGI Framework does not need the CORE function' +
+  ' since it is visible by closure.');
   spec.example('core object Model is available in closure', undefined, function () {
     this.shouldBeTrue(Model == CORE().Model);
   });
@@ -34,6 +34,7 @@ spec.test('tgi-core/lib/tgi-core.test.js', 'CORE', 'exposed as public or exporte
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-attribute.spec.js
  */
+spec.testSection('Core Objects');
 spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data types - needed by Model', function (callback) {
     spec.paragraph('Attributes are the means for models to represent data of different types.  They have no' +
     ' dependencies on Models however and can be used without creating a model.');

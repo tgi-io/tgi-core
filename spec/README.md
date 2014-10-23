@@ -4,6 +4,8 @@ Core objects, models, stores and interfaces for the TGI framework.
 ###Table of Contents
 
 - [CORE](#-core) exposed as public or exported (node)
+
+#### Core Objects
 - [Attribute](#-attribute) defines data types - needed by Model
 - [Command](#-command) encapsulates task execution
 - [Delta](#-delta) represents changes to models
@@ -34,7 +36,7 @@ return typeof CORE;
 ```
 <blockquote>returns <strong>function</strong> as expected
 </blockquote>
-Application code written in the TGI Framework does not need the CORE function since it isvisible by closure.    
+Application code written in the TGI Framework does not need the CORE function since it is visible by closure.    
 
 &nbsp;<b><i>core object Model is available in closure:</i></b>
 ```javascript
@@ -47,6 +49,7 @@ return cpad(' sup ',20,'*');
 ```
 <blockquote>returns <strong>******* sup ********</strong> as expected
 </blockquote>
+
 ## [&#9664;](#-core)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-command) &nbsp;Attribute
 Attributes are the means for models to represent data of different types.  They have no dependencies on Models however and can be used without creating a model.    
 
@@ -1161,7 +1164,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Wed Oct 22 2014 12:25:34 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Wed Oct 22 2014 22:21:13 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1170,7 +1173,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Wed Oct 22 2014 12:25:34 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Wed Oct 22 2014 22:21:13 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2987,7 +2990,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Wed Oct 22 2014 12:25:34 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Wed Oct 22 2014 22:21:13 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript

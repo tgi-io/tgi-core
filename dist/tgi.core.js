@@ -1052,9 +1052,11 @@ Message.getTypes = function () {
 };
 
 /**---------------------------------------------------------------------------------------------------------------------
- * tgi-core/xxx/tgi-core-procedure.source
+ * tgi-core/lib/core/tgi-core-procedure.source.js
  */
-// Model Constructor
+/**
+ * Model Constructor
+ */
 var Procedure = function (args) {
   if (false === (this instanceof Procedure)) throw new Error('new operator required');
   args = args || {};
