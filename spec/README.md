@@ -17,12 +17,16 @@ Core objects, models, stores and interfaces for the TGI framework.
 - [Request](#-request) <insert description>
 - [Store](#-store) <insert description>
 - [Transport](#-transport) <insert description>
+
+#### Models
 - [Application](#-application) <insert description>
 - [Log](#-log) <insert description>
 - [Presentation](#-presentation) <insert description>
 - [Session](#-session) Model user session with host
 - [User](#-user) <insert description>
 - [Workspace](#-workspace) <insert description>
+
+#### Stores
 - [Memory](#-memory) <insert description>
 - [Summary](#-summary) for this spec.
 
@@ -1164,7 +1168,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Wed Oct 22 2014 22:21:13 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Wed Oct 22 2014 22:24:42 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1173,7 +1177,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Wed Oct 22 2014 22:21:13 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Wed Oct 22 2014 22:24:42 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2317,6 +2321,7 @@ new SurrogateStore().deleteModel();
 This method will clear and populate the list with collection from store.  The **filter** property can be used to query the store.  The **order** property can specify the sort order of the list.  _See integration test for more info._    
 
 ## [&#9664;](#-store)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-application) &nbsp;Transport
+
 ## [&#9664;](#-transport)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-log) &nbsp;Application
 #### Application Model
 Information about the application is modeled here.    
@@ -2990,7 +2995,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Wed Oct 22 2014 22:21:13 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Wed Oct 22 2014 22:24:42 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -4303,6 +4308,7 @@ loadUserWorkspace(user, callBack)
 sync    
 
 #### INTEGRATION
+
 ## [&#9664;](#-workspace)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-summary) &nbsp;Memory
 #### MemoryStore
 The MemoryStore is a simple volatile store. It is the first test standard to define the spec for all Stores to follow.    

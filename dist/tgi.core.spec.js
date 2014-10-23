@@ -2219,6 +2219,7 @@ spec.test('tgi-core/lib/tgi-core-transport.spec.js', 'Transport', '<insert descr
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/models/tgi-core-model-application.test.js
  */
+spec.testSection('Models');
 spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application', '<insert description>', function (callback) {
   spec.heading('Application Model', function () {
     spec.paragraph('Information about the application is modeled here.');
@@ -2583,6 +2584,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-workspace.spec.js', 'Workspace', '
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/stores/tgi-core-store-memory.test.js
  */
+spec.testSection('Stores');
 spec.test('tgi-core/lib/stores/tgi-core-store-memory.spec.js', 'Memory', '<insert description>', function (callback) {
   spec.heading('MemoryStore', function () {
     spec.paragraph('The MemoryStore is a simple volatile store. ' +
