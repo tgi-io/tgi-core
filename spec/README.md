@@ -13,7 +13,7 @@ Core objects, models, stores and interfaces for the TGI framework.
 - [List](#-list) of items
 - [Message](#-message) between host and client
 - [Model](#-model) represents application abstract entities with a ordered list of attributes
-- [Procedure](#-procedure) <insert description>
+- [Procedure](#-procedure) manages set of Commands synchronous or asynchronous
 - [Request](#-request) <insert description>
 - [Store](#-store) <insert description>
 - [Transport](#-transport) <insert description>
@@ -1167,7 +1167,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Wed Oct 22 2014 22:35:10 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Thu Oct 23 2014 18:21:47 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1176,7 +1176,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Wed Oct 22 2014 22:35:10 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Thu Oct 23 2014 18:21:47 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2151,6 +2151,106 @@ if (!new Procedure().getObjectStateErrors()) return 'falsy';
 ```
 <blockquote>returns <strong>falsy</strong> as expected
 </blockquote>
+#### INTEGRATION
+&nbsp;<b><i>synchronous sequential tasks are the default when tasks has no requires property:</i></b>
+```javascript
+var cmd = new Command({name: 'cmdProcedure', type: 'Procedure', contents: new Procedure({tasks: [
+  {
+    command: new Command({
+      type: 'Function',
+      contents: function () {
+        var self = this;
+        setTimeout(function () {
+          self._parentProcedure.bucket += '1';
+          self.complete();
+        }, 250); // delayed to test that order is maintained
+      }
+    })
+  },
+  {
+    command: new Command({
+      type: 'Function',
+      contents: function () {
+        this._parentProcedure.bucket += '2';
+        this.complete();
+      }
+    })
+  },
+  function () { // shorthand version of command function ...
+    this._parentProcedure.bucket += '3';
+    this.complete();
+  }
+]})});
+cmd.onEvent('*', function (event) {
+  if (event == 'Completed') callback(cmd.bucket);
+});
+cmd.bucket = 'abc';
+cmd.execute();
+```
+<blockquote>returns <strong>abc123</strong> as expected
+</blockquote>
+&nbsp;<b><i>this example shows multiple dependencies:</i></b>
+```javascript
+var cmd = new Command({name: 'cmdProcedure', type: 'Procedure', contents: new Procedure({tasks: [
+  {
+    command: new Command({
+      type: 'Function',
+      contents: function () {
+        var self = this;
+        setTimeout(function () {
+          self._parentProcedure.bucket += ' rock';
+          self.complete();
+        }, 300);
+      }
+    })
+  },
+  {
+    requires: null, // no wait to run this
+    label: 'sex',
+    command: new Command({
+      type: 'Function',
+      contents: function () {
+        var self = this;
+        setTimeout(function () {
+          self._parentProcedure.bucket += ' sex';
+          self.complete();
+        }, 200);
+      }
+    })
+  },
+  {
+    requires: null, // no wait to run this
+    label: 'drugs',
+    command: new Command({
+      type: 'Function',
+      contents: function () {
+        var self = this;
+        setTimeout(function () {
+          self._parentProcedure.bucket += ' drugs';
+          self.complete();
+        }, 100);
+      }
+    })
+  },
+  {
+    requires: ['sex', 'drugs', 0], // need these labels and array index 0
+    command: new Command({
+      type: 'Function',
+      contents: function () {
+        this._parentProcedure.bucket += ' & roll';
+        this.complete();
+      }
+    })
+  }
+]})});
+cmd.onEvent('*', function (event) {
+  if (event == 'Completed') callback(cmd.bucket);
+});
+cmd.bucket = 'todo:';
+cmd.execute();
+```
+<blockquote>returns <strong>todo: drugs sex rock & roll</strong> as expected
+</blockquote>
 ## [&#9664;](#-procedure)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-store) &nbsp;Request
 #### Request Class
 Requests handle the Request / Response design pattern.  They are used by the Interface class to communicate with the Application Model    
@@ -2994,7 +3094,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Wed Oct 22 2014 22:35:10 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Thu Oct 23 2014 18:21:47 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
