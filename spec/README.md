@@ -14,8 +14,8 @@ Core objects, models, stores and interfaces.
 - [Message](#-message) between host and client
 - [Model](#-model) represents application abstract entities with a ordered list of attributes
 - [Procedure](#-procedure) manages set of Commands synchronous or asynchronous
-- [Request](#-request) from Interface - Application handle response
-- [Store](#-store) <insert description>
+- [Request](#-request) from Interface - Application handles response
+- [Store](#-store) holds Model objects for updating and retrieving
 - [Transport](#-transport) <insert description>
 
 #### Models
@@ -1167,7 +1167,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Thu Oct 23 2014 18:42:05 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Thu Oct 23 2014 18:54:14 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1176,7 +1176,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Thu Oct 23 2014 18:42:05 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Thu Oct 23 2014 18:54:14 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2306,7 +2306,6 @@ return new Request('Null').toString();
 <blockquote>returns <strong>Null Request</strong> as expected
 </blockquote>
 ## [&#9664;](#-request)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-transport) &nbsp;Store
-#### Store Class
 The store class is used for object persistence.    
 
 #### CONSTRUCTOR
@@ -2348,7 +2347,7 @@ return new SurrogateStore({storeType: 'legacyStorage'}).storeType;
 #### METHODS
 &nbsp;<b><i>getServices() returns an object with interface for the Store.:</i></b>
 ```javascript
-this.log(services);
+this.log(JSON.stringify(services));
 //this.shouldBeTrue(services instanceof Object);
 //this.shouldBeTrue(typeof services['isReady'] == 'boolean'); // don't use until
 //this.shouldBeTrue(typeof services['canGetModel'] == 'boolean'); // define all allowed methods...
@@ -2356,7 +2355,7 @@ this.log(services);
 //this.shouldBeTrue(typeof services['canDeleteModel'] == 'boolean');
 //this.shouldBeTrue(typeof services['canGetList'] == 'boolean');
 ```
-<blockquote><strong>log: </strong>[object Object]<br></blockquote>
+<blockquote><strong>log: </strong>{"isReady":true,"canGetModel":false,"canPutModel":false,"canDeleteModel":false,"canGetList":false}<br></blockquote>
 #### toString()
 &nbsp;<b><i>should return a description of the Store:</i></b>
 ```javascript
@@ -3093,7 +3092,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Thu Oct 23 2014 18:42:05 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Thu Oct 23 2014 18:54:14 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -4458,7 +4457,7 @@ return new SurrogateStore({storeType: 'legacyStorage'}).storeType;
 #### METHODS
 &nbsp;<b><i>getServices() returns an object with interface for the Store.:</i></b>
 ```javascript
-this.log(services);
+this.log(JSON.stringify(services));
 //this.shouldBeTrue(services instanceof Object);
 //this.shouldBeTrue(typeof services['isReady'] == 'boolean'); // don't use until
 //this.shouldBeTrue(typeof services['canGetModel'] == 'boolean'); // define all allowed methods...
@@ -4466,7 +4465,7 @@ this.log(services);
 //this.shouldBeTrue(typeof services['canDeleteModel'] == 'boolean');
 //this.shouldBeTrue(typeof services['canGetList'] == 'boolean');
 ```
-<blockquote><strong>log: </strong>[object Object]<br></blockquote>
+<blockquote><strong>log: </strong>{"isReady":true,"canGetModel":true,"canPutModel":true,"canDeleteModel":true,"canGetList":true}<br></blockquote>
 #### toString()
 &nbsp;<b><i>should return a description of the Store:</i></b>
 ```javascript

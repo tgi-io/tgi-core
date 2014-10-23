@@ -1121,9 +1121,9 @@ Procedure.prototype.getObjectStateErrors = function () {
 };
 
 /**---------------------------------------------------------------------------------------------------------------------
- * tgi-core/xxx/tgi-core-request.source
+ * tgi-core/lib/core/tgi-core-request.source.js
  */
-/*
+/**
  * Constructor
  */
 function Request(args) {
@@ -1139,29 +1139,29 @@ function Request(args) {
   switch (this.type) {
     case 'Command':
       this.command = args.command || null;
-      if (false === (this.command instanceof Command)) throw new Error('command object required');
+      if (!(this.command instanceof Command)) throw new Error('command object required');
       break;
   }
 }
-/*
+/**
  * Methods
  */
 Request.prototype.toString = function () {
   switch (this.type) {
     case 'Command':
       return this.type + ' Request: ' + this.command;
-
     default:
       return this.type + ' Request';
-
   }
 };
 
 /**---------------------------------------------------------------------------------------------------------------------
- * tgi-core/xxx/tgi-core-store.source
+ * tgi-core/lib/core/tgi-core-store.source.js
  */
 
-// Constructor
+/**
+ * Constructor
+ */
 var Store = function (args) {
   if (false === (this instanceof Store)) throw new Error('new operator required');
   args = args || {};
@@ -1180,7 +1180,9 @@ var Store = function (args) {
   if (errorList.length > 1) throw new Error('error creating Store: multiple errors');
   if (errorList.length) throw new Error('error creating Store: ' + errorList[0]);
 };
-// Methods
+/**
+ * Methods
+ */
 Store.prototype.toString = function () {
   if (this.name == 'a ' + this.storeType) {
     return this.name;

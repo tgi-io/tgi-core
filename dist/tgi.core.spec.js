@@ -1988,7 +1988,7 @@ spec.test('tgi-core/lib/tgi-core-procedure.spec.js', 'Procedure', 'manages set o
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-request.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-request.spec.js', 'Request', 'from Interface - Application handle response', function (callback) {
+spec.test('tgi-core/lib/tgi-core-request.spec.js', 'Request', 'from Interface - Application handles response', function (callback) {
   spec.paragraph('Requests handle the Request / Response design pattern.  They are used by the Interface class to ' +
   'communicate with the Application Model');
   spec.heading('CONSTRUCTOR', function () {
@@ -2026,14 +2026,12 @@ spec.test('tgi-core/lib/tgi-core-request.spec.js', 'Request', 'from Interface - 
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-store.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-store.spec.js', 'Store', '<insert description>', function (callback) {
-  spec.heading('Store Class', function () {
-    spec.paragraph('The store class is used for object persistence.');
-    spec.heading('CONSTRUCTOR', function () {
-      spec.runnerStoreConstructor(Store);
-    });
-    spec.runnerStoreMethods(Store);
+spec.test('tgi-core/lib/tgi-core-store.spec.js', 'Store', 'holds Model objects for updating and retrieving', function (callback) {
+  spec.paragraph('The store class is used for object persistence.');
+  spec.heading('CONSTRUCTOR', function () {
+    spec.runnerStoreConstructor(Store);
   });
+  spec.runnerStoreMethods(Store);
 });
 
 spec.runnerStoreConstructor = function (SurrogateStore) {
@@ -2064,7 +2062,7 @@ spec.runnerStoreMethods = function (SurrogateStore) {
   spec.heading('METHODS', function () {
     var services = new SurrogateStore().getServices();  // TODO change to methods ASAP!!!
     spec.example('getServices() returns an object with interface for the Store.', undefined, function () {
-      this.log(services);
+      this.log(JSON.stringify(services));
       //this.shouldBeTrue(services instanceof Object);
       //this.shouldBeTrue(typeof services['isReady'] == 'boolean'); // don't use until
       //this.shouldBeTrue(typeof services['canGetModel'] == 'boolean'); // define all allowed methods...
