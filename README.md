@@ -9,3 +9,4 @@ Todo
 - remaining stores ?
 - need show in tests
 - coverage sux bad
+- refactor CORE and UTILITY to TGI.CORE and TGI.UTILITY

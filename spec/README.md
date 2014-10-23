@@ -1,5 +1,5 @@
 #tgi-core
-Core objects, models, stores and interfaces for the TGI framework.    
+Core objects, models, stores and interfaces.    
 
 ###Table of Contents
 
@@ -14,7 +14,7 @@ Core objects, models, stores and interfaces for the TGI framework.
 - [Message](#-message) between host and client
 - [Model](#-model) represents application abstract entities with a ordered list of attributes
 - [Procedure](#-procedure) manages set of Commands synchronous or asynchronous
-- [Request](#-request) <insert description>
+- [Request](#-request) from Interface - Application handle response
 - [Store](#-store) <insert description>
 - [Transport](#-transport) <insert description>
 
@@ -1167,7 +1167,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Thu Oct 23 2014 18:21:47 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Thu Oct 23 2014 18:42:05 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1176,7 +1176,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Thu Oct 23 2014 18:21:47 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Thu Oct 23 2014 18:42:05 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2252,7 +2252,6 @@ cmd.execute();
 <blockquote>returns <strong>todo: drugs sex rock & roll</strong> as expected
 </blockquote>
 ## [&#9664;](#-procedure)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-store) &nbsp;Request
-#### Request Class
 Requests handle the Request / Response design pattern.  They are used by the Interface class to communicate with the Application Model    
 
 #### CONSTRUCTOR
@@ -3094,7 +3093,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Thu Oct 23 2014 18:21:47 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Thu Oct 23 2014 18:42:05 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript

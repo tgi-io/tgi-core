@@ -11,8 +11,8 @@ var testSpec = function(spec,CORE) {
 /**
  * Doc Intro
  */
-spec.test('lib/tgi-spec-intro', 'tgi-core', 'Core Repository for TGI Framework', function (callback) {
-  spec.paragraph('Core objects, models, stores and interfaces for the TGI framework.');
+spec.test('lib/tgi-spec-intro', 'tgi-core', 'Core Repository', function (callback) {
+  spec.paragraph('Core objects, models, stores and interfaces.');
   spec.index();
 });
 spec.test('tgi-core/lib/tgi-core.test.js', 'CORE', 'exposed as public or exported (node)', function (callback) {
@@ -1760,7 +1760,7 @@ spec.testModel = function (SurrogateModel) {
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-procedure.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-procedure.spec.js', 'Procedure', '<insert description>', function (callback) {
+spec.test('tgi-core/lib/tgi-core-procedure.spec.js', 'Procedure', 'manages set of Commands synchronous or asynchronous', function (callback) {
   spec.heading('Procedure Class', function () {
     spec.paragraph('The _Procedure_ class manages a set of _Command_ objects.  It provides a pattern for handling ' +
     'asynchronous and synchronous command execution.');
@@ -1856,45 +1856,168 @@ spec.test('tgi-core/lib/tgi-core-procedure.spec.js', 'Procedure', '<insert descr
         });
       });
     });
-    //spec.runnerProcedureIntegration();
+    spec.heading('INTEGRATION', function () {
+      spec.example('synchronous sequential tasks are the default when tasks has no requires property', spec.asyncResults('abc123'), function (callback) {
+        var cmd = new Command({name: 'cmdProcedure', type: 'Procedure', contents: new Procedure({tasks: [
+          {
+            command: new Command({
+              type: 'Function',
+              contents: function () {
+                var self = this;
+                setTimeout(function () {
+                  self._parentProcedure.bucket += '1';
+                  self.complete();
+                }, 250); // delayed to test that order is maintained
+              }
+            })
+          },
+          {
+            command: new Command({
+              type: 'Function',
+              contents: function () {
+                this._parentProcedure.bucket += '2';
+                this.complete();
+              }
+            })
+          },
+          function () { // shorthand version of command function ...
+            this._parentProcedure.bucket += '3';
+            this.complete();
+          }
+        ]})});
+        cmd.onEvent('*', function (event) {
+          if (event == 'Completed') callback(cmd.bucket);
+        });
+        cmd.bucket = 'abc';
+        cmd.execute();
+      });
+      spec.xexample('async tasks are designated when requires is set to null', spec.asyncResults('eenie meenie miney mo'), function (callback) {
+        var cmd = new Command({name: 'cmdProcedure', type: 'Procedure', contents: new Procedure({tasks: [
+          {
+            command: new Command({
+              type: 'Function',
+              contents: function () {
+                var self = this;
+                setTimeout(function () {
+                  self._parentProcedure.bucket += ' mo';
+                  self.complete();
+                }, 250); // This will be done last
+              }
+            })
+          },
+          {
+            requires: null, // no wait to run this
+            command: new Command({
+              type: 'Function',
+              contents: function () {
+                this._parentProcedure.bucket += ' miney';
+                this.complete();
+              }
+            })
+          }
+        ]})});
+        cmd.onEvent('*', function (event) {
+          if (event == 'Completed') callback(cmd.bucket);
+        });
+        cmd.bucket = 'eenie meenie';
+        cmd.execute();
+      });
+      spec.example('this example shows multiple dependencies', spec.asyncResults('todo: drugs sex rock & roll'), function (callback) {
+        var cmd = new Command({name: 'cmdProcedure', type: 'Procedure', contents: new Procedure({tasks: [
+          {
+            command: new Command({
+              type: 'Function',
+              contents: function () {
+                var self = this;
+                setTimeout(function () {
+                  self._parentProcedure.bucket += ' rock';
+                  self.complete();
+                }, 300);
+              }
+            })
+          },
+          {
+            requires: null, // no wait to run this
+            label: 'sex',
+            command: new Command({
+              type: 'Function',
+              contents: function () {
+                var self = this;
+                setTimeout(function () {
+                  self._parentProcedure.bucket += ' sex';
+                  self.complete();
+                }, 200);
+              }
+            })
+          },
+          {
+            requires: null, // no wait to run this
+            label: 'drugs',
+            command: new Command({
+              type: 'Function',
+              contents: function () {
+                var self = this;
+                setTimeout(function () {
+                  self._parentProcedure.bucket += ' drugs';
+                  self.complete();
+                }, 100);
+              }
+            })
+          },
+          {
+            requires: ['sex', 'drugs', 0], // need these labels and array index 0
+            command: new Command({
+              type: 'Function',
+              contents: function () {
+                this._parentProcedure.bucket += ' & roll';
+                this.complete();
+              }
+            })
+          }
+        ]})});
+        cmd.onEvent('*', function (event) {
+          if (event == 'Completed') callback(cmd.bucket);
+        });
+        cmd.bucket = 'todo:';
+        cmd.execute();
+      });
+    });
   });
 });
 
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-request.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-request.spec.js', 'Request', '<insert description>', function (callback) {
-  spec.heading('Request Class', function () {
-    spec.paragraph('Requests handle the Request / Response design pattern.  They are used by the Interface class to ' +
-    'communicate with the Application Model');
-    spec.heading('CONSTRUCTOR', function () {
-      spec.example('objects created should be an instance of Request', true, function () {
-        return new Request('Null') instanceof Request;
-      });
-      spec.example('should make sure new operator used', Error('new operator required'), function () {
-        Request('Null'); // jshint ignore:line
-      });
-      spec.example('request type must be specified', Error('Request type required'), function () {
-        new Request();
-      });
-      spec.example('simple string parameter creates request of named type', 'example', function () {
-        return new Request('example').type;
-      });
-      spec.example('type can be specified when object passed', 'example', function () {
-        return new Request({type: 'example'}).type;
-      });
-      spec.example('Command type requests expect contents to contain a command object', Error('command object required'), function () {
-        return new Request({type: 'Command'});
-      });
-      spec.example('correct version', 'Command Request: Stub Command: (unnamed)', function () {
-        return new Request({type: 'Command', command: new Command()});
-      });
+spec.test('tgi-core/lib/tgi-core-request.spec.js', 'Request', 'from Interface - Application handle response', function (callback) {
+  spec.paragraph('Requests handle the Request / Response design pattern.  They are used by the Interface class to ' +
+  'communicate with the Application Model');
+  spec.heading('CONSTRUCTOR', function () {
+    spec.example('objects created should be an instance of Request', true, function () {
+      return new Request('Null') instanceof Request;
     });
-    spec.heading('METHODS', function () {
-      spec.heading('toString()', function () {
-        spec.example('should return a description of the Request', 'Null Request', function () {
-          return new Request('Null').toString();
-        });
+    spec.example('should make sure new operator used', Error('new operator required'), function () {
+      Request('Null'); // jshint ignore:line
+    });
+    spec.example('request type must be specified', Error('Request type required'), function () {
+      new Request();
+    });
+    spec.example('simple string parameter creates request of named type', 'example', function () {
+      return new Request('example').type;
+    });
+    spec.example('type can be specified when object passed', 'example', function () {
+      return new Request({type: 'example'}).type;
+    });
+    spec.example('Command type requests expect contents to contain a command object', Error('command object required'), function () {
+      return new Request({type: 'Command'});
+    });
+    spec.example('correct version', 'Command Request: Stub Command: (unnamed)', function () {
+      return new Request({type: 'Command', command: new Command()});
+    });
+  });
+  spec.heading('METHODS', function () {
+    spec.heading('toString()', function () {
+      spec.example('should return a description of the Request', 'Null Request', function () {
+        return new Request('Null').toString();
       });
     });
   });
