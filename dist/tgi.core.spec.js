@@ -1521,7 +1521,7 @@ spec.test('tgi-core/lib/tgi-core-message.spec.js', 'Message', 'between host and 
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-model.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-model.spec.js', 'Model', 'represents application abstract entities with a ordered list of attributes', function (callback) {
+spec.test('tgi-core/lib/tgi-core-model.spec.js', 'Model', 'abstracts entities using a collection of attributes', function (callback) {
   spec.testModel(Model);
 });
 
@@ -1529,10 +1529,6 @@ spec.test('tgi-core/lib/tgi-core-model.spec.js', 'Model', 'represents applicatio
  * test Model and Models
  */
 spec.testModel = function (SurrogateModel) {
-  spec.heading('Model Class', function () {
-    spec.paragraph('Models being the primary purpose of this library are extensions of javascript objects.  ' +
-    'The tequila class library provides this class to encapsulate and enforce consistent programming interface' +
-    'to the models created by this library.');
     spec.heading('CONSTRUCTOR', function () {
       spec.paragraph('Creation of all Models must adhere to following examples:');
       spec.example('objects created should be an instance of Model', true, function () {
@@ -1754,7 +1750,6 @@ spec.testModel = function (SurrogateModel) {
         }
       });
     });
-  });
 };
 
 /**---------------------------------------------------------------------------------------------------------------------
@@ -2576,9 +2571,7 @@ spec.test('tgi-core/lib/tgi-core-transport.spec.js', 'Transport', 'messages betw
  * tgi-core/lib/models/tgi-core-model-application.test.js
  */
 spec.testSection('Models');
-spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application', '<insert description>', function (callback) {
-  spec.heading('Application Model', function () {
-    spec.paragraph('Information about the application is modeled here.');
+spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application', 'manages active state and configuration', function (callback) {
     spec.heading('CONSTRUCTOR', function () {
       spec.example('objects created should be an instance of Application', true, function () {
         return new Application() instanceof Application;
@@ -2657,8 +2650,35 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
         });
       });
     });
-    //spec.runnerApplicationIntegration();
+  spec.heading('Application Integration', function () {
+    spec.xexample('little app with command execution mocking', spec.asyncResults(true), function (callback) {
+
+      // Send 4 mocks and make sure we get 4 callback calls
+      var self = this;
+      self.callbackCount = 0;
+
+      var app = new Application();
+      var testInterface = new Interface();
+      var testPresentation = new Presentation();
+
+      app.setInterface(testInterface);
+      app.setPresentation(testPresentation);
+
+      app.start(function (request) {
+        if (request.type == 'mock count')
+          self.callbackCount++;
+        if (self.callbackCount > 3)
+          callback(true);
+      });
+      var cmds = [];
+      var i;
+      for (i = 0; i < 4; i++) {
+        cmds.push(new Request('mock count'));
+      }
+      testInterface.mockRequest(cmds);
+    });
   });
+
 });
 
 /**---------------------------------------------------------------------------------------------------------------------
