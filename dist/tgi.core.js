@@ -1212,7 +1212,7 @@ Store.prototype.getList = function () {
 };
 
 /**---------------------------------------------------------------------------------------------------------------------
- * tgi-core/xxx/tgi-core-transport.source
+ * tgi-core/lib/core/tgi-core-transport.source.js
  */
 /* istanbul ignore next */
 function Transport(location, callBack) {

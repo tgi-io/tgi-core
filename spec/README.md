@@ -16,7 +16,7 @@ Core objects, models, stores and interfaces.
 - [Procedure](#-procedure) manages set of Commands synchronous or asynchronous
 - [Request](#-request) from Interface - Application handles response
 - [Store](#-store) holds Model objects for updating and retrieving
-- [Transport](#-transport) <insert description>
+- [Transport](#-transport) messages between client and host
 
 #### Models
 - [Application](#-application) <insert description>
@@ -1167,7 +1167,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Thu Oct 23 2014 21:13:48 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Thu Oct 23 2014 21:22:27 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1176,7 +1176,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Thu Oct 23 2014 21:13:48 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Thu Oct 23 2014 21:22:27 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2644,6 +2644,8 @@ function listReady(list, error) {
 <br>Assertion(s) failed
 </blockquote>
 ## [&#9664;](#-store)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-application) &nbsp;Transport
+test disabled.    
+
 
 ## [&#9664;](#-transport)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-log) &nbsp;Application
 #### Application Model
@@ -3318,7 +3320,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Thu Oct 23 2014 21:13:48 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Thu Oct 23 2014 21:22:27 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
