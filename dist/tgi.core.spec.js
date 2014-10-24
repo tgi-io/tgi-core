@@ -15,6 +15,7 @@ spec.test('lib/tgi-spec-intro', 'tgi-core', 'Core Repository', function (callbac
   spec.paragraph('Core objects, models, stores and interfaces.');
   spec.index();
 });
+spec.testSection('Core Objects');
 spec.test('tgi-core/lib/tgi-core.test.js', 'CORE', 'exposed as public or exported (node)', function (callback) {
   spec.paragraph('The CORE function exposes the tgi-core library via global or node module exports.');
   spec.example('CORE function exposes library', 'function', function () {
@@ -34,7 +35,6 @@ spec.test('tgi-core/lib/tgi-core.test.js', 'CORE', 'exposed as public or exporte
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-attribute.spec.js
  */
-spec.testSection('Core Objects');
 spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data types - needed by Model', function (callback) {
     spec.paragraph('Attributes are the means for models to represent data of different types.  They have no' +
     ' dependencies on Models however and can be used without creating a model.');

@@ -3,9 +3,9 @@ Core objects, models, stores and interfaces.
 
 ###Table of Contents
 
-- [CORE](#-core) exposed as public or exported (node)
 
 #### Core Objects
+- [CORE](#-core) exposed as public or exported (node)
 - [Attribute](#-attribute) defines data types - needed by Model
 - [Command](#-command) encapsulates task execution
 - [Delta](#-delta) represents changes to models
@@ -30,6 +30,7 @@ Core objects, models, stores and interfaces.
 - [Memory](#-memory) <insert description>
 
 
+
 ## [&#9664;](#-tgi-core)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-attribute) &nbsp;CORE
 The CORE function exposes the tgi-core library via global or node module exports.    
 
@@ -52,7 +53,6 @@ return cpad(' sup ',20,'*');
 ```
 <blockquote>returns <strong>******* sup ********</strong> as expected
 </blockquote>
-
 ## [&#9664;](#-core)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-command) &nbsp;Attribute
 Attributes are the means for models to represent data of different types.  They have no dependencies on Models however and can be used without creating a model.    
 
@@ -1167,7 +1167,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Thu Oct 23 2014 21:02:38 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Thu Oct 23 2014 21:13:48 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1176,7 +1176,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Thu Oct 23 2014 21:02:38 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Thu Oct 23 2014 21:13:48 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -3318,7 +3318,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Thu Oct 23 2014 21:02:38 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Thu Oct 23 2014 21:13:48 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
