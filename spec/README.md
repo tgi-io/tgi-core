@@ -12,14 +12,14 @@ Core objects, models, stores and interfaces.
 - [Interface](#-interface) with humans and such
 - [List](#-list) of items
 - [Message](#-message) between host and client
-- [Model](#-model) represents application abstract entities with a ordered list of attributes
+- [Model](#-model) abstracts entities using a collection of attributes
 - [Procedure](#-procedure) manages set of Commands synchronous or asynchronous
 - [Request](#-request) from Interface - Application handles response
 - [Store](#-store) holds Model objects for updating and retrieving
 - [Transport](#-transport) messages between client and host
 
 #### Models
-- [Application](#-application) <insert description>
+- [Application](#-application) manages active state and configuration
 - [Log](#-log) <insert description>
 - [Presentation](#-presentation) <insert description>
 - [Session](#-session) Model user session with host
@@ -1167,7 +1167,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Thu Oct 23 2014 21:22:27 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Thu Oct 23 2014 23:32:18 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1176,7 +1176,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Thu Oct 23 2014 21:22:27 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Thu Oct 23 2014 23:32:18 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -1767,9 +1767,6 @@ this.log(Message.getTypes());
 ```
 <blockquote><strong>log: </strong>Null,Connected,Error,Sent,Ping,PutModel,PutModelAck,GetModel,GetModelAck,DeleteModel,DeleteModelAck,GetList,GetListAck<br></blockquote>
 ## [&#9664;](#-message)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-procedure) &nbsp;Model
-#### Model Class
-Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.    
-
 #### CONSTRUCTOR
 Creation of all Models must adhere to following examples:    
 
@@ -2659,9 +2656,6 @@ return new Application() instanceof Application;
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
 #### Model tests are applied
-#### Model Class
-Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.    
-
 #### CONSTRUCTOR
 Creation of all Models must adhere to following examples:    
 
@@ -3040,9 +3034,6 @@ return new Log() instanceof Log;
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
 #### Model tests are applied
-#### Model Class
-Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.    
-
 #### CONSTRUCTOR
 Creation of all Models must adhere to following examples:    
 
@@ -3320,7 +3311,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Thu Oct 23 2014 21:22:27 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Thu Oct 23 2014 23:32:18 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -3354,9 +3345,6 @@ return new Presentation() instanceof Presentation;
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
 #### Model tests are applied
-#### Model Class
-Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.    
-
 #### CONSTRUCTOR
 Creation of all Models must adhere to following examples:    
 
@@ -3711,9 +3699,6 @@ return new Session() instanceof Session;
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
 #### Model tests are applied
-#### Model Class
-Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.    
-
 #### CONSTRUCTOR
 Creation of all Models must adhere to following examples:    
 
@@ -4056,9 +4041,6 @@ return new User() instanceof User;
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
 #### Model tests are applied
-#### Model Class
-Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.    
-
 #### CONSTRUCTOR
 Creation of all Models must adhere to following examples:    
 
@@ -4349,9 +4331,6 @@ return new Workspace() instanceof Workspace;
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
 #### Model tests are applied
-#### Model Class
-Models being the primary purpose of this library are extensions of javascript objects.  The tequila class library provides this class to encapsulate and enforce consistent programming interfaceto the models created by this library.    
-
 #### CONSTRUCTOR
 Creation of all Models must adhere to following examples:    
 
