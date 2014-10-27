@@ -2940,7 +2940,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-user.spec.js', 'User', 'access, lo
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/models/tgi-core-model-workspace.test.js
  */
-spec.test('tgi-core/lib/models/tgi-core-model-workspace.spec.js', 'Workspace', '<insert description>', function (callback) {
+spec.test('tgi-core/lib/models/tgi-core-model-workspace.spec.js', 'Workspace', 'of active Models for user', function (callback) {
   spec.heading('Workspace Model', function () {
     spec.paragraph('A workspace is a collection of active deltas for a user.  The GUI could represent that as open' +
       'tabs for instance.  Each tab a model view.  The deltas represent the change in model state');

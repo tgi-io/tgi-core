@@ -24,7 +24,7 @@ Core objects, models, stores and interfaces.
 - [Presentation](#-presentation) used by Interface to render data
 - [Session](#-session) for user host access
 - [User](#-user) access, logging and other stuff todo with humans
-- [Workspace](#-workspace) <insert description>
+- [Workspace](#-workspace) of active Models for user
 
 #### Stores
 - [Memory](#-memory) <insert description>
@@ -1167,7 +1167,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Sun Oct 26 2014 22:24:59 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Sun Oct 26 2014 22:27:01 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1176,7 +1176,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Sun Oct 26 2014 22:24:59 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Sun Oct 26 2014 22:27:01 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2531,7 +2531,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Sun Oct 26 2014 22:24:59 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Sun Oct 26 2014 22:27:01 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
