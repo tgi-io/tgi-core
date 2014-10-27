@@ -2829,7 +2829,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-presentation.spec.js', 'Presentati
 /**---------------------------------------------------------------------------------------------------------------------
  * /tgi-core/lib/models/tgi-core-model-session.test.js
  */
-spec.test('/tgi-core/lib/models/tgi-core-model-session.spec.js', 'Session', 'Model user session with host', function (callback) {
+spec.test('/tgi-core/lib/models/tgi-core-model-session.spec.js', 'Session', 'for user host access', function (callback) {
   spec.heading('Session Model', function () {
     spec.paragraph('The Session Model represents the Session logged into the system. The library uses this for system' +
       ' access, logging and other functions.');
@@ -2910,7 +2910,7 @@ spec.test('/tgi-core/lib/models/tgi-core-model-session.spec.js', 'Session', 'Mod
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/models/tgi-core-model-user.test.js
  */
-spec.test('tgi-core/lib/models/tgi-core-model-user.spec.js', 'User', '<insert description>', function (callback) {
+spec.test('tgi-core/lib/models/tgi-core-model-user.spec.js', 'User', 'access, logging and other stuff todo with humans', function (callback) {
   spec.heading('User Model', function () {
     spec.paragraph('The User Model represents the user logged into the system. The library uses this for system' +
       ' access, logging and other functions.');
