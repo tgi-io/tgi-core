@@ -1,7 +1,7 @@
 {
   "name": "tgi-core",
-  "version": "0.0.6",
-  "description": "Core objects for TGIScript Application Framework.",
+  "version": "0.0.7",
+  "description": "core objects for tgi framework",
   "contributors": [
     {
       "name": "Sean Smith",

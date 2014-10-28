@@ -27,7 +27,7 @@ Core objects, models, stores and interfaces.
 - [Workspace](#-workspace) of active Models for user
 
 #### Stores
-- [Memory](#-memory) <insert description>
+- [MemoryStore](#-memorystore) volatile memory store in js codespace
 
 
 
@@ -1167,7 +1167,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Sun Oct 26 2014 22:27:01 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Mon Oct 27 2014 20:54:24 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1176,7 +1176,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Sun Oct 26 2014 22:27:01 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Mon Oct 27 2014 20:54:24 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2531,7 +2531,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Sun Oct 26 2014 22:27:01 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Mon Oct 27 2014 20:54:24 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -2762,7 +2762,7 @@ this.shouldBeTrue(user.get('firstName') === null);
 this.shouldBeTrue(user.get('lastName') === null);
 this.shouldBeTrue(user.get('email') === null);
 ```
-## [&#9664;](#-user)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-memory) &nbsp;Workspace
+## [&#9664;](#-user)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-memorystore) &nbsp;Workspace
 #### Workspace Model
 A workspace is a collection of active deltas for a user.  The GUI could represent that as opentabs for instance.  Each tab a model view.  The deltas represent the change in model state    
 
@@ -2797,7 +2797,7 @@ sync
 
 #### INTEGRATION
 
-## [&#9664;](#-workspace)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-summary) &nbsp;Memory
+## [&#9664;](#-workspace)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-summary) &nbsp;MemoryStore
 #### MemoryStore
 The MemoryStore is a simple volatile store. It is the first test standard to define the spec for all Stores to follow.    
 
@@ -3262,5 +3262,5 @@ function listReady(list, error) {
 <blockquote><strong>log: </strong>Moe,Larry,Shemp<br><strong>log: </strong>0<br><strong>log: </strong>0<br><strong>log: </strong>a MemoryStore MemoryStore<br>returns <strong>true</strong> as expected
 <br>Assertion(s) failed
 </blockquote>
-## [&#9664;](#-memory)&nbsp;[&#8984;](#table-of-contents) &nbsp;Summary
+## [&#9664;](#-memorystore)&nbsp;[&#8984;](#table-of-contents) &nbsp;Summary
 This documentation generated with https://github.com/tgicloud/tgi-spec.<br>TODO put testin stats here.    
