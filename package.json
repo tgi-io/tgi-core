@@ -8,7 +8,6 @@
       "email": "sean@tgicloud.com"
     }
   ],
-  "main": "index.js",
   "dependencies": {
     "sprintf-js": "0.0.7",
     "tgi-spec": "*",

@@ -2975,7 +2975,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-workspace.spec.js', 'Workspace', '
  * tgi-core/lib/stores/tgi-core-store-memory.test.js
  */
 spec.testSection('Stores');
-spec.test('tgi-core/lib/stores/tgi-core-store-memory.spec.js', 'Memory', '<insert description>', function (callback) {
+spec.test('tgi-core/lib/stores/tgi-core-store-memory.spec.js', 'MemoryStore', 'volatile memory store in js codespace', function (callback) {
   spec.heading('MemoryStore', function () {
     spec.paragraph('The MemoryStore is a simple volatile store. ' +
       'It is the first test standard to define the spec for all Stores to follow.');
