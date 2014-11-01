@@ -11,7 +11,6 @@ var childProcess = require('child_process');
 
 // Source and _packaging
 var libFiles = [
-  'lib/_packaging/lib-header',
   'lib/tgi-core.source.js',
   'lib/core/tgi-core-attribute.source.js',
   'lib/core/tgi-core-command.source.js',
@@ -32,13 +31,12 @@ var libFiles = [
   'lib/models/tgi-core-model-session.source.js',
   'lib/models/tgi-core-model-user.source.js',
   'lib/models/tgi-core-model-workspace.source.js',
-  'lib/stores/tgi-core-store-memory.source.js',
-  'lib/_packaging/lib-footer'
+  'lib/stores/tgi-core-store-memory.source.js'
 ];
+var libPackaging = ['lib/_packaging/lib-header'].concat(libFiles).concat(['lib/_packaging/lib-footer']);
 
 // The Spec
 var specFiles = [
-  'lib/_packaging/spec-header',
   'lib/tgi-core.test.js',
   'lib/core/tgi-core-attribute.spec.js',
   'lib/core/tgi-core-command.spec.js',
@@ -57,13 +55,14 @@ var specFiles = [
   'lib/models/tgi-core-model-session.spec.js',
   'lib/models/tgi-core-model-user.spec.js',
   'lib/models/tgi-core-model-workspace.spec.js',
-  'lib/stores/tgi-core-store-memory.spec.js',
-  'lib/_packaging/spec-footer'
+  'lib/stores/tgi-core-store-memory.spec.js'
+
 ];
+var specPackaging = ['lib/_packaging/spec-header'].concat(specFiles).concat(['lib/_packaging/spec-footer']);
 
 // Build Lib
 gulp.task('_buildLib', function () {
-  return gulp.src(libFiles)
+  return gulp.src(libPackaging)
     .pipe(concat('tgi.core.js'))
     .pipe(gulp.dest('dist'))
     .pipe(rename('tgi.core.min.js'))
@@ -71,20 +70,34 @@ gulp.task('_buildLib', function () {
     .pipe(gulp.dest('dist'));
 });
 
+// Build Lib Chunk
+gulp.task('_buildLibChunk', function () {
+  return gulp.src(libFiles)
+    .pipe(concat('tgi.core.chunk.js'))
+    .pipe(gulp.dest('dist'));
+});
+
 // Build Spec
 gulp.task('_buildSpec', function () {
-  return gulp.src(specFiles)
+  return gulp.src(specPackaging)
     .pipe(concat('tgi.core.spec.js'))
     .pipe(gulp.dest('dist'));
 });
 
+// Build Spec Chunk
+gulp.task('_buildSpecChunk', function () {
+  return gulp.src(specFiles)
+    .pipe(concat('tgi.core.spec.chunk.js'))
+    .pipe(gulp.dest('dist'));
+});
+
 // Build Task
-gulp.task('build', ['_buildLib', '_buildSpec'], function (callback) {
+gulp.task('build', ['_buildLibChunk', '_buildLib', '_buildSpecChunk', '_buildSpec'], function (callback) {
   callback();
 });
 
 // Lint Lib
-gulp.task('_lintLib', ['_buildLib'], function (callback) {
+gulp.task('_lintLib', ['_buildLibChunk', '_buildLib'], function (callback) {
   return gulp.src('dist/tgi.core.js')
     .pipe(jshint())
     .pipe(jshint.reporter('jshint-stylish'))
@@ -92,9 +105,9 @@ gulp.task('_lintLib', ['_buildLib'], function (callback) {
 });
 
 // Lint Spec
-gulp.task('_lintSpec', ['_buildSpec'], function (callback) {
+gulp.task('_lintSpec', ['_buildSpecChunk', '_buildSpec'], function (callback) {
   return gulp.src('dist/tgi.core.spec.js')
-    .pipe(jshint({validthis: true, sub:true}))
+    .pipe(jshint({validthis: true, sub: true}))
     .pipe(jshint.reporter('jshint-stylish'))
     .pipe(jshint.reporter('fail'));
 });
