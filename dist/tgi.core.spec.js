@@ -2248,11 +2248,7 @@ spec.runnerStoreMethods = function (SurrogateStore) {
           // See integration tests for examples of usage
         });
       } else {
-        if (services['isReady'] && services['canGetList']) {
-          spec.example('returns a List populated from store', Error('Store does not provide getList'), function () {
-            return new SurrogateStore().getList();
-          });
-        } else {
+        if (services['isReady']) {
           spec.example('returns a List populated from store', Error('Store does not provide getList'), function () {
             return new SurrogateStore().getList();
           });
