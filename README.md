@@ -10,3 +10,4 @@ Todo
 - refactor CORE and UTILITY to TGI.CORE and TGI.UTILITY
 - fix xexample tests
 - fix commented out code
+- methods getting infected into the global namespace ... arg
