@@ -5,6 +5,7 @@ var spec = new Spec();
 (function () {
   UTILITY().injectMethods(this);
   CORE().injectMethods(this);
+  spec._coreStore = MemoryStore;
   testSpec(spec, CORE);
   spec.runTests(function (msg) {
     /**
