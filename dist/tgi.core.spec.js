@@ -2260,13 +2260,14 @@ spec.runnerStoreMethods = function (SurrogateStore) {
     spec.heading('CRUD (Create Read Update Delete)', function () {
       spec.example('Exercise all store function for one store.', spec.asyncResults(true), function (callback) {
         var self = this;
-        spec.integrationStore = new MemoryStore();
+        spec.integrationStore = new SurrogateStore();
         var storeBeingTested = spec.integrationStore.name + ' ' + spec.integrationStore.storeType;
         self.log(storeBeingTested);
 
         // If store is not ready then get out...
         if (!spec.integrationStore.getServices().isReady) {
-          callback( Error('Store is not ready.'));
+          self.log('Store is not ready.');
+          callback(true);
           return;
         }
 

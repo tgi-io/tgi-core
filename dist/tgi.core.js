@@ -1168,7 +1168,7 @@ var Store = function (args) {
   this.storeType = args.storeType || "Store";
   this.name = args.name || 'a ' + this.storeType;
   this.storeProperty = {
-    isReady: true,
+    isReady: false,
     canGetModel: false,
     canPutModel: false,
     canDeleteModel: false,
