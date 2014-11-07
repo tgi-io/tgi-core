@@ -11,7 +11,6 @@ var CORE = require('../dist/tgi.core');
 (function () {
   UTILITY().injectMethods(this);
   CORE().injectMethods(this);
-  spec._coreStore = MemoryStore;
   testSpec(spec, CORE);
   spec.runTests(function (msg) {
     if (msg.error) {
