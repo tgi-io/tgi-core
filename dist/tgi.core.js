@@ -1223,43 +1223,50 @@ function Transport(location, callBack) {
   self.connected = false;
   self.initialConnect = true;
   self.location = location;
-  if (self.location==='') self.location='http host';
-  self.socket = io.connect(location);
+  if (self.location === '') self.location = 'http host';
+  self.socket = io.connect(location, {reconnection: false});
   self.socket.on('connect', function () {
     self.connected = true;
     self.initialConnect = false;
-    console.log('socket.io ('+self.location+') connected');
+    console.log('socket.io (' + self.location + ') connected');
     callBack.call(self, new Message('Connected', ''));
   });
   self.socket.on('connecting', function () {
-    console.log('socket.io ('+self.location+') connecting');
+    console.log('socket.io (' + self.location + ') connecting');
   });
   self.socket.on('error', function (reason) {
-    var theReason = reason;
-    if (theReason.length < 1) theReason = "(unknown)";
-    console.error('socket.io ('+self.location+') error: ' + theReason + '.');
+    var theError = 'general error with ' + self.location + (reason ? ', reason ' + reason : '');
+    console.error(theError);
     // If have not ever connected then signal error
     if (self.initialConnect) {
-      callBack.call(self, new Message('Error', 'cannot connect'));
+      callBack.call(self, new Message('Error', theError));
+    }
+  });
+  self.socket.on('connect_error', function (reason) {
+    var theError = 'connect error with ' + self.location + (reason ? ', reason ' + reason : '');
+    console.error(theError);
+    // If have not ever connected then signal error
+    if (self.initialConnect) {
+      callBack.call(self, new Message('Error', theError));
     }
   });
   self.socket.on('connect_failed', function (reason) {
-    var theReason = reason;
-    if (theReason.length < 1) theReason = "(unknown)";
-    console.error('socket.io ('+self.location+') connect_failed: ' + theReason + '.');
+    var theError = 'connect failed with ' + self.location + (reason ? ', reason ' + reason : '');
+    console.error(theError);
     // If have not ever connected then signal error
     if (self.initialConnect) {
-      callBack.call(self, new Message('Error', 'cannot connect'));
+      callBack.call(self, new Message('Error', theError));
     }
   });
   self.socket.on('message', function (obj) {
-    console.log('socket.io ('+self.location+') message: ' + obj);
+    console.log('socket.io (' + self.location + ') message: ' + obj);
   });
   self.socket.on('disconnect', function (reason) {
     self.connected = false;
-    console.log('socket.io ('+self.location+') disconnect: ' + reason);
+    console.log('socket.io (' + self.location + ') disconnect: ' + reason);
   });
 }
+
 /*
  * Methods
  */
