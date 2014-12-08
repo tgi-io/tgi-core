@@ -1275,8 +1275,7 @@ spec.test('tgi-core/lib/tgi-core-list.spec.js', 'List', 'of items', function (ca
         actors.moveFirst();
         test.shouldBeTrue(actors.get('name') == 'Marlon Brando');
       });
-      // TODO fix this invocation ...
-      // spec.runnerListStoreIntegration(MemoryStore);
+      spec.runnerListStoreIntegration(MemoryStore);
     });
   });
 });
