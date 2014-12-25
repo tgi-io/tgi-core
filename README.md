@@ -1,4 +1,4 @@
-# tgi-core [![Build Status](https://travis-ci.org/tgicloud/tgi-io.svg?branch=master)](https://travis-ci.org/tgi-io/tgi-core)
+# tgi-core [![Build Status](https://travis-ci.org/tgi-io/tgi-core.svg?branch=master)](https://travis-ci.org/tgi-io/tgi-core)
 
 Core Objects [read the spec](spec/README.md).
 
