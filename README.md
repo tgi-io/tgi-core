@@ -4,10 +4,17 @@ Core Objects [read the spec](spec/README.md).
 
 Todo
 ----
-- interface ?
 - remaining stores ?
 - coverage sux bad
 - refactor CORE and UTILITY to TGI.CORE and TGI.UTILITY
 - fix xexample tests
 - fix commented out code
 - methods getting infected into the global namespace ... arg
+- 
+
+Interface To Do
+---
+- sys bar
+- app bar
+- workspace
+- cli factor for commands app commands / prefix for system
