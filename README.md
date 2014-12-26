@@ -14,7 +14,7 @@ Todo
 
 Interface To Do
 ---
-- sys bar
-- app bar
+- system commands (presentation?)
+- application commands (sub of system)
 - workspace
 - cli factor for commands app commands / prefix for system
