@@ -2,7 +2,7 @@ sequenceDiagram
     Application->userApp: app instance created
     userApp-->Command: app defines commands
     userApp-->Presentation: app defines presentation
-    userApp-->Presentation: app defines interface
+    userApp-->Interface: app defines interface
     userApp->Application: app is started
     Application->Interface: starts interface
     Interface->Application: callback sends a Request object
