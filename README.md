@@ -4,12 +4,11 @@ Core Objects [read the spec](spec/README.md).
 
 Todo
 ----
-- remaining stores ?
-- coverage sux bad
 - refactor CORE and UTILITY to TGI.CORE and TGI.UTILITY
 - fix xexample tests
 - fix commented out code
 - Refactor inject global and closure option
+- coverage sux bad
 
 Interface To Do
 ---
@@ -17,3 +16,5 @@ Interface To Do
 - application commands (sub of system)
 - workspace
 - cli factor for commands app commands / prefix for system
+
+
