@@ -1,5 +1,5 @@
 sequenceDiagram
-    userApp-->Application: app is born
+    Application->userApp: app instance created
     userApp-->Command: app defines commands
     userApp-->Presentation: app defines presentation
     userApp-->Presentation: app defines interface
