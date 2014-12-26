@@ -7,11 +7,12 @@ sequenceDiagram
     Note right of userApp: app instance created
     userApp-->Command: app defines commands
     userApp-->Presentation: app defines presentation
-    userApp-->Interface: app defines interface
+    userApp-->Interface: app selects interface
     userApp->Application: app is started
     Application->Interface: starts interface
-    loop UserInteraction
+    loop user interacts with presentation
         Interface->Application: callback sends a Request object
         Application->Command: Command request type are executed
         Application->userApp: other request are passed back to app
     end
+
