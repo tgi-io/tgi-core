@@ -1,8 +1,10 @@
 sequenceDiagram
-    userApp->Command: app code defines commands
-    userApp->Presentation: app navigation
-    userApp->Application: starts app
+    userApp-->Application: app is born
+    userApp-->Command: app defines commands
+    userApp-->Presentation: app defines presentation
+    userApp-->Presentation: app defines interface
+    userApp-->Application: starts app
     Application->Interface: starts interface
     Interface->Application: callback sends a Request object
     Application->Command: Command request type are executed
-    Application->userApp: other request type are passed on
+    Application->userApp: other request are passed back to app
