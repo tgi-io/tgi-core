@@ -5,6 +5,8 @@ sequenceDiagram
     userApp-->Interface: app defines interface
     userApp->Application: app is started
     Application->Interface: starts interface
-    Interface->Application: callback sends a Request object
-    Application->Command: Command request type are executed
-    Application->userApp: other request are passed back to app
+    loop UserInteraction
+        Interface->Application: callback sends a Request object
+        Application->Command: Command request type are executed
+        Application->userApp: other request are passed back to app
+    end
