@@ -3,7 +3,7 @@ sequenceDiagram
     userApp-->Command: app defines commands
     userApp-->Presentation: app defines presentation
     userApp-->Presentation: app defines interface
-    userApp-->Application: starts app
+    userApp->Application: app is started
     Application->Interface: starts interface
     Interface->Application: callback sends a Request object
     Application->Command: Command request type are executed
