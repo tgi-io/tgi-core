@@ -6,3 +6,4 @@ see https://github.com/knsv/mermaid
 - sudo npm install -g mermaid
 
 ## App Interface Flow
+https://github.com/tgi-io/tgi-core/blob/master/spec/mermaid/app-interface.png
