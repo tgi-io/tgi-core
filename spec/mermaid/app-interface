@@ -1,5 +1,9 @@
 sequenceDiagram
+    participant userApp
+    participant Command
+    participant Presentation
     participant Application
+    participant Interface
     userApp->Application: app instance created
     userApp-->Command: app defines commands
     userApp-->Presentation: app defines presentation
