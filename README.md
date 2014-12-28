@@ -31,8 +31,3 @@ Presentation standard tabs
 - History ... logged activity in store
 - Workspace ...
 - Alerts ...
-
-
-
-
-c
