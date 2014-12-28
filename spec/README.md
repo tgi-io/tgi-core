@@ -1167,7 +1167,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Fri Dec 26 2014 14:53:07 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Sat Dec 27 2014 12:24:30 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1176,7 +1176,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Fri Dec 26 2014 14:53:07 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Sat Dec 27 2014 12:24:30 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -1705,10 +1705,10 @@ function getAlphabetical() {
       // Verify each move returns true when move succeeds
       test.shouldBeTrue(list.moveFirst(),'moveFirst');
       test.shouldBeTrue(!list.movePrevious(),'movePrevious');
-      test.shouldBeTrue(list.get('name') == 'Al Pacino','AP');
+      test.shouldBeTrue(list.get('name') == 'Al Pacinoz');
       test.shouldBeTrue(list.moveLast(),'moveLast');
       test.shouldBeTrue(!list.moveNext(),'moveNext');
-      test.shouldBeTrue(list.get('name') == 'Tom Hanks','TH');
+      test.shouldBeTrue(list.get('name') == 'Tom Hanks');
       callback(true);
     });
   }
@@ -1719,6 +1719,7 @@ function getAlphabetical() {
 }
 ```
 <blockquote><strong>log: </strong>a MemoryStore<br>returns <strong>true</strong> as expected
+<br>Assertion(s) failed
 </blockquote>
 ## [&#9664;](#-list)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-model) &nbsp;Message
 #### Message Class
@@ -2514,7 +2515,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Fri Dec 26 2014 14:53:07 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Sat Dec 27 2014 12:24:30 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript

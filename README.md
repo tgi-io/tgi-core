@@ -10,9 +10,12 @@ Todo
 - Refactor inject global and closure option
 - coverage sux bad
 
+App To Do
+
 Interface To Do
 ---
 - system commands (presentation?)
+    - sysNav and appNav !!!
 - Interface notify method needs to actually be implemented
 - application commands (sub of system)
 - workspace
@@ -26,6 +29,10 @@ Presentation standard tabs
 - History ... logged activity in store
 - Workspace ...
 - Alerts ...
+
+- prompt
+- yesno
+- ok
 
 
 
