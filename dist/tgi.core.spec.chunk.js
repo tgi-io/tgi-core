@@ -980,7 +980,7 @@ spec.test('tgi-core/lib/tgi-core-delta.spec.js', 'Delta', 'represents changes to
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-interface.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-interface.spec.js', 'Interface', 'with humans and such', function (callback) {
+spec.test('tgi-core/lib/tgi-core-interface.spec.js', 'Interface', 'enable user to communicate with app', function (callback) {
   var SurrogateInterface = Interface; // todo
   spec.paragraph('The Interface core constructor is a prototype for user or system interaction with the application.' +
   ' The SurrogateInterface is a reference to Interface being tested in the suite.');

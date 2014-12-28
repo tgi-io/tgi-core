@@ -22,7 +22,7 @@ var CORE = require('../dist/tgi.core');
       console.log('testsFailed = ' + msg.testsFailed);
       if (msg.testsFailed || msg.testsPending) process.exit(1);
     } else if (msg.log) {
-      console.log(msg.log);
+      //console.log(msg.log);
     }
   });
 }());

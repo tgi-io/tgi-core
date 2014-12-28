@@ -987,7 +987,7 @@ spec.test('tgi-core/lib/tgi-core-delta.spec.js', 'Delta', 'represents changes to
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-interface.spec.js
  */
-spec.test('tgi-core/lib/tgi-core-interface.spec.js', 'Interface', 'with humans and such', function (callback) {
+spec.test('tgi-core/lib/tgi-core-interface.spec.js', 'Interface', 'enable user to communicate with app', function (callback) {
   var SurrogateInterface = Interface; // todo
   spec.paragraph('The Interface core constructor is a prototype for user or system interaction with the application.' +
   ' The SurrogateInterface is a reference to Interface being tested in the suite.');
@@ -1895,7 +1895,7 @@ spec.test('tgi-core/lib/tgi-core-procedure.spec.js', 'Procedure', 'manages set o
         cmd.bucket = 'abc';
         cmd.execute();
       });
-      spec.xexample('async tasks are designated when requires is set to null', spec.asyncResults('eenie meenie miney mo'), function (callback) {
+      spec.example('async tasks are designated when requires is set to null', spec.asyncResults('eenie meenie miney mo'), function (callback) {
         var cmd = new Command({name: 'cmdProcedure', type: 'Procedure', contents: new Procedure({tasks: [
           {
             command: new Command({
@@ -2557,10 +2557,10 @@ spec.test('tgi-core/lib/tgi-core-transport.spec.js', 'Transport', 'messages betw
       });
       spec.heading('close()', function () {
         spec.xexample('Transport must be connected (async error message)', spec.asyncResponse('jobs done'), function (testNode, returnResponse) {
-          new Transport("", function () {
-            this.close(); // TODO can't open 2 transports to same URL so can't test this since it conflicts with hostStore
-            returnResponse(testNode, "jobs done");
-          });
+          //new Transport("", function () {
+          //  this.close(); // TODO can't open 2 transports to same URL so can't test this since it conflicts with hostStore
+          returnResponse(testNode, "jobs done"); // This test works but not when Transport active
+          //});
         });
       });
     });
@@ -2657,7 +2657,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
     });
   });
   spec.heading('Application Integration', function () {
-    spec.xexample('little app with command execution mocking', spec.asyncResults(true), function (callback) {
+    spec.example('little app with command execution mocking', spec.asyncResults(true), function (callback) {
 
       // Send 4 mocks and make sure we get 4 callback calls
       var self = this;

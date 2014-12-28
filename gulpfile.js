@@ -60,6 +60,21 @@ var specFiles = [
 ];
 var specPackaging = ['lib/_packaging/spec-header'].concat(specFiles).concat(['lib/_packaging/spec-footer']);
 
+// Build Quick (for test)
+gulp.task('_buildLibQuick', function () {
+  return gulp.src(libPackaging)
+    .pipe(concat('tgi.core.js'))
+    .pipe(gulp.dest('dist'))
+});
+gulp.task('_buildSpecQuick', function () {
+  return gulp.src(specPackaging)
+    .pipe(concat('tgi.core.spec.js'))
+    .pipe(gulp.dest('dist'))
+});
+gulp.task('_buildQuick',  ['_buildLibQuick', '_buildSpecQuick'], function (callback) {
+  callback();
+});
+
 // Build Lib
 gulp.task('_buildLib', function () {
   return gulp.src(libPackaging)
@@ -115,6 +130,15 @@ gulp.task('_lintSpec', ['_buildSpecChunk', '_buildSpec'], function (callback) {
 // Lint Task
 gulp.task('lint', ['_lintLib', '_lintSpec'], function (callback) {
   callback();
+});
+
+// Quick Test Task
+gulp.task('quickTest', ['_buildQuick'], function (callback) {
+  childProcess.exec('node spec/node-runner.js', function (error, stdout, stderr) {
+    console.log(stdout);
+    console.error(stderr);
+    callback(error);
+  });
 });
 
 // Test Task

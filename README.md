@@ -4,25 +4,27 @@ Core Objects [read the spec](spec/README.md).
 
 Todo
 ----
-- refactor CORE and UTILITY to TGI.CORE and TGI.UTILITY
-- fix xexample tests
-- fix commented out code
+- refactor CORE and UTILITY to TGI.CORE and TGI.UTILITY TGI.STORE TGI.INTERFACE
 - Refactor inject global and closure option
 - coverage sux bad
+- workspace beef up to load in app/interface and work ...
 
 App To Do
+---
+- user query via interface
+    - yesno
+    - ok
+    - prompt
+    - choose
 
 Interface To Do
 ---
-- system commands (presentation?)
-    - sysNav and appNav !!!
-- Interface notify method needs to actually be implemented
-- application commands (sub of system)
-- workspace
+- sysNav (required) and appNav (optional)
 - cli factor for commands app commands / prefix for system
 
 Presentation standard tabs
-- Main ... main menu for app
+---
+- appNav ... main menu for app
 - Info ... about app and interface - store connection(s)
 - Find ... item in store
 - Bookmarks ... favorite items in store
@@ -30,9 +32,6 @@ Presentation standard tabs
 - Workspace ...
 - Alerts ...
 
-- prompt
-- yesno
-- ok
 
 
 

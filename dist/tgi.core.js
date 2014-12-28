@@ -1338,7 +1338,7 @@ Application.prototype.start = function (callBack) {
   if (typeof callBack != 'function') throw new Error('callBack required');
   var self = this;
   this.startCallback = callBack;
-  this.primaryInterface.start(self, this.presentation, this.sysPresentation, function (request) {
+  this.primaryInterface.start(self, this.presentation, function (request) {
     if (request.type=='Command') {
       request.command.execute();
     } else {
