@@ -10,9 +10,13 @@ sequenceDiagram
     userApp-->Interface: app selects interface
     userApp->Application: app is started
     Application->Interface: starts interface
-    loop user interacts with presentation
+    Interface-->Presentation: interface presents to user
+    loop user sends request to app
         Interface->Application: callback sends a Request object
         Application->Command: Command request type are executed
         Application->userApp: other request are passed back to app
     end
-
+    loop app sends request to user
+        userApp->Interface: app invokes interface notify method with Request
+        Interface->userApp: user response (optional) sent to app via callback
+    end
