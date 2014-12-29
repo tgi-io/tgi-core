@@ -5,7 +5,7 @@ Core Objects [read the spec](spec/README.md).
 Todo
 ----
 - refactor CORE and UTILITY to TGI.CORE and TGI.UTILITY TGI.STORE TGI.INTERFACE
-- Refactor inject global and closure option
+- Refactor inject global and closure option - will need script
 - coverage sux bad
 - workspace beef up to load in app/interface and work ...
 
