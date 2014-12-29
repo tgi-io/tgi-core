@@ -2490,7 +2490,7 @@ spec.runnerStoreMethods = function (SurrogateStore) {
  * tgi-core/lib/tgi-core-transport.spec.js
  */
 spec.test('tgi-core/lib/tgi-core-transport.spec.js', 'Transport', 'messages between client and host', function (callback) {
-  if (true || typeof io == 'undefined') { // todo cleaner testing without spammy errors
+  if (typeof io == 'undefined') { // todo cleaner testing without spammy errors
     spec.paragraph('test disabled.');
     return; 
   }
@@ -2557,10 +2557,10 @@ spec.test('tgi-core/lib/tgi-core-transport.spec.js', 'Transport', 'messages betw
       });
       spec.heading('close()', function () {
         spec.xexample('Transport must be connected (async error message)', spec.asyncResponse('jobs done'), function (testNode, returnResponse) {
-          //new Transport("", function () {
-          //  this.close(); // TODO can't open 2 transports to same URL so can't test this since it conflicts with hostStore
-          returnResponse(testNode, "jobs done"); // This test works but not when Transport active
-          //});
+          new Transport("", function () {
+            this.close(); // TODO can't open 2 transports to same URL so can't test this since it conflicts with hostStore
+            returnResponse(testNode, "jobs done");
+          });
         });
       });
     });

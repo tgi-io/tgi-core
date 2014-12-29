@@ -1888,7 +1888,7 @@ spec.test('tgi-core/lib/tgi-core-procedure.spec.js', 'Procedure', 'manages set o
         cmd.bucket = 'abc';
         cmd.execute();
       });
-      spec.xexample('async tasks are designated when requires is set to null', spec.asyncResults('eenie meenie miney mo'), function (callback) {
+      spec.example('async tasks are designated when requires is set to null', spec.asyncResults('eenie meenie miney mo'), function (callback) {
         var cmd = new Command({name: 'cmdProcedure', type: 'Procedure', contents: new Procedure({tasks: [
           {
             command: new Command({
@@ -2483,7 +2483,7 @@ spec.runnerStoreMethods = function (SurrogateStore) {
  * tgi-core/lib/tgi-core-transport.spec.js
  */
 spec.test('tgi-core/lib/tgi-core-transport.spec.js', 'Transport', 'messages between client and host', function (callback) {
-  if (true || typeof io == 'undefined') { // todo cleaner testing without spammy errors
+  if (typeof io == 'undefined') { // todo cleaner testing without spammy errors
     spec.paragraph('test disabled.');
     return; 
   }
@@ -2650,7 +2650,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
     });
   });
   spec.heading('Application Integration', function () {
-    spec.xexample('little app with command execution mocking', spec.asyncResults(true), function (callback) {
+    spec.example('little app with command execution mocking', spec.asyncResults(true), function (callback) {
 
       // Send 4 mocks and make sure we get 4 callback calls
       var self = this;
