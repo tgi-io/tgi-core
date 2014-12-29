@@ -363,19 +363,16 @@ for (var i = 0; i < myTypes.length; i++)
     } else {
       // mismatches bad so should throw error (is caught unless no error or different error)
       theBad++;
-      /* jshint ignore:start */
-      this.shouldThrowError('*', function () {
+      // NOTE: functions in loops are terrible code practices - except in dorky test cases
+      this.shouldThrowError('*', function () { // jshint ignore:line
         new Attribute({name: 'my' + myTypes[i], type: myTypes[i], value: myValues[j]});
-      });
-      /* jshint ignore:end */
+      });// jshint ignore:line
     }
     // other objects should throw always
     theBad++;
-    /* jshint ignore:start */
-    this.shouldThrowError('*', function () {
+    this.shouldThrowError('*', function () { // jshint ignore:line
       new Attribute({name: 'my' + myTypes[i], type: myTypes[i], value: {}});
-    });
-    /* jshint ignore:end */
+    }); // jshint ignore:line
   }
 return theGood + ' correct assignments ' + theBad + ' errors thrown';
 ```
@@ -1167,7 +1164,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Sun Dec 28 2014 20:03:26 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Sun Dec 28 2014 20:18:06 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1176,7 +1173,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Sun Dec 28 2014 20:03:26 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Sun Dec 28 2014 20:18:06 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2576,7 +2573,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Sun Dec 28 2014 20:03:26 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Sun Dec 28 2014 20:18:06 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript

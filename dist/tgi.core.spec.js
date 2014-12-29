@@ -264,19 +264,16 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
                 } else {
                   // mismatches bad so should throw error (is caught unless no error or different error)
                   theBad++;
-                  /* jshint ignore:start */
-                  this.shouldThrowError('*', function () {
+                  // NOTE: functions in loops are terrible code practices - except in dorky test cases
+                  this.shouldThrowError('*', function () { // jshint ignore:line
                     new Attribute({name: 'my' + myTypes[i], type: myTypes[i], value: myValues[j]});
-                  });
-                  /* jshint ignore:end */
+                  });// jshint ignore:line
                 }
                 // other objects should throw always
                 theBad++;
-                /* jshint ignore:start */
-                this.shouldThrowError('*', function () {
+                this.shouldThrowError('*', function () { // jshint ignore:line
                   new Attribute({name: 'my' + myTypes[i], type: myTypes[i], value: {}});
-                });
-                /* jshint ignore:end */
+                }); // jshint ignore:line
               }
             return theGood + ' correct assignments ' + theBad + ' errors thrown';
           });
