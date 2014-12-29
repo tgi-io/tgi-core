@@ -2486,8 +2486,8 @@ spec.test('tgi-core/lib/tgi-core-transport.spec.js', 'Transport', 'messages betw
   if (typeof io == 'undefined') { // todo cleaner testing without spammy errors
     spec.paragraph('Handle message passing between host and UI.');
     spec.paragraph('TODO: run these tests in node-make-spec-md with io defined');
-    spec.paragraph('Read the source until then...' +
-    '\nhttps://github.com/tgi-io/tgi-core/blob/master/lib/core/tgi-core-transport.spec.js');
+    spec.paragraph('Read the source until then...');
+    spec.paragraph('https://github.com/tgi-io/tgi-core/blob/master/lib/core/tgi-core-transport.spec.js');
     return;
   }
   spec.heading('Transport Class', function () {
