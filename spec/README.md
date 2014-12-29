@@ -1167,7 +1167,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Sun Dec 28 2014 19:55:39 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Sun Dec 28 2014 19:59:34 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1176,7 +1176,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Sun Dec 28 2014 19:55:39 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Sun Dec 28 2014 19:59:34 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2396,7 +2396,7 @@ function listReady(list, error) {
 <blockquote><strong>log: </strong>Store is not ready.<br><strong>log: </strong>a Store Store<br>returns <strong>true</strong> as expected
 </blockquote>
 ## [&#9664;](#-store)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-application) &nbsp;Transport
-test disabled.    
+TODO: run these tests in node-make-spec-md with io defined    
 
 
 ## [&#9664;](#-transport)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-log) &nbsp;Application
@@ -2570,7 +2570,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Sun Dec 28 2014 19:55:39 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Sun Dec 28 2014 19:59:34 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
