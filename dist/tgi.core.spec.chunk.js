@@ -1125,7 +1125,7 @@ spec.test('tgi-core/lib/tgi-core-interface.spec.js', 'Interface', 'enable user t
       });
     });
 
-    spec.heading('choose', function () {
+    spec.heading('choose(prompt, choices, callBack)', function () {
       spec.paragraph('prompt to choose an item');
       spec.example('must provide text prompt first', Error('prompt required'), function () {
         new Interface().choose();

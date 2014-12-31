@@ -1164,7 +1164,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Wed Dec 31 2014 13:23:41 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Wed Dec 31 2014 15:16:58 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1173,7 +1173,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Wed Dec 31 2014 13:23:41 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Wed Dec 31 2014 15:16:58 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -1396,7 +1396,7 @@ new Interface().ask('Please enter your name', new Attribute({name: 'Name'}));
 ```
 <blockquote><strong>Error: callBack required</strong> thrown as expected
 </blockquote>
-#### choose
+#### choose(prompt, choices, callBack)
 prompt to choose an item    
 
 &nbsp;<b><i>must provide text prompt first:</i></b>
@@ -2795,7 +2795,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Wed Dec 31 2014 13:23:41 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Wed Dec 31 2014 15:16:58 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
