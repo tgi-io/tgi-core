@@ -728,6 +728,25 @@ Interface.prototype.render = function (presentation, callBack) {
   if (false === (presentation instanceof Presentation)) throw new Error('Presentation object required');
   if (callBack && typeof callBack != 'function') throw new Error('optional second argument must a commandRequest callback function');
 };
+Interface.prototype.yesno = function (prompt, callBack) {
+  if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
+  if (typeof callBack != 'function') throw new Error('callBack required');
+};
+Interface.prototype.ok = function (prompt, callBack) {
+  if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
+  if (typeof callBack != 'function') throw new Error('callBack required');
+};
+Interface.prototype.ask = function (prompt, attribute, callBack) {
+  if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
+  if (false === (attribute instanceof Attribute)) throw new Error('instance of Attribute a required parameter');
+  if (typeof callBack != 'function') throw new Error('callBack required');
+};
+Interface.prototype.choose = function (prompt, choices, callBack) {
+  if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
+  if (false === (choices instanceof Array)) throw new Error('choices array required');
+  if (!choices.length) throw new Error('choices array empty');
+  if (typeof callBack != 'function') throw new Error('callBack required');
+};
 
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-list.source.js

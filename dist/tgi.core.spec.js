@@ -1085,6 +1085,73 @@ spec.test('tgi-core/lib/tgi-core-interface.spec.js', 'Interface', 'enable user t
         });
       });
     });
+
+    spec.heading('yesno(prompt, callBack)', function () {
+      spec.paragraph('Query user with a yes no question.');
+      spec.example('must set interface before invoking', Error('interface not set'), function () {
+        new Application().yesno();
+      });
+      spec.example('must provide the text question param', Error('prompt required'), function () {
+        var myApplication = new Application();
+        myApplication.setInterface(new Interface());
+        myApplication.yesno();
+      });
+      spec.example('must provide callback param', Error('callBack required'), function () {
+        var myApplication = new Application();
+        myApplication.setInterface(new Interface());
+        myApplication.yesno('Who moved my cheese?');
+      });
+    });
+    spec.heading('ok(prompt, callBack)', function () {
+      spec.paragraph('Pause before proceeding');
+      spec.example('must set interface before invoking', Error('interface not set'), function () {
+        new Application().ok();
+      });
+      spec.example('must provide the text prompt param', Error('prompt required'), function () {
+        var myApplication = new Application();
+        myApplication.setInterface(new Interface());
+        myApplication.ok();
+      });
+      spec.example('must provide callback param', Error('callBack required'), function () {
+        var myApplication = new Application();
+        myApplication.setInterface(new Interface());
+        myApplication.ok('You are about to enter the twilight zone.');
+      });
+    });
+
+    spec.heading('ask(prompt, attribute, callBack)', function () {
+      spec.paragraph('Simple single item prompt.');
+      spec.example('must provide the text question param', Error('prompt required'), function () {
+        new Interface().ask();
+      });
+      spec.example('must supply attribute', Error('instance of Attribute a required parameter'), function () {
+        new Interface().ask('What it do');
+      });
+      spec.example('must provide callback param', Error('callBack required'), function () {
+        new Interface().ask('Please enter your name', new Attribute({name: 'Name'}));
+      });
+    });
+
+    spec.heading('choose', function () {
+      spec.paragraph('prompt to choose an item');
+      spec.example('must provide text prompt first', Error('prompt required'), function () {
+        new Interface().choose();
+      });
+      spec.example('must supply array of choices', undefined, function () {
+        this.shouldThrowError(Error('choices array required'), function () {
+          new Interface().choose('What it do');
+        });
+        this.shouldThrowError(Error('choices array required'), function () {
+          new Interface().choose('this will not', 'work');
+        });
+        this.shouldThrowError(Error('choices array empty'), function () {
+          new Interface().choose('empty array?', []);
+        });
+      });
+      spec.example('must provide callback param', Error('callBack required'), function () {
+        new Interface().choose('choose wisely', ['rock', 'paper', 'scissors']);
+      });
+    });
   });
   spec.heading('Interface Integration', function () {
     spec.example('Test command execution mocking', spec.asyncResults(true), function (callback) {
@@ -2582,7 +2649,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
     //});
   });
   spec.heading('ATTRIBUTES', function () {
-    spec.paragraph('Application extends model and inherits the attributes property.  All Presentation objects ' +
+    spec.paragraph('Application extends model and inherits the attributes property.  All Application objects ' +
     'have the following attributes:');
     spec.example('following attributes are defined:', undefined, function () {
       var presentation = new Application(); // default attributes and values
@@ -2650,12 +2717,12 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
         new Application().dispatch(new Request({type: 'Command', command: new Command()}), true);
       });
     });
-    spec.heading('yesno', function () {
+    spec.heading('yesno(prompt, callBack)', function () {
       spec.paragraph('Query user with a yes no question.');
       spec.example('must set interface before invoking', Error('interface not set'), function () {
         new Application().yesno();
       });
-      spec.example('must provide the text question param', Error('text required'), function () {
+      spec.example('must provide the text question param', Error('prompt required'), function () {
         var myApplication = new Application();
         myApplication.setInterface(new Interface());
         myApplication.yesno();
@@ -2666,12 +2733,12 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
         myApplication.yesno('Who moved my cheese?');
       });
     });
-    spec.heading('ok', function () {
+    spec.heading('ok(prompt, callBack)', function () {
       spec.paragraph('Pause before proceeding');
       spec.example('must set interface before invoking', Error('interface not set'), function () {
         new Application().ok();
       });
-      spec.example('must provide the text question param', Error('text required'), function () {
+      spec.example('must provide the text prompt param', Error('prompt required'), function () {
         var myApplication = new Application();
         myApplication.setInterface(new Interface());
         myApplication.ok();
@@ -2683,26 +2750,26 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
       });
     });
 
-    spec.heading('prompt', function () {
+    spec.heading('ask(prompt, attribute, callBack)', function () {
       spec.paragraph('Simple single item prompt.');
       spec.example('must set interface before invoking', Error('interface not set'), function () {
-        new Application().prompt();
+        new Application().ask();
       });
-      spec.example('must provide the text question param', Error('text required'), function () {
+      spec.example('must provide the text question param', Error('prompt required'), function () {
         var myApplication = new Application();
         myApplication.setInterface(new Interface());
-        myApplication.prompt();
+        myApplication.ask();
       });
       spec.example('must supply attribute', Error('instance of Attribute a required parameter'), function () {
         var myApplication = new Application();
         myApplication.setInterface(new Interface());
-        myApplication.prompt('What it do');
+        myApplication.ask('What it do');
         // myApplication.prompt('Name Please:',new Attribute());
       });
       spec.example('must provide callback param', Error('callBack required'), function () {
         var myApplication = new Application();
         myApplication.setInterface(new Interface());
-        myApplication.prompt('Please enter your name', new Attribute({name: 'Name'}));
+        myApplication.ask('Please enter your name', new Attribute({name: 'Name'}));
       });
     });
 
@@ -2711,7 +2778,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
       spec.example('must set interface before invoking', Error('interface not set'), function () {
         new Application().choose();
       });
-      spec.example('must provide text prompt first', Error('text required'), function () {
+      spec.example('must provide text prompt first', Error('prompt required'), function () {
         var myApplication = new Application();
         myApplication.setInterface(new Interface());
         myApplication.choose();
@@ -2766,6 +2833,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
   });
 
 });
+
 
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/models/tgi-core-model-log.test.js

@@ -1164,7 +1164,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Wed Dec 31 2014 12:36:34 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Wed Dec 31 2014 13:22:45 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1173,7 +1173,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Wed Dec 31 2014 12:36:34 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Wed Dec 31 2014 13:22:45 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -1325,6 +1325,104 @@ this.shouldThrowError('Error: invalid request parameter', function () {
   ui.mockRequest([new Request(new Command()), 'wtf']);
 });
 ```
+#### yesno(prompt, callBack)
+Query user with a yes no question.    
+
+&nbsp;<b><i>must set interface before invoking:</i></b>
+```javascript
+new Application().yesno();
+```
+<blockquote><strong>Error: interface not set</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>must provide the text question param:</i></b>
+```javascript
+var myApplication = new Application();
+myApplication.setInterface(new Interface());
+myApplication.yesno();
+```
+<blockquote><strong>Error: prompt required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>must provide callback param:</i></b>
+```javascript
+var myApplication = new Application();
+myApplication.setInterface(new Interface());
+myApplication.yesno('Who moved my cheese?');
+```
+<blockquote><strong>Error: callBack required</strong> thrown as expected
+</blockquote>
+#### ok(prompt, callBack)
+Pause before proceeding    
+
+&nbsp;<b><i>must set interface before invoking:</i></b>
+```javascript
+new Application().ok();
+```
+<blockquote><strong>Error: interface not set</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>must provide the text prompt param:</i></b>
+```javascript
+var myApplication = new Application();
+myApplication.setInterface(new Interface());
+myApplication.ok();
+```
+<blockquote><strong>Error: prompt required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>must provide callback param:</i></b>
+```javascript
+var myApplication = new Application();
+myApplication.setInterface(new Interface());
+myApplication.ok('You are about to enter the twilight zone.');
+```
+<blockquote><strong>Error: callBack required</strong> thrown as expected
+</blockquote>
+#### ask(prompt, attribute, callBack)
+Simple single item prompt.    
+
+&nbsp;<b><i>must provide the text question param:</i></b>
+```javascript
+new Interface().ask();
+```
+<blockquote><strong>Error: prompt required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>must supply attribute:</i></b>
+```javascript
+new Interface().ask('What it do');
+```
+<blockquote><strong>Error: instance of Attribute a required parameter</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>must provide callback param:</i></b>
+```javascript
+new Interface().ask('Please enter your name', new Attribute({name: 'Name'}));
+```
+<blockquote><strong>Error: callBack required</strong> thrown as expected
+</blockquote>
+#### choose
+prompt to choose an item    
+
+&nbsp;<b><i>must provide text prompt first:</i></b>
+```javascript
+new Interface().choose();
+```
+<blockquote><strong>Error: prompt required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>must supply array of choices:</i></b>
+```javascript
+this.shouldThrowError(Error('choices array required'), function () {
+  new Interface().choose('What it do');
+});
+this.shouldThrowError(Error('choices array required'), function () {
+  new Interface().choose('this will not', 'work');
+});
+this.shouldThrowError(Error('choices array empty'), function () {
+  new Interface().choose('empty array?', []);
+});
+```
+&nbsp;<b><i>must provide callback param:</i></b>
+```javascript
+new Interface().choose('choose wisely', ['rock', 'paper', 'scissors']);
+```
+<blockquote><strong>Error: callBack required</strong> thrown as expected
+</blockquote>
 #### Interface Integration
 &nbsp;<b><i>Test command execution mocking:</i></b>
 ```javascript
@@ -2418,7 +2516,7 @@ return wasMuted > 0;
 <blockquote><strong>log: </strong>Tests Muted: 25<br>returns <strong>true</strong> as expected
 </blockquote>
 #### ATTRIBUTES
-Application extends model and inherits the attributes property.  All Presentation objects have the following attributes:    
+Application extends model and inherits the attributes property.  All Application objects have the following attributes:    
 
 &nbsp;<b><i>following attributes are defined::</i></b>
 ```javascript
@@ -2697,7 +2795,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Wed Dec 31 2014 12:36:34 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Wed Dec 31 2014 13:22:45 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
