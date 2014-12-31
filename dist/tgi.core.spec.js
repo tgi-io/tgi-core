@@ -2650,21 +2650,106 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
         new Application().dispatch(new Request({type: 'Command', command: new Command()}), true);
       });
     });
+    spec.heading('yesno', function () {
+      spec.paragraph('Query user with a yes no question.');
+      spec.example('must set interface before invoking', Error('interface not set'), function () {
+        new Application().yesno();
+      });
+      spec.example('must provide the text question param', Error('text required'), function () {
+        var myApplication = new Application();
+        myApplication.setInterface(new Interface());
+        myApplication.yesno();
+      });
+      spec.example('must provide callback param', Error('callBack required'), function () {
+        var myApplication = new Application();
+        myApplication.setInterface(new Interface());
+        myApplication.yesno('Who moved my cheese?');
+      });
+    });
+    spec.heading('ok', function () {
+      spec.paragraph('Pause before proceeding');
+      spec.example('must set interface before invoking', Error('interface not set'), function () {
+        new Application().ok();
+      });
+      spec.example('must provide the text question param', Error('text required'), function () {
+        var myApplication = new Application();
+        myApplication.setInterface(new Interface());
+        myApplication.ok();
+      });
+      spec.example('must provide callback param', Error('callBack required'), function () {
+        var myApplication = new Application();
+        myApplication.setInterface(new Interface());
+        myApplication.ok('You are about to enter the twilight zone.');
+      });
+    });
+
+    spec.heading('prompt', function () {
+      spec.paragraph('Simple single item prompt.');
+      spec.example('must set interface before invoking', Error('interface not set'), function () {
+        new Application().prompt();
+      });
+      spec.example('must provide the text question param', Error('text required'), function () {
+        var myApplication = new Application();
+        myApplication.setInterface(new Interface());
+        myApplication.prompt();
+      });
+      spec.example('must supply attribute', Error('instance of Attribute a required parameter'), function () {
+        var myApplication = new Application();
+        myApplication.setInterface(new Interface());
+        myApplication.prompt('What it do');
+        // myApplication.prompt('Name Please:',new Attribute());
+      });
+      spec.example('must provide callback param', Error('callBack required'), function () {
+        var myApplication = new Application();
+        myApplication.setInterface(new Interface());
+        myApplication.prompt('Please enter your name', new Attribute({name: 'Name'}));
+      });
+    });
+
+    spec.heading('choose', function () {
+      spec.paragraph('prompt to choose an item');
+      spec.example('must set interface before invoking', Error('interface not set'), function () {
+        new Application().choose();
+      });
+      spec.example('must provide text prompt first', Error('text required'), function () {
+        var myApplication = new Application();
+        myApplication.setInterface(new Interface());
+        myApplication.choose();
+      });
+      spec.example('must supply array of choices', undefined, function () {
+        var myApplication = new Application();
+        myApplication.setInterface(new Interface());
+
+        this.shouldThrowError(Error('choices array required'), function () {
+          myApplication.choose('What it do');
+        });
+        this.shouldThrowError(Error('choices array required'), function () {
+          myApplication.choose('this will not', 'work');
+        });
+        this.shouldThrowError(Error('choices array empty'), function () {
+          myApplication.choose('empty array?', []);
+        });
+      });
+      spec.example('must provide callback param', Error('callBack required'), function () {
+        var myApplication = new Application();
+        myApplication.setInterface(new Interface());
+        myApplication.choose('choose wisely', ['rock', 'paper', 'scissors']);
+      });
+    });
+
+
   });
   spec.heading('Application Integration', function () {
     spec.example('little app with command execution mocking', spec.asyncResults(true), function (callback) {
-
+      // todo delamify this
       // Send 4 mocks and make sure we get 4 callback calls
       var self = this;
       self.callbackCount = 0;
-
       var app = new Application();
       var testInterface = new Interface();
       var testPresentation = new Presentation();
-
       app.setInterface(testInterface);
       app.setPresentation(testPresentation);
-
       app.start(function (request) {
         if (request.type == 'mock count')
           self.callbackCount++;

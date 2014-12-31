@@ -11,11 +11,8 @@ Todo
 
 App To Do
 ---
-- user query via interface
-    - yesno
-    - ok
-    - prompt
-    - choose
+- propagate user queries to interface
+- incorporate user queries in integration test
 
 Interface To Do
 ---
