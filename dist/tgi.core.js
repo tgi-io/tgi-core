@@ -1375,25 +1375,25 @@ Application.prototype.setPresentation = function (presentation) {
 Application.prototype.getPresentation = function () {
   return this.presentation;
 };
-Application.prototype.yesno = function (text, callBack) {
+Application.prototype.yesno = function (prompt, callBack) {
   if (false === (this.primaryInterface instanceof Interface)) throw new Error('interface not set');
-  if (!text || typeof text !== 'string') throw new Error('text required');
+  if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
   if (typeof callBack != 'function') throw new Error('callBack required');
 };
-Application.prototype.ok = function (text, callBack) {
+Application.prototype.ok = function (prompt, callBack) {
   if (false === (this.primaryInterface instanceof Interface)) throw new Error('interface not set');
-  if (!text || typeof text !== 'string') throw new Error('text required');
+  if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
   if (typeof callBack != 'function') throw new Error('callBack required');
 };
-Application.prototype.prompt = function (text, attribute, callBack) {
+Application.prototype.ask = function (prompt, attribute, callBack) {
   if (false === (this.primaryInterface instanceof Interface)) throw new Error('interface not set');
-  if (!text || typeof text !== 'string') throw new Error('text required');
+  if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
   if (false === (attribute instanceof Attribute)) throw new Error('instance of Attribute a required parameter');
   if (typeof callBack != 'function') throw new Error('callBack required');
 };
-Application.prototype.choose = function (text, choices, callBack) {
+Application.prototype.choose = function (prompt, choices, callBack) {
   if (false === (this.primaryInterface instanceof Interface)) throw new Error('interface not set');
-  if (!text || typeof text !== 'string') throw new Error('text required');
+  if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
   if (false === (choices instanceof Array)) throw new Error('choices array required');
   if (!choices.length) throw new Error('choices array empty');
   if (typeof callBack != 'function') throw new Error('callBack required');
