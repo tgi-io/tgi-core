@@ -1,6 +1,6 @@
 {
   "name": "tgi-core",
-  "version": "0.0.18",
+  "version": "0.0.22",
   "description": "core objects for tgi framework",
   "contributors": [
     {
@@ -13,6 +13,7 @@
     "tgi-spec": "*",
     "tgi-utility": "*"
   },
+  "main": "./dist/tgi.core",
   "scripts": {
     "test": "node spec/node-runner.js"
   },

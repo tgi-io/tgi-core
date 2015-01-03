@@ -429,9 +429,9 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
           this.shouldBeTrue(myBool.coerce(true) === true && myBool.coerce(1) === true);
           this.shouldBeTrue(myBool.coerce('y') && myBool.coerce('yEs') && myBool.coerce('t') && myBool.coerce('TRUE') && myBool.coerce('1'));
           this.shouldBeTrue(!((myBool.coerce('') || (myBool.coerce('yep')))));
-          // Date
-          this.shouldBeTrue(myDate.coerce('2/21/2014').getTime() === new Date('2/21/2014').getTime());
-          this.shouldBeTrue(myDate.coerce('2/21').getTime() === new Date('2/21/2014').getTime());
+          //// Date
+          this.shouldBeTrue(myDate.coerce('2/21/2015').getTime() === new Date('2/21/2015').getTime());
+          this.shouldBeTrue(myDate.coerce('2/21').getTime() === new Date('2/21/2015').getTime());
 
           // TODO
           this.shouldThrowError(Error('coerce cannot determine appropriate value'), function () {
