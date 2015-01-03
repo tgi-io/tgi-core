@@ -9,7 +9,7 @@ Todo
 - coverage sux bad
 - workspace beef up to load in app/interface and work ...
 
-App To Do
+App To Do 
 ---
 - propagate user queries to interface
 - incorporate user queries in integration test
