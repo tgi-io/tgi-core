@@ -4,15 +4,15 @@ Core Objects [read the spec](spec/README.md).
 
 Todo
 ----
-- refactor CORE and UTILITY to TGI.CORE and TGI.UTILITY TGI.STORE TGI.INTERFACE
-- Refactor inject global and closure option - will need script
-- coverage sux bad
-- workspace beef up to load in app/interface and work ...
+- merge core and utility
 
-App To Do 
+App To Do
 ---
+- remove setpresentation req. for app
+- have app.start pass presentation / command / function etc if anything applies
 - propagate user queries to interface
 - incorporate user queries in integration test
+- var app.code = function(function(){}){}
 
 Interface To Do
 ---
@@ -28,3 +28,11 @@ Presentation standard tabs
 - History ... logged activity in store
 - Workspace ...
 - Alerts ...
+
+obselete design
+---
+- refactor CORE and UTILITY to TGI.CORE and TGI.UTILITY TGI.STORE TGI.INTERFACE
+- Refactor inject global and closure option - will need script <no global>
+- coverage sux bad <fuck coverage>
+- workspace beef up to load in app/interface and work ...
+

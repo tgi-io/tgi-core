@@ -57,13 +57,13 @@ var libFilesUtils =[
   'lib/models/tgi-core-model-session.source.js',
   'lib/models/tgi-core-model-user.source.js',
   'lib/models/tgi-core-model-workspace.source.js',
-  'lib/stores/tgi-core-store-memory.source.js'
+  'lib/stores/tgi-core-store-memory.source.js',
+  'node_modules/tgi-utility/lib/tgi-utility.source.js',
+  'node_modules/tgi-utility/lib/tgi-utility-objects.source.js',
+  'node_modules/tgi-utility/lib/tgi-utility-arrays.source.js',
+  'node_modules/tgi-utility/lib/tgi-utility-strings.source.js'
 ];
 
-libFilesUtils.push('node_modules/tgi-utility/lib/tgi-utility.source.js');
-libFilesUtils.push('node_modules/tgi-utility/lib/lib/tgi-utility-objects.source.js');
-libFilesUtils.push('node_modules/tgi-utility/lib/lib/tgi-utility-arrays.source.js');
-libFilesUtils.push('node_modules/tgi-utility/lib/tgi-utility-strings.source.js');
 var libPackagingUtils = ['lib/_packaging/lib-header'].concat(libFilesUtils).concat(['lib/_packaging/lib-footer']);
 
 // The Spec
