@@ -33,6 +33,6 @@ obselete design
 ---
 - refactor CORE and UTILITY to TGI.CORE and TGI.UTILITY TGI.STORE TGI.INTERFACE
 - Refactor inject global and closure option - will need script <no global>
-- coverage sux bad <fuck coverage>
+- coverage sux bad one day I'll...
 - workspace beef up to load in app/interface and work ...
 
