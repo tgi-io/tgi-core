@@ -9,9 +9,6 @@ return typeof CORE;
 </blockquote>
 ###Table of Contents
 
-
-#### Core Objects
-- [CORE](#-core) exposed as public or exported (node)
 - [Attribute](#-attribute) defines data types - needed by Model
 - [Command](#-command) encapsulates task execution
 - [Delta](#-delta) represents changes to models
@@ -36,24 +33,7 @@ return typeof CORE;
 - [MemoryStore](#-memorystore) volatile memory store in js codespace
 
 
-
-## [&#9664;](#-tgi-core)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-attribute) &nbsp;CORE
-The CORE function exposes the tgi-core library via global or node module exports.    
-
-Application code written in the TGI Framework does not need the CORE function since it is visible by closure.    
-
-&nbsp;<b><i>core object Model is available in closure:</i></b>
-```javascript
-this.shouldBeTrue(Model == CORE().Model);
-```
-&nbsp;<b><i>UTILITY functions are available in closure:</i></b>
-```javascript
-// https://github.com/tgicloud/tgi-utility
-return cpad(' sup ',20,'*');
-```
-<blockquote>returns <strong>******* sup ********</strong> as expected
-</blockquote>
-## [&#9664;](#-core)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-command) &nbsp;Attribute
+## [&#9664;](#-tgi-core)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-command) &nbsp;Attribute
 Attributes are the means for models to represent data of different types.  They have no dependencies on Models however and can be used without creating a model.    
 
 #### CONSTRUCTOR
@@ -1164,7 +1144,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Sat Jan 03 2015 20:57:35 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Sat Jan 03 2015 20:58:58 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1173,7 +1153,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Sat Jan 03 2015 20:57:35 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Sat Jan 03 2015 20:58:58 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2795,7 +2775,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Sat Jan 03 2015 20:57:35 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Sat Jan 03 2015 20:58:58 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript

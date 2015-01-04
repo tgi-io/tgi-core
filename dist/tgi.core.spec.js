@@ -13,24 +13,24 @@ var testSpec = function(spec,CORE) {
  */
 spec.test('lib/tgi-spec-intro', 'tgi-core', 'Core Repository', function (callback) {
   spec.paragraph('Core objects, models, stores and interfaces.');
-  spec.index();
-});
-spec.testSection('Core Objects');
-spec.test('tgi-core/lib/tgi-core.test.js', 'CORE', 'exposed as public or exported (node)', function (callback) {
-  spec.paragraph('The CORE function exposes the tgi-core library via global or node module exports.');
   spec.example('CORE function exposes library', 'function', function () {
     return typeof CORE;
   });
-  spec.paragraph('Application code written in the TGI Framework does not need the CORE function' +
-  ' since it is visible by closure.');
-  spec.example('core object Model is available in closure', undefined, function () {
-    this.shouldBeTrue(Model == CORE().Model);
-  });
-  spec.example('UTILITY functions are available in closure', '******* sup ********', function () {
-    // https://github.com/tgicloud/tgi-utility
-    return cpad(' sup ',20,'*');
-  });
+  spec.index();
 });
+//spec.testSection('Core Objects');
+//spec.test('tgi-core/lib/tgi-core.test.js', 'CORE', 'exposed as public or exported (node)', function (callback) {
+//  spec.paragraph('The CORE function exposes the tgi-core library via global or node module exports.');
+//  spec.paragraph('Application code written in the TGI Framework does not need the CORE function' +
+//  ' since it is visible by closure.');
+//  spec.example('core object Model is available in closure', undefined, function () {
+//    this.shouldBeTrue(Model == CORE().Model);
+//  });
+//  spec.example('UTILITY functions are available in closure', '******* sup ********', function () {
+//    // https://github.com/tgicloud/tgi-utility
+//    return cpad(' sup ',20,'*');
+//  });
+//});
 
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-attribute.spec.js
@@ -429,7 +429,7 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
           this.shouldBeTrue(myBool.coerce(true) === true && myBool.coerce(1) === true);
           this.shouldBeTrue(myBool.coerce('y') && myBool.coerce('yEs') && myBool.coerce('t') && myBool.coerce('TRUE') && myBool.coerce('1'));
           this.shouldBeTrue(!((myBool.coerce('') || (myBool.coerce('yep')))));
-          //// Date
+          //// Date {todo this will break in 2016}
           this.shouldBeTrue(myDate.coerce('2/21/2015').getTime() === new Date('2/21/2015').getTime());
           this.shouldBeTrue(myDate.coerce('2/21').getTime() === new Date('2/21/2015').getTime());
 
