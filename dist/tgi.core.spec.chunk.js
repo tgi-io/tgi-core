@@ -9,7 +9,8 @@ spec.test('lib/tgi-spec-intro', 'tgi-core', 'Core Repository', function (callbac
   spec.example('CORE function exposes library', 'function', function () {
     return typeof CORE;
   });
-  spec.index();
+  spec.index(); // todo optional parm changes TOC to opt
+
 });
 //spec.testSection('Core Objects');
 //spec.test('tgi-core/lib/tgi-core.test.js', 'CORE', 'exposed as public or exported (node)', function (callback) {
