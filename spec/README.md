@@ -31,8 +31,10 @@ return typeof CORE;
 
 #### Stores
 - [MemoryStore](#-memorystore) volatile memory store in js codespace
+
+#### Utility Functions
 - [Array Functions](#-array-functions) description
-- [Spec Constructor Function](#-spec-constructor-function) description
+- [Object Functions](#-object-functions) description
 - [String Functions](#-string-functions) description
 
 
@@ -1147,7 +1149,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Mon Jan 05 2015 15:43:09 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Mon Jan 05 2015 15:47:39 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1156,7 +1158,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Mon Jan 05 2015 15:43:09 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Mon Jan 05 2015 15:47:39 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2778,7 +2780,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Mon Jan 05 2015 15:43:09 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Mon Jan 05 2015 15:47:39 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -3506,7 +3508,8 @@ function listReady(list, error) {
 ```
 <blockquote><strong>log: </strong>Moe,Larry,Shemp<br><strong>log: </strong>0<br><strong>log: </strong>0<br><strong>log: </strong>a MemoryStore MemoryStore<br>returns <strong>true</strong> as expected
 </blockquote>
-## [&#9664;](#-memorystore)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-spec-constructor-function) &nbsp;Array Functions
+
+## [&#9664;](#-memorystore)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-object-functions) &nbsp;Array Functions
 #### ARRAY FUNCTIONS
 #### contains(array,object)
 This method returns true or false as to whether object is contained in array.    
@@ -3521,7 +3524,7 @@ return contains(['moe', 'larry', 'curley'], 'larry');
 ```javascript
 return contains(['moe', 'larry', 'curley'], 'shemp');
 ```
-## [&#9664;](#-array-functions)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-string-functions) &nbsp;Spec Constructor Function
+## [&#9664;](#-array-functions)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-string-functions) &nbsp;Object Functions
 #### inheritPrototype(p)
 kinda sorta class like    
 
@@ -3570,7 +3573,7 @@ return getInvalidProperties({name: 'name', Kahn: 'value'}, ['name', 'value'])[0]
 // no unknown properties
 return getInvalidProperties({name: 'name', value: 'Kahn'}, ['name', 'value']).length;
 ```
-## [&#9664;](#-spec-constructor-function)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-summary) &nbsp;String Functions
+## [&#9664;](#-object-functions)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-summary) &nbsp;String Functions
 #### STRING FUNCTIONS
 #### trim(string)
 &nbsp;<b><i>Remove leading and trailing spaces from string:</i></b>

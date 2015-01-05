@@ -3123,6 +3123,7 @@ spec.test('tgi-core/lib/stores/tgi-core-store-memory.spec.js', 'MemoryStore', 'v
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/utility/tgi-core-arrays.spec.js
  */
+spec.testSection('Utility Functions');
 spec.test('tgi-utility/lib/tgi-utility-arrays.test.js', 'Array Functions', 'description', function (callback) {
   callback({log: 'tgi-utility/lib/tgi-utility-arrays.test.js'});
   spec.heading('ARRAY FUNCTIONS', function () {
@@ -3141,8 +3142,7 @@ spec.test('tgi-utility/lib/tgi-utility-arrays.test.js', 'Array Functions', 'desc
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/utility/tgi-core-objects.spec.js
  */
-spec.test('tgi-utility/lib/tgi-utility-objects.test.js', 'Spec Constructor Function', 'description', function (callback) {
-  callback({log: 'tgi-utility/lib/tgi-utility-objects.test.js'});
+spec.test('tgi-utility/lib/tgi-utility-objects.test.js', 'Object Functions', 'description', function (callback) {
   spec.heading('inheritPrototype(p)', function () {
     spec.paragraph('kinda sorta class like');
     spec.example('Cannot pass null', undefined, function () {
@@ -3174,7 +3174,6 @@ spec.test('tgi-utility/lib/tgi-utility-objects.test.js', 'Spec Constructor Funct
       return daffy.sound();
     });
   });
-
   spec.heading('getInvalidProperties(args,allowedProperties)', function () {
     spec.paragraph('Functions that take an object as it\'s parameter use this to validate the ' +
     'properties of the parameter by returning any invalid properties');
@@ -3195,7 +3194,6 @@ spec.test('tgi-utility/lib/tgi-utility-objects.test.js', 'Spec Constructor Funct
  */
 
 spec.test('tgi-utility/lib/tgi-utility-strings.test.js', 'String Functions', 'description', function (callback) {
-  callback({log: 'tgi-utility/lib/tgi-utility-strings.test.js'});
   spec.heading('STRING FUNCTIONS', function () {
     spec.heading('trim(string)', function () {
       spec.example('Remove leading and trailing spaces from string', '(hello)', function () {
