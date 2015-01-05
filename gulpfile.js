@@ -68,7 +68,7 @@ var libPackagingUtils = ['lib/_packaging/lib-header'].concat(libFilesUtils).conc
 
 // The Spec
 var specFiles = [
-  'lib/tgi-core.test.js',
+  'lib/tgi-core.spec.js',
   'lib/core/tgi-core-attribute.spec.js',
   'lib/core/tgi-core-command.spec.js',
   'lib/core/tgi-core-delta.spec.js',

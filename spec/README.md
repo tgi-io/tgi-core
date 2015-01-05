@@ -1,5 +1,5 @@
 #tgi-core
-Core objects, models, stores and interfaces.    
+Core constructors, models, stores and interfaces.  The constructor functions define the object "classes" used by the framework.  The Model Constructor is a key part of the core that defines the system functionality for the framework.  The framework is further extended with a Store and Interface abstract that provides data stores and ui/ux implementations.    
 
 &nbsp;<b><i>CORE function exposes library:</i></b>
 ```javascript
@@ -7,7 +7,7 @@ return typeof CORE;
 ```
 <blockquote>returns <strong>function</strong> as expected
 </blockquote>
-####Objects
+####Constructors
 
 - [Attribute](#-attribute) defines data types - needed by Model
 - [Command](#-command) encapsulates task execution
@@ -1144,7 +1144,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Sat Jan 03 2015 22:30:29 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Mon Jan 05 2015 15:05:15 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1153,7 +1153,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Sat Jan 03 2015 22:30:29 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Mon Jan 05 2015 15:05:15 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2775,7 +2775,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Sat Jan 03 2015 22:30:29 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Mon Jan 05 2015 15:05:15 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
