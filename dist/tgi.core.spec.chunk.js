@@ -1,30 +1,16 @@
 /**---------------------------------------------------------------------------------------------------------------------
- * tgi-core/lib/tgi-core.test.js
+ * tgi-core/lib/tgi-core.spec.js
  **/
-/**
- * Doc Intro
- */
 spec.test('lib/tgi-spec-intro', 'tgi-core', 'Core Repository', function (callback) {
-  spec.paragraph('Core objects, models, stores and interfaces.');
+  spec.paragraph('Core constructors, models, stores and interfaces.  The constructor functions define the object ' +
+  '"classes" used by the framework.  The Model Constructor is a key part of the core that defines the system ' +
+  'functionality for the framework.  The framework is further extended with a Store and Interface abstract that ' +
+  'provides data store and user interface plugins.');
   spec.example('CORE function exposes library', 'function', function () {
     return typeof CORE;
   });
-  spec.index('##Objects'); // todo optional parm changes TOC to opt
-
+  spec.index('##Constructors');
 });
-//spec.testSection('Core Objects');
-//spec.test('tgi-core/lib/tgi-core.test.js', 'CORE', 'exposed as public or exported (node)', function (callback) {
-//  spec.paragraph('The CORE function exposes the tgi-core library via global or node module exports.');
-//  spec.paragraph('Application code written in the TGI Framework does not need the CORE function' +
-//  ' since it is visible by closure.');
-//  spec.example('core object Model is available in closure', undefined, function () {
-//    this.shouldBeTrue(Model == CORE().Model);
-//  });
-//  spec.example('UTILITY functions are available in closure', '******* sup ********', function () {
-//    // https://github.com/tgicloud/tgi-utility
-//    return cpad(' sup ',20,'*');
-//  });
-//});
 
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-attribute.spec.js
@@ -3123,6 +3109,155 @@ spec.test('tgi-core/lib/stores/tgi-core-store-memory.spec.js', 'MemoryStore', 'v
     });
     spec.heading('Store tests are applied', function () {
       spec.runnerStoreMethods(MemoryStore);
+    });
+  });
+});
+
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/lib/utility/tgi-core-arrays.spec.js
+ */
+spec.test('tgi-utility/lib/tgi-utility-arrays.test.js', 'Array Functions', 'description', function (callback) {
+  callback({log: 'tgi-utility/lib/tgi-utility-arrays.test.js'});
+  spec.heading('ARRAY FUNCTIONS', function () {
+    spec.heading('contains(array,object)', function () {
+      spec.paragraph('This method returns true or false as to whether object is contained in array.');
+      spec.example('object exists in array', true, function () {
+        return contains(['moe', 'larry', 'curley'], 'larry');
+      });
+      spec.example('object does not exist in array', false, function () {
+        return contains(['moe', 'larry', 'curley'], 'shemp');
+      });
+    });
+  });
+});
+
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/lib/utility/tgi-core-objects.spec.js
+ */
+spec.test('tgi-utility/lib/tgi-utility-objects.test.js', 'Spec Constructor Function', 'description', function (callback) {
+  callback({log: 'tgi-utility/lib/tgi-utility-objects.test.js'});
+  spec.heading('inheritPrototype(p)', function () {
+    spec.paragraph('kinda sorta class like');
+    spec.example('Cannot pass null', undefined, function () {
+      this.shouldThrowError('*', function () {
+        inheritPrototype(null);
+      });
+    });
+    spec.example('quack like a duck', 'quack', function () {
+      // Duck class
+      var Duck = function () {
+      };
+      // Duck method
+      Duck.prototype.sound = function () {
+        return 'quack';
+      };
+      // Mallard class
+      var Mallard = function () {
+      };
+      // Mallard inherits Duck prototype
+      Mallard.prototype = inheritPrototype(Duck.prototype);
+      // Create instance
+      var daffy = new Mallard();
+
+      // Instance of constructor & the inherited prototype's class fir daffy
+      this.shouldBeTrue(daffy instanceof Mallard);
+      this.shouldBeTrue(daffy instanceof Duck);
+
+      // What sound does daffy make?
+      return daffy.sound();
+    });
+  });
+
+  spec.heading('getInvalidProperties(args,allowedProperties)', function () {
+    spec.paragraph('Functions that take an object as it\'s parameter use this to validate the ' +
+    'properties of the parameter by returning any invalid properties');
+    spec.example('valid property', 'Kahn', function () {
+      // got Kahn and value backwards so Kahn is an unknown property
+      return getInvalidProperties({name: 'name', Kahn: 'value'}, ['name', 'value'])[0];
+    });
+    spec.example('invalid property', 0, function () {
+      // no unknown properties
+      return getInvalidProperties({name: 'name', value: 'Kahn'}, ['name', 'value']).length;
+    });
+  });
+
+});
+
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/lib/utility/tgi-core-strings.spec.js
+ */
+
+spec.test('tgi-utility/lib/tgi-utility-strings.test.js', 'String Functions', 'description', function (callback) {
+  callback({log: 'tgi-utility/lib/tgi-utility-strings.test.js'});
+  spec.heading('STRING FUNCTIONS', function () {
+    spec.heading('trim(string)', function () {
+      spec.example('Remove leading and trailing spaces from string', '(hello)', function () {
+        return '(' + trim(' hello ') + ')';
+      });
+    });
+    spec.heading('ltrim(string)', function () {
+      spec.example('Remove leading spaces from string', '(hello )', function () {
+        return '(' + ltrim(' hello ') + ')';
+      });
+    });
+    spec.heading('rtrim(string)', function () {
+      spec.example('Remove trailing spaces from string', '( hello)', function () {
+        return '(' + rtrim(' hello ') + ')';
+      });
+    });
+    spec.heading('left(string)', function () {
+      spec.example('return left part of string', '123', function () {
+        return left('12345',3);
+      });
+    });
+    spec.heading('right(string)', function () {
+      spec.example('return right part of string', '345', function () {
+        return right('12345',3);
+      });
+    });
+    spec.heading('center(string)', function () {
+      spec.example('return center part of string', '234', function () {
+        return center('12345',3);
+      });
+    });
+    spec.heading('lpad(string, length, fillChar)', function () {
+      spec.paragraph('Return string size length with fillChar padded on left.  ' +
+      'fillChar is optional and defaults to space.');
+      spec.example('add leading asteriks', '********42', function () {
+        return lpad('42', 10, '*');
+      });
+      spec.example('truncate when length is less than string length', 'ok', function () {
+        return lpad('okay', 2);
+      });
+      spec.example('fillChar defaults to space', ': x:', function () {
+        return ':' + lpad('x',2) + ':';
+      });
+    });
+    spec.heading('rpad(string, length, fillChar)', function () {
+      spec.paragraph('Return string size length with fillChar padded on right.  ' +
+      'fillChar is optional and defaults to space.');
+      spec.example('Add trailing periods', 'etc...', function () {
+        return rpad('etc', 6, '.');
+      });
+      spec.example('truncate when length is less than string length', 'sup', function () {
+        return rpad('wassup', 3);
+      });
+      spec.example('fillChar defaults to space', ':x :', function () {
+        return ':' + rpad('x',2) + ':';
+      });
+    });
+    spec.heading('cpad(string, length, fillChar)', function () {
+      spec.paragraph('Return string size length with fillChar padded on left and right.  ' +
+      'fillChar is optional and defaults to space.');
+      spec.example('center with periods', '...center....', function () {
+        return cpad('center', 13, '.');
+      });
+      spec.example('truncate when length is less than string length', 'cd', function () {
+        return cpad('abcdef', 2);
+      });
+      spec.example('fillChar defaults to space', ': x :', function () {
+        return ':' + cpad('x',3) + ':';
+      });
     });
   });
 });

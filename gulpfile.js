@@ -31,7 +31,10 @@ var libFiles = [
   'lib/models/tgi-core-model-session.source.js',
   'lib/models/tgi-core-model-user.source.js',
   'lib/models/tgi-core-model-workspace.source.js',
-  'lib/stores/tgi-core-store-memory.source.js'
+  'lib/stores/tgi-core-store-memory.source.js',
+  'lib/utility/tgi-core-arrays.source.js',
+  'lib/utility/tgi-core-objects.source.js',
+  'lib/utility/tgi-core-strings.source.js'
 ];
 var libPackaging = ['lib/_packaging/lib-header'].concat(libFiles).concat(['lib/_packaging/lib-footer']);
 
@@ -86,8 +89,10 @@ var specFiles = [
   'lib/models/tgi-core-model-session.spec.js',
   'lib/models/tgi-core-model-user.spec.js',
   'lib/models/tgi-core-model-workspace.spec.js',
-  'lib/stores/tgi-core-store-memory.spec.js'
-
+  'lib/stores/tgi-core-store-memory.spec.js',
+  'lib/utility/tgi-core-arrays.spec.js',
+  'lib/utility/tgi-core-objects.spec.js',
+  'lib/utility/tgi-core-strings.spec.js'
 ];
 var specPackaging = ['lib/_packaging/spec-header'].concat(specFiles).concat(['lib/_packaging/spec-footer']);
 

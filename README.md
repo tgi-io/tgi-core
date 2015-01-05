@@ -12,7 +12,7 @@ App To Do
 - have app.start pass presentation / command / function etc if anything applies
 - propagate user queries to interface
 - incorporate user queries in integration test
-- var app.code = function(function(){}){}
+- var app.code or app.script = function(function(){}){} ... or nix this and use app.start function
 
 Interface To Do
 ---
