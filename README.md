@@ -2,10 +2,6 @@
 
 Core Objects [read the spec](spec/README.md).
 
-Todo
-----
-- merge core and utility
-
 App To Do
 ---
 - remove setpresentation req. for app
@@ -29,10 +25,8 @@ Presentation standard tabs
 - Workspace ...
 - Alerts ...
 
-obselete design
+meh
 ---
-- refactor CORE and UTILITY to TGI.CORE and TGI.UTILITY TGI.STORE TGI.INTERFACE
-- Refactor inject global and closure option - will need script <no global>
 - coverage sux bad one day I'll...
 - workspace beef up to load in app/interface and work ...
 

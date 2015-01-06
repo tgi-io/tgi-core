@@ -38,37 +38,6 @@ var libFiles = [
 ];
 var libPackaging = ['lib/_packaging/lib-header'].concat(libFiles).concat(['lib/_packaging/lib-footer']);
 
-// Source + Utils
-var libFilesUtils =[
-  'lib/tgi-coreUtil.source.js',
-  'lib/core/tgi-core-attribute.source.js',
-  'lib/core/tgi-core-command.source.js',
-  'lib/core/tgi-core-delta.source.js',
-  'lib/core/tgi-core-interface.source.js',
-  'lib/core/tgi-core-list.source.js',
-  'lib/core/tgi-core-model.source.js',
-  'lib/core/tgi-core-message.source.js',
-  'lib/core/tgi-core-procedure.source.js',
-  'lib/core/tgi-core-request.source.js',
-  'lib/core/tgi-core-store.source.js',
-  'lib/core/tgi-core-transport.source.js',
-  'lib/core/tgi-core-model.source.js',
-  'lib/core/tgi-core-model.source.js',
-  'lib/models/tgi-core-model-application.source.js',
-  'lib/models/tgi-core-model-log.source.js',
-  'lib/models/tgi-core-model-presentation.source.js',
-  'lib/models/tgi-core-model-session.source.js',
-  'lib/models/tgi-core-model-user.source.js',
-  'lib/models/tgi-core-model-workspace.source.js',
-  'lib/stores/tgi-core-store-memory.source.js',
-  'node_modules/tgi-utility/lib/tgi-utility.source.js',
-  'node_modules/tgi-utility/lib/tgi-utility-objects.source.js',
-  'node_modules/tgi-utility/lib/tgi-utility-arrays.source.js',
-  'node_modules/tgi-utility/lib/tgi-utility-strings.source.js'
-];
-
-var libPackagingUtils = ['lib/_packaging/lib-header'].concat(libFilesUtils).concat(['lib/_packaging/lib-footer']);
-
 // The Spec
 var specFiles = [
   'lib/tgi-core.spec.js',
@@ -117,16 +86,6 @@ gulp.task('_buildLib', function () {
     .pipe(concat('tgi.core.js'))
     .pipe(gulp.dest('dist'))
     .pipe(rename('tgi.core.min.js'))
-    .pipe(uglify())
-    .pipe(gulp.dest('dist'));
-});
-
-// Build Lib + Utils
-gulp.task('_buildLibUtil', function () {
-  return gulp.src(libPackagingUtils)
-    .pipe(concat('tgi.coreUtil.js'))
-    .pipe(gulp.dest('dist'))
-    .pipe(rename('tgi.coreUtil.min.js'))
     .pipe(uglify())
     .pipe(gulp.dest('dist'));
 });
