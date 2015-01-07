@@ -4,7 +4,6 @@ Core Objects [read the spec](spec/README.md).
 
 App To Do
 ---
-- remove setpresentation req. for app
 - have app.start pass presentation / command / function etc if anything applies
 - propagate user queries to interface
 - incorporate user queries in integration test
