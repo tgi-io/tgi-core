@@ -5,6 +5,39 @@
 "use strict";
 var root = this;
 var testSpec = function(spec,CORE) {
+  var tgi = CORE();
+  var Application = tgi.Application;
+  var Attribute = tgi.Attribute;
+  var Command = tgi.Command;
+  var Delta = tgi.Delta;
+  var Interface = tgi.Interface;
+  var List = tgi.List;
+  var Log = tgi.Log;
+  var MemoryStore = tgi.MemoryStore;
+  var Message = tgi.Message;
+  var Model = tgi.Model;
+  var Presentation = tgi.Presentation;
+  var Procedure = tgi.Procedure;
+  var REPLInterface = tgi.REPLInterface;
+  var Request = tgi.Request;
+  var Session = tgi.Session;
+  var Store = tgi.Store;
+  var Transport = tgi.Transport;
+  var User = tgi.User;
+  var Workspace = tgi.Workspace;
+  var inheritPrototype = tgi.inheritPrototype;
+  var getInvalidProperties = tgi.getInvalidProperties;
+  var trim = tgi.trim;
+  var ltrim = tgi.ltrim;
+  var rtrim = tgi.rtrim;
+  var left = tgi.left;
+  var center = tgi.center;
+  var right = tgi.right;
+  var lpad = tgi.lpad;
+  var rpad = tgi.rpad;
+  var cpad = tgi.cpad;
+  var contains = tgi.contains;
+
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core.spec.js
  **/
@@ -972,21 +1005,26 @@ spec.test('tgi-core/lib/tgi-core-delta.spec.js', 'Delta', 'represents changes to
  * tgi-core/lib/tgi-core-interface.spec.js
  */
 spec.test('tgi-core/lib/tgi-core-interface.spec.js', 'Interface', 'enable user to communicate with app', function (callback) {
-  var SurrogateInterface = Interface; // todo
   spec.paragraph('The Interface core constructor is a prototype for user or system interaction with the application.' +
   ' The SurrogateInterface is a reference to Interface being tested in the suite.');
   spec.heading('CONSTRUCTOR', function () {
-    spec.example('objects created should be an instance of SurrogateInterface', true, function () {
-      var i = new SurrogateInterface();
-      return (i instanceof SurrogateInterface) && (i instanceof Interface);
-    });
-    spec.example('should make sure new operator used', Error('new operator required'), function () {
-      SurrogateInterface(); // jshint ignore:line
-    });
-    spec.example('should make sure argument properties are valid', Error('error creating Procedure: invalid property: yo'), function () {
-      new SurrogateInterface({yo: 'whatup'});
-    });
+    spec.runnerInterfaceConstructor(Interface);
   });
+  spec.runnerInterfaceMethods(Interface);
+});
+spec.runnerInterfaceConstructor = function (SurrogateInterface) {
+  spec.example('objects created should be an instance of Interface', true, function () {
+    var i = new SurrogateInterface();
+    return (i instanceof SurrogateInterface) && (i instanceof Interface);
+  });
+  spec.example('should make sure new operator used', Error('new operator required'), function () {
+    SurrogateInterface(); // jshint ignore:line
+  });
+  spec.example('should make sure argument properties are valid', Error('error creating Procedure: invalid property: yo'), function () {
+    new SurrogateInterface({yo: 'whatup'});
+  });
+};
+spec.runnerInterfaceMethods = function (SurrogateInterface) {
   spec.heading('PROPERTIES', function () {
     spec.heading('name', function () {
       spec.example('defaults to (unnamed)', '(unnamed)', function () {
@@ -1160,8 +1198,7 @@ spec.test('tgi-core/lib/tgi-core-interface.spec.js', 'Interface', 'enable user t
       testInterface.mockRequest(cmds);
     });
   });
-
-});
+};
 
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-list.test.js
@@ -2619,6 +2656,21 @@ spec.test('tgi-core/lib/tgi-core-transport.spec.js', 'Transport', 'messages betw
 });
 
 /**---------------------------------------------------------------------------------------------------------------------
+ * lib/interfaces/tgi-core-interfaces-repl.spec.js
+ */
+
+spec.testSection('Interfaces');
+spec.test('tgi-core/lib/interfaces/tgi-core-interfaces-repl.spec.js', 'REPLInterface', 'Read Evaluate Print Loop Interface', function (callback) {
+  spec.heading('REPLInterface', function () {
+    spec.paragraph('The REPLInterface is a Read Evaluate Print Loop Interface.');
+    spec.heading('CONSTRUCTOR', function () {
+      spec.runnerInterfaceConstructor(REPLInterface);
+    });
+    spec.runnerInterfaceMethods(REPLInterface);
+  });
+});
+
+/**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/models/tgi-core-model-application.test.js
  */
 spec.testSection('Models');
@@ -2699,9 +2751,11 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
       });
       spec.example('send command without callback when no response needed', undefined, function () {
         var ex = this;
-        new Application().dispatch(new Request({type: 'Command', command: new Command(function(){
-          ex.log('PEACE');
-        })}));
+        new Application().dispatch(new Request({
+          type: 'Command', command: new Command(function () {
+            ex.log('PEACE');
+          })
+        }));
       });
       spec.example('optional second parameter is the response callback', Error('response callback is not a function'), function () {
         new Application().dispatch(new Request({type: 'Command', command: new Command()}), true);

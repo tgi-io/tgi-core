@@ -9,7 +9,7 @@ var root = this;
  **/
 var CORE = function () {
   return {
-    version: '0.0.7',
+    version: '?.?.?', // todo tie to package.json
     Application: Application,
     Attribute: Attribute,
     Command: Command,
@@ -22,32 +22,25 @@ var CORE = function () {
     Model: Model,
     Presentation: Presentation,
     Procedure: Procedure,
+    REPLInterface: REPLInterface,
     Request: Request,
     Session: Session,
     Store: Store,
     Transport: Transport,
     User: User,
     Workspace: Workspace,
-    injectMethods: function (that) {
-      that.Application = Application;
-      that.Attribute = Attribute;
-      that.Command = Command;
-      that.Delta = Delta;
-      that.Interface = Interface;
-      that.List = List;
-      that.Log = Log;
-      that.MemoryStore = MemoryStore;
-      that.Message = Message;
-      that.Model = Model;
-      that.Presentation = Presentation;
-      that.Procedure = Procedure;
-      that.Request = Request;
-      that.Store = Store;
-      that.Session = Session;
-      that.Transport = Transport;
-      that.User = User;
-      that.Workspace = Workspace;
-    }
+    inheritPrototype: inheritPrototype,
+    getInvalidProperties: getInvalidProperties,
+    trim: trim,
+    ltrim: ltrim,
+    rtrim: rtrim,
+    left: left,
+    center: center,
+    right: right,
+    lpad: lpad,
+    rpad: rpad,
+    cpad: cpad,
+    contains: contains
   };
 };
 
@@ -1328,6 +1321,32 @@ Transport.prototype.close = function () {
     throw new Error('not connected');
   this.socket.disconnect();
 };
+
+/**---------------------------------------------------------------------------------------------------------------------
+ * lib/interfaces/tgi-core-interfaces-repl.source.js
+ */
+// Constructor
+var REPLInterface = function (args) {
+  if (false === (this instanceof Interface)) throw new Error('new operator required');
+  args = args || {};
+  args.name = args.name || '(unnamed)';
+  args.description = args.description || 'a Interface';
+  var i;
+  var unusedProperties = getInvalidProperties(args, ['name', 'description']);
+  var errorList = [];
+  for (i = 0; i < unusedProperties.length; i++) errorList.push('invalid property: ' + unusedProperties[i]);
+  if (errorList.length > 1)
+    throw new Error('error creating Procedure: multiple errors');
+  if (errorList.length) throw new Error('error creating Procedure: ' + errorList[0]);
+  // default state
+  this.startCallback = null;
+  this.stopCallback = null;
+  this.mocks = [];
+  this.mockPending = false;
+  // args ok, now copy to object
+  for (i in args) this[i] = args[i];
+};
+REPLInterface.prototype = Object.create(Interface.prototype);
 
 /**
  * tequila

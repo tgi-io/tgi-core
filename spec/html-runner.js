@@ -3,8 +3,7 @@
  **/
 var spec = new Spec();
 (function () {
-  UTILITY().injectMethods(this);
-  CORE().injectMethods(this);
+  //CORE().injectMethods(this);
   testSpec(spec, CORE);
   spec.runTests(function (msg) {
     /**

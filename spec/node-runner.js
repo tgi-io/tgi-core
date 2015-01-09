@@ -3,26 +3,23 @@
  */
 var Spec = require('tgi-spec/dist/tgi.spec.js');
 var testSpec = require('../dist/tgi.core.spec');
-var spec = new Spec();
-var UTILITY = require('tgi-utility/dist/tgi.utility');
 var CORE = require('../dist/tgi.core');
 
-(function () {
-  UTILITY().injectMethods(this);
-  CORE().injectMethods(this);
-  testSpec(spec, CORE);
-  spec.runTests(function (msg) {
-    if (msg.error) {
-      console.error(msg.error);
+var spec = new Spec();
+testSpec(spec, CORE);
+spec.runTests(function (msg) {
+  if (msg.error) {
+    console.error(msg.error);
+    process.exit(1);
+  } else if (msg.done) {
+    console.log(msg.testsCreated + ' tests passed.');
+    if (msg.testsPending)
+      console.log(msg.testsPending + ' tests pending.');
+    if (msg.testsFailed)
+      console.log(msg.testsFailed + ' tests failed.');
+    if (msg.testsFailed || msg.testsPending)
       process.exit(1);
-    } else if (msg.done) {
-      console.log('Testing completed with  ...');
-      console.log('testsCreated = ' + msg.testsCreated);
-      console.log('testsPending = ' + msg.testsPending);
-      console.log('testsFailed = ' + msg.testsFailed);
-      if (msg.testsFailed || msg.testsPending) process.exit(1);
-    } else if (msg.log) {
-      //console.log(msg.log);
-    }
-  });
-}());
+  } else if (msg.log) {
+    //console.log(msg.log);
+  }
+});

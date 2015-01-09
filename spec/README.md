@@ -22,7 +22,7 @@ return typeof CORE;
 - [Transport](#-transport) messages between client and host
 
 #### Interfaces
-- [REPLInterface](#-replinterface) volatile memory store in js codespace
+- [REPLInterface](#-replinterface) Read Evaluate Print Loop Interface
 
 #### Models
 - [Application](#-application) manages active state and configuration
@@ -1152,7 +1152,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Fri Jan 09 2015 07:39:17 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Fri Jan 09 2015 17:47:46 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1161,7 +1161,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Fri Jan 09 2015 07:39:17 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Fri Jan 09 2015 17:47:46 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -1177,7 +1177,7 @@ return typeof new Delta(new Attribute.ModelID(new Model())).attributeValues;
 The Interface core constructor is a prototype for user or system interaction with the application. The SurrogateInterface is a reference to Interface being tested in the suite.    
 
 #### CONSTRUCTOR
-&nbsp;<b><i>objects created should be an instance of SurrogateInterface:</i></b>
+&nbsp;<b><i>objects created should be an instance of Interface:</i></b>
 ```javascript
 var i = new SurrogateInterface();
 return (i instanceof SurrogateInterface) && (i instanceof Interface);
@@ -2490,8 +2490,265 @@ https://github.com/tgi-io/tgi-core/blob/master/lib/core/tgi-core-transport.spec.
 
 ## [&#9664;](#-transport)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-application) &nbsp;REPLInterface
 #### REPLInterface
-The REPLInterface is da shiznat.    
+The REPLInterface is a Read Evaluate Print Loop Interface.    
 
+#### CONSTRUCTOR
+&nbsp;<b><i>objects created should be an instance of Interface:</i></b>
+```javascript
+var i = new SurrogateInterface();
+return (i instanceof SurrogateInterface) && (i instanceof Interface);
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>should make sure new operator used:</i></b>
+```javascript
+SurrogateInterface(); // jshint ignore:line
+```
+<blockquote><strong>Error: new operator required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>should make sure argument properties are valid:</i></b>
+```javascript
+new SurrogateInterface({yo: 'whatup'});
+```
+<blockquote><strong>Error: error creating Procedure: invalid property: yo</strong> thrown as expected
+</blockquote>
+#### PROPERTIES
+#### name
+&nbsp;<b><i>defaults to (unnamed):</i></b>
+```javascript
+return new SurrogateInterface().name;
+```
+<blockquote>returns <strong>(unnamed)</strong> as expected
+</blockquote>
+#### description
+&nbsp;<b><i>defaults to a SurrogateInterface:</i></b>
+```javascript
+return new SurrogateInterface().description;
+```
+<blockquote>returns <strong>a Interface</strong> as expected
+</blockquote>
+#### METHODS
+#### toString()
+&nbsp;<b><i>should return a description of the message:</i></b>
+```javascript
+return new SurrogateInterface({description: 'Punched Card SurrogateInterface'}).toString();
+```
+<blockquote>returns <strong>Punched Card SurrogateInterface</strong> as expected
+</blockquote>
+#### start()
+The start method initiates the interface and passes a callback for the interface to submit requests. The callback must pass a Request object followed by an optional callback for responses to the request e.g. interface.start ( function ( request, response(callback) ) ) {}    
+
+&nbsp;<b><i>Application parameter is required:</i></b>
+```javascript
+new SurrogateInterface().start();
+```
+<blockquote><strong>Error: Application required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>presentation parameter is required:</i></b>
+```javascript
+new SurrogateInterface().start(new Application());
+```
+<blockquote><strong>Error: presentation required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>callback parameter required:</i></b>
+```javascript
+new SurrogateInterface().start(new Application(), new Presentation());
+```
+<blockquote><strong>Error: callBack required</strong> thrown as expected
+</blockquote>
+#### stop()
+calling stop will end the start() processing and release any resources    
+
+&nbsp;<b><i>must pass callback function:</i></b>
+```javascript
+new SurrogateInterface().stop();
+```
+<blockquote><strong>Error: callBack required</strong> thrown as expected
+</blockquote>
+#### dispatch()
+The dispatch method will accept a request and act on it or pass it to the app.    
+
+&nbsp;<b><i>must pass a Request object:</i></b>
+```javascript
+new SurrogateInterface().dispatch();
+```
+<blockquote><strong>Error: Request required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>send command without callback when no response needed:</i></b>
+```javascript
+new SurrogateInterface().dispatch(new Request({type: 'Command', command: new Command()}));
+```
+&nbsp;<b><i>optional second parameter is the response callback:</i></b>
+```javascript
+new SurrogateInterface().dispatch(new Request({type: 'Command', command: new Command()}), true);
+```
+<blockquote><strong>Error: response callback is not a function</strong> thrown as expected
+</blockquote>
+#### notify()
+The notify method sends a Request to the Interface.  This can be the result of a request sent from the start() callback.    
+
+&nbsp;<b><i>must pass a Request object:</i></b>
+```javascript
+new SurrogateInterface().notify();
+```
+<blockquote><strong>Error: Request required</strong> thrown as expected
+</blockquote>
+#### render()
+&nbsp;<b><i>first argument must be a Presentation instance:</i></b>
+```javascript
+new SurrogateInterface().render();
+```
+<blockquote><strong>Error: Presentation object required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>optional callback must be function:</i></b>
+```javascript
+new SurrogateInterface().render(new Presentation(), true);
+```
+<blockquote><strong>Error: optional second argument must a commandRequest callback function</strong> thrown as expected
+</blockquote>
+#### canMock()
+&nbsp;<b><i>returns boolean to indicate if interface has mocking ability:</i></b>
+```javascript
+var canMock = new SurrogateInterface().canMock();
+return typeof canMock;
+```
+<blockquote>returns <strong>boolean</strong> as expected
+</blockquote>
+#### mockRequest()
+&nbsp;<b><i>parameter must be request or array of requests:</i></b>
+```javascript
+var ui = new SurrogateInterface();
+this.shouldThrowError('Error: missing request parameter', function () {
+  ui.mockRequest();
+});
+// Empty Stub Commands are ignored in mocks
+ui.mockRequest(new Request(new Command())); // Send single command
+ui.mockRequest([new Request(new Command()), new Request(new Command())]); // Send array of commands
+// Test when one of array elements is bad
+this.shouldThrowError('Error: invalid request parameter', function () {
+  ui.mockRequest([new Request(new Command()), 'wtf']);
+});
+```
+#### yesno(prompt, callBack)
+Query user with a yes no question.    
+
+&nbsp;<b><i>must set interface before invoking:</i></b>
+```javascript
+new Application().yesno();
+```
+<blockquote><strong>Error: interface not set</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>must provide the text question param:</i></b>
+```javascript
+var myApplication = new Application();
+myApplication.setInterface(new Interface());
+myApplication.yesno();
+```
+<blockquote><strong>Error: prompt required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>must provide callback param:</i></b>
+```javascript
+var myApplication = new Application();
+myApplication.setInterface(new Interface());
+myApplication.yesno('Who moved my cheese?');
+```
+<blockquote><strong>Error: callBack required</strong> thrown as expected
+</blockquote>
+#### ok(prompt, callBack)
+Pause before proceeding    
+
+&nbsp;<b><i>must set interface before invoking:</i></b>
+```javascript
+new Application().ok();
+```
+<blockquote><strong>Error: interface not set</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>must provide the text prompt param:</i></b>
+```javascript
+var myApplication = new Application();
+myApplication.setInterface(new Interface());
+myApplication.ok();
+```
+<blockquote><strong>Error: prompt required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>must provide callback param:</i></b>
+```javascript
+var myApplication = new Application();
+myApplication.setInterface(new Interface());
+myApplication.ok('You are about to enter the twilight zone.');
+```
+<blockquote><strong>Error: callBack required</strong> thrown as expected
+</blockquote>
+#### ask(prompt, attribute, callBack)
+Simple single item prompt.    
+
+&nbsp;<b><i>must provide the text question param:</i></b>
+```javascript
+new Interface().ask();
+```
+<blockquote><strong>Error: prompt required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>must supply attribute:</i></b>
+```javascript
+new Interface().ask('What it do');
+```
+<blockquote><strong>Error: instance of Attribute a required parameter</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>must provide callback param:</i></b>
+```javascript
+new Interface().ask('Please enter your name', new Attribute({name: 'Name'}));
+```
+<blockquote><strong>Error: callBack required</strong> thrown as expected
+</blockquote>
+#### choose(prompt, choices, callBack)
+prompt to choose an item    
+
+&nbsp;<b><i>must provide text prompt first:</i></b>
+```javascript
+new Interface().choose();
+```
+<blockquote><strong>Error: prompt required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>must supply array of choices:</i></b>
+```javascript
+this.shouldThrowError(Error('choices array required'), function () {
+  new Interface().choose('What it do');
+});
+this.shouldThrowError(Error('choices array required'), function () {
+  new Interface().choose('this will not', 'work');
+});
+this.shouldThrowError(Error('choices array empty'), function () {
+  new Interface().choose('empty array?', []);
+});
+```
+&nbsp;<b><i>must provide callback param:</i></b>
+```javascript
+new Interface().choose('choose wisely', ['rock', 'paper', 'scissors']);
+```
+<blockquote><strong>Error: callBack required</strong> thrown as expected
+</blockquote>
+#### Interface Integration
+&nbsp;<b><i>Test command execution mocking:</i></b>
+```javascript
+// Send 4 mocks and make sure we get 4 callback calls
+var self = this;
+self.callbackCount = 0;
+var testInterface = new Interface();
+testInterface.start(new Application(), new Presentation(), function (request) {
+  if (request.type == 'mock count')
+    self.callbackCount++;
+  if (self.callbackCount > 3)
+    callback(true);
+});
+var cmds = [];
+var i;
+for (i = 0; i < 4; i++) {
+  cmds.push(new Request('mock count'));
+}
+testInterface.mockRequest(cmds);
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
 
 ## [&#9664;](#-replinterface)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-log) &nbsp;Application
 #### CONSTRUCTOR
@@ -2810,7 +3067,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Fri Jan 09 2015 07:39:17 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Fri Jan 09 2015 17:47:46 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
