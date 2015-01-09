@@ -1149,7 +1149,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Wed Jan 07 2015 16:47:28 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Fri Jan 09 2015 07:21:33 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1158,7 +1158,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Wed Jan 07 2015 16:47:28 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Fri Jan 09 2015 07:21:33 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2592,8 +2592,12 @@ new Application().dispatch();
 </blockquote>
 &nbsp;<b><i>send command without callback when no response needed:</i></b>
 ```javascript
-new Application().dispatch(new Request({type: 'Command', command: new Command()}));
+var ex = this;
+new Application().dispatch(new Request({type: 'Command', command: new Command(function(){
+  ex.log('PEACE');
+})}));
 ```
+<blockquote><strong>log: </strong>PEACE<br></blockquote>
 &nbsp;<b><i>optional second parameter is the response callback:</i></b>
 ```javascript
 new Application().dispatch(new Request({type: 'Command', command: new Command()}), true);
@@ -2724,6 +2728,22 @@ myApplication.choose('choose wisely', ['rock', 'paper', 'scissors']);
 <blockquote><strong>Error: callBack required</strong> thrown as expected
 </blockquote>
 #### Application Integration
+&nbsp;<b><i>minimal app:</i></b>
+```javascript
+// Here is our app
+var ui = new Interface();
+var app = new Application();
+app.setInterface(ui);
+app.start(console.log);
+// define command to satisfy test
+var helloWorldCommand = new Command(function () {
+  callback('hello world');
+});
+// mock ui command request - this will get executed by app directly
+ui.mockRequest(new Request({type: 'Command', command: helloWorldCommand}));
+```
+<blockquote>returns <strong>hello world</strong> as expected
+</blockquote>
 &nbsp;<b><i>little app with command execution mocking:</i></b>
 ```javascript
 // todo delamify this
@@ -2780,7 +2800,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Wed Jan 07 2015 16:47:28 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Fri Jan 09 2015 07:21:33 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript

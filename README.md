@@ -26,6 +26,7 @@ Presentation standard tabs
 
 meh
 ---
+- fix index ⌘ in helps
 - coverage sux bad one day I'll...
 - workspace beef up to load in app/interface and work ...
 

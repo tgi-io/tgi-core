@@ -1357,6 +1357,7 @@ Application.prototype.start = function (callBack) {
   if (typeof callBack != 'function') throw new Error('callBack required');
   var self = this;
   this.startCallback = callBack;
+  if (!this.presentation) this.presentation = new Presentation();
   this.primaryInterface.start(self, this.presentation, function (request) {
     if (request.type=='Command') {
       request.command.execute();
@@ -1370,9 +1371,15 @@ Application.prototype.start = function (callBack) {
 Application.prototype.dispatch = function (request, response) {
   if (false === (request instanceof Request)) throw new Error('Request required');
   if (response && typeof response != 'function') throw new Error('response callback is not a function');
-  if (this.startCallback) {
-    this.startCallback(request);
+  // commands are handled directly
+  if (request.type == 'Command') {
+    request.command.execute();
     return true;
+  } else {
+    if (this.startCallback) {
+      this.startCallback(request);
+      return true;
+    }
   }
   return false;
 };
