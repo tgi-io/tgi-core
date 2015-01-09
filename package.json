@@ -9,6 +9,7 @@
     }
   ],
   "dependencies": {
+    "coveralls": "^2.11.2",
     "sprintf-js": "0.0.7",
     "tgi-spec": "*",
     "tgi-utility": "*"
