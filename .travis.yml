@@ -8,6 +8,6 @@ after_script:
   - export COVERALLS_SERVICE_NAME=travis-ci
   - export COVERALLS_REPO_TOKEN=IpGDVlXV9kREavJRjqaZMFRekwDJC8OjE
   - npm install -g istanbul
-  - istanbul cover spec/node-test.js --report lcovonly -- -R spec
+  - istanbul cover spec/node-runner.js --report lcovonly -- -R spec
   - istanbul check-coverage --statement 100 --branch 100 --function 100
   - cat ./build/coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
