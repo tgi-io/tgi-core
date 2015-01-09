@@ -21,6 +21,9 @@ return typeof CORE;
 - [Store](#-store) holds Model objects for updating and retrieving
 - [Transport](#-transport) messages between client and host
 
+#### Interfaces
+- [REPLInterface](#-replinterface) volatile memory store in js codespace
+
 #### Models
 - [Application](#-application) manages active state and configuration
 - [Log](#-log) information for recall
@@ -1149,7 +1152,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Fri Jan 09 2015 07:21:33 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Fri Jan 09 2015 07:39:17 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1158,7 +1161,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Fri Jan 09 2015 07:21:33 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Fri Jan 09 2015 07:39:17 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2475,7 +2478,7 @@ function listReady(list, error) {
 ```
 <blockquote><strong>log: </strong>Store is not ready.<br><strong>log: </strong>a Store Store<br>returns <strong>true</strong> as expected
 </blockquote>
-## [&#9664;](#-store)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-application) &nbsp;Transport
+## [&#9664;](#-store)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-replinterface) &nbsp;Transport
 Handle message passing between host and UI.    
 
 TODO: run these tests in node-make-spec-md with io defined    
@@ -2485,7 +2488,12 @@ Read the source until then...
 https://github.com/tgi-io/tgi-core/blob/master/lib/core/tgi-core-transport.spec.js    
 
 
-## [&#9664;](#-transport)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-log) &nbsp;Application
+## [&#9664;](#-transport)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-application) &nbsp;REPLInterface
+#### REPLInterface
+The REPLInterface is da shiznat.    
+
+
+## [&#9664;](#-replinterface)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-log) &nbsp;Application
 #### CONSTRUCTOR
 &nbsp;<b><i>objects created should be an instance of Application:</i></b>
 ```javascript
@@ -2593,9 +2601,11 @@ new Application().dispatch();
 &nbsp;<b><i>send command without callback when no response needed:</i></b>
 ```javascript
 var ex = this;
-new Application().dispatch(new Request({type: 'Command', command: new Command(function(){
-  ex.log('PEACE');
-})}));
+new Application().dispatch(new Request({
+  type: 'Command', command: new Command(function () {
+    ex.log('PEACE');
+  })
+}));
 ```
 <blockquote><strong>log: </strong>PEACE<br></blockquote>
 &nbsp;<b><i>optional second parameter is the response callback:</i></b>
@@ -2800,7 +2810,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Fri Jan 09 2015 07:21:33 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Fri Jan 09 2015 07:39:17 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
