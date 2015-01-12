@@ -11,6 +11,7 @@ App To Do
 
 Interface To Do
 ---
+- work up REPLInterface
 - sysNav (required) and appNav (optional)
 - cli factor for commands app commands / prefix for system
 
@@ -24,9 +25,9 @@ Presentation standard tabs
 - Workspace ...
 - Alerts ...
 
-meh
+Misc
 ---
 - fix index ⌘ in helps
-- coverage sux bad one day I'll...
-- workspace beef up to load in app/interface and work ...
+- improve coverage
+
 
