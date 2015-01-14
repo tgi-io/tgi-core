@@ -1151,7 +1151,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Wed Jan 14 2015 10:44:08 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Wed Jan 14 2015 10:57:51 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1160,7 +1160,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Wed Jan 14 2015 10:44:08 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Wed Jan 14 2015 10:57:51 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -1595,10 +1595,8 @@ for (var i in actorsInfo) {
 actors.moveFirst();
 test.shouldBeTrue(actors.get('name') == 'Jack Nicholson');
 actors.moveNext();
-test.log(actors.get('name'));
 test.shouldBeTrue(actors.get('name') == 'Meryl Streep');
 actors.moveLast();
-test.log(actors.get('name'));
 test.shouldBeTrue(actors.get('name') == 'Renée Zellweger');
 // Sort the list
 actors.sort({born: -1});  // Youngest actor
@@ -1608,12 +1606,11 @@ actors.sort({born: 1});  // Oldest actor
 actors.moveFirst();
 test.shouldBeTrue(actors.get('name') == 'Marlon Brando');
 ```
-<blockquote><strong>log: </strong>Renée Zellweger<br><strong>log: </strong>Meryl Streep<br></blockquote>
 &nbsp;<b><i>Test variations on getList method.:</i></b>
 ```javascript
 var test = this;
 var storeBeingTested = new SurrogateStore();
-test.log(storeBeingTested);
+test.log('storeBeingTested: ' + storeBeingTested);
 // Create list of actors
 test.actorsInfo = [
   // Actor Born Male Oscards
@@ -1665,22 +1662,20 @@ try {
       storeActors();
     else {
       test.oldActorsFound = list._items.length;
+      var testakill = function (model, error) {
+        if (++test.oldActorsKilled >= test.oldActorsFound) {
+          storeActors();
+        }
+      };
       for (var i = 0; i < list._items.length; i++) {
         test.killhim.set('id', list._items[i][0]);
-        // jshint ignore:start
-        storeBeingTested.deleteModel(test.killhim, function (model, error) {
-          if (++test.oldActorsKilled >= test.oldActorsFound) {
-            storeActors();
-          }
-        })
-        // jshint ignore:end
+        storeBeingTested.deleteModel(test.killhim, testakill);
       }
     }
   });
 }
 catch (err) {
   callback(err);
-  return;
 }
 // Callback after model cleaned
 // now, build List and add to store
@@ -1718,7 +1713,6 @@ function getAllActors() {
   }
   catch (err) {
     callback(err);
-    return;
   }
 }
 // only one Tom Hanks
@@ -1735,7 +1729,6 @@ function getTomHanks() {
   }
   catch (err) {
     callback(err);
-    return;
   }
 }
 // 3 names begin with D
@@ -1753,7 +1746,6 @@ function getD() {
   }
   catch (err) {
     callback(err);
-    return;
   }
 }
 // Renée Zellweger only female starting name with 'R'
@@ -1766,13 +1758,12 @@ function getRZ() {
         return;
       }
       test.shouldBeTrue(list._items.length == 1, ('1 not ' + list._items.length));
-      //list._items.length && test.shouldBeTrue(list.get('name') == 'Renée Zellweger','rz');
+      test.shouldBeTrue(list.get('name') == 'Renée Zellweger', 'rz');
       getAlphabetical();
     });
   }
   catch (err) {
     callback(err);
-    return;
   }
 }
 // Retrieve list alphabetically by name
@@ -1785,22 +1776,21 @@ function getAlphabetical() {
         return;
       }
       // Verify each move returns true when move succeeds
-      //test.shouldBeTrue(list.moveFirst(),'moveFirst');
-      //test.shouldBeTrue(!list.movePrevious(),'movePrevious');
-      //test.shouldBeTrue(list.get('name') == 'Al Pacino','AP');
-      //test.shouldBeTrue(list.moveLast(),'moveLast');
-      //test.shouldBeTrue(!list.moveNext(),'moveNext');
-      //test.shouldBeTrue(list.get('name') == 'Tom Hanks','TH');
+      test.shouldBeTrue(list.moveFirst(), 'moveFirst');
+      test.shouldBeTrue(!list.movePrevious(), 'movePrevious');
+      test.shouldBeTrue(list.get('name') == 'Al Pacino', 'AP');
+      test.shouldBeTrue(list.moveLast(), 'moveLast');
+      test.shouldBeTrue(!list.moveNext(), 'moveNext');
+      test.shouldBeTrue(list.get('name') == 'Tom Hanks', 'TH');
       callback(true);
     });
   }
   catch (err) {
     callback(err);
-    return;
   }
 }
 ```
-<blockquote><strong>log: </strong>a MemoryStore<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>storeBeingTested: a MemoryStore<br>returns <strong>true</strong> as expected
 </blockquote>
 ## [&#9664;](#-list)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-model) &nbsp;Message
 #### Message Class
@@ -3066,7 +3056,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Wed Jan 14 2015 10:44:08 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Wed Jan 14 2015 10:57:51 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript

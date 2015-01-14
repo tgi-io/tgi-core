@@ -1309,10 +1309,8 @@ spec.test('tgi-core/lib/tgi-core-list.spec.js', 'List', 'of items', function (ca
         actors.moveFirst();
         test.shouldBeTrue(actors.get('name') == 'Jack Nicholson');
         actors.moveNext();
-        test.log(actors.get('name'));
         test.shouldBeTrue(actors.get('name') == 'Meryl Streep');
         actors.moveLast();
-        test.log(actors.get('name'));
         test.shouldBeTrue(actors.get('name') == 'Renée Zellweger');
 
         // Sort the list
@@ -1331,7 +1329,7 @@ spec.runnerListStoreIntegration = function (SurrogateStore) {
   spec.example('Test variations on getList method.', spec.asyncResults(true), function (callback) {
     var test = this;
     var storeBeingTested = new SurrogateStore();
-    test.log(storeBeingTested);
+    test.log('storeBeingTested: ' + storeBeingTested);
 
     // Create list of actors
     test.actorsInfo = [
@@ -1386,22 +1384,20 @@ spec.runnerListStoreIntegration = function (SurrogateStore) {
           storeActors();
         else {
           test.oldActorsFound = list._items.length;
+          var testakill = function (model, error) {
+            if (++test.oldActorsKilled >= test.oldActorsFound) {
+              storeActors();
+            }
+          };
           for (var i = 0; i < list._items.length; i++) {
             test.killhim.set('id', list._items[i][0]);
-            // jshint ignore:start
-            storeBeingTested.deleteModel(test.killhim, function (model, error) {
-              if (++test.oldActorsKilled >= test.oldActorsFound) {
-                storeActors();
-              }
-            })
-            // jshint ignore:end
+            storeBeingTested.deleteModel(test.killhim, testakill);
           }
         }
       });
     }
     catch (err) {
       callback(err);
-      return;
     }
 
     // Callback after model cleaned
@@ -1442,7 +1438,6 @@ spec.runnerListStoreIntegration = function (SurrogateStore) {
       }
       catch (err) {
         callback(err);
-        return;
       }
     }
 
@@ -1460,7 +1455,6 @@ spec.runnerListStoreIntegration = function (SurrogateStore) {
       }
       catch (err) {
         callback(err);
-        return;
       }
     }
 
@@ -1479,7 +1473,6 @@ spec.runnerListStoreIntegration = function (SurrogateStore) {
       }
       catch (err) {
         callback(err);
-        return;
       }
     }
 
@@ -1493,13 +1486,12 @@ spec.runnerListStoreIntegration = function (SurrogateStore) {
             return;
           }
           test.shouldBeTrue(list._items.length == 1, ('1 not ' + list._items.length));
-          //list._items.length && test.shouldBeTrue(list.get('name') == 'Renée Zellweger','rz');
+          test.shouldBeTrue(list.get('name') == 'Renée Zellweger', 'rz');
           getAlphabetical();
         });
       }
       catch (err) {
         callback(err);
-        return;
       }
     }
 
@@ -1513,18 +1505,17 @@ spec.runnerListStoreIntegration = function (SurrogateStore) {
             return;
           }
           // Verify each move returns true when move succeeds
-          //test.shouldBeTrue(list.moveFirst(),'moveFirst');
-          //test.shouldBeTrue(!list.movePrevious(),'movePrevious');
-          //test.shouldBeTrue(list.get('name') == 'Al Pacino','AP');
-          //test.shouldBeTrue(list.moveLast(),'moveLast');
-          //test.shouldBeTrue(!list.moveNext(),'moveNext');
-          //test.shouldBeTrue(list.get('name') == 'Tom Hanks','TH');
+          test.shouldBeTrue(list.moveFirst(), 'moveFirst');
+          test.shouldBeTrue(!list.movePrevious(), 'movePrevious');
+          test.shouldBeTrue(list.get('name') == 'Al Pacino', 'AP');
+          test.shouldBeTrue(list.moveLast(), 'moveLast');
+          test.shouldBeTrue(!list.moveNext(), 'moveNext');
+          test.shouldBeTrue(list.get('name') == 'Tom Hanks', 'TH');
           callback(true);
         });
       }
       catch (err) {
         callback(err);
-        return;
       }
     }
   });
