@@ -10,7 +10,7 @@ var root = this;
 var TGI = {
   CORE: function () {
     return {
-      version: '?.?.?', // todo tie to package.json
+      version: '0.0.25',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
