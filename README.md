@@ -4,12 +4,15 @@ Core Objects [read the spec](spec/README.md).
 
 To Do
 ---
-- App: propagate user queries to interface
-- App: have app.start pass presentation / command / function etc if anything applies
 - App: incorporate user queries in integration test
+
+- App: have app.start pass presentation / command / function etc if anything applies
 - App: var app.code or app.script = function(function(){}){} ... or nix this and use app.start function
 - Interface: work up REPLInterface
 - Misc: fix index ⌘ in helps
+
+- Review models for completeness esp. Workspace and Session
+
 - Misc: improve coverage
 
 Presentation standard tabs
