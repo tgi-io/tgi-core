@@ -1116,14 +1116,14 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
         new Application().yesno();
       });
       spec.example('must provide the text question param', Error('prompt required'), function () {
-        var myApplication = new Application();
-        myApplication.setInterface(new Interface());
-        myApplication.yesno();
+        new Application({interface: new Interface()}).yesno();
       });
       spec.example('must provide callback param', Error('callBack required'), function () {
-        var myApplication = new Application();
-        myApplication.setInterface(new Interface());
-        myApplication.yesno('Who moved my cheese?');
+        new Application({interface: new Interface()}).yesno('Are we there yet?');
+      });
+      spec.example('proper usage', Error('no mocks pending'), function () {
+        new Application({interface: new Interface()}).yesno('¿comprendes?', function (answer) {
+        });
       });
     });
     spec.heading('ok(prompt, callBack)', function () {
@@ -1132,9 +1132,7 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
         new Application().ok();
       });
       spec.example('must provide the text prompt param', Error('prompt required'), function () {
-        var myApplication = new Application();
-        myApplication.setInterface(new Interface());
-        myApplication.ok();
+        new Application({interface: new Interface()}).ok();
       });
       spec.example('must provide callback param', Error('callBack required'), function () {
         var myApplication = new Application();
@@ -2667,13 +2665,13 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
     spec.example('objects created should be an instance of Application', true, function () {
       return new Application() instanceof Application;
     });
-    //spec.mute(true);
     spec.testModel(Application);
-    //var wasMuted = spec.mute(false).testsCreated;
-    //spec.example('model tests applied', true, function () {
-    //  this.log('Tests Muted: ' + wasMuted);
-    //  return wasMuted > 0;
-    //});
+    spec.example('argument property interface will invoke setInterface method', true, function () {
+      var myInterface = new Interface();
+      var myApplication = new Application({interface: myInterface});
+      return (myApplication.getInterface() === myInterface);
+    });
+
   });
   spec.heading('ATTRIBUTES', function () {
     spec.paragraph('Application extends model and inherits the attributes property.  All Application objects ' +
@@ -2878,7 +2876,6 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
       testInterface.mockRequest(cmds);
     });
   });
-
 });
 
 

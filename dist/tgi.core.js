@@ -663,7 +663,7 @@ Interface.prototype.toString = function () {
   return this.description;
 };
 Interface.prototype.canMock = function () {
-  return false;
+  return true;
 };
 Interface.prototype.doMock = function () {
   // If no more elements then we are done
@@ -726,6 +726,8 @@ Interface.prototype.render = function (presentation, callBack) {
 Interface.prototype.yesno = function (prompt, callBack) {
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
   if (typeof callBack != 'function') throw new Error('callBack required');
+  if (this.mocks.length < 1)
+    throw new Error('no mocks pending');
 };
 Interface.prototype.ok = function (prompt, callBack) {
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
@@ -1350,13 +1352,15 @@ var REPLInterface = function (args) {
 };
 REPLInterface.prototype = Object.create(Interface.prototype);
 
-/**
- * tequila
- * application-model
+/**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core-model-application.source.js
  */
 
-// Model Constructor
+/**
+ * Constructor Function
+ */
 var Application = function (args) {
+  var _interface;
   if (false === (this instanceof Application)) throw new Error('new operator required');
   args = args || {};
   if (!args.attributes) {
@@ -1364,13 +1368,18 @@ var Application = function (args) {
   }
   args.attributes.push(new Attribute({name: 'name', type: 'String(20)'}));
   args.attributes.push(new Attribute({name: 'brand', type: 'String'}));
+  if (args.interface) {
+    this.setInterface(args.interface);
+    delete args.interface;
+  }
   Model.call(this, args);
   this.modelType = "Application";
   this.set('name','newApp');
   this.set('brand','NEW APP');
 };
 Application.prototype = Object.create(Model.prototype);
-/*
+
+/**
  * Methods
  */
 Application.prototype.start = function (callBack) {
@@ -1426,6 +1435,7 @@ Application.prototype.yesno = function (prompt, callBack) {
   if (false === (this.primaryInterface instanceof Interface)) throw new Error('interface not set');
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
   if (typeof callBack != 'function') throw new Error('callBack required');
+  this.primaryInterface.yesno(prompt, callBack);
 };
 Application.prototype.ok = function (prompt, callBack) {
   if (false === (this.primaryInterface instanceof Interface)) throw new Error('interface not set');
