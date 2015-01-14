@@ -4,39 +4,39 @@
 (function () {
 "use strict";
 var root = this;
-var testSpec = function(spec,CORE) {
-  var tgi = CORE();
-  var Application = tgi.Application;
-  var Attribute = tgi.Attribute;
-  var Command = tgi.Command;
-  var Delta = tgi.Delta;
-  var Interface = tgi.Interface;
-  var List = tgi.List;
-  var Log = tgi.Log;
-  var MemoryStore = tgi.MemoryStore;
-  var Message = tgi.Message;
-  var Model = tgi.Model;
-  var Presentation = tgi.Presentation;
-  var Procedure = tgi.Procedure;
-  var REPLInterface = tgi.REPLInterface;
-  var Request = tgi.Request;
-  var Session = tgi.Session;
-  var Store = tgi.Store;
-  var Transport = tgi.Transport;
-  var User = tgi.User;
-  var Workspace = tgi.Workspace;
-  var inheritPrototype = tgi.inheritPrototype;
-  var getInvalidProperties = tgi.getInvalidProperties;
-  var trim = tgi.trim;
-  var ltrim = tgi.ltrim;
-  var rtrim = tgi.rtrim;
-  var left = tgi.left;
-  var center = tgi.center;
-  var right = tgi.right;
-  var lpad = tgi.lpad;
-  var rpad = tgi.rpad;
-  var cpad = tgi.cpad;
-  var contains = tgi.contains;
+var testSpec = function(spec,TGI) {
+  var tgiCore = TGI.CORE();
+  var Application = tgiCore.Application;
+  var Attribute = tgiCore.Attribute;
+  var Command = tgiCore.Command;
+  var Delta = tgiCore.Delta;
+  var Interface = tgiCore.Interface;
+  var List = tgiCore.List;
+  var Log = tgiCore.Log;
+  var MemoryStore = tgiCore.MemoryStore;
+  var Message = tgiCore.Message;
+  var Model = tgiCore.Model;
+  var Presentation = tgiCore.Presentation;
+  var Procedure = tgiCore.Procedure;
+  var REPLInterface = tgiCore.REPLInterface;
+  var Request = tgiCore.Request;
+  var Session = tgiCore.Session;
+  var Store = tgiCore.Store;
+  var Transport = tgiCore.Transport;
+  var User = tgiCore.User;
+  var Workspace = tgiCore.Workspace;
+  var inheritPrototype = tgiCore.inheritPrototype;
+  var getInvalidProperties = tgiCore.getInvalidProperties;
+  var trim = tgiCore.trim;
+  var ltrim = tgiCore.ltrim;
+  var rtrim = tgiCore.rtrim;
+  var left = tgiCore.left;
+  var center = tgiCore.center;
+  var right = tgiCore.right;
+  var lpad = tgiCore.lpad;
+  var rpad = tgiCore.rpad;
+  var cpad = tgiCore.cpad;
+  var contains = tgiCore.contains;
 
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core.spec.js
@@ -46,8 +46,8 @@ spec.test('lib/tgi-spec-intro', 'tgi-core', 'Core Repository', function (callbac
   '"classes" used by the framework.  The Model Constructor is a key part of the core that defines the system ' +
   'functionality for the framework.  The framework is further extended with a Store and Interface abstract that ' +
   'provides data store and user interface plugins.');
-  spec.example('CORE function exposes library', 'function', function () {
-    return typeof CORE;
+  spec.example('TGI.CORE function exposes library', 'function', function () {
+    return typeof TGI.CORE;
   });
   spec.index('##Constructors');
 });

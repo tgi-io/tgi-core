@@ -1,9 +1,9 @@
 #tgi-core
 Core constructors, models, stores and interfaces.  The constructor functions define the object "classes" used by the framework.  The Model Constructor is a key part of the core that defines the system functionality for the framework.  The framework is further extended with a Store and Interface abstract that provides data store and user interface plugins.    
 
-&nbsp;<b><i>CORE function exposes library:</i></b>
+&nbsp;<b><i>TGI.CORE function exposes library:</i></b>
 ```javascript
-return typeof CORE;
+return typeof TGI.CORE;
 ```
 <blockquote>returns <strong>function</strong> as expected
 </blockquote>
@@ -1152,7 +1152,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Fri Jan 09 2015 17:47:46 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Wed Jan 14 2015 10:38:01 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1161,7 +1161,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Fri Jan 09 2015 17:47:46 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Wed Jan 14 2015 10:38:01 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -3067,7 +3067,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Fri Jan 09 2015 17:47:46 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Wed Jan 14 2015 10:38:01 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript

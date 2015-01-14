@@ -2,32 +2,23 @@
 
 Core Objects [read the spec](spec/README.md).
 
-App To Do
+To Do
 ---
-- have app.start pass presentation / command / function etc if anything applies
-- propagate user queries to interface
-- incorporate user queries in integration test
-- var app.code or app.script = function(function(){}){} ... or nix this and use app.start function
-
-Interface To Do
----
-- work up REPLInterface
-- sysNav (required) and appNav (optional)
-- cli factor for commands app commands / prefix for system
+- App: propagate user queries to interface
+- App: have app.start pass presentation / command / function etc if anything applies
+- App: incorporate user queries in integration test
+- App: var app.code or app.script = function(function(){}){} ... or nix this and use app.start function
+- Interface: work up REPLInterface
+- Misc: fix index ⌘ in helps
+- Misc: improve coverage
 
 Presentation standard tabs
 ---
-- appNav ... main menu for app
+- AppNav ... main menu for app
 - Info ... about app and interface - store connection(s)
 - Find ... item in store
+- Favorites ... favorite items in store
 - Bookmarks ... favorite items in store
 - History ... logged activity in store
-- Workspace ...
+- Workspace ... 
 - Alerts ...
-
-Misc
----
-- fix index ⌘ in helps
-- improve coverage
-
-
