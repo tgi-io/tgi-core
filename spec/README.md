@@ -1151,7 +1151,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Wed Jan 14 2015 17:20:22 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Wed Jan 14 2015 18:31:00 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1160,7 +1160,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Wed Jan 14 2015 17:20:22 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Wed Jan 14 2015 18:31:00 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -1357,11 +1357,16 @@ new Application({interface: new Interface()}).ok();
 </blockquote>
 &nbsp;<b><i>must provide callback param:</i></b>
 ```javascript
-var myApplication = new Application();
-myApplication.setInterface(new Interface());
-myApplication.ok('You are about to enter the twilight zone.');
+new Application({interface: new Interface()}).ok('You are about to enter the twilight zone.');
 ```
 <blockquote><strong>Error: callBack required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>proper usage:</i></b>
+```javascript
+new Application({interface: new Interface()}).ok('You are about to enter the twilight zone.', function (answer) {
+});
+```
+<blockquote><strong>Error: no mocks pending</strong> thrown as expected
 </blockquote>
 #### ask(prompt, attribute, callBack)
 Simple single item prompt.    
@@ -1383,6 +1388,13 @@ new Interface().ask('What it do');
 new Interface().ask('Please enter your name', new Attribute({name: 'Name'}));
 ```
 <blockquote><strong>Error: callBack required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>proper usage:</i></b>
+```javascript
+new Application({interface: new Interface()}).ask('Who dis?', new Attribute({name: 'Name'}), function (answer) {
+});
+```
+<blockquote><strong>Error: no mocks pending</strong> thrown as expected
 </blockquote>
 #### choose(prompt, choices, callBack)
 prompt to choose an item    
@@ -1410,6 +1422,13 @@ this.shouldThrowError(Error('choices array empty'), function () {
 new Interface().choose('choose wisely', ['rock', 'paper', 'scissors']);
 ```
 <blockquote><strong>Error: callBack required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>proper usage:</i></b>
+```javascript
+new Application({interface: new Interface()}).choose('Who dis?', ['Rick James', 'mammy', 'pappy'], function (answer) {
+});
+```
+<blockquote><strong>Error: no mocks pending</strong> thrown as expected
 </blockquote>
 #### Interface Integration
 &nbsp;<b><i>Test command execution mocking:</i></b>
@@ -2664,11 +2683,16 @@ new Application({interface: new Interface()}).ok();
 </blockquote>
 &nbsp;<b><i>must provide callback param:</i></b>
 ```javascript
-var myApplication = new Application();
-myApplication.setInterface(new Interface());
-myApplication.ok('You are about to enter the twilight zone.');
+new Application({interface: new Interface()}).ok('You are about to enter the twilight zone.');
 ```
 <blockquote><strong>Error: callBack required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>proper usage:</i></b>
+```javascript
+new Application({interface: new Interface()}).ok('You are about to enter the twilight zone.', function (answer) {
+});
+```
+<blockquote><strong>Error: no mocks pending</strong> thrown as expected
 </blockquote>
 #### ask(prompt, attribute, callBack)
 Simple single item prompt.    
@@ -2690,6 +2714,13 @@ new Interface().ask('What it do');
 new Interface().ask('Please enter your name', new Attribute({name: 'Name'}));
 ```
 <blockquote><strong>Error: callBack required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>proper usage:</i></b>
+```javascript
+new Application({interface: new Interface()}).ask('Who dis?', new Attribute({name: 'Name'}), function (answer) {
+});
+```
+<blockquote><strong>Error: no mocks pending</strong> thrown as expected
 </blockquote>
 #### choose(prompt, choices, callBack)
 prompt to choose an item    
@@ -2717,6 +2748,13 @@ this.shouldThrowError(Error('choices array empty'), function () {
 new Interface().choose('choose wisely', ['rock', 'paper', 'scissors']);
 ```
 <blockquote><strong>Error: callBack required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>proper usage:</i></b>
+```javascript
+new Application({interface: new Interface()}).choose('Who dis?', ['Rick James', 'mammy', 'pappy'], function (answer) {
+});
+```
+<blockquote><strong>Error: no mocks pending</strong> thrown as expected
 </blockquote>
 #### Interface Integration
 &nbsp;<b><i>Test command execution mocking:</i></b>
@@ -3066,7 +3104,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Wed Jan 14 2015 17:20:22 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Wed Jan 14 2015 18:31:00 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
