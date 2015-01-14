@@ -1151,7 +1151,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Wed Jan 14 2015 11:34:57 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Wed Jan 14 2015 17:20:22 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1160,7 +1160,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Wed Jan 14 2015 11:34:57 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Wed Jan 14 2015 17:20:22 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -1323,19 +1323,22 @@ new Application().yesno();
 </blockquote>
 &nbsp;<b><i>must provide the text question param:</i></b>
 ```javascript
-var myApplication = new Application();
-myApplication.setInterface(new Interface());
-myApplication.yesno();
+new Application({interface: new Interface()}).yesno();
 ```
 <blockquote><strong>Error: prompt required</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>must provide callback param:</i></b>
 ```javascript
-var myApplication = new Application();
-myApplication.setInterface(new Interface());
-myApplication.yesno('Who moved my cheese?');
+new Application({interface: new Interface()}).yesno('Are we there yet?');
 ```
 <blockquote><strong>Error: callBack required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>proper usage:</i></b>
+```javascript
+new Application({interface: new Interface()}).yesno('¿comprendes d00d?', function (answer) {
+});
+```
+<blockquote><strong>Error: no mocks pending</strong> thrown as expected
 </blockquote>
 #### ok(prompt, callBack)
 Pause before proceeding    
@@ -1348,9 +1351,7 @@ new Application().ok();
 </blockquote>
 &nbsp;<b><i>must provide the text prompt param:</i></b>
 ```javascript
-var myApplication = new Application();
-myApplication.setInterface(new Interface());
-myApplication.ok();
+new Application({interface: new Interface()}).ok();
 ```
 <blockquote><strong>Error: prompt required</strong> thrown as expected
 </blockquote>
@@ -2629,19 +2630,22 @@ new Application().yesno();
 </blockquote>
 &nbsp;<b><i>must provide the text question param:</i></b>
 ```javascript
-var myApplication = new Application();
-myApplication.setInterface(new Interface());
-myApplication.yesno();
+new Application({interface: new Interface()}).yesno();
 ```
 <blockquote><strong>Error: prompt required</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>must provide callback param:</i></b>
 ```javascript
-var myApplication = new Application();
-myApplication.setInterface(new Interface());
-myApplication.yesno('Who moved my cheese?');
+new Application({interface: new Interface()}).yesno('Are we there yet?');
 ```
 <blockquote><strong>Error: callBack required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>proper usage:</i></b>
+```javascript
+new Application({interface: new Interface()}).yesno('¿comprendes d00d?', function (answer) {
+});
+```
+<blockquote><strong>Error: no mocks pending</strong> thrown as expected
 </blockquote>
 #### ok(prompt, callBack)
 Pause before proceeding    
@@ -2654,9 +2658,7 @@ new Application().ok();
 </blockquote>
 &nbsp;<b><i>must provide the text prompt param:</i></b>
 ```javascript
-var myApplication = new Application();
-myApplication.setInterface(new Interface());
-myApplication.ok();
+new Application({interface: new Interface()}).ok();
 ```
 <blockquote><strong>Error: prompt required</strong> thrown as expected
 </blockquote>
@@ -2753,6 +2755,14 @@ this.log('Tests Muted: ' + wasMuted);
 return wasMuted > 0;
 ```
 <blockquote><strong>log: </strong>Tests Muted: 25<br>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>argument property interface will invoke setInterface method:</i></b>
+```javascript
+var myInterface = new Interface();
+var myApplication = new Application({interface: myInterface});
+return (myApplication.getInterface() === myInterface);
+```
+<blockquote>returns <strong>true</strong> as expected
 </blockquote>
 #### ATTRIBUTES
 Application extends model and inherits the attributes property.  All Application objects have the following attributes:    
@@ -3056,7 +3066,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Wed Jan 14 2015 11:34:57 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Wed Jan 14 2015 17:20:22 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
