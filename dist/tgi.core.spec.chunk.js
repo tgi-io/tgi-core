@@ -999,8 +999,8 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
   });
   spec.heading('METHODS', function () {
     spec.heading('toString()', function () {
-      spec.example('should return a description of the message', 'Punched Card SurrogateInterface', function () {
-        return new SurrogateInterface({description: 'Punched Card SurrogateInterface'}).toString();
+      spec.example('should return a description of the message', 'Punched Card Interface', function () {
+        return new SurrogateInterface({description: 'Punched Card Interface'}).toString();
       });
     });
     spec.heading('start()', function () {
@@ -1036,8 +1036,8 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
       });
     });
     spec.heading('notify()', function () {
-      spec.paragraph('The notify method sends a Request to the Interface.  This can be the result of a request sent from the start() callback.');
-      spec.example('must pass a Request object', Error('Request required'), function () {
+      spec.paragraph('The notify method sends a `Message` to the Interface.  This can be the result of a request sent from the start() callback.');
+      spec.example('must pass a Message object', Error('Message required'), function () {
         new SurrogateInterface().notify();
       });
     });
@@ -1070,7 +1070,6 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
         });
       });
     });
-
     spec.heading('yesno(prompt, callBack)', function () {
       spec.paragraph('Query user with a yes no question.');
       spec.example('must set interface before invoking', Error('interface not set'), function () {
@@ -1103,7 +1102,6 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
         myApplication.ok('You are about to enter the twilight zone.');
       });
     });
-
     spec.heading('ask(prompt, attribute, callBack)', function () {
       spec.paragraph('Simple single item prompt.');
       spec.example('must provide the text question param', Error('prompt required'), function () {
@@ -1116,7 +1114,6 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
         new Interface().ask('Please enter your name', new Attribute({name: 'Name'}));
       });
     });
-
     spec.heading('choose(prompt, choices, callBack)', function () {
       spec.paragraph('prompt to choose an item');
       spec.example('must provide text prompt first', Error('prompt required'), function () {

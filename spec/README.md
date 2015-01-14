@@ -1151,7 +1151,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Wed Jan 14 2015 10:57:51 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Wed Jan 14 2015 11:34:57 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1160,7 +1160,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Wed Jan 14 2015 10:57:51 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Wed Jan 14 2015 11:34:57 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -1214,9 +1214,9 @@ return new SurrogateInterface().description;
 #### toString()
 &nbsp;<b><i>should return a description of the message:</i></b>
 ```javascript
-return new SurrogateInterface({description: 'Punched Card SurrogateInterface'}).toString();
+return new SurrogateInterface({description: 'Punched Card Interface'}).toString();
 ```
-<blockquote>returns <strong>Punched Card SurrogateInterface</strong> as expected
+<blockquote>returns <strong>Punched Card Interface</strong> as expected
 </blockquote>
 #### start()
 The start method initiates the interface and passes a callback for the interface to submit requests. The callback must pass a Request object followed by an optional callback for responses to the request e.g. interface.start ( function ( request, response(callback) ) ) {}    
@@ -1268,13 +1268,13 @@ new SurrogateInterface().dispatch(new Request({type: 'Command', command: new Com
 <blockquote><strong>Error: response callback is not a function</strong> thrown as expected
 </blockquote>
 #### notify()
-The notify method sends a Request to the Interface.  This can be the result of a request sent from the start() callback.    
+The notify method sends a `Message` to the Interface.  This can be the result of a request sent from the start() callback.    
 
-&nbsp;<b><i>must pass a Request object:</i></b>
+&nbsp;<b><i>must pass a Message object:</i></b>
 ```javascript
 new SurrogateInterface().notify();
 ```
-<blockquote><strong>Error: Request required</strong> thrown as expected
+<blockquote><strong>Error: Message required</strong> thrown as expected
 </blockquote>
 #### render()
 &nbsp;<b><i>first argument must be a Presentation instance:</i></b>
@@ -2520,9 +2520,9 @@ return new SurrogateInterface().description;
 #### toString()
 &nbsp;<b><i>should return a description of the message:</i></b>
 ```javascript
-return new SurrogateInterface({description: 'Punched Card SurrogateInterface'}).toString();
+return new SurrogateInterface({description: 'Punched Card Interface'}).toString();
 ```
-<blockquote>returns <strong>Punched Card SurrogateInterface</strong> as expected
+<blockquote>returns <strong>Punched Card Interface</strong> as expected
 </blockquote>
 #### start()
 The start method initiates the interface and passes a callback for the interface to submit requests. The callback must pass a Request object followed by an optional callback for responses to the request e.g. interface.start ( function ( request, response(callback) ) ) {}    
@@ -2574,13 +2574,13 @@ new SurrogateInterface().dispatch(new Request({type: 'Command', command: new Com
 <blockquote><strong>Error: response callback is not a function</strong> thrown as expected
 </blockquote>
 #### notify()
-The notify method sends a Request to the Interface.  This can be the result of a request sent from the start() callback.    
+The notify method sends a `Message` to the Interface.  This can be the result of a request sent from the start() callback.    
 
-&nbsp;<b><i>must pass a Request object:</i></b>
+&nbsp;<b><i>must pass a Message object:</i></b>
 ```javascript
 new SurrogateInterface().notify();
 ```
-<blockquote><strong>Error: Request required</strong> thrown as expected
+<blockquote><strong>Error: Message required</strong> thrown as expected
 </blockquote>
 #### render()
 &nbsp;<b><i>first argument must be a Presentation instance:</i></b>
@@ -3056,7 +3056,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Wed Jan 14 2015 10:57:51 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Wed Jan 14 2015 11:34:57 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript

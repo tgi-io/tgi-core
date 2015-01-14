@@ -3,10 +3,16 @@
  */
 var Spec = require('tgi-spec/dist/tgi.spec.js');
 var testSpec = require('../dist/tgi.core.spec');
-var CORE = require('../dist/tgi.core');
+var TGI = require('../dist/tgi.core');
+var package = require('../package');
+
+if (package.version != TGI.CORE().version) {
+  console.error('Library version %s does not match package.json %s',TGI.CORE().version,package.version);
+  process.exit(1);
+}
 
 var spec = new Spec();
-testSpec(spec, CORE);
+testSpec(spec, TGI);
 spec.runTests(function (msg) {
   if (msg.error) {
     console.error(msg.error);
