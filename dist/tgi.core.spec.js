@@ -27,6 +27,7 @@ var testSpec = function(spec,TGI) {
   var Workspace = tgiCore.Workspace;
   var inheritPrototype = tgiCore.inheritPrototype;
   var getInvalidProperties = tgiCore.getInvalidProperties;
+  var λ = tgiCore.λ;
   var trim = tgiCore.trim;
   var ltrim = tgiCore.ltrim;
   var rtrim = tgiCore.rtrim;
@@ -3254,9 +3255,8 @@ spec.test('tgi-utility/lib/tgi-utility-objects.test.js', 'Object Functions', 'de
       return getInvalidProperties({name: 'name', value: 'Kahn'}, ['name', 'value']).length;
     });
   });
-  spec.heading('λ', function () {
-    spec.example('λ', undefined, function () {
-      function λ() {}
+  spec.heading('λ stub function', function () {
+    spec.example('λ is defined for a stub function', undefined, function () {
       λ();
     });
   });

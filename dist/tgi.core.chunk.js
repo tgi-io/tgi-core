@@ -26,6 +26,7 @@ var TGI = {
       Workspace: Workspace,
       inheritPrototype: inheritPrototype,
       getInvalidProperties: getInvalidProperties,
+      λ: λ,
       trim: trim,
       ltrim: ltrim,
       rtrim: rtrim,
@@ -1963,6 +1964,7 @@ var inheritPrototype = function (p) {
   if (t !== "object" && typeof t !== "function") throw new TypeError();
   function F() {
   }
+
   F.prototype = p;
   return new F();
 };
@@ -1980,7 +1982,8 @@ var getInvalidProperties = function (args, allowedProperties) {
   }
   return props;
 };
-
+var λ = function () {
+};
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/utility/tgi-core-strings.source.js
  */

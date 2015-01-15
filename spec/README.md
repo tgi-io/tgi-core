@@ -1151,7 +1151,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Wed Jan 14 2015 22:27:28 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Wed Jan 14 2015 22:31:30 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1160,7 +1160,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Wed Jan 14 2015 22:27:28 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Wed Jan 14 2015 22:31:30 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -3110,7 +3110,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Wed Jan 14 2015 22:27:28 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Wed Jan 14 2015 22:31:30 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -3903,10 +3903,9 @@ return getInvalidProperties({name: 'name', Kahn: 'value'}, ['name', 'value'])[0]
 // no unknown properties
 return getInvalidProperties({name: 'name', value: 'Kahn'}, ['name', 'value']).length;
 ```
-#### λ
-&nbsp;<b><i>λ:</i></b>
+#### λ stub function
+&nbsp;<b><i>λ is defined for a stub function:</i></b>
 ```javascript
-function λ() {}
 λ();
 ```
 ## [&#9664;](#-object-functions)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-summary) &nbsp;String Functions
