@@ -2820,8 +2820,6 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
       // mock ui command request - this will get executed by app directly
       ui.mockRequest(new Request({type: 'Command', command: helloWorldCommand}));
     });
-
-
     spec.example('little app with command execution mocking', spec.asyncResults(true), function (callback) {
       // todo delamify this
       // Send 4 mocks and make sure we get 4 callback calls
@@ -2844,6 +2842,9 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
         cmds.push(new Request('mock count'));
       }
       testInterface.mockRequest(cmds);
+    });
+    spec.example('use queries', spec.asyncResults(true), function (callback) {
+      callback(true);
     });
   });
 });
@@ -3213,7 +3214,12 @@ spec.test('tgi-utility/lib/tgi-utility-objects.test.js', 'Object Functions', 'de
       return getInvalidProperties({name: 'name', value: 'Kahn'}, ['name', 'value']).length;
     });
   });
-
+  spec.heading('λ', function () {
+    spec.example('λ', undefined, function () {
+      function λ() {}
+      λ();
+    });
+  });
 });
 
 /**---------------------------------------------------------------------------------------------------------------------
