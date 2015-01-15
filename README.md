@@ -10,6 +10,7 @@ To Do
 - App: var app.code or app.script = function(function(){}){} ... or nix this and use app.start function
 - Interface: work up REPLInterface
 - Misc: fix index ⌘ in helps
+- Misc remove bucket - replace example with closure varaibles as needed
 
 - Review models for completeness esp. Workspace and Session
 
