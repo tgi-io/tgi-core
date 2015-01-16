@@ -1122,7 +1122,7 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
       spec.example('must provide callback param', Error('callBack required'), function () {
         new Application({interface: new Interface()}).yesno('Are we there yet?');
       });
-      spec.example('proper usage', Error('no mocks pending'), function () {
+      spec.xexample('proper usage', Error('no mocks pending'), function () {
         new Application({interface: new Interface()}).yesno('¿comprendes d00d?', function (answer) {
         });
       });
@@ -1138,7 +1138,7 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
       spec.example('must provide callback param', Error('callBack required'), function () {
         new Application({interface: new Interface()}).ok('You are about to enter the twilight zone.');
       });
-      spec.example('proper usage', Error('no mocks pending'), function () {
+      spec.xexample('proper usage', Error('no mocks pending'), function () {
         new Application({interface: new Interface()}).ok('You are about to enter the twilight zone.', function (answer) {
         });
       });
@@ -1154,7 +1154,7 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
       spec.example('must provide callback param', Error('callBack required'), function () {
         new Interface().ask('Please enter your name', new Attribute({name: 'Name'}));
       });
-      spec.example('proper usage', Error('no mocks pending'), function () {
+      spec.xexample('proper usage', Error('no mocks pending'), function () {
         new Application({interface: new Interface()}).ask('Who dis?', new Attribute({name: 'Name'}), function (answer) {
         });
       });
@@ -1178,7 +1178,7 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
       spec.example('must provide callback param', Error('callBack required'), function () {
         new Interface().choose('choose wisely', ['rock', 'paper', 'scissors']);
       });
-      spec.example('proper usage', Error('no mocks pending'), function () {
+      spec.xexample('proper usage', Error('no mocks pending'), function () {
         new Application({interface: new Interface()}).choose('Who dis?', ['Rick James', 'mammy', 'pappy'], function (answer) {
         });
       });
@@ -2860,19 +2860,34 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
       }
       testInterface.mockRequest(cmds);
     });
-    spec.xexample('user queries', spec.asyncResults(true), function (callback) {
+    spec.example('user queries', spec.asyncResults(true), function (callback) {
       var io = new Interface();
       var app = new Application({interface: io});
 
-      // For mocking ok() will pull any request off stack
-      console.log('mock ' + io.mocks.length + '?');
-      io.mockRequest(new Request('bagel & lox'));
-      console.log('mock ' + io.mocks.length + '?');
-      // ??? io.mocks.push(new Request('bagel & lox'));
-      app.ok('You have to acknowledge this message!', function () {
-        callback(true);
-      });
+      /**
+       * Each test is a function ...
+       */
 
+      var ok1 = function () {
+        // For mocking ok() will pull any request off stack
+        io.mockRequest(new Request('ok'));
+        app.ok('You can mock ok() before', function () {
+          ok2();
+        });
+      };
+      var ok2 = function () {
+        // For mocking ok() will pull any request off stack
+        app.ok('You can mock ok() after', function () {
+          callback(true);
+        });
+        io.mockRequest(new Request('ok'));
+      };
+
+      /**
+       * Launch test
+       */
+
+      ok1();
     });
   });
 });
