@@ -10,19 +10,19 @@ To Do
 - App: var app.code or app.script = function(function(){}){} ... or nix this and use app.start function
 - Interface: work up REPLInterface
 - Misc: fix index ⌘ in helps
-- Misc remove bucket - replace example with closure varaibles as needed
+- Misc remove bucket - replace example with closure variables as needed
 
 - Review models for completeness esp. Workspace and Session
 
 - Misc: improve coverage
 
-Presentation standard tabs
+Presentation standard procedures
 ---
 - AppNav ... main menu for app
-- Info ... about app and interface - store connection(s)
+- About ... about app and interface - store connection(s) - also sys info
 - Find ... item in store
 - Favorites ... favorite items in store
 - Bookmarks ... favorite items in store
 - History ... logged activity in store
-- Workspace ... 
+- Workspace ... active models
 - Alerts ...
