@@ -1014,6 +1014,9 @@ spec.test('tgi-core/lib/tgi-core-interface.spec.js', 'Interface', 'enable user t
   spec.runnerInterfaceMethods(Interface);
 });
 spec.runnerInterfaceConstructor = function (SurrogateInterface) {
+  if (new SurrogateInterface().description !== 'a Interface') {
+    spec.mute(true);
+  }
   spec.example('objects created should be an instance of Interface', true, function () {
     var i = new SurrogateInterface();
     return (i instanceof SurrogateInterface) && (i instanceof Interface);
@@ -1026,9 +1029,6 @@ spec.runnerInterfaceConstructor = function (SurrogateInterface) {
   });
 };
 spec.runnerInterfaceMethods = function (SurrogateInterface) {
-  if (new SurrogateInterface().description !== 'a Interface') {
-    spec.mute(true);
-  }
   spec.heading('PROPERTIES', function () {
     spec.heading('name', function () {
       spec.example('defaults to (unnamed)', '(unnamed)', function () {

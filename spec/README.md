@@ -1151,7 +1151,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Sat Jan 17 2015 12:27:36 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Sat Jan 17 2015 12:30:49 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1160,7 +1160,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Sat Jan 17 2015 12:27:36 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Sat Jan 17 2015 12:30:49 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2555,31 +2555,12 @@ https://github.com/tgi-io/tgi-core/blob/master/lib/core/tgi-core-transport.spec.
 The REPLInterface is a Read Evaluate Print Loop Interface.    
 
 #### CONSTRUCTOR
-&nbsp;<b><i>objects created should be an instance of Interface:</i></b>
-```javascript
-var i = new SurrogateInterface();
-return (i instanceof SurrogateInterface) && (i instanceof Interface);
-```
-<blockquote>returns <strong>true</strong> as expected
-</blockquote>
-&nbsp;<b><i>should make sure new operator used:</i></b>
-```javascript
-SurrogateInterface(); // jshint ignore:line
-```
-<blockquote><strong>Error: new operator required</strong> thrown as expected
-</blockquote>
-&nbsp;<b><i>should make sure argument properties are valid:</i></b>
-```javascript
-new SurrogateInterface({yo: 'whatup'});
-```
-<blockquote><strong>Error: error creating Procedure: invalid property: yo</strong> thrown as expected
-</blockquote>
 &nbsp;<b><i>model tests applied:</i></b>
 ```javascript
 this.log('Tests Muted: ' + wasMuted);
 return wasMuted > 0;
 ```
-<blockquote><strong>log: </strong>Tests Muted: 29<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Tests Muted: 32<br>returns <strong>true</strong> as expected
 </blockquote>
 
 ## [&#9664;](#-replinterface)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-log) &nbsp;Application
@@ -2888,7 +2869,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Sat Jan 17 2015 12:27:36 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Sat Jan 17 2015 12:30:49 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
