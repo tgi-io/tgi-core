@@ -1026,6 +1026,9 @@ spec.runnerInterfaceConstructor = function (SurrogateInterface) {
   });
 };
 spec.runnerInterfaceMethods = function (SurrogateInterface) {
+  if (new SurrogateInterface().description !== 'a Interface') {
+    spec.mute(true);
+  }
   spec.heading('PROPERTIES', function () {
     spec.heading('name', function () {
       spec.example('defaults to (unnamed)', '(unnamed)', function () {
@@ -1033,8 +1036,8 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
       });
     });
     spec.heading('description', function () {
-      spec.example('defaults to a SurrogateInterface', 'a Interface', function () {
-        return new SurrogateInterface().description;
+      spec.example('defaults to Interface implementation', undefined, function () {
+        this.log (new SurrogateInterface().description);
       });
     });
   });
@@ -1268,6 +1271,13 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
     });
 
   });
+  if (new SurrogateInterface().description !== 'a Interface') {
+    var wasMuted = spec.mute(false).testsCreated;
+    spec.example('model tests applied', true, function () {
+      this.log('Tests Muted: ' + wasMuted);
+      return wasMuted > 0;
+    });
+  }
 };
 
 /**---------------------------------------------------------------------------------------------------------------------

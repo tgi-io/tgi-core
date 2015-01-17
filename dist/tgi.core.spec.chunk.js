@@ -985,6 +985,9 @@ spec.runnerInterfaceConstructor = function (SurrogateInterface) {
   });
 };
 spec.runnerInterfaceMethods = function (SurrogateInterface) {
+  if (new SurrogateInterface().description !== 'a Interface') {
+    spec.mute(true);
+  }
   spec.heading('PROPERTIES', function () {
     spec.heading('name', function () {
       spec.example('defaults to (unnamed)', '(unnamed)', function () {
@@ -992,8 +995,8 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
       });
     });
     spec.heading('description', function () {
-      spec.example('defaults to a SurrogateInterface', 'a Interface', function () {
-        return new SurrogateInterface().description;
+      spec.example('defaults to Interface implementation', undefined, function () {
+        this.log (new SurrogateInterface().description);
       });
     });
   });
@@ -1076,14 +1079,10 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
         new Application().yesno();
       });
       spec.example('must provide the text question param', Error('prompt required'), function () {
-        new Application({interface: new Interface()}).yesno();
+        new Application({interface: new SurrogateInterface()}).yesno();
       });
       spec.example('must provide callback param', Error('callBack required'), function () {
-        new Application({interface: new Interface()}).yesno('Are we there yet?');
-      });
-      spec.xexample('proper usage', Error('no mocks pending'), function () {
-        new Application({interface: new Interface()}).yesno('¿comprendes d00d?', function (answer) {
-        });
+        new Application({interface: new SurrogateInterface()}).yesno('Are we there yet?');
       });
     });
     spec.heading('ok(prompt, callBack)', function () {
@@ -1092,54 +1091,42 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
         new Application().ok();
       });
       spec.example('must provide the text prompt param', Error('prompt required'), function () {
-        new Application({interface: new Interface()}).ok();
+        new Application({interface: new SurrogateInterface()}).ok();
       });
       spec.example('must provide callback param', Error('callBack required'), function () {
-        new Application({interface: new Interface()}).ok('You are about to enter the twilight zone.');
-      });
-      spec.xexample('proper usage', Error('no mocks pending'), function () {
-        new Application({interface: new Interface()}).ok('You are about to enter the twilight zone.', function (answer) {
-        });
+        new Application({interface: new SurrogateInterface()}).ok('You are about to enter the twilight zone.');
       });
     });
     spec.heading('ask(prompt, attribute, callBack)', function () {
       spec.paragraph('Simple single item prompt.');
       spec.example('must provide the text question param', Error('prompt required'), function () {
-        new Interface().ask();
+        new SurrogateInterface().ask();
       });
       spec.example('must supply attribute', Error('instance of Attribute a required parameter'), function () {
-        new Interface().ask('What it do');
+        new SurrogateInterface().ask('What it do');
       });
       spec.example('must provide callback param', Error('callBack required'), function () {
-        new Interface().ask('Please enter your name', new Attribute({name: 'Name'}));
-      });
-      spec.xexample('proper usage', Error('no mocks pending'), function () {
-        new Application({interface: new Interface()}).ask('Who dis?', new Attribute({name: 'Name'}), function (answer) {
-        });
+        new SurrogateInterface().ask('Please enter your name', new Attribute({name: 'Name'}));
       });
     });
     spec.heading('choose(prompt, choices, callBack)', function () {
       spec.paragraph('prompt to choose an item');
       spec.example('must provide text prompt first', Error('prompt required'), function () {
-        new Interface().choose();
+        new SurrogateInterface().choose();
       });
       spec.example('must supply array of choices', undefined, function () {
         this.shouldThrowError(Error('choices array required'), function () {
-          new Interface().choose('What it do');
+          new SurrogateInterface().choose('What it do');
         });
         this.shouldThrowError(Error('choices array required'), function () {
-          new Interface().choose('this will not', 'work');
+          new SurrogateInterface().choose('this will not', 'work');
         });
         this.shouldThrowError(Error('choices array empty'), function () {
-          new Interface().choose('empty array?', []);
+          new SurrogateInterface().choose('empty array?', []);
         });
       });
       spec.example('must provide callback param', Error('callBack required'), function () {
-        new Interface().choose('choose wisely', ['rock', 'paper', 'scissors']);
-      });
-      spec.xexample('proper usage', Error('no mocks pending'), function () {
-        new Application({interface: new Interface()}).choose('Who dis?', ['Rick James', 'mammy', 'pappy'], function (answer) {
-        });
+        new SurrogateInterface().choose('choose wisely', ['rock', 'paper', 'scissors']);
       });
     });
   });
@@ -1148,7 +1135,7 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
       // Send 4 mocks and make sure we get 4 callback calls
       var self = this;
       self.callbackCount = 0;
-      var testInterface = new Interface();
+      var testInterface = new SurrogateInterface();
       testInterface.start(new Application(), new Presentation(), function (request) {
         if (request.type == 'mock count')
           self.callbackCount++;
@@ -1162,7 +1149,94 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
       }
       testInterface.mockRequest(cmds);
     });
+    spec.example('user queries', spec.asyncResults('The End'), function (callback) {
+      var io = new SurrogateInterface();
+      var app = new Application({interface: io});
+      /**
+       * Each test is a function ...
+       */
+      var ok1 = function () {
+        io.mockRequest(new Request('ok'));
+        app.ok('You can mock ok() before', function () {
+          ok2();
+        });
+      };
+      var ok2 = function () {
+        app.ok('You can mock ok() after', function () {
+          yesno1();
+        });
+        io.mockRequest(new Request('ok'));
+      };
+      var yesno1 = function () {
+        app.yesno('Yesno can be true', function (answer) {
+          if (answer)
+            yesno2();
+          else
+            callback('fail');
+        });
+        io.mockRequest(new Request('yes'));
+      };
+      var yesno2 = function () {
+        app.yesno('Yesno can be false', function (answer) {
+          if (!answer)
+            ask1();
+          else
+            callback('fail');
+        });
+        io.mockRequest(new Request('no'));
+      };
+      var ask1 = function () {
+        var name = new Attribute({name: 'Name'});
+        io.mockRequest(new Request({type: 'ask', value: 'John Doe'}));
+        app.ask('What is your name?', name, function (answer) {
+          if (answer == 'John Doe')
+            ask2();
+          else
+            callback(answer);
+        });
+      };
+      var ask2 = function () {
+        var name = new Attribute({name: 'Name'});
+        app.ask('Vas is das name?', name, function (answer) {
+          if (undefined === answer)
+            choose1();
+          else
+            callback(answer);
+        });
+        io.mockRequest(new Request({type: 'ask'})); // no value like canceled dialog
+      };
+      var choose1 = function () {
+        io.mockRequest(new Request({type: 'choose', value: 1}));
+        app.choose('Pick one...', ['chicken', 'beef', 'tofu'], function (choice) {
+          if (choice == 1)
+            choose2();
+          else
+            callback(choice);
+        });
+      };
+      var choose2 = function () {
+        app.choose('Pick one...', ['chicken', 'beef', 'tofu'], function (choice) {
+          if (undefined === choice)
+            callback('The End');
+          else
+            callback(choice);
+        });
+        io.mockRequest(new Request({type: 'choose'})); // no value like canceled dialog
+      };
+      /**
+       * Launch test
+       */
+      ok1();
+    });
+
   });
+  if (new SurrogateInterface().description !== 'a Interface') {
+    var wasMuted = spec.mute(false).testsCreated;
+    spec.example('model tests applied', true, function () {
+      this.log('Tests Muted: ' + wasMuted);
+      return wasMuted > 0;
+    });
+  }
 };
 
 /**---------------------------------------------------------------------------------------------------------------------
@@ -2820,85 +2894,6 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
       }
       testInterface.mockRequest(cmds);
     });
-    spec.example('user queries', spec.asyncResults('The End'), function (callback) {
-      var io = new Interface();
-      var app = new Application({interface: io});
-      /**
-       * Each test is a function ...
-       */
-      var ok1 = function () {
-        io.mockRequest(new Request('ok'));
-        app.ok('You can mock ok() before', function () {
-          ok2();
-        });
-      };
-      var ok2 = function () {
-        app.ok('You can mock ok() after', function () {
-          yesno1();
-        });
-        io.mockRequest(new Request('ok'));
-      };
-      var yesno1 = function () {
-        app.yesno('Yesno can be true', function (answer) {
-          if (answer)
-            yesno2();
-          else
-            callback('fail');
-        });
-        io.mockRequest(new Request('yes'));
-      };
-      var yesno2 = function () {
-        app.yesno('Yesno can be false', function (answer) {
-          if (!answer)
-            ask1();
-          else
-            callback('fail');
-        });
-        io.mockRequest(new Request('no'));
-      };
-      var ask1 = function () {
-        var name = new Attribute({name: 'Name'});
-        io.mockRequest(new Request({type: 'ask', value: 'John Doe'}));
-        app.ask('What is your name?', name, function (answer) {
-          if (answer == 'John Doe')
-            ask2();
-          else
-            callback(answer);
-        });
-      };
-      var ask2 = function () {
-        var name = new Attribute({name: 'Name'});
-        app.ask('Vas is das name?', name, function (answer) {
-          if (undefined === answer)
-            choose1();
-          else
-            callback(answer);
-        });
-        io.mockRequest(new Request({type: 'ask'})); // no value like canceled dialog
-      };
-      var choose1 = function () {
-        io.mockRequest(new Request({type: 'choose', value: 1}));
-        app.choose('Pick one...', ['chicken', 'beef', 'tofu'], function (choice) {
-          if (choice == 1)
-            choose2();
-          else
-            callback(choice);
-        });
-      };
-      var choose2 = function () {
-        app.choose('Pick one...', ['chicken', 'beef', 'tofu'], function (choice) {
-          if (undefined === choice)
-            callback('The End');
-          else
-            callback(choice);
-        });
-        io.mockRequest(new Request({type: 'choose'})); // no value like canceled dialog
-      };
-      /**
-       * Launch test
-       */
-      ok1();
-    });
   });
 });
 
@@ -3265,11 +3260,6 @@ spec.test('tgi-utility/lib/tgi-utility-objects.test.js', 'Object Functions', 'de
     spec.example('invalid property', 0, function () {
       // no unknown properties
       return getInvalidProperties({name: 'name', value: 'Kahn'}, ['name', 'value']).length;
-    });
-  });
-  spec.heading('λ stub function', function () {
-    spec.example('λ is defined for a stub function', undefined, function () {
-      λ();
     });
   });
 });

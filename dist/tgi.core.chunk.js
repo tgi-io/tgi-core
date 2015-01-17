@@ -26,7 +26,6 @@ var TGI = {
       Workspace: Workspace,
       inheritPrototype: inheritPrototype,
       getInvalidProperties: getInvalidProperties,
-      λ: λ,
       trim: trim,
       ltrim: ltrim,
       rtrim: rtrim,
@@ -1397,7 +1396,7 @@ var REPLInterface = function (args) {
   if (false === (this instanceof Interface)) throw new Error('new operator required');
   args = args || {};
   args.name = args.name || '(unnamed)';
-  args.description = args.description || 'a Interface';
+  args.description = args.description || 'a REPLInterface';
   var i;
   var unusedProperties = getInvalidProperties(args, ['name', 'description']);
   var errorList = [];
@@ -2044,8 +2043,7 @@ var getInvalidProperties = function (args, allowedProperties) {
   }
   return props;
 };
-var λ = function () {
-};
+
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/utility/tgi-core-strings.source.js
  */
