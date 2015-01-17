@@ -667,12 +667,56 @@ Interface.prototype.canMock = function () {
   return true;
 };
 Interface.prototype.doMock = function () {
+  var callBack;
   // If no more elements then we are done
   this.mockPending = false;
   if (this.mocks.length < 1)
     return;
   // Get oldest ele and pass to callback if it is set
   var thisMock = this.mocks.shift();
+  if (thisMock.type == 'ok') {
+    if (this.okCallBack) {
+      callBack = this.okCallBack;
+      delete this.okCallBack;
+      callBack();
+    } else {
+      this.okPending = true;
+    }
+    return;
+  }
+  if (thisMock.type == 'yes' || thisMock.type == 'no') {
+    if (this.yesnoCallBack) {
+      callBack = this.yesnoCallBack;
+      delete this.yesnoCallBack;
+      callBack(thisMock.type == 'yes');
+    } else {
+      this.yesnoPending = true;
+      this.yesnoResponse = (thisMock.type == 'yes');
+    }
+    return;
+  }
+  if (thisMock.type == 'ask') {
+    if (this.askCallBack) {
+      callBack = this.askCallBack;
+      delete this.askCallBack;
+      callBack(thisMock.value);
+    } else {
+      this.askPending = true;
+      this.askResponse = thisMock.value;
+    }
+    return;
+  }
+  if (thisMock.type == 'choose') {
+    if (this.chooseCallBack) {
+      callBack = this.chooseCallBack;
+      delete this.chooseCallBack;
+      callBack();
+    } else {
+      this.choosePending = true;
+      this.chooseResponse = thisMock.value;
+    }
+    return;
+  }
   this.dispatch(thisMock);
   // Invoke for next element (delayed execution)
   this.mockPending = true;
@@ -724,32 +768,48 @@ Interface.prototype.render = function (presentation, callBack) {
   if (false === (presentation instanceof Presentation)) throw new Error('Presentation object required');
   if (callBack && typeof callBack != 'function') throw new Error('optional second argument must a commandRequest callback function');
 };
-Interface.prototype.yesno = function (prompt, callBack) {
-  if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
-  if (typeof callBack != 'function') throw new Error('callBack required');
-  if (this.mocks.length < 1)
-    throw new Error('no mocks pending');
-};
 Interface.prototype.ok = function (prompt, callBack) {
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
   if (typeof callBack != 'function') throw new Error('callBack required');
-  if (this.mocks.length < 1)
-    throw new Error('no mocks pending');
+  if (this.okPending) {
+    delete this.okPending;
+    callBack();
+  } else {
+    this.okCallBack = callBack;
+  }
+};
+Interface.prototype.yesno = function (prompt, callBack) {
+  if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
+  if (typeof callBack != 'function') throw new Error('callBack required');
+  if (this.yesnoPending) {
+    delete this.yesnoPending;
+    callBack(this.yesnoResponse);
+  } else {
+    this.yesnoCallBack = callBack;
+  }
 };
 Interface.prototype.ask = function (prompt, attribute, callBack) {
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
   if (false === (attribute instanceof Attribute)) throw new Error('instance of Attribute a required parameter');
   if (typeof callBack != 'function') throw new Error('callBack required');
-  if (this.mocks.length < 1)
-    throw new Error('no mocks pending');
+  if (this.askPending) {
+    delete this.askPending;
+    callBack(this.askResponse);
+  } else {
+    this.askCallBack = callBack;
+  }
 };
 Interface.prototype.choose = function (prompt, choices, callBack) {
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
   if (false === (choices instanceof Array)) throw new Error('choices array required');
   if (!choices.length) throw new Error('choices array empty');
   if (typeof callBack != 'function') throw new Error('callBack required');
-  if (this.mocks.length < 1)
-    throw new Error('no mocks pending');
+  if (this.choosePending) {
+    delete this.choosePending;
+    callBack(this.chooseResponse);
+  } else {
+    this.chooseCallBack = callBack;
+  }
 };
 
 /**---------------------------------------------------------------------------------------------------------------------
@@ -1158,6 +1218,8 @@ function Request(args) {
   }
   args = args || {};
   this.type = args.type || null;
+  if (args.value) // todo spec as optional param
+    this.value = args.value;
   if (!this.type || typeof this.type != 'string') throw new Error('Request type required');
   switch (this.type) {
     case 'Command':

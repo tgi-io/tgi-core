@@ -1151,7 +1151,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Thu Jan 15 2015 21:33:18 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Fri Jan 16 2015 21:38:26 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1160,7 +1160,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Thu Jan 15 2015 21:33:18 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Fri Jan 16 2015 21:38:26 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2915,7 +2915,8 @@ new Application({interface: new Interface()}).ask('sup');
 </blockquote>
 &nbsp;<b><i>must provide callback param:</i></b>
 ```javascript
-new Application({interface: new Interface()}).ask('Please enter your name', new Attribute({name: 'Name'}));
+new Application({interface: new Interface()}).
+  ask('Please enter your name', new Attribute({name: 'Name'}));
 ```
 <blockquote><strong>Error: callBack required</strong> thrown as expected
 </blockquote>
@@ -3006,25 +3007,79 @@ var app = new Application({interface: io});
  * Each test is a function ...
  */
 var ok1 = function () {
-  // For mocking ok() will pull any request off stack
   io.mockRequest(new Request('ok'));
   app.ok('You can mock ok() before', function () {
     ok2();
   });
 };
 var ok2 = function () {
-  // For mocking ok() will pull any request off stack
   app.ok('You can mock ok() after', function () {
-    callback(true);
+    yesno1();
   });
   io.mockRequest(new Request('ok'));
+};
+var yesno1 = function () {
+  app.yesno('Yesno can be true', function (answer) {
+    if (answer)
+      yesno2();
+    else
+      callback('fail');
+  });
+  io.mockRequest(new Request('yes'));
+};
+var yesno2 = function () {
+  app.yesno('Yesno can be false', function (answer) {
+    if (!answer)
+      ask1();
+    else
+      callback('fail');
+  });
+  io.mockRequest(new Request('no'));
+};
+var ask1 = function () {
+  var name = new Attribute({name: 'Name'});
+  io.mockRequest(new Request({type: 'ask', value: 'John Doe'}));
+  app.ask('What is your name?', name, function (answer) {
+    if (answer == 'John Doe')
+      ask2();
+    else
+      callback(answer);
+  });
+};
+var ask2 = function () {
+  var name = new Attribute({name: 'Name'});
+  app.ask('Vas is das name?', name, function (answer) {
+    if (undefined === answer)
+      choose1();
+    else
+      callback(answer);
+  });
+  io.mockRequest(new Request({type: 'ask'})); // no value like canceled dialog
+};
+var choose1 = function () {
+  io.mockRequest(new Request({type: 'choose', value: 1}));
+  app.choose('Pick one...', ['chicken', 'beef', 'tofu'], function (choice) {
+    if (choice == 1)
+      choose2();
+    else
+      callback(choice);
+  });
+};
+var choose2 = function () {
+  app.choose('Pick one...', ['chicken', 'beef', 'tofu'], function (choice) {
+    if (undefined === choice)
+      callback('The End');
+    else
+      callback(choice);
+  });
+  io.mockRequest(new Request({type: 'choose'})); // no value like canceled dialog
 };
 /**
  * Launch test
  */
 ok1();
 ```
-<blockquote>returns <strong>true</strong> as expected
+<blockquote>returns <strong>The End</strong> as expected
 </blockquote>
 ## [&#9664;](#-application)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-presentation) &nbsp;Log
 #### Log Model
@@ -3056,7 +3111,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Thu Jan 15 2015 21:33:18 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Fri Jan 16 2015 21:38:26 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript

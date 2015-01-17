@@ -2792,7 +2792,8 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
         new Application({interface: new Interface()}).ask('sup');
       });
       spec.example('must provide callback param', Error('callBack required'), function () {
-        new Application({interface: new Interface()}).ask('Please enter your name', new Attribute({name: 'Name'}));
+        new Application({interface: new Interface()}).
+          ask('Please enter your name', new Attribute({name: 'Name'}));
       });
     });
     spec.heading('choose', function () {
@@ -2860,33 +2861,83 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
       }
       testInterface.mockRequest(cmds);
     });
-    spec.example('user queries', spec.asyncResults(true), function (callback) {
+    spec.example('user queries', spec.asyncResults('The End'), function (callback) {
       var io = new Interface();
       var app = new Application({interface: io});
-
       /**
        * Each test is a function ...
        */
-
       var ok1 = function () {
-        // For mocking ok() will pull any request off stack
         io.mockRequest(new Request('ok'));
         app.ok('You can mock ok() before', function () {
           ok2();
         });
       };
       var ok2 = function () {
-        // For mocking ok() will pull any request off stack
         app.ok('You can mock ok() after', function () {
-          callback(true);
+          yesno1();
         });
         io.mockRequest(new Request('ok'));
       };
-
+      var yesno1 = function () {
+        app.yesno('Yesno can be true', function (answer) {
+          if (answer)
+            yesno2();
+          else
+            callback('fail');
+        });
+        io.mockRequest(new Request('yes'));
+      };
+      var yesno2 = function () {
+        app.yesno('Yesno can be false', function (answer) {
+          if (!answer)
+            ask1();
+          else
+            callback('fail');
+        });
+        io.mockRequest(new Request('no'));
+      };
+      var ask1 = function () {
+        var name = new Attribute({name: 'Name'});
+        io.mockRequest(new Request({type: 'ask', value: 'John Doe'}));
+        app.ask('What is your name?', name, function (answer) {
+          if (answer == 'John Doe')
+            ask2();
+          else
+            callback(answer);
+        });
+      };
+      var ask2 = function () {
+        var name = new Attribute({name: 'Name'});
+        app.ask('Vas is das name?', name, function (answer) {
+          if (undefined === answer)
+            choose1();
+          else
+            callback(answer);
+        });
+        io.mockRequest(new Request({type: 'ask'})); // no value like canceled dialog
+      };
+      var choose1 = function () {
+        io.mockRequest(new Request({type: 'choose', value: 1}));
+        app.choose('Pick one...', ['chicken', 'beef', 'tofu'], function (choice) {
+          if (choice == 1)
+            choose2();
+          else
+            callback(choice);
+        });
+      };
+      var choose2 = function () {
+        app.choose('Pick one...', ['chicken', 'beef', 'tofu'], function (choice) {
+          if (undefined === choice)
+            callback('The End');
+          else
+            callback(choice);
+        });
+        io.mockRequest(new Request({type: 'choose'})); // no value like canceled dialog
+      };
       /**
        * Launch test
        */
-
       ok1();
     });
   });
