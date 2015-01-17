@@ -1014,7 +1014,8 @@ spec.test('tgi-core/lib/tgi-core-interface.spec.js', 'Interface', 'enable user t
   spec.runnerInterfaceMethods(Interface);
 });
 spec.runnerInterfaceConstructor = function (SurrogateInterface) {
-  if (new SurrogateInterface().description !== 'a Interface') {
+  if (new SurrogateInterface().description == 'a REPLInterface') {
+    spec.paragraph('see `Interface` for documentation');
     spec.mute(true);
   }
   spec.example('objects created should be an instance of Interface', true, function () {
@@ -1271,9 +1272,9 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
     });
 
   });
-  if (new SurrogateInterface().description !== 'a Interface') {
+  if (new SurrogateInterface().description == 'a REPLInterface') {
     var wasMuted = spec.mute(false).testsCreated;
-    spec.example('model tests applied', true, function () {
+    spec.example('interface tests applied', true, function () {
       this.log('Tests Muted: ' + wasMuted);
       return wasMuted > 0;
     });
