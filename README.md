@@ -4,13 +4,13 @@ Core Objects [read the spec](spec/README.md).
 
 To Do
 ---
-- App: have app.start pass presentation / command / function etc if anything applies
-- App: var app.code or app.script = function(function(){}){} ... or nix this and use app.start function
 - Interface: work up REPLInterface
 - Misc: fix index ⌘ in helps
 - Misc remove bucket - replace example with closure variables as needed
 - Review models for completeness esp. Workspace and Session
 - Misc: improve coverage
+- Review tequila for lingering todo
+- extend spec to external stores & interfaces
 
 Presentation standard procedures
 ---

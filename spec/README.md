@@ -1151,7 +1151,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Fri Jan 16 2015 21:38:26 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Sat Jan 17 2015 12:14:29 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1160,7 +1160,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Fri Jan 16 2015 21:38:26 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Sat Jan 17 2015 12:14:29 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -1323,13 +1323,13 @@ new Application().yesno();
 </blockquote>
 &nbsp;<b><i>must provide the text question param:</i></b>
 ```javascript
-new Application({interface: new Interface()}).yesno();
+new Application({interface: new SurrogateInterface()}).yesno();
 ```
 <blockquote><strong>Error: prompt required</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>must provide callback param:</i></b>
 ```javascript
-new Application({interface: new Interface()}).yesno('Are we there yet?');
+new Application({interface: new SurrogateInterface()}).yesno('Are we there yet?');
 ```
 <blockquote><strong>Error: callBack required</strong> thrown as expected
 </blockquote>
@@ -1344,13 +1344,13 @@ new Application().ok();
 </blockquote>
 &nbsp;<b><i>must provide the text prompt param:</i></b>
 ```javascript
-new Application({interface: new Interface()}).ok();
+new Application({interface: new SurrogateInterface()}).ok();
 ```
 <blockquote><strong>Error: prompt required</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>must provide callback param:</i></b>
 ```javascript
-new Application({interface: new Interface()}).ok('You are about to enter the twilight zone.');
+new Application({interface: new SurrogateInterface()}).ok('You are about to enter the twilight zone.');
 ```
 <blockquote><strong>Error: callBack required</strong> thrown as expected
 </blockquote>
@@ -1359,19 +1359,19 @@ Simple single item prompt.
 
 &nbsp;<b><i>must provide the text question param:</i></b>
 ```javascript
-new Interface().ask();
+new SurrogateInterface().ask();
 ```
 <blockquote><strong>Error: prompt required</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>must supply attribute:</i></b>
 ```javascript
-new Interface().ask('What it do');
+new SurrogateInterface().ask('What it do');
 ```
 <blockquote><strong>Error: instance of Attribute a required parameter</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>must provide callback param:</i></b>
 ```javascript
-new Interface().ask('Please enter your name', new Attribute({name: 'Name'}));
+new SurrogateInterface().ask('Please enter your name', new Attribute({name: 'Name'}));
 ```
 <blockquote><strong>Error: callBack required</strong> thrown as expected
 </blockquote>
@@ -1380,25 +1380,25 @@ prompt to choose an item
 
 &nbsp;<b><i>must provide text prompt first:</i></b>
 ```javascript
-new Interface().choose();
+new SurrogateInterface().choose();
 ```
 <blockquote><strong>Error: prompt required</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>must supply array of choices:</i></b>
 ```javascript
 this.shouldThrowError(Error('choices array required'), function () {
-  new Interface().choose('What it do');
+  new SurrogateInterface().choose('What it do');
 });
 this.shouldThrowError(Error('choices array required'), function () {
-  new Interface().choose('this will not', 'work');
+  new SurrogateInterface().choose('this will not', 'work');
 });
 this.shouldThrowError(Error('choices array empty'), function () {
-  new Interface().choose('empty array?', []);
+  new SurrogateInterface().choose('empty array?', []);
 });
 ```
 &nbsp;<b><i>must provide callback param:</i></b>
 ```javascript
-new Interface().choose('choose wisely', ['rock', 'paper', 'scissors']);
+new SurrogateInterface().choose('choose wisely', ['rock', 'paper', 'scissors']);
 ```
 <blockquote><strong>Error: callBack required</strong> thrown as expected
 </blockquote>
@@ -1408,7 +1408,7 @@ new Interface().choose('choose wisely', ['rock', 'paper', 'scissors']);
 // Send 4 mocks and make sure we get 4 callback calls
 var self = this;
 self.callbackCount = 0;
-var testInterface = new Interface();
+var testInterface = new SurrogateInterface();
 testInterface.start(new Application(), new Presentation(), function (request) {
   if (request.type == 'mock count')
     self.callbackCount++;
@@ -1423,6 +1423,88 @@ for (i = 0; i < 4; i++) {
 testInterface.mockRequest(cmds);
 ```
 <blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>user queries:</i></b>
+```javascript
+var io = new SurrogateInterface();
+var app = new Application({interface: io});
+/**
+ * Each test is a function ...
+ */
+var ok1 = function () {
+  io.mockRequest(new Request('ok'));
+  app.ok('You can mock ok() before', function () {
+    ok2();
+  });
+};
+var ok2 = function () {
+  app.ok('You can mock ok() after', function () {
+    yesno1();
+  });
+  io.mockRequest(new Request('ok'));
+};
+var yesno1 = function () {
+  app.yesno('Yesno can be true', function (answer) {
+    if (answer)
+      yesno2();
+    else
+      callback('fail');
+  });
+  io.mockRequest(new Request('yes'));
+};
+var yesno2 = function () {
+  app.yesno('Yesno can be false', function (answer) {
+    if (!answer)
+      ask1();
+    else
+      callback('fail');
+  });
+  io.mockRequest(new Request('no'));
+};
+var ask1 = function () {
+  var name = new Attribute({name: 'Name'});
+  io.mockRequest(new Request({type: 'ask', value: 'John Doe'}));
+  app.ask('What is your name?', name, function (answer) {
+    if (answer == 'John Doe')
+      ask2();
+    else
+      callback(answer);
+  });
+};
+var ask2 = function () {
+  var name = new Attribute({name: 'Name'});
+  app.ask('Vas is das name?', name, function (answer) {
+    if (undefined === answer)
+      choose1();
+    else
+      callback(answer);
+  });
+  io.mockRequest(new Request({type: 'ask'})); // no value like canceled dialog
+};
+var choose1 = function () {
+  io.mockRequest(new Request({type: 'choose', value: 1}));
+  app.choose('Pick one...', ['chicken', 'beef', 'tofu'], function (choice) {
+    if (choice == 1)
+      choose2();
+    else
+      callback(choice);
+  });
+};
+var choose2 = function () {
+  app.choose('Pick one...', ['chicken', 'beef', 'tofu'], function (choice) {
+    if (undefined === choice)
+      callback('The End');
+    else
+      callback(choice);
+  });
+  io.mockRequest(new Request({type: 'choose'})); // no value like canceled dialog
+};
+/**
+ * Launch test
+ */
+ok1();
+```
+<blockquote>returns <strong>The End</strong> as expected
 </blockquote>
 ## [&#9664;](#-interface)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-message) &nbsp;List
 Lists are an ordered collection of items.  Each item is an array of values that correspond to the attributes for model used in constructor.    
@@ -2621,13 +2703,13 @@ new Application().yesno();
 </blockquote>
 &nbsp;<b><i>must provide the text question param:</i></b>
 ```javascript
-new Application({interface: new Interface()}).yesno();
+new Application({interface: new SurrogateInterface()}).yesno();
 ```
 <blockquote><strong>Error: prompt required</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>must provide callback param:</i></b>
 ```javascript
-new Application({interface: new Interface()}).yesno('Are we there yet?');
+new Application({interface: new SurrogateInterface()}).yesno('Are we there yet?');
 ```
 <blockquote><strong>Error: callBack required</strong> thrown as expected
 </blockquote>
@@ -2642,13 +2724,13 @@ new Application().ok();
 </blockquote>
 &nbsp;<b><i>must provide the text prompt param:</i></b>
 ```javascript
-new Application({interface: new Interface()}).ok();
+new Application({interface: new SurrogateInterface()}).ok();
 ```
 <blockquote><strong>Error: prompt required</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>must provide callback param:</i></b>
 ```javascript
-new Application({interface: new Interface()}).ok('You are about to enter the twilight zone.');
+new Application({interface: new SurrogateInterface()}).ok('You are about to enter the twilight zone.');
 ```
 <blockquote><strong>Error: callBack required</strong> thrown as expected
 </blockquote>
@@ -2657,19 +2739,19 @@ Simple single item prompt.
 
 &nbsp;<b><i>must provide the text question param:</i></b>
 ```javascript
-new Interface().ask();
+new SurrogateInterface().ask();
 ```
 <blockquote><strong>Error: prompt required</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>must supply attribute:</i></b>
 ```javascript
-new Interface().ask('What it do');
+new SurrogateInterface().ask('What it do');
 ```
 <blockquote><strong>Error: instance of Attribute a required parameter</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>must provide callback param:</i></b>
 ```javascript
-new Interface().ask('Please enter your name', new Attribute({name: 'Name'}));
+new SurrogateInterface().ask('Please enter your name', new Attribute({name: 'Name'}));
 ```
 <blockquote><strong>Error: callBack required</strong> thrown as expected
 </blockquote>
@@ -2678,25 +2760,25 @@ prompt to choose an item
 
 &nbsp;<b><i>must provide text prompt first:</i></b>
 ```javascript
-new Interface().choose();
+new SurrogateInterface().choose();
 ```
 <blockquote><strong>Error: prompt required</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>must supply array of choices:</i></b>
 ```javascript
 this.shouldThrowError(Error('choices array required'), function () {
-  new Interface().choose('What it do');
+  new SurrogateInterface().choose('What it do');
 });
 this.shouldThrowError(Error('choices array required'), function () {
-  new Interface().choose('this will not', 'work');
+  new SurrogateInterface().choose('this will not', 'work');
 });
 this.shouldThrowError(Error('choices array empty'), function () {
-  new Interface().choose('empty array?', []);
+  new SurrogateInterface().choose('empty array?', []);
 });
 ```
 &nbsp;<b><i>must provide callback param:</i></b>
 ```javascript
-new Interface().choose('choose wisely', ['rock', 'paper', 'scissors']);
+new SurrogateInterface().choose('choose wisely', ['rock', 'paper', 'scissors']);
 ```
 <blockquote><strong>Error: callBack required</strong> thrown as expected
 </blockquote>
@@ -2706,7 +2788,7 @@ new Interface().choose('choose wisely', ['rock', 'paper', 'scissors']);
 // Send 4 mocks and make sure we get 4 callback calls
 var self = this;
 self.callbackCount = 0;
-var testInterface = new Interface();
+var testInterface = new SurrogateInterface();
 testInterface.start(new Application(), new Presentation(), function (request) {
   if (request.type == 'mock count')
     self.callbackCount++;
@@ -2721,6 +2803,88 @@ for (i = 0; i < 4; i++) {
 testInterface.mockRequest(cmds);
 ```
 <blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>user queries:</i></b>
+```javascript
+var io = new SurrogateInterface();
+var app = new Application({interface: io});
+/**
+ * Each test is a function ...
+ */
+var ok1 = function () {
+  io.mockRequest(new Request('ok'));
+  app.ok('You can mock ok() before', function () {
+    ok2();
+  });
+};
+var ok2 = function () {
+  app.ok('You can mock ok() after', function () {
+    yesno1();
+  });
+  io.mockRequest(new Request('ok'));
+};
+var yesno1 = function () {
+  app.yesno('Yesno can be true', function (answer) {
+    if (answer)
+      yesno2();
+    else
+      callback('fail');
+  });
+  io.mockRequest(new Request('yes'));
+};
+var yesno2 = function () {
+  app.yesno('Yesno can be false', function (answer) {
+    if (!answer)
+      ask1();
+    else
+      callback('fail');
+  });
+  io.mockRequest(new Request('no'));
+};
+var ask1 = function () {
+  var name = new Attribute({name: 'Name'});
+  io.mockRequest(new Request({type: 'ask', value: 'John Doe'}));
+  app.ask('What is your name?', name, function (answer) {
+    if (answer == 'John Doe')
+      ask2();
+    else
+      callback(answer);
+  });
+};
+var ask2 = function () {
+  var name = new Attribute({name: 'Name'});
+  app.ask('Vas is das name?', name, function (answer) {
+    if (undefined === answer)
+      choose1();
+    else
+      callback(answer);
+  });
+  io.mockRequest(new Request({type: 'ask'})); // no value like canceled dialog
+};
+var choose1 = function () {
+  io.mockRequest(new Request({type: 'choose', value: 1}));
+  app.choose('Pick one...', ['chicken', 'beef', 'tofu'], function (choice) {
+    if (choice == 1)
+      choose2();
+    else
+      callback(choice);
+  });
+};
+var choose2 = function () {
+  app.choose('Pick one...', ['chicken', 'beef', 'tofu'], function (choice) {
+    if (undefined === choice)
+      callback('The End');
+    else
+      callback(choice);
+  });
+  io.mockRequest(new Request({type: 'choose'})); // no value like canceled dialog
+};
+/**
+ * Launch test
+ */
+ok1();
+```
+<blockquote>returns <strong>The End</strong> as expected
 </blockquote>
 
 ## [&#9664;](#-replinterface)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-log) &nbsp;Application
@@ -2999,88 +3163,6 @@ testInterface.mockRequest(cmds);
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
-&nbsp;<b><i>user queries:</i></b>
-```javascript
-var io = new Interface();
-var app = new Application({interface: io});
-/**
- * Each test is a function ...
- */
-var ok1 = function () {
-  io.mockRequest(new Request('ok'));
-  app.ok('You can mock ok() before', function () {
-    ok2();
-  });
-};
-var ok2 = function () {
-  app.ok('You can mock ok() after', function () {
-    yesno1();
-  });
-  io.mockRequest(new Request('ok'));
-};
-var yesno1 = function () {
-  app.yesno('Yesno can be true', function (answer) {
-    if (answer)
-      yesno2();
-    else
-      callback('fail');
-  });
-  io.mockRequest(new Request('yes'));
-};
-var yesno2 = function () {
-  app.yesno('Yesno can be false', function (answer) {
-    if (!answer)
-      ask1();
-    else
-      callback('fail');
-  });
-  io.mockRequest(new Request('no'));
-};
-var ask1 = function () {
-  var name = new Attribute({name: 'Name'});
-  io.mockRequest(new Request({type: 'ask', value: 'John Doe'}));
-  app.ask('What is your name?', name, function (answer) {
-    if (answer == 'John Doe')
-      ask2();
-    else
-      callback(answer);
-  });
-};
-var ask2 = function () {
-  var name = new Attribute({name: 'Name'});
-  app.ask('Vas is das name?', name, function (answer) {
-    if (undefined === answer)
-      choose1();
-    else
-      callback(answer);
-  });
-  io.mockRequest(new Request({type: 'ask'})); // no value like canceled dialog
-};
-var choose1 = function () {
-  io.mockRequest(new Request({type: 'choose', value: 1}));
-  app.choose('Pick one...', ['chicken', 'beef', 'tofu'], function (choice) {
-    if (choice == 1)
-      choose2();
-    else
-      callback(choice);
-  });
-};
-var choose2 = function () {
-  app.choose('Pick one...', ['chicken', 'beef', 'tofu'], function (choice) {
-    if (undefined === choice)
-      callback('The End');
-    else
-      callback(choice);
-  });
-  io.mockRequest(new Request({type: 'choose'})); // no value like canceled dialog
-};
-/**
- * Launch test
- */
-ok1();
-```
-<blockquote>returns <strong>The End</strong> as expected
-</blockquote>
 ## [&#9664;](#-application)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-presentation) &nbsp;Log
 #### Log Model
 Multi purpose log model.    
@@ -3111,7 +3193,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Fri Jan 16 2015 21:38:26 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Sat Jan 17 2015 12:14:29 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -3903,11 +3985,6 @@ return getInvalidProperties({name: 'name', Kahn: 'value'}, ['name', 'value'])[0]
 ```javascript
 // no unknown properties
 return getInvalidProperties({name: 'name', value: 'Kahn'}, ['name', 'value']).length;
-```
-#### λ stub function
-&nbsp;<b><i>λ is defined for a stub function:</i></b>
-```javascript
-λ();
 ```
 ## [&#9664;](#-object-functions)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-summary) &nbsp;String Functions
 #### STRING FUNCTIONS
