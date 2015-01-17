@@ -1151,7 +1151,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Sat Jan 17 2015 16:32:33 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Sat Jan 17 2015 16:58:42 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1160,7 +1160,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Sat Jan 17 2015 16:32:33 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Sat Jan 17 2015 16:58:42 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2564,6 +2564,25 @@ return wasMuted > 0;
 ```
 <blockquote><strong>log: </strong>Tests Muted: 32<br>returns <strong>true</strong> as expected
 </blockquote>
+#### METHODS
+The REPLInterface defines adds the following methods.    
+
+evaluateInput(line)    
+
+&nbsp;<b><i>called when line of input available:</i></b>
+```javascript
+return typeof REPLInterface.prototype.evaluateInput;
+```
+<blockquote>returns <strong>function</strong> as expected
+</blockquote>
+captureOutput(callback)    
+
+&nbsp;<b><i>called when line of input available:</i></b>
+```javascript
+return typeof REPLInterface.prototype.captureOutput;
+```
+<blockquote>returns <strong>function</strong> as expected
+</blockquote>
 
 ## [&#9664;](#-replinterface)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-log) &nbsp;Application
 #### CONSTRUCTOR
@@ -2871,7 +2890,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Sat Jan 17 2015 16:32:33 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Sat Jan 17 2015 16:58:42 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
