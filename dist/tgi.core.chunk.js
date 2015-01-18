@@ -703,7 +703,7 @@ Interface.prototype.doMock = function () {
     if (this.chooseCallBack) {
       callBack = this.chooseCallBack;
       delete this.chooseCallBack;
-      callBack();
+      callBack(Interface.firstMatch(thisMock.value, this.chooseChoices));
     } else {
       this.choosePending = true;
       this.chooseResponse = thisMock.value;
@@ -799,12 +799,25 @@ Interface.prototype.choose = function (prompt, choices, callBack) {
   if (typeof callBack != 'function') throw new Error('callBack required');
   if (this.choosePending) {
     delete this.choosePending;
-    callBack(this.chooseResponse);
+    callBack(Interface.firstMatch(this.chooseResponse, choices));
   } else {
     this.chooseCallBack = callBack;
+    this.chooseChoices = choices;
   }
 };
-
+/**
+ * Helper Functions
+ */
+Interface.firstMatch = function (s, a) { // find first partial match with s in array a
+  if (undefined === s)
+  return undefined;
+  for (var i = 0; i < a.length; i++) {
+    var obj = a[i];
+    if (left(obj, s.length) == s)
+      return i;
+  }
+  return undefined;
+};
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-list.source.js
  */
@@ -1468,7 +1481,7 @@ REPLInterface.prototype.doMock = function () {
     if (this.chooseCallBack) {
       callBack = this.chooseCallBack;
       delete this.chooseCallBack;
-      callBack();
+      callBack(Interface.firstMatch(thisMock.value, this.chooseChoices));
     } else {
       this.choosePending = true;
       this.chooseResponse = thisMock.value;
@@ -1564,9 +1577,10 @@ REPLInterface.prototype.choose = function (prompt, choices, callBack) {
   if (typeof callBack != 'function') throw new Error('callBack required');
   if (this.choosePending) {
     delete this.choosePending;
-    callBack(this.chooseResponse);
+    callBack(Interface.firstMatch(this.chooseResponse, choices));
   } else {
     this.chooseCallBack = callBack;
+    this.chooseChoices = choices;
   }
 };
 /**
@@ -1574,9 +1588,25 @@ REPLInterface.prototype.choose = function (prompt, choices, callBack) {
  */
 REPLInterface.prototype.evaluateInput = function (line) {
   var callBack;
+  var uLine = ('' + line).toUpperCase();
+  if (this.okCallBack) {
+    callBack = this.okCallBack;
+    delete this.okCallBack;
+    callBack();
+  }
+  if (this.yesnoCallBack) {
+    callBack = this.yesnoCallBack;
+    delete this.yesnoCallBack;
+    callBack(uLine == 'Y' || uLine == 'YES');
+  }
   if (this.askCallBack) {
     callBack = this.askCallBack;
     delete this.askCallBack;
+    callBack(line);
+  }
+  if (this.chooseCallBack) {
+    callBack = this.chooseCallBack;
+    delete this.chooseCallBack;
     callBack(line);
   }
 };

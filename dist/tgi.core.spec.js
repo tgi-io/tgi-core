@@ -2750,7 +2750,6 @@ spec.test('tgi-core/lib/interfaces/tgi-core-interfaces-repl.spec.js', 'REPLInter
         return typeof REPLInterface.prototype.captureOutput;
       });
     });
-
   });
 });
 
