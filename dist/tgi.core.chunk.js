@@ -1573,7 +1573,12 @@ REPLInterface.prototype.choose = function (prompt, choices, callBack) {
  * Additional Methods
  */
 REPLInterface.prototype.evaluateInput = function (line) {
-  console.log('evaluateInput: ' + line);
+  var callBack;
+  if (this.askCallBack) {
+    callBack = this.askCallBack;
+    delete this.askCallBack;
+    callBack(line);
+  }
 };
 REPLInterface.prototype.captureOutput = function (callback) {
   this.captureOutputCallback = callback;

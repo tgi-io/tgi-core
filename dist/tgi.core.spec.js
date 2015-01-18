@@ -1229,41 +1229,41 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
       };
       var ask1 = function () {
         var name = new Attribute({name: 'Name'});
-        io.mockRequest(new Request({type: 'ask', value: 'John Doe'}));
         app.ask('What is your name?', name, function (answer) {
           if (answer == 'John Doe')
             ask2();
           else
             callback(answer);
         });
+        io.mockRequest(new Request({type: 'ask', value: 'John Doe'}));
       };
       var ask2 = function () {
         var name = new Attribute({name: 'Name'});
+        io.mockRequest(new Request({type: 'ask'})); // no value like canceled dialog
         app.ask('Vas is das name?', name, function (answer) {
           if (undefined === answer)
             choose1();
           else
             callback(answer);
         });
-        io.mockRequest(new Request({type: 'ask'})); // no value like canceled dialog
       };
       var choose1 = function () {
-        io.mockRequest(new Request({type: 'choose', value: 1}));
         app.choose('Pick one...', ['chicken', 'beef', 'tofu'], function (choice) {
           if (choice == 1)
             choose2();
           else
             callback(choice);
         });
+        io.mockRequest(new Request({type: 'choose', value: 'beef'}));
       };
       var choose2 = function () {
+        io.mockRequest(new Request({type: 'choose'})); // no value like canceled dialog
         app.choose('Pick one...', ['chicken', 'beef', 'tofu'], function (choice) {
           if (undefined === choice)
             callback('The End');
           else
             callback(choice);
         });
-        io.mockRequest(new Request({type: 'choose'})); // no value like canceled dialog
       };
       /**
        * Launch test
@@ -2739,6 +2739,18 @@ spec.test('tgi-core/lib/interfaces/tgi-core-interfaces-repl.spec.js', 'REPLInter
       spec.runnerInterfaceConstructor(REPLInterface);
     });
     spec.runnerInterfaceMethods(REPLInterface);
+    spec.heading('METHODS', function () {
+      spec.paragraph('The REPLInterface defines adds the following methods.');
+      spec.paragraph('evaluateInput(line)');
+      spec.example('called when line of input available', 'function', function () {
+        return typeof REPLInterface.prototype.evaluateInput;
+      });
+      spec.paragraph('captureOutput(callback)');
+      spec.example('called when line of input available', 'function', function () {
+        return typeof REPLInterface.prototype.captureOutput;
+      });
+    });
+
   });
 });
 

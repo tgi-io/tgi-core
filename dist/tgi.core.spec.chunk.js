@@ -2698,14 +2698,22 @@ spec.test('tgi-core/lib/interfaces/tgi-core-interfaces-repl.spec.js', 'REPLInter
       spec.runnerInterfaceConstructor(REPLInterface);
     });
     spec.runnerInterfaceMethods(REPLInterface);
-    spec.heading('METHODS', function () {
+    spec.heading('ADDITIONAL METHODS', function () {
       spec.paragraph('The REPLInterface defines adds the following methods.');
       spec.paragraph('evaluateInput(line)');
       spec.example('called when line of input available', 'function', function () {
         return typeof REPLInterface.prototype.evaluateInput;
       });
+      spec.example('simple example providing input', spec.asyncResults('cake'), function (callback) {
+        var io = new REPLInterface();
+        new Application({interface: io}).ask('Let them eat ...', new Attribute({name: 'Answer'}), function (answer) {
+          callback(answer);
+        });
+        io.evaluateInput('cake');
+        // io.mockRequest(new Request({type: 'ask', value: 'cake'}));
+      });
       spec.paragraph('captureOutput(callback)');
-      spec.example('called when line of input available', 'function', function () {
+      spec.example('set callback to ', 'function', function () {
         return typeof REPLInterface.prototype.captureOutput;
       });
     });
