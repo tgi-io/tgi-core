@@ -1534,6 +1534,9 @@ REPLInterface.prototype.dispatch = function (request, response) {
 };
 REPLInterface.prototype.notify = function (message) {
   if (false === (message instanceof Message)) throw new Error('Message required');
+  if (this.captureOutputCallback) {
+    this.captureOutputCallback(message);
+  }
 };
 REPLInterface.prototype.render = function (presentation, callBack) {
   if (false === (presentation instanceof Presentation)) throw new Error('Presentation object required');
@@ -1542,6 +1545,9 @@ REPLInterface.prototype.render = function (presentation, callBack) {
 REPLInterface.prototype.ok = function (prompt, callBack) {
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
   if (typeof callBack != 'function') throw new Error('callBack required');
+  if (this.captureOutputCallback) {
+    this.captureOutputCallback(prompt);
+  }
   if (this.okPending) {
     delete this.okPending;
     callBack();
@@ -1552,6 +1558,9 @@ REPLInterface.prototype.ok = function (prompt, callBack) {
 REPLInterface.prototype.yesno = function (prompt, callBack) {
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
   if (typeof callBack != 'function') throw new Error('callBack required');
+  if (this.captureOutputCallback) {
+    this.captureOutputCallback(prompt);
+  }
   if (this.yesnoPending) {
     delete this.yesnoPending;
     callBack(this.yesnoResponse);
@@ -1563,6 +1572,9 @@ REPLInterface.prototype.ask = function (prompt, attribute, callBack) {
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
   if (false === (attribute instanceof Attribute)) throw new Error('instance of Attribute a required parameter');
   if (typeof callBack != 'function') throw new Error('callBack required');
+  if (this.captureOutputCallback) {
+    this.captureOutputCallback(prompt);
+  }
   if (this.askPending) {
     delete this.askPending;
     callBack(this.askResponse);

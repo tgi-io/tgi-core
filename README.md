@@ -11,6 +11,8 @@ To Do
 - Misc: improve coverage
 - Review tequila for lingering todo
 - extend spec to external stores & interfaces
+- fix // repl.notify(new Message('Nice to meet you ' + answer + '.'));
+- why is interface.notify needing message parm and not just text
 
 Presentation standard procedures
 ---
