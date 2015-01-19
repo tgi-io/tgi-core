@@ -1151,7 +1151,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Sun Jan 18 2015 20:46:53 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Mon Jan 19 2015 08:34:40 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1160,7 +1160,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Sun Jan 18 2015 20:46:53 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Mon Jan 19 2015 08:34:40 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2630,19 +2630,28 @@ var ask1 = function () {
   app.ask('What is your name?',new Attribute({name:'Name'}), function (answer) {
     // repl.notify(new Message('Nice to meet you ' + answer + '.'));
     if (answer=='Sean') {
-      callback('done');
+      choose1();
     } else {
       callback(answer);
     }
   });
   input('Sean');
 };
+var choose1 = function() {
+  app.choose('Pick one...', ['Eenie', 'Meenie', 'Miney', 'Moe'], function (choice) {
+    if (choice == 1)
+      callback('done');
+    else
+      callback(choice);
+  });
+  input('m'); // first partial match
+};
 /**
  * Start the first test
  */
 ok1();
 ```
-<blockquote><strong>log: </strong>out> This is a test.<br><strong>log: </strong>in> whatever<br><strong>log: </strong>out> Are we having fun?<br><strong>log: </strong>in> hell no<br><strong>log: </strong>out> Should I continue?<br><strong>log: </strong>in> y<br><strong>log: </strong>out> What is your name?<br><strong>log: </strong>in> Sean<br>returns <strong>done</strong> as expected
+<blockquote><strong>log: </strong>out> This is a test.<br><strong>log: </strong>in> whatever<br><strong>log: </strong>out> Are we having fun?<br><strong>log: </strong>in> hell no<br><strong>log: </strong>out> Should I continue?<br><strong>log: </strong>in> y<br><strong>log: </strong>out> What is your name?<br><strong>log: </strong>in> Sean<br><strong>log: </strong>out> Pick one...<br><strong>log: </strong>out>   Eenie<br><strong>log: </strong>out>   Meenie<br><strong>log: </strong>out>   Miney<br><strong>log: </strong>out>   Moe<br><strong>log: </strong>in> m<br>returns <strong>done</strong> as expected
 </blockquote>
 
 ## [&#9664;](#-replinterface)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-log) &nbsp;Application
@@ -2951,7 +2960,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Sun Jan 18 2015 20:46:53 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Mon Jan 19 2015 08:34:40 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript

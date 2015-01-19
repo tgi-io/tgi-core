@@ -812,8 +812,8 @@ Interface.firstMatch = function (s, a) { // find first partial match with s in a
   if (undefined === s)
   return undefined;
   for (var i = 0; i < a.length; i++) {
-    var obj = a[i];
-    if (left(obj, s.length) == s)
+    var obj = a[i].toLowerCase();
+    if (left(obj, s.length) == s.toLowerCase())
       return i;
   }
   return undefined;
@@ -1587,6 +1587,12 @@ REPLInterface.prototype.choose = function (prompt, choices, callBack) {
   if (false === (choices instanceof Array)) throw new Error('choices array required');
   if (!choices.length) throw new Error('choices array empty');
   if (typeof callBack != 'function') throw new Error('callBack required');
+  if (this.captureOutputCallback) {
+    this.captureOutputCallback(prompt);
+    for (var i = 0; i < choices.length; i++) {
+      this.captureOutputCallback('  ' + choices[i]);
+    }
+  }
   if (this.choosePending) {
     delete this.choosePending;
     callBack(Interface.firstMatch(this.chooseResponse, choices));
@@ -1619,7 +1625,7 @@ REPLInterface.prototype.evaluateInput = function (line) {
   if (this.chooseCallBack) {
     callBack = this.chooseCallBack;
     delete this.chooseCallBack;
-    callBack(line);
+    callBack(Interface.firstMatch(line, this.chooseChoices));
   }
 };
 REPLInterface.prototype.captureOutput = function (callback) {

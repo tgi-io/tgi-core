@@ -4,7 +4,7 @@ Core Objects [read the spec](spec/README.md).
 
 To Do
 ---
-- Interface: work up REPLInterface
+- REPLInterface - handle nav and presentation
 - Misc: fix index ⌘ in helps
 - Misc remove bucket - replace example with closure variables as needed
 - Review models for completeness esp. Workspace and Session

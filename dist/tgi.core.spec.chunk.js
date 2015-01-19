@@ -2754,12 +2754,21 @@ spec.test('tgi-core/lib/interfaces/tgi-core-interfaces-repl.spec.js', 'REPLInter
           app.ask('What is your name?',new Attribute({name:'Name'}), function (answer) {
             // repl.notify(new Message('Nice to meet you ' + answer + '.'));
             if (answer=='Sean') {
-              callback('done');
+              choose1();
             } else {
               callback(answer);
             }
           });
           input('Sean');
+        };
+        var choose1 = function() {
+          app.choose('Pick one...', ['Eenie', 'Meenie', 'Miney', 'Moe'], function (choice) {
+            if (choice == 1)
+              callback('done');
+            else
+              callback(choice);
+          });
+          input('m'); // first partial match
         };
         /**
          * Start the first test
