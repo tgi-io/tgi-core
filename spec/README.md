@@ -483,7 +483,7 @@ badApple.value = -1; // One bad apple will spoil my stuff
 this.log(myStuff.getObjectStateErrors());
 return myStuff.getObjectStateErrors().length;
 ```
-<blockquote><strong>log: </strong>group contains invalid members<br><strong>log: </strong><br>returns <strong>1</strong> as expected
+<blockquote><strong>log: </strong><br><strong>log: </strong>group contains invalid members<br>returns <strong>1</strong> as expected
 </blockquote>
 #### Table
 Table types are used to store an array of values (rows) each of which is an array of values (columns).  Each column value is associated with the corresponding element in the Table property group which is set when creating a Table.    
@@ -1151,7 +1151,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Sun Jan 18 2015 20:37:31 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Sun Jan 18 2015 20:46:53 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1160,7 +1160,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Sun Jan 18 2015 20:37:31 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Sun Jan 18 2015 20:46:53 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2282,7 +2282,7 @@ cStore.storeType = 'ConvenienceStore';
 this.log(cStore.toString());
 return cStore.toString();
 ```
-<blockquote><strong>log: </strong>ConvenienceStore: 7-Eleven<br><strong>log: </strong>a Store<br>returns <strong>ConvenienceStore: 7-Eleven</strong> as expected
+<blockquote><strong>log: </strong>a Store<br><strong>log: </strong>ConvenienceStore: 7-Eleven<br>returns <strong>ConvenienceStore: 7-Eleven</strong> as expected
 </blockquote>
 #### onConnect()
 &nbsp;<b><i>must pass url string:</i></b>
@@ -2538,7 +2538,7 @@ function listReady(list, error) {
   callback(true);
 }
 ```
-<blockquote><strong>log: </strong>Store is not ready.<br><strong>log: </strong>a Store Store<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>a Store Store<br><strong>log: </strong>Store is not ready.<br>returns <strong>true</strong> as expected
 </blockquote>
 ## [&#9664;](#-store)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-replinterface) &nbsp;Transport
 Handle message passing between host and UI.    
@@ -2642,7 +2642,7 @@ var ask1 = function () {
  */
 ok1();
 ```
-<blockquote><strong>log: </strong>in> Sean<br><strong>log: </strong>out> What is your name?<br><strong>log: </strong>in> y<br><strong>log: </strong>out> Should I continue?<br><strong>log: </strong>in> hell no<br><strong>log: </strong>out> Are we having fun?<br><strong>log: </strong>in> whatever<br><strong>log: </strong>out> This is a test.<br>returns <strong>done</strong> as expected
+<blockquote><strong>log: </strong>out> This is a test.<br><strong>log: </strong>in> whatever<br><strong>log: </strong>out> Are we having fun?<br><strong>log: </strong>in> hell no<br><strong>log: </strong>out> Should I continue?<br><strong>log: </strong>in> y<br><strong>log: </strong>out> What is your name?<br><strong>log: </strong>in> Sean<br>returns <strong>done</strong> as expected
 </blockquote>
 
 ## [&#9664;](#-replinterface)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-log) &nbsp;Application
@@ -2951,7 +2951,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Sun Jan 18 2015 20:37:31 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Sun Jan 18 2015 20:46:53 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -3287,7 +3287,7 @@ cStore.storeType = 'ConvenienceStore';
 this.log(cStore.toString());
 return cStore.toString();
 ```
-<blockquote><strong>log: </strong>ConvenienceStore: 7-Eleven<br><strong>log: </strong>a MemoryStore<br>returns <strong>ConvenienceStore: 7-Eleven</strong> as expected
+<blockquote><strong>log: </strong>a MemoryStore<br><strong>log: </strong>ConvenienceStore: 7-Eleven<br>returns <strong>ConvenienceStore: 7-Eleven</strong> as expected
 </blockquote>
 #### onConnect()
 &nbsp;<b><i>must pass url string:</i></b>
@@ -3677,7 +3677,7 @@ function listReady(list, error) {
   callback(true);
 }
 ```
-<blockquote><strong>log: </strong>Moe,Larry,Shemp<br><strong>log: </strong>0<br><strong>log: </strong>0<br><strong>log: </strong>a MemoryStore MemoryStore<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>a MemoryStore MemoryStore<br><strong>log: </strong>0<br><strong>log: </strong>0<br><strong>log: </strong>Moe,Larry,Shemp<br>returns <strong>true</strong> as expected
 </blockquote>
 
 ## [&#9664;](#-memorystore)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-object-functions) &nbsp;Array Functions
