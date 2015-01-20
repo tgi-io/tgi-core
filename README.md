@@ -8,11 +8,10 @@ To Do
 - Misc: fix index ⌘ in helps
 - Misc remove bucket - replace example with closure variables as needed
 - Review models for completeness esp. Workspace and Session
+- Interface.notify needs review
 - Misc: improve coverage
 - Review tequila for lingering todo
 - extend spec to external stores & interfaces
-- fix // repl.notify(new Message('Nice to meet you ' + answer + '.'));
-- why is interface.notify needing message parm and not just text
 
 Presentation standard procedures
 ---
