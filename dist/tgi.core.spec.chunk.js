@@ -2821,6 +2821,8 @@ spec.test('tgi-core/lib/interfaces/tgi-core-interfaces-repl.spec.js', 'REPLInter
         var menu = new Presentation();
         menu.set('name', 'Public Menu');
         menu.set('contents', [
+          'How will string be handled?',
+          new Attribute({name:'junk'}),
           rockCommand,
           paperCommand,
           scissorsCommand,
