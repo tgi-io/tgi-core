@@ -1151,7 +1151,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Tue Jan 20 2015 20:18:56 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Tue Jan 20 2015 20:28:13 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1160,7 +1160,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Tue Jan 20 2015 20:18:56 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Tue Jan 20 2015 20:28:13 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2720,11 +2720,8 @@ input('r');
 input('p');
 input('s');
 input('se');
-//rockCommand.execute();
-//paperCommand.execute();
-//scissorsCommand.execute();
 ```
-<blockquote><strong>log: </strong>in> Rockaby<br><strong>log: </strong>out> unrecognized: Rockaby<br><strong>log: </strong>in> r<br><strong>log: </strong>in> p<br><strong>log: </strong>in> s<br><strong>log: </strong>in> se<br>returns <strong>RockPaperScissors</strong> as expected
+<blockquote><strong>log: </strong>in> Rockaby<br><strong>log: </strong>out> unrecognized: Rockaby<br><strong>log: </strong>out> valid commands:  Rock Paper Scissors SeeYou<br><strong>log: </strong>in> r<br><strong>log: </strong>in> p<br><strong>log: </strong>in> s<br><strong>log: </strong>in> se<br>returns <strong>RockPaperScissors</strong> as expected
 </blockquote>
 
 ## [&#9664;](#-replinterface)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-log) &nbsp;Application
@@ -3033,7 +3030,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Tue Jan 20 2015 20:18:56 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Tue Jan 20 2015 20:28:13 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript

@@ -1655,6 +1655,7 @@ REPLInterface.prototype.evaluateInput = function (line) {
    */
   if (this.presentation && line.length) {
     var menu = this.presentation.get('contents');
+    var commands = '';
     for (var i = 0; i < menu.length; i++) {
       var m = menu[i];
       var name = m.name.toUpperCase();
@@ -1662,8 +1663,12 @@ REPLInterface.prototype.evaluateInput = function (line) {
         m.execute();
         return;
       }
+      commands += ( ' ' + m.name );
     }
-    if (this.captureOutputCallback) this.captureOutputCallback('unrecognized: ' + line);
+    if (this.captureOutputCallback) {
+      this.captureOutputCallback('unrecognized: ' + line);
+      this.captureOutputCallback('valid commands: ' + commands);
+    }
     return;
   }
   /**

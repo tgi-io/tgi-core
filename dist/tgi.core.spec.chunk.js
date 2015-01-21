@@ -2836,10 +2836,6 @@ spec.test('tgi-core/lib/interfaces/tgi-core-interfaces-repl.spec.js', 'REPLInter
         input('p');
         input('s');
         input('se');
-        //rockCommand.execute();
-        //paperCommand.execute();
-        //scissorsCommand.execute();
-
       });
     });
   });
