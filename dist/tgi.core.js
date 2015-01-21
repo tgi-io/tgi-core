@@ -767,6 +767,9 @@ Interface.prototype.render = function (presentation, callBack) {
   if (false === (presentation instanceof Presentation)) throw new Error('Presentation object required');
   if (callBack && typeof callBack != 'function') throw new Error('optional second argument must a commandRequest callback function');
 };
+Interface.prototype.info = function (text) {
+  if (!text || typeof text !== 'string') throw new Error('text required');
+};
 Interface.prototype.ok = function (prompt, callBack) {
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
   if (typeof callBack != 'function') throw new Error('callBack required');
@@ -1548,6 +1551,13 @@ REPLInterface.prototype.render = function (presentation, callBack) {
   if (false === (presentation instanceof Presentation)) throw new Error('Presentation object required');
   if (callBack && typeof callBack != 'function') throw new Error('optional second argument must a commandRequest callback function');
 };
+REPLInterface.prototype.info = function (text) {
+  if (!text || typeof text !== 'string') throw new Error('text required');
+  if (this.captureOutputCallback) {
+    this.captureOutputCallback(text);
+  }
+};
+
 REPLInterface.prototype.ok = function (prompt, callBack) {
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
   if (typeof callBack != 'function') throw new Error('callBack required');
@@ -1613,27 +1623,55 @@ REPLInterface.prototype.choose = function (prompt, choices, callBack) {
 REPLInterface.prototype.evaluateInput = function (line) {
   var callBack;
   var uLine = ('' + line).toUpperCase();
+  /**
+   * First priority for input capture - user queries
+   */
   if (this.okCallBack) {
     callBack = this.okCallBack;
     delete this.okCallBack;
     callBack();
+    return;
   }
   if (this.yesnoCallBack) {
     callBack = this.yesnoCallBack;
     delete this.yesnoCallBack;
     callBack(uLine == 'Y' || uLine == 'YES');
+    return;
   }
   if (this.askCallBack) {
     callBack = this.askCallBack;
     delete this.askCallBack;
     callBack(line);
+    return;
   }
   if (this.chooseCallBack) {
     callBack = this.chooseCallBack;
     delete this.chooseCallBack;
     callBack(Interface.firstMatch(line, this.chooseChoices));
+    return;
   }
-};
+  /**
+   * Do we have a primary navigation?
+   */
+  if (this.presentation && line.length) {
+    var menu = this.presentation.get('contents');
+    for (var i = 0; i < menu.length; i++) {
+      var m = menu[i];
+      var name = m.name.toUpperCase();
+      if (left(name, uLine.length) == uLine) {
+        m.execute();
+        return;
+      }
+    }
+    if (this.captureOutputCallback) this.captureOutputCallback('unrecognized: ' + line);
+    return;
+  }
+  /**
+   * This should never get this far ...
+   */
+  if (this.captureOutputCallback) this.captureOutputCallback('input ignored: ' + line);
+}
+;
 REPLInterface.prototype.captureOutput = function (callback) {
   this.captureOutputCallback = callback;
 };
@@ -1709,25 +1747,30 @@ Application.prototype.getInterface = function () {
 Application.prototype.setPresentation = function (presentation) {
   if (false === (presentation instanceof Presentation)) throw new Error('instance of Presentation a required parameter');
   this.presentation = presentation;
-  if (this.startCallback) {
-    // Interface started so reload
-    this.primaryInterface.setPresentation(this.presentation);
-  }
+  //if (this.startCallback) { TODO WTF
+  //  // Interface started so reload
+  //  this.primaryInterface.setPresentation(this.presentation);
+  //}
 };
 Application.prototype.getPresentation = function () {
   return this.presentation;
 };
-Application.prototype.yesno = function (prompt, callBack) {
+Application.prototype.info = function (text) {
   if (false === (this.primaryInterface instanceof Interface)) throw new Error('interface not set');
-  if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
-  if (typeof callBack != 'function') throw new Error('callBack required');
-  this.primaryInterface.yesno(prompt, callBack);
+  if (!text || typeof text !== 'string') throw new Error('text parameter required');
+  this.primaryInterface.info(text);
 };
 Application.prototype.ok = function (prompt, callBack) {
   if (false === (this.primaryInterface instanceof Interface)) throw new Error('interface not set');
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
   if (typeof callBack != 'function') throw new Error('callBack required');
   this.primaryInterface.ok(prompt, callBack);
+};
+Application.prototype.yesno = function (prompt, callBack) {
+  if (false === (this.primaryInterface instanceof Interface)) throw new Error('interface not set');
+  if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
+  if (typeof callBack != 'function') throw new Error('callBack required');
+  this.primaryInterface.yesno(prompt, callBack);
 };
 Application.prototype.ask = function (prompt, attribute, callBack) {
   if (false === (this.primaryInterface instanceof Interface)) throw new Error('interface not set');

@@ -1074,18 +1074,16 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
         });
       });
     });
-    spec.heading('yesno(prompt, callBack)', function () {
-      spec.paragraph('Query user with a yes no question.');
+    spec.heading('info(text)', function () {
+      spec.paragraph('Display info to user in background of primary presentation.');
       spec.example('must set interface before invoking', Error('interface not set'), function () {
-        new Application().yesno();
+        new Application().info();
       });
-      spec.example('must provide the text question param', Error('prompt required'), function () {
-        new Application({interface: new SurrogateInterface()}).yesno();
-      });
-      spec.example('must provide callback param', Error('callBack required'), function () {
-        new Application({interface: new SurrogateInterface()}).yesno('Are we there yet?');
+      spec.example('must supply the text info', Error('text parameter required'), function () {
+        new Application({interface: new SurrogateInterface()}).info();
       });
     });
+
     spec.heading('ok(prompt, callBack)', function () {
       spec.paragraph('Pause before proceeding');
       spec.example('must set interface before invoking', Error('interface not set'), function () {
@@ -1096,6 +1094,18 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
       });
       spec.example('must provide callback param', Error('callBack required'), function () {
         new Application({interface: new SurrogateInterface()}).ok('You are about to enter the twilight zone.');
+      });
+    });
+    spec.heading('yesno(prompt, callBack)', function () {
+      spec.paragraph('Query user with a yes no question.');
+      spec.example('must set interface before invoking', Error('interface not set'), function () {
+        new Application().yesno();
+      });
+      spec.example('must provide the text question param', Error('prompt required'), function () {
+        new Application({interface: new SurrogateInterface()}).yesno();
+      });
+      spec.example('must provide callback param', Error('callBack required'), function () {
+        new Application({interface: new SurrogateInterface()}).yesno('Are we there yet?');
       });
     });
     spec.heading('ask(prompt, attribute, callBack)', function () {
@@ -1189,6 +1199,7 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
       var ask1 = function () {
         var name = new Attribute({name: 'Name'});
         app.ask('What is your name?', name, function (answer) {
+          app.info('Hello ' + answer);
           if (answer == 'John Doe')
             ask2();
           else
@@ -2704,21 +2715,26 @@ spec.test('tgi-core/lib/interfaces/tgi-core-interfaces-repl.spec.js', 'REPLInter
       spec.example('called when line of input available', 'function', function () {
         return typeof REPLInterface.prototype.evaluateInput;
       });
+      spec.example('if no input state error generated', undefined, function () {
+      });
       spec.paragraph('captureOutput(callback)');
       spec.example('called when line of input available', 'function', function () {
         return typeof REPLInterface.prototype.captureOutput;
       });
-      spec.example('mixed example', spec.asyncResults('done'), function (callback) {
+    });
+    spec.heading('INTEGRATION', function () {
+      spec.example('user queries', spec.asyncResults('done'), function (callback) {
         var repl = new REPLInterface();
         var app = new Application({interface: repl});
         var ex = this;
         repl.captureOutput(function (text) {
           ex.log('out> ' + text);
-          console.log('out> ' + text);
+          //console.log('out> ' + text);
         });
+        repl.evaluateInput('input ignored if no context for it');
         var input = function (text) {
           ex.log('in> ' + text);
-          console.log('in> ' + text);
+          //console.log('in> ' + text);
           repl.evaluateInput(text);
         };
         /**
@@ -2751,9 +2767,9 @@ spec.test('tgi-core/lib/interfaces/tgi-core-interfaces-repl.spec.js', 'REPLInter
           input('y');
         };
         var ask1 = function () {
-          app.ask('What is your name?',new Attribute({name:'Name'}), function (answer) {
-            // repl.notify(new Message('Nice to meet you ' + answer + '.'));
-            if (answer=='Sean') {
+          app.ask('What is your name?', new Attribute({name: 'Name'}), function (answer) {
+            repl.info('Nice to meet you ' + answer + '.');
+            if (answer == 'Sean') {
               choose1();
             } else {
               callback(answer);
@@ -2761,7 +2777,7 @@ spec.test('tgi-core/lib/interfaces/tgi-core-interfaces-repl.spec.js', 'REPLInter
           });
           input('Sean');
         };
-        var choose1 = function() {
+        var choose1 = function () {
           app.choose('Pick one...', ['Eenie', 'Meenie', 'Miney', 'Moe'], function (choice) {
             if (choice == 1)
               callback('done');
@@ -2774,6 +2790,56 @@ spec.test('tgi-core/lib/interfaces/tgi-core-interfaces-repl.spec.js', 'REPLInter
          * Start the first test
          */
         ok1();
+      });
+      spec.example('app navigation', spec.asyncResults('RockPaperScissors'), function (callback) {
+        var repl = new REPLInterface();
+        var app = new Application({interface: repl});
+        var ex = this;
+        repl.captureOutput(function (text) {
+          ex.log('out> ' + text);
+          console.log('out> ' + text);
+        });
+        var input = function (text) {
+          ex.log('in> ' + text);
+          console.log('in> ' + text);
+          repl.evaluateInput(text);
+        };
+
+        var answer = '';
+        var rockCommand = new Command({name: 'Rock', type: 'Function', contents: function () {
+          answer += 'Rock';
+        }});
+        var paperCommand = new Command({name: 'Paper', type: 'Function', contents: function () {
+          answer += 'Paper';
+        }});
+        var scissorsCommand = new Command({name: 'Scissors', type: 'Function', contents: function () {
+          answer += 'Scissors';
+        }});
+        var seeYouCommand = new Command({name: 'SeeYou', type: 'Function', contents: function () {
+          callback(answer);
+        }});
+        var menu = new Presentation();
+        menu.set('name', 'Public Menu');
+        menu.set('contents', [
+          rockCommand,
+          paperCommand,
+          scissorsCommand,
+          seeYouCommand
+        ]);
+        app.setPresentation(menu);
+        app.start(function (stuff) {
+          ex.log('app got stuff: ' + JSON.stringify(stuff));
+          console.log('app got stuff: ' + JSON.stringify(stuff));
+        });
+        input('Rockaby');
+        input('r');
+        input('p');
+        input('s');
+        input('se');
+        //rockCommand.execute();
+        //paperCommand.execute();
+        //scissorsCommand.execute();
+
       });
     });
   });
