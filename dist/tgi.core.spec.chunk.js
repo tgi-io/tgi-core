@@ -2806,30 +2806,38 @@ spec.test('tgi-core/lib/interfaces/tgi-core-interfaces-repl.spec.js', 'REPLInter
         };
 
         var answer = '';
-        var rockCommand = new Command({name: 'Rock', type: 'Function', contents: function () {
-          answer += 'Rock';
-        }});
-        var paperCommand = new Command({name: 'Paper', type: 'Function', contents: function () {
-          answer += 'Paper';
-        }});
-        var scissorsCommand = new Command({name: 'Scissors', type: 'Function', contents: function () {
-          answer += 'Scissors';
-        }});
-        var seeYouCommand = new Command({name: 'SeeYou', type: 'Function', contents: function () {
-          callback(answer);
-        }});
+        var rockCommand = new Command({
+          name: 'Rock', type: 'Function', contents: function () {
+            answer += 'Rock';
+          }
+        });
+        var paperCommand = new Command({
+          name: 'Paper', type: 'Function', contents: function () {
+            answer += 'Paper';
+          }
+        });
+        var scissorsCommand = new Command({
+          name: 'Scissors', type: 'Function', contents: function () {
+            answer += 'Scissors';
+          }
+        });
+        var seeYouCommand = new Command({
+          name: 'SeeYou', type: 'Function', contents: function () {
+            callback(answer);
+          }
+        });
         var menu = new Presentation();
         menu.set('name', 'Public Menu');
         menu.set('contents', [
           'Strings are ignored',
-          new Attribute({name:'ignoredAlso'}),
+          new Attribute({name: 'ignoredAlso'}),
           rockCommand,
           paperCommand,
           scissorsCommand,
           seeYouCommand
         ]);
         app.setPresentation(menu);
-        app.start(function (stuff) {
+        app.start(function () {
           ex.log('app got stuff: ' + JSON.stringify(stuff));
           console.log('app got stuff: ' + JSON.stringify(stuff));
         });

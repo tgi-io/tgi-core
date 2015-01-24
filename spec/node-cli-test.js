@@ -5,12 +5,11 @@
 var Spec = require('tgi-spec/dist/tgi.spec.js');
 var testSpec = require('../dist/tgi.core.spec');
 var spec = new Spec();
-var UTILITY = require('tgi-utility/dist/tgi.utility');
-var CORE = require('../dist/tgi.core');
+var TGI = require('../dist/tgi.core');
 var readline = require('readline'),
   rl = readline.createInterface(process.stdin, process.stdout);
 
-var cliServer = function(line, callback){
+var cliServer = function (line, callback) {
 
   var output = '';
 
@@ -47,22 +46,17 @@ var cliServer = function(line, callback){
   callback(output);
 };
 
-(function () {
-  UTILITY().injectMethods(this);
-  CORE().injectMethods(this);
-  testSpec(spec, CORE);
+testSpec(spec, TGI);
 
-  rl.setPrompt(': ');
-  rl.prompt();
-  rl.on('line', function (line) {
-
-    cliServer(line,function(output){
-      console.log(output);
-      rl.prompt();
-    });
-
-  }).on('close', function () {
-    console.log('\nBye!');
-    process.exit(0);
+rl.setPrompt(': ');
+rl.prompt();
+rl.on('line', function (line) {
+  cliServer(line, function (output) {
+    console.log(output);
+    rl.prompt();
   });
-}());
+}).on('close', function () {
+  console.log('\nBye!');
+  process.exit(0);
+});
+

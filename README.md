@@ -13,13 +13,12 @@ To Do
 - Review tequila for lingering todo
 - extend spec to external stores & interfaces
 
-Presentation standard procedures
+Standard Commands
 ---
-- AppNav ... main menu for app
-- About ... about app and interface - store connection(s) - also sys info
-- Find ... item in store
-- Favorites ... favorite items in store
-- Bookmarks ... favorite items in store
-- History ... logged activity in store
-- Workspace ... active models
-- Alerts ...
+- AppCommand ... Top level commands for app
+- InfoCommand ... about app and interface - store connection(s) - also sys info
+- FindCommand ... model
+- FavoritesCommand ... favorite models
+- HistoryCommand ... logged activity
+- WorkspaceCommand ... active models
+- AlertsCommand ... shit you need to deal with

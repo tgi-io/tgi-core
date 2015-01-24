@@ -1151,7 +1151,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Wed Jan 21 2015 16:05:16 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Wed Jan 21 2015 17:36:39 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1160,7 +1160,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Wed Jan 21 2015 16:05:16 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Wed Jan 21 2015 17:36:39 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2690,30 +2690,38 @@ var input = function (text) {
   repl.evaluateInput(text);
 };
 var answer = '';
-var rockCommand = new Command({name: 'Rock', type: 'Function', contents: function () {
-  answer += 'Rock';
-}});
-var paperCommand = new Command({name: 'Paper', type: 'Function', contents: function () {
-  answer += 'Paper';
-}});
-var scissorsCommand = new Command({name: 'Scissors', type: 'Function', contents: function () {
-  answer += 'Scissors';
-}});
-var seeYouCommand = new Command({name: 'SeeYou', type: 'Function', contents: function () {
-  callback(answer);
-}});
+var rockCommand = new Command({
+  name: 'Rock', type: 'Function', contents: function () {
+    answer += 'Rock';
+  }
+});
+var paperCommand = new Command({
+  name: 'Paper', type: 'Function', contents: function () {
+    answer += 'Paper';
+  }
+});
+var scissorsCommand = new Command({
+  name: 'Scissors', type: 'Function', contents: function () {
+    answer += 'Scissors';
+  }
+});
+var seeYouCommand = new Command({
+  name: 'SeeYou', type: 'Function', contents: function () {
+    callback(answer);
+  }
+});
 var menu = new Presentation();
 menu.set('name', 'Public Menu');
 menu.set('contents', [
   'Strings are ignored',
-  new Attribute({name:'ignoredAlso'}),
+  new Attribute({name: 'ignoredAlso'}),
   rockCommand,
   paperCommand,
   scissorsCommand,
   seeYouCommand
 ]);
 app.setPresentation(menu);
-app.start(function (stuff) {
+app.start(function () {
   ex.log('app got stuff: ' + JSON.stringify(stuff));
   console.log('app got stuff: ' + JSON.stringify(stuff));
 });
@@ -3032,7 +3040,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Wed Jan 21 2015 16:05:16 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Wed Jan 21 2015 17:36:39 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
