@@ -2838,11 +2838,11 @@ spec.test('tgi-core/lib/interfaces/tgi-core-interfaces-repl.spec.js', 'REPLInter
         var ex = this;
         repl.captureOutput(function (text) {
           ex.log('out> ' + text);
-          console.log('out> ' + text);
+          //console.log('out> ' + text);
         });
         var input = function (text) {
           ex.log('in> ' + text);
-          console.log('in> ' + text);
+          //console.log('in> ' + text);
           repl.evaluateInput(text);
         };
 
@@ -2880,7 +2880,7 @@ spec.test('tgi-core/lib/interfaces/tgi-core-interfaces-repl.spec.js', 'REPLInter
         app.setPresentation(menu);
         app.start(function () {
           ex.log('app got stuff: ' + JSON.stringify(stuff));
-          console.log('app got stuff: ' + JSON.stringify(stuff));
+          //console.log('app got stuff: ' + JSON.stringify(stuff));
         });
         input('Rockaby');
         input('r');
