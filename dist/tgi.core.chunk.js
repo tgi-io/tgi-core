@@ -4,7 +4,7 @@
 var TGI = {
   CORE: function () {
     return {
-      version: '0.0.25',
+      version: '0.0.28',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
