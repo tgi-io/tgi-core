@@ -5,7 +5,7 @@ Core constructors, models, stores and interfaces.  The constructor functions def
 ```javascript
 this.log(TGI.CORE().version);
 ```
-<blockquote><strong>log: </strong>0.0.28<br></blockquote>
+<blockquote><strong>log: </strong>0.0.30<br></blockquote>
 ####Constructors
 
 - [Attribute](#-attribute) defines data types - needed by Model
@@ -1151,7 +1151,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Sun Jan 25 2015 09:46:42 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Sun Jan 25 2015 14:57:58 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1160,7 +1160,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Sun Jan 25 2015 09:46:42 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Sun Jan 25 2015 14:57:58 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -3040,7 +3040,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Sun Jan 25 2015 09:46:42 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Sun Jan 25 2015 14:57:58 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -3435,6 +3435,7 @@ new SurrogateStore().getModel(m);
 &nbsp;<b><i>returns error when model not found:</i></b>
 ```javascript
 var m = new Model();
+m.modelType = "Supermodel"; // change type so one not used in tests
 m.attributes[0].value = 1;
 new SurrogateStore().getModel(m, function (mod, err) {
   if (err) {
@@ -3472,6 +3473,7 @@ new SurrogateStore().putModel(m);
 &nbsp;<b><i>returns error when model not found:</i></b>
 ```javascript
 var m = new Model();
+m.modelType = "Supermodel";
 m.attributes[0].value = 1;
 new SurrogateStore().putModel(m, function (mod, err) {
   if (err) {

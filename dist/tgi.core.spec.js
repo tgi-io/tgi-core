@@ -2296,6 +2296,7 @@ spec.runnerStoreMethods = function (SurrogateStore) {
         if (services['isReady']) {
           spec.example('returns error when model not found', spec.asyncResults('Error: model not found in store'), function (callback) {
             var m = new Model();
+            m.modelType = "Supermodel"; // change type so one not used in tests
             m.attributes[0].value = 1;
             new SurrogateStore().getModel(m, function (mod, err) {
               if (err) {
@@ -2332,6 +2333,7 @@ spec.runnerStoreMethods = function (SurrogateStore) {
         if (services['isReady']) {
           spec.example('returns error when model not found', spec.asyncResults('Error: model not found in store'), function (callback) {
             var m = new Model();
+            m.modelType = "Supermodel";
             m.attributes[0].value = 1;
             new SurrogateStore().putModel(m, function (mod, err) {
               if (err) {
