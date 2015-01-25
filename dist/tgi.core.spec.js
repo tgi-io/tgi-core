@@ -1,5 +1,5 @@
 /**---------------------------------------------------------------------------------------------------------------------
- * tgi-core/lib/misc/test-header
+ * tgi-core/lib/_packaging/spec-header
  **/
 (function () {
 "use strict";
@@ -27,7 +27,6 @@ var testSpec = function(spec,TGI) {
   var Workspace = tgiCore.Workspace;
   var inheritPrototype = tgiCore.inheritPrototype;
   var getInvalidProperties = tgiCore.getInvalidProperties;
-  var λ = tgiCore.λ;
   var trim = tgiCore.trim;
   var ltrim = tgiCore.ltrim;
   var rtrim = tgiCore.rtrim;
