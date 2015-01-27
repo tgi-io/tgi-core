@@ -5,7 +5,7 @@ Core constructors, models, stores and interfaces.  The constructor functions def
 ```javascript
 this.log(TGI.CORE().version);
 ```
-<blockquote><strong>log: </strong>0.0.30<br></blockquote>
+<blockquote><strong>log: </strong>0.0.32<br></blockquote>
 ####Constructors
 
 - [Attribute](#-attribute) defines data types - needed by Model
@@ -1151,7 +1151,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Sun Jan 25 2015 14:57:58 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Tue Jan 27 2015 18:47:01 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1160,7 +1160,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Sun Jan 25 2015 14:57:58 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Tue Jan 27 2015 18:47:01 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -1193,8 +1193,12 @@ SurrogateInterface(); // jshint ignore:line
 ```javascript
 new SurrogateInterface({yo: 'whatup'});
 ```
-<blockquote><strong>Error: error creating Procedure: invalid property: yo</strong> thrown as expected
+<blockquote><strong>Error: error creating Interface: invalid property: yo</strong> thrown as expected
 </blockquote>
+&nbsp;<b><i>allowable properties:</i></b>
+```javascript
+new SurrogateInterface({name: 'pen', description: 'old school', vendor: Object}); // Vendor is reference needed vendor liblib
+```
 #### PROPERTIES
 #### name
 &nbsp;<b><i>defaults to (unnamed):</i></b>
@@ -1206,7 +1210,7 @@ return new SurrogateInterface().name;
 #### description
 &nbsp;<b><i>defaults to Interface implementation:</i></b>
 ```javascript
-this.log (new SurrogateInterface().description);
+this.log(new SurrogateInterface().description);
 ```
 <blockquote><strong>log: </strong>a Interface<br></blockquote>
 #### METHODS
@@ -1847,7 +1851,8 @@ function getRZ() {
         return;
       }
       test.shouldBeTrue(list._items.length == 1, ('1 not ' + list._items.length));
-      test.shouldBeTrue(list.get('name') == 'Renée Zellweger', 'rz');
+      if (list._items.length)
+        test.shouldBeTrue(list.get('name') == 'Renée Zellweger', 'rz');
       getAlphabetical();
     });
   }
@@ -2578,7 +2583,7 @@ see `Interface` for documentation
 this.log('Tests Muted: ' + wasMuted);
 return wasMuted > 0;
 ```
-<blockquote><strong>log: </strong>Tests Muted: 34<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Tests Muted: 35<br>returns <strong>true</strong> as expected
 </blockquote>
 #### METHODS
 The REPLInterface defines adds the following methods.    
@@ -3040,7 +3045,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Sun Jan 25 2015 14:57:58 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Tue Jan 27 2015 18:47:01 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript

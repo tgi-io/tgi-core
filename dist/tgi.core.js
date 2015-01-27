@@ -10,7 +10,7 @@ var root = this;
 var TGI = {
   CORE: function () {
     return {
-      version: '0.0.30',
+      version: '0.0.32',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -641,13 +641,14 @@ function Interface(args) {
   args = args || {};
   args.name = args.name || '(unnamed)';
   args.description = args.description || 'a Interface';
+  args.vendor = args.vendor || null;
   var i;
-  var unusedProperties = getInvalidProperties(args, ['name', 'description']);
+  var unusedProperties = getInvalidProperties(args, ['name', 'description', 'vendor']);
   var errorList = [];
   for (i = 0; i < unusedProperties.length; i++) errorList.push('invalid property: ' + unusedProperties[i]);
   if (errorList.length > 1)
-    throw new Error('error creating Procedure: multiple errors');
-  if (errorList.length) throw new Error('error creating Procedure: ' + errorList[0]);
+    throw new Error('error creating Interface: multiple errors');
+  if (errorList.length) throw new Error('error creating Interface: ' + errorList[0]);
   // default state
   this.startCallback = null;
   this.stopCallback = null;
@@ -1421,13 +1422,14 @@ var REPLInterface = function (args) {
   args = args || {};
   args.name = args.name || '(unnamed)';
   args.description = args.description || 'a REPLInterface';
+  args.vendor = args.vendor || null;
   var i;
-  var unusedProperties = getInvalidProperties(args, ['name', 'description']);
+  var unusedProperties = getInvalidProperties(args, ['name', 'description', 'vendor']);
   var errorList = [];
   for (i = 0; i < unusedProperties.length; i++) errorList.push('invalid property: ' + unusedProperties[i]);
   if (errorList.length > 1)
-    throw new Error('error creating Procedure: multiple errors');
-  if (errorList.length) throw new Error('error creating Procedure: ' + errorList[0]);
+    throw new Error('error creating Interface: multiple errors');
+  if (errorList.length) throw new Error('error creating Interface: ' + errorList[0]);
   // default state
   this.startCallback = null;
   this.stopCallback = null;
