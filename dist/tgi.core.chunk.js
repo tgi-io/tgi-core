@@ -4,7 +4,7 @@
 var TGI = {
   CORE: function () {
     return {
-      version: '0.0.32',
+      version: '0.0.35',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -601,6 +601,10 @@ Command.prototype.complete = function () {
   this.status = 1;
   this._emitEvent('Completed');
 };
+//Command.prototype.restart = function () {
+//  this.status = undefined;
+//  this._emitEvent('Completed');
+//};
 /**
  * Simple functions
  */

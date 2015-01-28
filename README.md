@@ -12,6 +12,8 @@ To Do
 - Misc: improve coverage
 - Review tequila for lingering todo
 - extend spec to external stores & interfaces
+- have ask() let Attribute be optional so can do quicker ask functions
+- make Command.prototype.restart work to restart a command
 
 Standard Commands
 ---
