@@ -5,7 +5,7 @@ Core constructors, models, stores and interfaces.  The constructor functions def
 ```javascript
 this.log(TGI.CORE().version);
 ```
-<blockquote><strong>log: </strong>0.0.35<br></blockquote>
+<blockquote><strong>log: </strong>0.1.0<br></blockquote>
 ####Constructors
 
 - [Attribute](#-attribute) defines data types - needed by Model
@@ -1049,6 +1049,7 @@ this.shouldThrowError(Error('error executing Presentation: contents elements mus
 ```
 &nbsp;<b><i>Function test straight up:</i></b>
 ```javascript
+var execCount = 0; // Call twice to test reset state
 var cmd = new Command({
   type: 'Function',
   contents: function () {
@@ -1060,13 +1061,18 @@ cmd.bucket = 'Hola!';
 // Monitor all events
 cmd.onEvent(['BeforeExecute', 'AfterExecute', 'Error', 'Aborted', 'Completed'], function (event) {
   this.bucket += ' ' + event;
-  if (event == 'Completed')
-    callback(this.bucket);
+  if (event == 'Completed') {
+    if (execCount++ < 2)
+      cmd.execute();
+    else
+      callback(this.bucket);
+  }
 });
+execCount++;
 cmd.execute();
 cmd.bucket += ' Adious!';
 ```
-<blockquote>returns <strong>Hola! BeforeExecute AfterExecute Adious! funk Completed</strong> as expected
+<blockquote>returns <strong>Hola! BeforeExecute AfterExecute Adious! funk Completed BeforeExecute AfterExecute funk Completed</strong> as expected
 </blockquote>
 &nbsp;<b><i>Function test with error:</i></b>
 ```javascript
@@ -1118,9 +1124,10 @@ var cmd = new Command({
 });
 this.log(cmd);
 cmd.execute();
-// Better example: https://github.com/tgicloud/tgi-core/tree/master/spec#-procedure
 ```
 <blockquote><strong>log: </strong>Procedure Command: procedureCommand<br></blockquote>
+(Better example under `Procedure`)    
+
 ## [&#9664;](#-command)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-interface) &nbsp;Delta
 Deltas represent changes to models.  They can be applied to a store then update the model.  They can be stored in logs as a change audit for the model.    
 
@@ -1151,7 +1158,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Wed Jan 28 2015 17:04:56 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Sun Feb 01 2015 19:08:03 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1160,7 +1167,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Wed Jan 28 2015 17:04:56 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Sun Feb 01 2015 19:08:03 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -1976,9 +1983,11 @@ new Procedure({tasks: true});
 </blockquote>
 &nbsp;<b><i>the parameters must be valid for the object in each element of the array:</i></b>
 ```javascript
-new Procedure({tasks: [
-  {clean: 'room'}
-]});
+new Procedure({
+  tasks: [
+    {clean: 'room'}
+  ]
+});
 ```
 <blockquote><strong>Error: error creating Procedure: invalid task[0] property: clean</strong> thrown as expected
 </blockquote>
@@ -2000,9 +2009,11 @@ optional label for this task task element
 
 &nbsp;<b><i>if used it must be a string:</i></b>
 ```javascript
-new Procedure({tasks: [
-  {label: true}
-]});
+new Procedure({
+  tasks: [
+    {label: true}
+  ]
+});
 ```
 <blockquote><strong>Error: error creating Procedure: task[0].label must be string</strong> thrown as expected
 </blockquote>
@@ -2011,9 +2022,11 @@ Command to execute for this task
 
 &nbsp;<b><i>if used it must be a string:</i></b>
 ```javascript
-new Procedure({tasks: [
-  {command: true}
-]});
+new Procedure({
+  tasks: [
+    {command: true}
+  ]
+});
 ```
 <blockquote><strong>Error: error creating Procedure: task[0].command must be a Command object</strong> thrown as expected
 </blockquote>
@@ -2023,27 +2036,35 @@ Establish other tasks that must be complete before this task is executed.  Pass 
 &nbsp;<b><i>test it:</i></b>
 ```javascript
 this.shouldThrowError(Error('invalid type for requires in task[0]'), function () {
-  new Procedure({tasks: [
-    {requires: new Date() }
-  ]});
+  new Procedure({
+    tasks: [
+      {requires: new Date()}
+    ]
+  });
 });
 // if number supplied it is index in array
 this.shouldThrowError(Error('missing task #1 for requires in task[0]'), function () {
-  new Procedure({tasks: [
-    {command: new Procedure({}), requires: 1 }
-  ]});
+  new Procedure({
+    tasks: [
+      {command: new Procedure({}), requires: 1}
+    ]
+  });
 });
 this.shouldThrowError(Error('task #-2 invalid requires in task[0]'), function () {
-  new Procedure({tasks: [
-    {command: new Procedure({}), requires: -2 }
-  ]});
+  new Procedure({
+    tasks: [
+      {command: new Procedure({}), requires: -2}
+    ]
+  });
 });
 // requires defaults to -1 which means the previous element in the array so essentially the default
 // is sequential processing.  Set to null for no dependencies which makes it asynchronous -1 means
 // previous element is ignored for first index and is the default
-var proc = new Procedure({tasks: [
-  {command: new Command({})}
-]});
+var proc = new Procedure({
+  tasks: [
+    {command: new Command({})}
+  ]
+});
 this.shouldBeTrue(proc.tasks[0].requires == -1);
 ```
 #### METHODS
@@ -2057,33 +2078,37 @@ if (!new Procedure().getObjectStateErrors()) return 'falsy';
 #### INTEGRATION
 &nbsp;<b><i>synchronous sequential tasks are the default when tasks has no requires property:</i></b>
 ```javascript
-var cmd = new Command({name: 'cmdProcedure', type: 'Procedure', contents: new Procedure({tasks: [
-  {
-    command: new Command({
-      type: 'Function',
-      contents: function () {
-        var self = this;
-        setTimeout(function () {
-          self._parentProcedure.bucket += '1';
-          self.complete();
-        }, 250); // delayed to test that order is maintained
-      }
-    })
-  },
-  {
-    command: new Command({
-      type: 'Function',
-      contents: function () {
-        this._parentProcedure.bucket += '2';
+var cmd = new Command({
+  name: 'cmdProcedure', type: 'Procedure', contents: new Procedure({
+    tasks: [
+      {
+        command: new Command({
+          type: 'Function',
+          contents: function () {
+            var self = this;
+            setTimeout(function () {
+              self._parentProcedure.bucket += '1';
+              self.complete();
+            }, 250); // delayed to test that order is maintained
+          }
+        })
+      },
+      {
+        command: new Command({
+          type: 'Function',
+          contents: function () {
+            this._parentProcedure.bucket += '2';
+            this.complete();
+          }
+        })
+      },
+      function () { // shorthand version of command function ...
+        this._parentProcedure.bucket += '3';
         this.complete();
       }
-    })
-  },
-  function () { // shorthand version of command function ...
-    this._parentProcedure.bucket += '3';
-    this.complete();
-  }
-]})});
+    ]
+  })
+});
 cmd.onEvent('*', function (event) {
   if (event == 'Completed') callback(cmd.bucket);
 });
@@ -2094,92 +2119,108 @@ cmd.execute();
 </blockquote>
 &nbsp;<b><i>async tasks are designated when requires is set to null:</i></b>
 ```javascript
-var cmd = new Command({name: 'cmdProcedure', type: 'Procedure', contents: new Procedure({tasks: [
-  {
-    command: new Command({
-      type: 'Function',
-      contents: function () {
-        var self = this;
-        setTimeout(function () {
-          self._parentProcedure.bucket += ' mo';
-          self.complete();
-        }, 250); // This will be done last
+var execCount = 0; // Call twice to test reset state
+var cmd = new Command({
+  name: 'cmdProcedure', type: 'Procedure', contents: new Procedure({
+    tasks: [
+      {
+        command: new Command({
+          type: 'Function',
+          contents: function () {
+            var self = this;
+            setTimeout(function () {
+              self._parentProcedure.bucket += ' mo';
+              self.complete();
+            }, 50); // This will be done last
+          }
+        })
+      },
+      {
+        requires: null, // no wait to run this
+        command: new Command({
+          type: 'Function',
+          contents: function () {
+            this._parentProcedure.bucket += ' miney';
+            this.complete();
+          }
+        })
       }
-    })
-  },
-  {
-    requires: null, // no wait to run this
-    command: new Command({
-      type: 'Function',
-      contents: function () {
-        this._parentProcedure.bucket += ' miney';
-        this.complete();
-      }
-    })
-  }
-]})});
+    ]
+  })
+});
 cmd.onEvent('*', function (event) {
-  if (event == 'Completed') callback(cmd.bucket);
+  if (event == 'Completed') {
+    if (execCount++ < 2) {
+      cmd.execute();
+    } else {
+      callback(cmd.bucket);
+    }
+  }
 });
 cmd.bucket = 'eenie meenie';
+execCount++;
 cmd.execute();
 ```
-<blockquote>returns <strong>eenie meenie miney mo</strong> as expected
+<blockquote>returns <strong>eenie meenie miney mo miney mo</strong> as expected
 </blockquote>
 &nbsp;<b><i>this example shows multiple dependencies:</i></b>
 ```javascript
-var cmd = new Command({name: 'cmdProcedure', type: 'Procedure', contents: new Procedure({tasks: [
-  {
-    command: new Command({
-      type: 'Function',
-      contents: function () {
-        var self = this;
-        setTimeout(function () {
-          self._parentProcedure.bucket += ' rock';
-          self.complete();
-        }, 300);
+var cmd = new Command({
+  name: 'cmdProcedure', type: 'Procedure', contents: new Procedure({
+    tasks: [
+      {
+        command: new Command({
+          type: 'Function',
+          contents: function () {
+            var self = this;
+            setTimeout(function () {
+              self._parentProcedure.bucket += ' rock';
+              self.complete();
+            }, 300);
+          }
+        })
+      },
+      {
+        requires: null, // no wait to run this
+        label: 'sex',
+        command: new Command({
+          type: 'Function',
+          contents: function () {
+            var self = this;
+            setTimeout(function () {
+              self._parentProcedure.bucket += ' sex';
+              self.complete();
+            }, 200);
+          }
+        })
+      },
+      {
+        requires: null, // no wait to run this
+        label: 'drugs',
+        command: new Command({
+          type: 'Function',
+          contents: function () {
+            var self = this;
+            setTimeout(function () {
+              self._parentProcedure.bucket += ' drugs';
+              self.complete();
+            }, 100);
+          }
+        })
+      },
+      {
+        requires: ['sex', 'drugs', 0], // need these labels and array index 0
+        command: new Command({
+          type: 'Function',
+          contents: function () {
+            this._parentProcedure.bucket += ' & roll';
+            this.complete();
+          }
+        })
       }
-    })
-  },
-  {
-    requires: null, // no wait to run this
-    label: 'sex',
-    command: new Command({
-      type: 'Function',
-      contents: function () {
-        var self = this;
-        setTimeout(function () {
-          self._parentProcedure.bucket += ' sex';
-          self.complete();
-        }, 200);
-      }
-    })
-  },
-  {
-    requires: null, // no wait to run this
-    label: 'drugs',
-    command: new Command({
-      type: 'Function',
-      contents: function () {
-        var self = this;
-        setTimeout(function () {
-          self._parentProcedure.bucket += ' drugs';
-          self.complete();
-        }, 100);
-      }
-    })
-  },
-  {
-    requires: ['sex', 'drugs', 0], // need these labels and array index 0
-    command: new Command({
-      type: 'Function',
-      contents: function () {
-        this._parentProcedure.bucket += ' & roll';
-        this.complete();
-      }
-    })
-  }
-]})});
+    ]
+  })
+});
 cmd.onEvent('*', function (event) {
   if (event == 'Completed') callback(cmd.bucket);
 });
@@ -3045,7 +3086,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Wed Jan 28 2015 17:04:57 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Sun Feb 01 2015 19:08:03 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript

@@ -4,7 +4,7 @@
 var TGI = {
   CORE: function () {
     return {
-      version: '0.0.35',
+      version: '0.1.0',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -470,8 +470,8 @@ Command.prototype._emitEvent = function (event) {
       }
     }
   }
-  if (event == 'Completed') // if command complete release listeners
-    this._eventListeners = [];
+  //if (event == 'Completed') // if command complete release listeners
+  //  this._eventListeners = [];
 };
 Command.prototype.execute = function () {
   if (!this.type) throw new Error('command not implemented');
@@ -495,11 +495,10 @@ Command.prototype.execute = function () {
   try {
     switch (this.type) {
       case 'Function':
-        this.status = 0;
         setTimeout(callFunc, 0);
         break;
       case 'Procedure':
-        setTimeout(procedureExecute, 0);
+        setTimeout(procedureExecuteInit, 0);
         break;
     }
   } catch (e) {
@@ -510,6 +509,7 @@ Command.prototype.execute = function () {
   }
   this._emitEvent('AfterExecute');
   function callFunc() {
+    self.status = 0;
     try {
       self.contents.apply(self, args); // give function this context to command object (self)
     } catch (e) {
@@ -519,8 +519,7 @@ Command.prototype.execute = function () {
       self.status = -1;
     }
   }
-
-  function procedureExecute() {
+  function procedureExecuteInit() {
     self.status = 0;
     var tasks = self.contents.tasks || [];
     for (var t = 0; t < tasks.length; t++) {
@@ -535,6 +534,13 @@ Command.prototype.execute = function () {
         tasks[t].command._parentProcedure = self;
         tasks[t].command.onEvent('*', ProcedureEvents);
       }
+      tasks[t].command.status = undefined;
+    }
+    procedureExecute();
+  }
+  function procedureExecute() {
+    var tasks = self.contents.tasks || [];
+    for (var t = 0; t < tasks.length; t++) {
       // Execute if it is time
       var canExecute = true;
       if (typeof (tasks[t].command.status) == 'undefined') {
@@ -1557,7 +1563,6 @@ REPLInterface.prototype.info = function (text) {
     this.captureOutputCallback(text);
   }
 };
-
 REPLInterface.prototype.ok = function (prompt, callBack) {
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
   if (typeof callBack != 'function') throw new Error('callBack required');
@@ -1677,8 +1682,7 @@ REPLInterface.prototype.evaluateInput = function (line) {
    * This should never get this far ...
    */
   if (this.captureOutputCallback) this.captureOutputCallback('input ignored: ' + line);
-}
-;
+};
 REPLInterface.prototype.captureOutput = function (callback) {
   this.captureOutputCallback = callback;
 };

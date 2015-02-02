@@ -14,6 +14,7 @@ To Do
 - extend spec to external stores & interfaces
 - have ask() let Attribute be optional so can do quicker ask functions
 - make Command.prototype.restart work to restart a command
+- command event for error needs to pass error along
 
 Standard Commands
 ---
