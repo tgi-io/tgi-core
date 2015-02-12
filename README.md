@@ -4,6 +4,7 @@ Core Objects [read the spec](spec/README.md).
 
 To Do
 ---
+- yesno needs cancel / undefined
 - REPLInterface - handle nav and presentation
 - Misc: fix index ⌘ in helps
 - Misc remove bucket - replace example with closure variables as needed
@@ -15,13 +16,23 @@ To Do
 - have ask() let Attribute be optional so can do quicker ask functions
 - make Command.prototype.restart work to restart a command
 - command event for error needs to pass error along
+- REPLInterface needs to add capturePrompt along with captureOutput to signal when to prompt
 
 Standard Commands
 ---
-- AppCommand ... Top level commands for app
+- MenuCommand ... Menu of commands for app
 - InfoCommand ... about app and interface - store connection(s) - also sys info
 - FindCommand ... model
 - FavoritesCommand ... favorite models
 - HistoryCommand ... logged activity
 - WorkspaceCommand ... active models
 - AlertsCommand ... shit you need to deal with
+
+Present
+-------
+- Navigation
+- List
+- View
+- Edit
+- Dialogue
+

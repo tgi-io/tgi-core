@@ -1673,8 +1673,7 @@ REPLInterface.prototype.evaluateInput = function (line) {
       }
     }
     if (this.captureOutputCallback) {
-      this.captureOutputCallback('unrecognized: ' + line);
-      this.captureOutputCallback('valid commands: ' + commands);
+      this.captureOutputCallback('unrecognized: ' + line + '\nvalid commands: ' + commands);
     }
     return;
   }
