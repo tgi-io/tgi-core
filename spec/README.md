@@ -5,7 +5,7 @@ Core constructors, models, stores and interfaces.  The constructor functions def
 ```javascript
 this.log(TGI.CORE().version);
 ```
-<blockquote><strong>log: </strong>0.1.0<br></blockquote>
+<blockquote><strong>log: </strong>0.2.0<br></blockquote>
 ####Constructors
 
 - [Attribute](#-attribute) defines data types - needed by Model
@@ -1158,7 +1158,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Sun Feb 01 2015 19:48:15 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Fri Feb 13 2015 16:09:01 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1167,7 +1167,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Sun Feb 01 2015 19:48:15 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Fri Feb 13 2015 16:09:01 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -1247,7 +1247,7 @@ new SurrogateInterface().start(new Application());
 ```javascript
 new SurrogateInterface().start(new Application(), new Presentation());
 ```
-<blockquote><strong>Error: callBack required</strong> thrown as expected
+<blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
 #### stop()
 calling stop will end the start() processing and release any resources    
@@ -1256,7 +1256,7 @@ calling stop will end the start() processing and release any resources
 ```javascript
 new SurrogateInterface().stop();
 ```
-<blockquote><strong>Error: callBack required</strong> thrown as expected
+<blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
 #### dispatch()
 The dispatch method will accept a request and act on it or pass it to the app.    
@@ -1337,7 +1337,7 @@ new Application({interface: new SurrogateInterface()}).info();
 ```
 <blockquote><strong>Error: text parameter required</strong> thrown as expected
 </blockquote>
-#### ok(prompt, callBack)
+#### ok(prompt, callback)
 Pause before proceeding    
 
 &nbsp;<b><i>must set interface before invoking:</i></b>
@@ -1356,9 +1356,9 @@ new Application({interface: new SurrogateInterface()}).ok();
 ```javascript
 new Application({interface: new SurrogateInterface()}).ok('You are about to enter the twilight zone.');
 ```
-<blockquote><strong>Error: callBack required</strong> thrown as expected
+<blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
-#### yesno(prompt, callBack)
+#### yesno(prompt, callback)
 Query user with a yes no question.    
 
 &nbsp;<b><i>must set interface before invoking:</i></b>
@@ -1377,9 +1377,9 @@ new Application({interface: new SurrogateInterface()}).yesno();
 ```javascript
 new Application({interface: new SurrogateInterface()}).yesno('Are we there yet?');
 ```
-<blockquote><strong>Error: callBack required</strong> thrown as expected
+<blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
-#### ask(prompt, attribute, callBack)
+#### ask(prompt, attribute, callback)
 Simple single item prompt.    
 
 &nbsp;<b><i>must provide the text question param:</i></b>
@@ -1388,19 +1388,19 @@ new SurrogateInterface().ask();
 ```
 <blockquote><strong>Error: prompt required</strong> thrown as expected
 </blockquote>
-&nbsp;<b><i>must supply attribute:</i></b>
+&nbsp;<b><i>next param is attribute or callback:</i></b>
 ```javascript
 new SurrogateInterface().ask('What it do');
 ```
-<blockquote><strong>Error: instance of Attribute a required parameter</strong> thrown as expected
+<blockquote><strong>Error: attribute or callback expected</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>must provide callback param:</i></b>
 ```javascript
 new SurrogateInterface().ask('Please enter your name', new Attribute({name: 'Name'}));
 ```
-<blockquote><strong>Error: callBack required</strong> thrown as expected
+<blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
-#### choose(prompt, choices, callBack)
+#### choose(prompt, choices, callback)
 prompt to choose an item    
 
 &nbsp;<b><i>must provide text prompt first:</i></b>
@@ -1425,7 +1425,7 @@ this.shouldThrowError(Error('choices array empty'), function () {
 ```javascript
 new SurrogateInterface().choose('choose wisely', ['rock', 'paper', 'scissors']);
 ```
-<blockquote><strong>Error: callBack required</strong> thrown as expected
+<blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
 #### Interface Integration
 &nbsp;<b><i>Test command execution mocking:</i></b>
@@ -1777,7 +1777,7 @@ try {
 catch (err) {
   callback(err);
 }
-// Callback after model cleaned
+// callback after model cleaned
 // now, build List and add to store
 function storeActors() {
   test.actorsStored = 0;
@@ -1789,7 +1789,7 @@ function storeActors() {
     storeBeingTested.putModel(test.actor, actorStored);
   }
 }
-// Callback after actor stored
+// callback after actor stored
 function actorStored(model, error) {
   if (typeof error != 'undefined') {
     callback(error);
@@ -2452,7 +2452,7 @@ if (useListToCleanStart) {
 } else {
   storeStooges();
 }
-// Callback to store new stooges
+// callback to store new stooges
 function storeStooges() {
   self.log(self.oldStoogesFound);
   self.log(self.oldStoogesKilled);
@@ -2682,7 +2682,8 @@ var yesno1 = function () {
       yesno2();
     }
   });
-  input('hell no');
+  input('nope'); // this will be ignored
+  input('n'); // this will be ignored
 };
 var yesno2 = function () {
   app.yesno('Should I continue?', function (answer) {
@@ -2692,10 +2693,11 @@ var yesno2 = function () {
       callback(answer);
     }
   });
+  input('yeppers'); // this will be ignored
   input('y');
 };
 var ask1 = function () {
-  app.ask('What is your name?', new Attribute({name: 'Name'}), function (answer) {
+  app.ask('What is your name?', function (answer) {
     repl.info('Nice to meet you ' + answer + '.');
     if (answer == 'Sean') {
       choose1();
@@ -2719,7 +2721,7 @@ var choose1 = function () {
  */
 ok1();
 ```
-<blockquote><strong>log: </strong>out> input ignored: input ignored if no context for it<br><strong>log: </strong>out> This is a test.<br><strong>log: </strong>in> whatever<br><strong>log: </strong>out> Are we having fun?<br><strong>log: </strong>in> hell no<br><strong>log: </strong>out> Should I continue?<br><strong>log: </strong>in> y<br><strong>log: </strong>out> What is your name?<br><strong>log: </strong>in> Sean<br><strong>log: </strong>out> Nice to meet you Sean.<br><strong>log: </strong>out> Pick one...<br><strong>log: </strong>out>   Eenie<br><strong>log: </strong>out>   Meenie<br><strong>log: </strong>out>   Miney<br><strong>log: </strong>out>   Moe<br><strong>log: </strong>in> m<br>returns <strong>done</strong> as expected
+<blockquote><strong>log: </strong>out> input ignored: input ignored if no context for it<br><strong>log: </strong>out> This is a test.<br><strong>log: </strong>in> whatever<br><strong>log: </strong>out> Are we having fun?<br><strong>log: </strong>in> nope<br><strong>log: </strong>out> yes or no response required<br><strong>log: </strong>in> n<br><strong>log: </strong>out> Should I continue?<br><strong>log: </strong>in> yeppers<br><strong>log: </strong>out> yes or no response required<br><strong>log: </strong>in> y<br><strong>log: </strong>out> What is your name?<br><strong>log: </strong>in> Sean<br><strong>log: </strong>out> Nice to meet you Sean.<br><strong>log: </strong>out> Pick one...<br><strong>log: </strong>out>   Eenie<br><strong>log: </strong>out>   Meenie<br><strong>log: </strong>out>   Miney<br><strong>log: </strong>out>   Moe<br><strong>log: </strong>in> m<br>returns <strong>done</strong> as expected
 </blockquote>
 &nbsp;<b><i>app navigation:</i></b>
 ```javascript
@@ -2777,7 +2779,8 @@ input('p');
 input('s');
 input('se');
 ```
-<blockquote><strong>log: </strong>in> Rockaby<br><strong>log: </strong>out> unrecognized: Rockaby<br><strong>log: </strong>out> valid commands:  Rock Paper Scissors SeeYou<br><strong>log: </strong>in> r<br><strong>log: </strong>in> p<br><strong>log: </strong>in> s<br><strong>log: </strong>in> se<br>returns <strong>RockPaperScissors</strong> as expected
+<blockquote><strong>log: </strong>in> Rockaby<br><strong>log: </strong>out> unrecognized: Rockaby
+valid commands:  Rock Paper Scissors SeeYou<br><strong>log: </strong>in> r<br><strong>log: </strong>in> p<br><strong>log: </strong>in> s<br><strong>log: </strong>in> se<br>returns <strong>RockPaperScissors</strong> as expected
 </blockquote>
 
 ## [&#9664;](#-replinterface)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-log) &nbsp;Application
@@ -2880,7 +2883,7 @@ new Application().start();
 ```javascript
 new Application({interface: new Interface()}).start();
 ```
-<blockquote><strong>Error: callBack required</strong> thrown as expected
+<blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
 #### dispatch()
 The dispatch method will accept a request and act on it or pass it to the app.    
@@ -2907,7 +2910,7 @@ new Application().dispatch(new Request({type: 'Command', command: new Command()}
 ```
 <blockquote><strong>Error: response callback is not a function</strong> thrown as expected
 </blockquote>
-#### ok(prompt, callBack)
+#### ok(prompt, callback)
 Pause before proceeding    
 
 &nbsp;<b><i>must set interface before invoking:</i></b>
@@ -2926,9 +2929,9 @@ new Application({interface: new Interface()}).ok();
 ```javascript
 new Application({interface: new Interface()}).ok('You are about to enter the twilight zone.');
 ```
-<blockquote><strong>Error: callBack required</strong> thrown as expected
+<blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
-#### yesno(prompt, callBack)
+#### yesno(prompt, callback)
 Query user with a yes no question.    
 
 &nbsp;<b><i>must set interface before invoking:</i></b>
@@ -2947,9 +2950,9 @@ new Application({interface: new Interface()}).yesno();
 ```javascript
 new Application({interface: new Interface()}).yesno('ok?');
 ```
-<blockquote><strong>Error: callBack required</strong> thrown as expected
+<blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
-#### ask(prompt, attribute, callBack)
+#### ask(prompt, attribute, callback)
 Simple single item prompt.    
 
 &nbsp;<b><i>must set interface before invoking:</i></b>
@@ -2964,18 +2967,18 @@ new Application({interface: new Interface()}).ask();
 ```
 <blockquote><strong>Error: prompt required</strong> thrown as expected
 </blockquote>
-&nbsp;<b><i>must supply attribute:</i></b>
+&nbsp;<b><i>next param is attribute or callback:</i></b>
 ```javascript
 new Application({interface: new Interface()}).ask('sup');
 ```
-<blockquote><strong>Error: instance of Attribute a required parameter</strong> thrown as expected
+<blockquote><strong>Error: attribute or callback expected</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>must provide callback param:</i></b>
 ```javascript
 new Application({interface: new Interface()}).
   ask('Please enter your name', new Attribute({name: 'Name'}));
 ```
-<blockquote><strong>Error: callBack required</strong> thrown as expected
+<blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
 #### choose
 prompt to choose an item    
@@ -3011,7 +3014,7 @@ var myApplication = new Application();
 myApplication.setInterface(new Interface());
 myApplication.choose('choose wisely', ['rock', 'paper', 'scissors']);
 ```
-<blockquote><strong>Error: callBack required</strong> thrown as expected
+<blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
 #### Application Integration
 &nbsp;<b><i>minimal app:</i></b>
@@ -3086,7 +3089,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Sun Feb 01 2015 19:48:15 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Fri Feb 13 2015 16:09:01 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -3252,7 +3255,7 @@ this.shouldThrowError(Error('password required'), function () {
 this.shouldThrowError(Error('ip required'), function () {
   new Session().startSession(new Store(), 'blow', 'me');
 });
-this.shouldThrowError(Error('callBack required'), function () {
+this.shouldThrowError(Error('callback required'), function () {
   new Session().startSession(new Store(), 'blow', 'me', 'ipman');
 });
 ```
@@ -3270,7 +3273,7 @@ this.shouldThrowError(Error('ip required'), function () {
 this.shouldThrowError(Error('passCode required'), function () {
   new Session().resumeSession(new Store(), 'ipman');
 });
-this.shouldThrowError(Error('callBack required'), function () {
+this.shouldThrowError(Error('callback required'), function () {
   new Session().resumeSession(new Store(), 'ipman', '123');
 });
 ```
@@ -3282,7 +3285,7 @@ Method to end session.
 this.shouldThrowError(Error('store required'), function () {
   new Session().endSession();
 });
-this.shouldThrowError(Error('callBack required'), function () {
+this.shouldThrowError(Error('callback required'), function () {
   new Session().endSession(new Store());
 });
 ```
@@ -3346,7 +3349,7 @@ this.shouldBeTrue(user.get('user').modelType == 'User');
 this.shouldBeTrue(typeof user.get('deltas') == 'object');
 ```
 #### METHODS
-loadUserWorkspace(user, callBack)    
+loadUserWorkspace(user, callback)    
 
 sync    
 
@@ -3476,7 +3479,7 @@ var m = new Model();
 m.attributes[0].value = 1;
 new SurrogateStore().getModel(m);
 ```
-<blockquote><strong>Error: callBack required</strong> thrown as expected
+<blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>returns error when model not found:</i></b>
 ```javascript
@@ -3514,7 +3517,7 @@ var m = new Model();
 m.attributes[0].value = 1;
 new SurrogateStore().putModel(m);
 ```
-<blockquote><strong>Error: callBack required</strong> thrown as expected
+<blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>returns error when model not found:</i></b>
 ```javascript
@@ -3566,7 +3569,7 @@ var m = new Model();
 m.attributes[0].value = 1;
 new SurrogateStore().deleteModel(m);
 ```
-<blockquote><strong>Error: callBack required</strong> thrown as expected
+<blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>returns error when model not found:</i></b>
 ```javascript
@@ -3594,7 +3597,7 @@ this.shouldThrowError(Error('argument must be a List'), function () {
 this.shouldThrowError(Error('filter argument must be Object'), function () {
   new SurrogateStore().getList(new List(new Model()));
 });
-this.shouldThrowError(Error('callBack required'), function () {
+this.shouldThrowError(Error('callback required'), function () {
   new SurrogateStore().getList(new List(new Model()), []);
 });
 // See integration tests for examples of usage
@@ -3666,7 +3669,7 @@ if (useListToCleanStart) {
 } else {
   storeStooges();
 }
-// Callback to store new stooges
+// callback to store new stooges
 function storeStooges() {
   self.log(self.oldStoogesFound);
   self.log(self.oldStoogesKilled);

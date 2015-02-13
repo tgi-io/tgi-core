@@ -1067,13 +1067,13 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
       spec.example('presentation parameter is required', Error('presentation required'), function () {
         new SurrogateInterface().start(new Application());
       });
-      spec.example('callback parameter required', Error('callBack required'), function () {
+      spec.example('callback parameter required', Error('callback required'), function () {
         new SurrogateInterface().start(new Application(), new Presentation());
       });
     });
     spec.heading('stop()', function () {
       spec.paragraph('calling stop will end the start() processing and release any resources');
-      spec.example('must pass callback function', Error('callBack required'), function () {
+      spec.example('must pass callback function', Error('callback required'), function () {
         new SurrogateInterface().stop();
       });
     });
@@ -1134,7 +1134,7 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
       });
     });
 
-    spec.heading('ok(prompt, callBack)', function () {
+    spec.heading('ok(prompt, callback)', function () {
       spec.paragraph('Pause before proceeding');
       spec.example('must set interface before invoking', Error('interface not set'), function () {
         new Application().ok();
@@ -1142,11 +1142,11 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
       spec.example('must provide the text prompt param', Error('prompt required'), function () {
         new Application({interface: new SurrogateInterface()}).ok();
       });
-      spec.example('must provide callback param', Error('callBack required'), function () {
+      spec.example('must provide callback param', Error('callback required'), function () {
         new Application({interface: new SurrogateInterface()}).ok('You are about to enter the twilight zone.');
       });
     });
-    spec.heading('yesno(prompt, callBack)', function () {
+    spec.heading('yesno(prompt, callback)', function () {
       spec.paragraph('Query user with a yes no question.');
       spec.example('must set interface before invoking', Error('interface not set'), function () {
         new Application().yesno();
@@ -1154,23 +1154,23 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
       spec.example('must provide the text question param', Error('prompt required'), function () {
         new Application({interface: new SurrogateInterface()}).yesno();
       });
-      spec.example('must provide callback param', Error('callBack required'), function () {
+      spec.example('must provide callback param', Error('callback required'), function () {
         new Application({interface: new SurrogateInterface()}).yesno('Are we there yet?');
       });
     });
-    spec.heading('ask(prompt, attribute, callBack)', function () {
+    spec.heading('ask(prompt, attribute, callback)', function () {
       spec.paragraph('Simple single item prompt.');
       spec.example('must provide the text question param', Error('prompt required'), function () {
         new SurrogateInterface().ask();
       });
-      spec.example('must supply attribute', Error('instance of Attribute a required parameter'), function () {
+      spec.example('next param is attribute or callback', Error('attribute or callback expected'), function () {
         new SurrogateInterface().ask('What it do');
       });
-      spec.example('must provide callback param', Error('callBack required'), function () {
+      spec.example('must provide callback param', Error('callback required'), function () {
         new SurrogateInterface().ask('Please enter your name', new Attribute({name: 'Name'}));
       });
     });
-    spec.heading('choose(prompt, choices, callBack)', function () {
+    spec.heading('choose(prompt, choices, callback)', function () {
       spec.paragraph('prompt to choose an item');
       spec.example('must provide text prompt first', Error('prompt required'), function () {
         new SurrogateInterface().choose();
@@ -1186,7 +1186,7 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
           new SurrogateInterface().choose('empty array?', []);
         });
       });
-      spec.example('must provide callback param', Error('callBack required'), function () {
+      spec.example('must provide callback param', Error('callback required'), function () {
         new SurrogateInterface().choose('choose wisely', ['rock', 'paper', 'scissors']);
       });
     });
@@ -1541,7 +1541,7 @@ spec.runnerListStoreIntegration = function (SurrogateStore) {
       callback(err);
     }
 
-    // Callback after model cleaned
+    // callback after model cleaned
     // now, build List and add to store
     function storeActors() {
       test.actorsStored = 0;
@@ -1554,7 +1554,7 @@ spec.runnerListStoreIntegration = function (SurrogateStore) {
       }
     }
 
-    // Callback after actor stored
+    // callback after actor stored
     function actorStored(model, error) {
       if (typeof error != 'undefined') {
         callback(error);
@@ -2335,7 +2335,7 @@ spec.runnerStoreMethods = function (SurrogateStore) {
         spec.example('ID attribute must have truthy value', Error('ID not set'), function () {
           new SurrogateStore().getModel(new Model());
         });
-        spec.example('callback function required', Error('callBack required'), function () {
+        spec.example('callback function required', Error('callback required'), function () {
           var m = new Model();
           m.attributes[0].value = 1;
           new SurrogateStore().getModel(m);
@@ -2372,7 +2372,7 @@ spec.runnerStoreMethods = function (SurrogateStore) {
           m.attributes = null;
           new SurrogateStore().putModel(m);
         });
-        spec.example('callback function required', Error('callBack required'), function () {
+        spec.example('callback function required', Error('callback required'), function () {
           var m = new Model();
           m.attributes[0].value = 1;
           new SurrogateStore().putModel(m);
@@ -2420,7 +2420,7 @@ spec.runnerStoreMethods = function (SurrogateStore) {
           m.attributes = null;
           new SurrogateStore().deleteModel(m);
         });
-        spec.example('callback function required', Error('callBack required'), function () {
+        spec.example('callback function required', Error('callback required'), function () {
           var m = new Model();
           m.attributes[0].value = 1;
           new SurrogateStore().deleteModel(m);
@@ -2460,7 +2460,7 @@ spec.runnerStoreMethods = function (SurrogateStore) {
           this.shouldThrowError(Error('filter argument must be Object'), function () {
             new SurrogateStore().getList(new List(new Model()));
           });
-          this.shouldThrowError(Error('callBack required'), function () {
+          this.shouldThrowError(Error('callback required'), function () {
             new SurrogateStore().getList(new List(new Model()), []);
           });
           // See integration tests for examples of usage
@@ -2546,7 +2546,7 @@ spec.runnerStoreMethods = function (SurrogateStore) {
           storeStooges();
         }
 
-        // Callback to store new stooges
+        // callback to store new stooges
         function storeStooges() {
           self.log(self.oldStoogesFound);
           self.log(self.oldStoogesKilled);
@@ -2843,7 +2843,8 @@ spec.test('tgi-core/lib/interfaces/tgi-core-interfaces-repl.spec.js', 'REPLInter
               yesno2();
             }
           });
-          input('hell no');
+          input('nope'); // this will be ignored
+          input('n'); // this will be ignored
         };
         var yesno2 = function () {
           app.yesno('Should I continue?', function (answer) {
@@ -2853,10 +2854,11 @@ spec.test('tgi-core/lib/interfaces/tgi-core-interfaces-repl.spec.js', 'REPLInter
               callback(answer);
             }
           });
+          input('yeppers'); // this will be ignored
           input('y');
         };
         var ask1 = function () {
-          app.ask('What is your name?', new Attribute({name: 'Name'}), function (answer) {
+          app.ask('What is your name?', function (answer) {
             repl.info('Nice to meet you ' + answer + '.');
             if (answer == 'Sean') {
               choose1();
@@ -3008,7 +3010,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
       spec.example('must set interface before starting', Error('error starting application: interface not set'), function () {
         new Application().start();
       });
-      spec.example('callback parameter required', Error('callBack required'), function () {
+      spec.example('callback parameter required', Error('callback required'), function () {
         new Application({interface: new Interface()}).start();
       });
     });
@@ -3029,7 +3031,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
         new Application().dispatch(new Request({type: 'Command', command: new Command()}), true);
       });
     });
-    spec.heading('ok(prompt, callBack)', function () {
+    spec.heading('ok(prompt, callback)', function () {
       spec.paragraph('Pause before proceeding');
       spec.example('must set interface before invoking', Error('interface not set'), function () {
         new Application().ok();
@@ -3037,11 +3039,11 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
       spec.example('must provide the text prompt param', Error('prompt required'), function () {
         new Application({interface: new Interface()}).ok();
       });
-      spec.example('must provide callback param', Error('callBack required'), function () {
+      spec.example('must provide callback param', Error('callback required'), function () {
         new Application({interface: new Interface()}).ok('You are about to enter the twilight zone.');
       });
     });
-    spec.heading('yesno(prompt, callBack)', function () {
+    spec.heading('yesno(prompt, callback)', function () {
       spec.paragraph('Query user with a yes no question.');
       spec.example('must set interface before invoking', Error('interface not set'), function () {
         new Application().yesno();
@@ -3049,11 +3051,11 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
       spec.example('must provide the text question param', Error('prompt required'), function () {
         new Application({interface: new Interface()}).yesno();
       });
-      spec.example('must provide callback param', Error('callBack required'), function () {
+      spec.example('must provide callback param', Error('callback required'), function () {
         new Application({interface: new Interface()}).yesno('ok?');
       });
     });
-    spec.heading('ask(prompt, attribute, callBack)', function () {
+    spec.heading('ask(prompt, attribute, callback)', function () {
       spec.paragraph('Simple single item prompt.');
       spec.example('must set interface before invoking', Error('interface not set'), function () {
         new Application().ask();
@@ -3061,10 +3063,10 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
       spec.example('must provide the text question param', Error('prompt required'), function () {
         new Application({interface: new Interface()}).ask();
       });
-      spec.example('must supply attribute', Error('instance of Attribute a required parameter'), function () {
+      spec.example('next param is attribute or callback', Error('attribute or callback expected'), function () {
         new Application({interface: new Interface()}).ask('sup');
       });
-      spec.example('must provide callback param', Error('callBack required'), function () {
+      spec.example('must provide callback param', Error('callback required'), function () {
         new Application({interface: new Interface()}).
           ask('Please enter your name', new Attribute({name: 'Name'}));
       });
@@ -3090,7 +3092,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
           myApplication.choose('empty array?', []);
         });
       });
-      spec.example('must provide callback param', Error('callBack required'), function () {
+      spec.example('must provide callback param', Error('callback required'), function () {
         var myApplication = new Application();
         myApplication.setInterface(new Interface());
         myApplication.choose('choose wisely', ['rock', 'paper', 'scissors']);
@@ -3312,7 +3314,7 @@ spec.test('/tgi-core/lib/models/tgi-core-model-session.spec.js', 'Session', 'for
           this.shouldThrowError(Error('ip required'), function () {
             new Session().startSession(new Store(), 'blow', 'me');
           });
-          this.shouldThrowError(Error('callBack required'), function () {
+          this.shouldThrowError(Error('callback required'), function () {
             new Session().startSession(new Store(), 'blow', 'me', 'ipman');
           });
         });
@@ -3329,7 +3331,7 @@ spec.test('/tgi-core/lib/models/tgi-core-model-session.spec.js', 'Session', 'for
           this.shouldThrowError(Error('passCode required'), function () {
             new Session().resumeSession(new Store(), 'ipman');
           });
-          this.shouldThrowError(Error('callBack required'), function () {
+          this.shouldThrowError(Error('callback required'), function () {
             new Session().resumeSession(new Store(), 'ipman', '123');
           });
         });
@@ -3340,7 +3342,7 @@ spec.test('/tgi-core/lib/models/tgi-core-model-session.spec.js', 'Session', 'for
           this.shouldThrowError(Error('store required'), function () {
             new Session().endSession();
           });
-          this.shouldThrowError(Error('callBack required'), function () {
+          this.shouldThrowError(Error('callback required'), function () {
             new Session().endSession(new Store());
           });
         });
@@ -3405,7 +3407,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-workspace.spec.js', 'Workspace', '
       });
     });
     spec.heading('METHODS', function () {
-      spec.paragraph('loadUserWorkspace(user, callBack)');
+      spec.paragraph('loadUserWorkspace(user, callback)');
       spec.paragraph('sync');
     });
     spec.heading('INTEGRATION', function () {

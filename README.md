@@ -6,12 +6,14 @@ Core Objects [read the spec](spec/README.md).
 
 Current
 -------
-- have ask() let Attribute be optional so can do quicker ask functions
++ have ask() let Attribute be optional so can do quicker ask functions
 - yesno needs cancel / undefined
-- REPLInterface - handle presentation
+- GET FIXED SPEC UPDATE TO FIND AAYNC ERROR!!!
 - Misc remove bucket - replace example with closure variables as needed
 - make Command.prototype.restart work to restart a command
 - command event for error needs to pass error along
+
+- REPLInterface - handle presentation
 - REPLInterface needs to add capturePrompt along with captureOutput to signal when to prompt
 
 Later

@@ -4,7 +4,7 @@
 var TGI = {
   CORE: function () {
     return {
-      version: '0.1.0',
+      version: '0.2.0',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -297,8 +297,8 @@ Attribute.prototype.getObjectStateErrors = function () {
   this.validationMessage = this.validationErrors.length > 0 ? this.validationErrors[0] : '';
   return this.validationErrors;
 };
-Attribute.prototype.validate = function (callBack) {
-  if (typeof callBack != 'function') throw new Error('callback is required');
+Attribute.prototype.validate = function (callback) {
+  if (typeof callback != 'function') throw new Error('callback is required');
   // First check object state
   this.getObjectStateErrors();
   this._emitEvent('Validate');
@@ -344,7 +344,7 @@ Attribute.prototype.validate = function (callBack) {
   // All done...
   this.validationMessage = this.validationErrors.length > 0 ? this.validationErrors[0] : '';
   this._emitEvent('StateChange');
-  callBack.call(this);
+  callback.call(this);
 };
 Attribute.prototype.setError = function (condition, description) {
   condition = condition || '';
@@ -654,8 +654,8 @@ function Interface(args) {
     throw new Error('error creating Interface: multiple errors');
   if (errorList.length) throw new Error('error creating Interface: ' + errorList[0]);
   // default state
-  this.startCallback = null;
-  this.stopCallback = null;
+  this.startcallback = null;
+  this.stopcallback = null;
   this.mocks = [];
   this.mockPending = false;
   // args ok, now copy to object
@@ -671,7 +671,7 @@ Interface.prototype.canMock = function () {
   return true;
 };
 Interface.prototype.doMock = function () {
-  var callBack;
+  var callback;
   // If no more elements then we are done
   this.mockPending = false;
   if (this.mocks.length < 1)
@@ -679,20 +679,20 @@ Interface.prototype.doMock = function () {
   // Get oldest ele and pass to callback if it is set
   var thisMock = this.mocks.shift();
   if (thisMock.type == 'ok') {
-    if (this.okCallBack) {
-      callBack = this.okCallBack;
-      delete this.okCallBack;
-      callBack();
+    if (this.okcallback) {
+      callback = this.okcallback;
+      delete this.okcallback;
+      callback();
     } else {
       this.okPending = true;
     }
     return;
   }
   if (thisMock.type == 'yes' || thisMock.type == 'no') {
-    if (this.yesnoCallBack) {
-      callBack = this.yesnoCallBack;
-      delete this.yesnoCallBack;
-      callBack(thisMock.type == 'yes');
+    if (this.yesnocallback) {
+      callback = this.yesnocallback;
+      delete this.yesnocallback;
+      callback(thisMock.type == 'yes');
     } else {
       this.yesnoPending = true;
       this.yesnoResponse = (thisMock.type == 'yes');
@@ -700,10 +700,10 @@ Interface.prototype.doMock = function () {
     return;
   }
   if (thisMock.type == 'ask') {
-    if (this.askCallBack) {
-      callBack = this.askCallBack;
-      delete this.askCallBack;
-      callBack(thisMock.value);
+    if (this.askcallback) {
+      callback = this.askcallback;
+      delete this.askcallback;
+      callback(thisMock.value);
     } else {
       this.askPending = true;
       this.askResponse = thisMock.value;
@@ -711,10 +711,10 @@ Interface.prototype.doMock = function () {
     return;
   }
   if (thisMock.type == 'choose') {
-    if (this.chooseCallBack) {
-      callBack = this.chooseCallBack;
-      delete this.chooseCallBack;
-      callBack(Interface.firstMatch(thisMock.value, this.chooseChoices));
+    if (this.choosecallback) {
+      callback = this.choosecallback;
+      delete this.choosecallback;
+      callback(Interface.firstMatch(thisMock.value, this.chooseChoices));
     } else {
       this.choosePending = true;
       this.chooseResponse = thisMock.value;
@@ -745,77 +745,77 @@ Interface.prototype.mockRequest = function (args) {
     this.doMock();
   }
 };
-Interface.prototype.start = function (application, presentation, callBack) {
+Interface.prototype.start = function (application, presentation, callback) {
   if (!(application instanceof Application)) throw new Error('Application required');
   if (!(presentation instanceof Presentation)) throw new Error('presentation required');
-  if (typeof callBack != 'function') throw new Error('callBack required');
+  if (typeof callback != 'function') throw new Error('callback required');
   this.application = application;
   this.presentation = presentation;
-  this.startCallback = callBack;
+  this.startcallback = callback;
 };
-Interface.prototype.stop = function (callBack) {
-  if (typeof callBack != 'function') throw new Error('callBack required');
+Interface.prototype.stop = function (callback) {
+  if (typeof callback != 'function') throw new Error('callback required');
 };
 Interface.prototype.dispatch = function (request, response) {
   if (false === (request instanceof Request)) throw new Error('Request required');
   if (response && typeof response != 'function') throw new Error('response callback is not a function');
   if (!this.application || !this.application.dispatch(request)) {
-    if (this.startCallback) {
-      this.startCallback(request);
+    if (this.startcallback) {
+      this.startcallback(request);
     }
   }
 };
 Interface.prototype.notify = function (message) {
   if (false === (message instanceof Message)) throw new Error('Message required');
 };
-Interface.prototype.render = function (presentation, callBack) {
+Interface.prototype.render = function (presentation, callback) {
   if (false === (presentation instanceof Presentation)) throw new Error('Presentation object required');
-  if (callBack && typeof callBack != 'function') throw new Error('optional second argument must a commandRequest callback function');
+  if (callback && typeof callback != 'function') throw new Error('optional second argument must a commandRequest callback function');
 };
 Interface.prototype.info = function (text) {
   if (!text || typeof text !== 'string') throw new Error('text required');
 };
-Interface.prototype.ok = function (prompt, callBack) {
+Interface.prototype.ok = function (prompt, callback) {
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
-  if (typeof callBack != 'function') throw new Error('callBack required');
+  if (typeof callback != 'function') throw new Error('callback required');
   if (this.okPending) {
     delete this.okPending;
-    callBack();
+    callback();
   } else {
-    this.okCallBack = callBack;
+    this.okcallback = callback;
   }
 };
-Interface.prototype.yesno = function (prompt, callBack) {
+Interface.prototype.yesno = function (prompt, callback) {
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
-  if (typeof callBack != 'function') throw new Error('callBack required');
+  if (typeof callback != 'function') throw new Error('callback required');
   if (this.yesnoPending) {
     delete this.yesnoPending;
-    callBack(this.yesnoResponse);
+    callback(this.yesnoResponse);
   } else {
-    this.yesnoCallBack = callBack;
+    this.yesnocallback = callback;
   }
 };
-Interface.prototype.ask = function (prompt, attribute, callBack) {
+Interface.prototype.ask = function (prompt, attribute, callback) {
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
-  if (false === (attribute instanceof Attribute)) throw new Error('instance of Attribute a required parameter');
-  if (typeof callBack != 'function') throw new Error('callBack required');
+  if (false === (attribute instanceof Attribute)) throw new Error('attribute or callback expected');
+  if (typeof callback != 'function') throw new Error('callback required');
   if (this.askPending) {
     delete this.askPending;
-    callBack(this.askResponse);
+    callback(this.askResponse);
   } else {
-    this.askCallBack = callBack;
+    this.askcallback = callback;
   }
 };
-Interface.prototype.choose = function (prompt, choices, callBack) {
+Interface.prototype.choose = function (prompt, choices, callback) {
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
   if (false === (choices instanceof Array)) throw new Error('choices array required');
   if (!choices.length) throw new Error('choices array empty');
-  if (typeof callBack != 'function') throw new Error('callBack required');
+  if (typeof callback != 'function') throw new Error('callback required');
   if (this.choosePending) {
     delete this.choosePending;
-    callBack(Interface.firstMatch(this.chooseResponse, choices));
+    callback(Interface.firstMatch(this.chooseResponse, choices));
   } else {
-    this.chooseCallBack = callBack;
+    this.choosecallback = callback;
     this.chooseChoices = choices;
   }
 };
@@ -1016,11 +1016,11 @@ Model.prototype.set = function (attribute, value) {
   }
   throw new Error('attribute not valid for model');
 };
-Model.prototype.validate = function (callBack) {
+Model.prototype.validate = function (callback) {
   var model = this;
   var i, e;
   var validationsPending = 0; // track callbacks sent
-  if (typeof callBack != 'function') throw new Error('callback is required');
+  if (typeof callback != 'function') throw new Error('callback is required');
   // First check object state
   model.getObjectStateErrors();
   for (e in model._errorConditions) {
@@ -1032,7 +1032,7 @@ Model.prototype.validate = function (callBack) {
   if (model.validationErrors.length) {
     model.validationMessage = model.validationErrors.length > 0 ? model.validationErrors[0] : '';
     model._emitEvent('StateChange');
-    callBack.call(model);
+    callback.call(model);
     return;
   }
 
@@ -1055,7 +1055,7 @@ Model.prototype.validate = function (callBack) {
             // Finally done here!
             model.validationMessage = model.validationErrors.length > 0 ? model.validationErrors[0] : '';
             model._emitEvent('StateChange');
-            callBack.call(model);
+            callback.call(model);
           }
         });
       }, 0);
@@ -1066,7 +1066,7 @@ Model.prototype.validate = function (callBack) {
 //  // All done...
 //  this.validationMessage = this.validationErrors.length > 0 ? this.validationErrors[0] : '';
 //  this._emitEvent('StateChange');
-//  callBack.call(this);
+//  callback.call(this);
 
 };
 Model.prototype.onEvent = function (events, callback) {
@@ -1298,10 +1298,10 @@ Store.prototype.toString = function () {
 Store.prototype.getServices = function () {
   return this.storeProperty;
 };
-Store.prototype.onConnect = function (location, callBack) {
+Store.prototype.onConnect = function (location, callback) {
   if (typeof location != 'string') throw new Error('argument must a url string');
-  if (typeof callBack != 'function') throw new Error('argument must a callback');
-  callBack(this, undefined);
+  if (typeof callback != 'function') throw new Error('argument must a callback');
+  callback(this, undefined);
 };
 Store.prototype.getModel = function () {
   throw new Error(this.storeType + ' does not provide getModel');
@@ -1320,10 +1320,10 @@ Store.prototype.getList = function () {
  * tgi-core/lib/core/tgi-core-transport.source.js
  */
 /* istanbul ignore next */
-function Transport(location, callBack) {
+function Transport(location, callback) {
   if (false === (this instanceof Transport)) throw new Error('new operator required');
   if (typeof location != 'string') throw new Error('argument must a url string');
-  if (typeof callBack != 'function') throw new Error('argument must a callback');
+  if (typeof callback != 'function') throw new Error('argument must a callback');
   var self = this;
   self.connected = false;
   self.initialConnect = true;
@@ -1334,7 +1334,7 @@ function Transport(location, callBack) {
     self.connected = true;
     self.initialConnect = false;
     console.log('socket.io (' + self.location + ') connected');
-    callBack.call(self, new Message('Connected', ''));
+    callback.call(self, new Message('Connected', ''));
   });
   self.socket.on('connecting', function () {
     console.log('socket.io (' + self.location + ') connecting');
@@ -1344,7 +1344,7 @@ function Transport(location, callBack) {
     console.error(theError);
     // If have not ever connected then signal error
     if (self.initialConnect) {
-      callBack.call(self, new Message('Error', theError));
+      callback.call(self, new Message('Error', theError));
     }
   });
   self.socket.on('connect_error', function (reason) {
@@ -1352,7 +1352,7 @@ function Transport(location, callBack) {
     console.error(theError);
     // If have not ever connected then signal error
     if (self.initialConnect) {
-      callBack.call(self, new Message('Error', theError));
+      callback.call(self, new Message('Error', theError));
     }
   });
   self.socket.on('connect_failed', function (reason) {
@@ -1360,7 +1360,7 @@ function Transport(location, callBack) {
     console.error(theError);
     // If have not ever connected then signal error
     if (self.initialConnect) {
-      callBack.call(self, new Message('Error', theError));
+      callback.call(self, new Message('Error', theError));
     }
   });
   self.socket.on('message', function (obj) {
@@ -1391,18 +1391,18 @@ Transport.hostMessageProcess = function (obj, fn) {
  * Methods
  */
 /* istanbul ignore next */
-Transport.prototype.send = function (message, callBack) {
+Transport.prototype.send = function (message, callback) {
   var self = this;
   if (typeof message == 'undefined') throw new Error('message required');
   if (!(message instanceof Message)) throw new Error('parameter must be instance of Message');
-  if (typeof callBack != 'undefined' && typeof callBack != 'function') throw new Error('argument must a callback');
+  if (typeof callback != 'undefined' && typeof callback != 'function') throw new Error('argument must a callback');
   if (!this.connected) {
-    callBack.call(self, new Message('Error', 'not connected'));
+    callback.call(self, new Message('Error', 'not connected'));
     return;
   }
-  if (typeof callBack != 'undefined') {
+  if (typeof callback != 'undefined') {
     self.socket.emit('ackmessage', message, function (msg) {
-      callBack.call(self, msg);
+      callback.call(self, msg);
     });
   } else {
     self.socket.send(message);
@@ -1435,8 +1435,8 @@ var REPLInterface = function (args) {
     throw new Error('error creating Interface: multiple errors');
   if (errorList.length) throw new Error('error creating Interface: ' + errorList[0]);
   // default state
-  this.startCallback = null;
-  this.stopCallback = null;
+  this.startcallback = null;
+  this.stopcallback = null;
   this.mocks = [];
   this.mockPending = false;
   // args ok, now copy to object
@@ -1453,7 +1453,7 @@ REPLInterface.prototype.canMock = function () {
   return true;
 };
 REPLInterface.prototype.doMock = function () {
-  var callBack;
+  var callback;
   // If no more elements then we are done
   this.mockPending = false;
   if (this.mocks.length < 1)
@@ -1461,20 +1461,20 @@ REPLInterface.prototype.doMock = function () {
   // Get oldest ele and pass to callback if it is set
   var thisMock = this.mocks.shift();
   if (thisMock.type == 'ok') {
-    if (this.okCallBack) {
-      callBack = this.okCallBack;
-      delete this.okCallBack;
-      callBack();
+    if (this.okcallback) {
+      callback = this.okcallback;
+      delete this.okcallback;
+      callback();
     } else {
       this.okPending = true;
     }
     return;
   }
   if (thisMock.type == 'yes' || thisMock.type == 'no') {
-    if (this.yesnoCallBack) {
-      callBack = this.yesnoCallBack;
-      delete this.yesnoCallBack;
-      callBack(thisMock.type == 'yes');
+    if (this.yesnocallback) {
+      callback = this.yesnocallback;
+      delete this.yesnocallback;
+      callback(thisMock.type == 'yes');
     } else {
       this.yesnoPending = true;
       this.yesnoResponse = (thisMock.type == 'yes');
@@ -1482,10 +1482,10 @@ REPLInterface.prototype.doMock = function () {
     return;
   }
   if (thisMock.type == 'ask') {
-    if (this.askCallBack) {
-      callBack = this.askCallBack;
-      delete this.askCallBack;
-      callBack(thisMock.value);
+    if (this.askcallback) {
+      callback = this.askcallback;
+      delete this.askcallback;
+      callback(thisMock.value);
     } else {
       this.askPending = true;
       this.askResponse = thisMock.value;
@@ -1493,10 +1493,10 @@ REPLInterface.prototype.doMock = function () {
     return;
   }
   if (thisMock.type == 'choose') {
-    if (this.chooseCallBack) {
-      callBack = this.chooseCallBack;
-      delete this.chooseCallBack;
-      callBack(Interface.firstMatch(thisMock.value, this.chooseChoices));
+    if (this.choosecallback) {
+      callback = this.choosecallback;
+      delete this.choosecallback;
+      callback(Interface.firstMatch(thisMock.value, this.chooseChoices));
     } else {
       this.choosePending = true;
       this.chooseResponse = thisMock.value;
@@ -1527,98 +1527,98 @@ REPLInterface.prototype.mockRequest = function (args) {
     this.doMock();
   }
 };
-REPLInterface.prototype.start = function (application, presentation, callBack) {
+REPLInterface.prototype.start = function (application, presentation, callback) {
   if (!(application instanceof Application)) throw new Error('Application required');
   if (!(presentation instanceof Presentation)) throw new Error('presentation required');
-  if (typeof callBack != 'function') throw new Error('callBack required');
+  if (typeof callback != 'function') throw new Error('callback required');
   this.application = application;
   this.presentation = presentation;
-  this.startCallback = callBack;
+  this.startcallback = callback;
 };
-REPLInterface.prototype.stop = function (callBack) {
-  if (typeof callBack != 'function') throw new Error('callBack required');
+REPLInterface.prototype.stop = function (callback) {
+  if (typeof callback != 'function') throw new Error('callback required');
 };
 REPLInterface.prototype.dispatch = function (request, response) {
   if (false === (request instanceof Request)) throw new Error('Request required');
   if (response && typeof response != 'function') throw new Error('response callback is not a function');
   if (!this.application || !this.application.dispatch(request)) {
-    if (this.startCallback) {
-      this.startCallback(request);
+    if (this.startcallback) {
+      this.startcallback(request);
     }
   }
 };
 REPLInterface.prototype.notify = function (message) {
   if (false === (message instanceof Message)) throw new Error('Message required');
-  if (this.captureOutputCallback) {
-    this.captureOutputCallback(message);
+  if (this.captureOutputcallback) {
+    this.captureOutputcallback(message);
   }
 };
-REPLInterface.prototype.render = function (presentation, callBack) {
+REPLInterface.prototype.render = function (presentation, callback) {
   if (false === (presentation instanceof Presentation)) throw new Error('Presentation object required');
-  if (callBack && typeof callBack != 'function') throw new Error('optional second argument must a commandRequest callback function');
+  if (callback && typeof callback != 'function') throw new Error('optional second argument must a commandRequest callback function');
 };
 REPLInterface.prototype.info = function (text) {
   if (!text || typeof text !== 'string') throw new Error('text required');
-  if (this.captureOutputCallback) {
-    this.captureOutputCallback(text);
+  if (this.captureOutputcallback) {
+    this.captureOutputcallback(text);
   }
 };
-REPLInterface.prototype.ok = function (prompt, callBack) {
+REPLInterface.prototype.ok = function (prompt, callback) {
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
-  if (typeof callBack != 'function') throw new Error('callBack required');
-  if (this.captureOutputCallback) {
-    this.captureOutputCallback(prompt);
+  if (typeof callback != 'function') throw new Error('callback required');
+  if (this.captureOutputcallback) {
+    this.captureOutputcallback(prompt);
   }
   if (this.okPending) {
     delete this.okPending;
-    callBack();
+    callback();
   } else {
-    this.okCallBack = callBack;
+    this.okcallback = callback;
   }
 };
-REPLInterface.prototype.yesno = function (prompt, callBack) {
+REPLInterface.prototype.yesno = function (prompt, callback) {
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
-  if (typeof callBack != 'function') throw new Error('callBack required');
-  if (this.captureOutputCallback) {
-    this.captureOutputCallback(prompt);
+  if (typeof callback != 'function') throw new Error('callback required');
+  if (this.captureOutputcallback) {
+    this.captureOutputcallback(prompt);
   }
   if (this.yesnoPending) {
     delete this.yesnoPending;
-    callBack(this.yesnoResponse);
+    callback(this.yesnoResponse);
   } else {
-    this.yesnoCallBack = callBack;
+    this.yesnocallback = callback;
   }
 };
-REPLInterface.prototype.ask = function (prompt, attribute, callBack) {
+REPLInterface.prototype.ask = function (prompt, attribute, callback) {
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
-  if (false === (attribute instanceof Attribute)) throw new Error('instance of Attribute a required parameter');
-  if (typeof callBack != 'function') throw new Error('callBack required');
-  if (this.captureOutputCallback) {
-    this.captureOutputCallback(prompt);
+  if (false === (attribute instanceof Attribute)) throw new Error('attribute or callback expected');
+  if (typeof callback != 'function') throw new Error('callback required');
+  if (this.captureOutputcallback) {
+    this.captureOutputcallback(prompt);
   }
   if (this.askPending) {
     delete this.askPending;
-    callBack(this.askResponse);
+    callback(this.askResponse);
   } else {
-    this.askCallBack = callBack;
+    this.askcallback = callback;
   }
 };
-REPLInterface.prototype.choose = function (prompt, choices, callBack) {
+REPLInterface.prototype.choose = function (prompt, choices, callback) {
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
   if (false === (choices instanceof Array)) throw new Error('choices array required');
   if (!choices.length) throw new Error('choices array empty');
-  if (typeof callBack != 'function') throw new Error('callBack required');
-  if (this.captureOutputCallback) {
-    this.captureOutputCallback(prompt);
+  if (typeof callback != 'function') throw new Error('callback required');
+  if (this.captureOutputcallback) {
+    this.captureOutputcallback(prompt);
     for (var i = 0; i < choices.length; i++) {
-      this.captureOutputCallback('  ' + choices[i]);
+      this.captureOutputcallback('  ' + choices[i]);
     }
   }
   if (this.choosePending) {
     delete this.choosePending;
-    callBack(Interface.firstMatch(this.chooseResponse, choices));
+    callback(Interface.firstMatch(this.chooseResponse, choices));
   } else {
-    this.chooseCallBack = callBack;
+    this.choosecallback = callback;
     this.chooseChoices = choices;
   }
 };
@@ -1626,33 +1626,43 @@ REPLInterface.prototype.choose = function (prompt, choices, callBack) {
  * Additional Methods
  */
 REPLInterface.prototype.evaluateInput = function (line) {
-  var callBack;
+  var callback;
   var uLine = ('' + line).toUpperCase();
   /**
    * First priority for input capture - user queries
    */
-  if (this.okCallBack) {
-    callBack = this.okCallBack;
-    delete this.okCallBack;
-    callBack();
+  if (this.okcallback) {
+    callback = this.okcallback;
+    delete this.okcallback;
+    callback();
     return;
   }
-  if (this.yesnoCallBack) {
-    callBack = this.yesnoCallBack;
-    delete this.yesnoCallBack;
-    callBack(uLine == 'Y' || uLine == 'YES');
+  if (this.yesnocallback) {
+    if (uLine == 'Y' || uLine == 'YES') {
+      callback = this.yesnocallback;
+      delete this.yesnocallback;
+      callback(true);
+      return;
+    } else if (uLine == 'N' || uLine == 'NO') {
+      callback = this.yesnocallback;
+      delete this.yesnocallback;
+      callback(false);
+      return;
+    }
+    if (this.captureOutputcallback)
+      this.captureOutputcallback('yes or no response required');
     return;
   }
-  if (this.askCallBack) {
-    callBack = this.askCallBack;
-    delete this.askCallBack;
-    callBack(line);
+  if (this.askcallback) {
+    callback = this.askcallback;
+    delete this.askcallback;
+    callback(line);
     return;
   }
-  if (this.chooseCallBack) {
-    callBack = this.chooseCallBack;
-    delete this.chooseCallBack;
-    callBack(Interface.firstMatch(line, this.chooseChoices));
+  if (this.choosecallback) {
+    callback = this.choosecallback;
+    delete this.choosecallback;
+    callback(Interface.firstMatch(line, this.chooseChoices));
     return;
   }
   /**
@@ -1672,18 +1682,18 @@ REPLInterface.prototype.evaluateInput = function (line) {
         commands += ( ' ' + m.name );
       }
     }
-    if (this.captureOutputCallback) {
-      this.captureOutputCallback('unrecognized: ' + line + '\nvalid commands: ' + commands);
+    if (this.captureOutputcallback) {
+      this.captureOutputcallback('unrecognized: ' + line + '\nvalid commands: ' + commands);
     }
     return;
   }
   /**
    * This should never get this far ...
    */
-  if (this.captureOutputCallback) this.captureOutputCallback('input ignored: ' + line);
+  if (this.captureOutputcallback) this.captureOutputcallback('input ignored: ' + line);
 };
 REPLInterface.prototype.captureOutput = function (callback) {
-  this.captureOutputCallback = callback;
+  this.captureOutputcallback = callback;
 };
 
 /**---------------------------------------------------------------------------------------------------------------------
@@ -1708,26 +1718,26 @@ var Application = function (args) {
   }
   Model.call(this, args);
   this.modelType = "Application";
-  this.set('name','newApp');
-  this.set('brand','NEW APP');
+  this.set('name', 'newApp');
+  this.set('brand', 'NEW APP');
 };
 Application.prototype = Object.create(Model.prototype);
 
 /**
  * Methods
  */
-Application.prototype.start = function (callBack) {
+Application.prototype.start = function (callback) {
   if (false === (this.primaryInterface instanceof Interface)) throw new Error('error starting application: interface not set');
-  if (typeof callBack != 'function') throw new Error('callBack required');
+  if (typeof callback != 'function') throw new Error('callback required');
   var self = this;
-  this.startCallback = callBack;
+  this.startcallback = callback;
   if (!this.presentation) this.presentation = new Presentation();
   this.primaryInterface.start(self, this.presentation, function (request) {
-    if (request.type=='Command') {
+    if (request.type == 'Command') {
       request.command.execute();
     } else {
-      if (self.startCallback) {
-        self.startCallback(request);
+      if (self.startcallback) {
+        self.startcallback(request);
       }
     }
   });
@@ -1740,8 +1750,8 @@ Application.prototype.dispatch = function (request, response) {
     request.command.execute();
     return true;
   } else {
-    if (this.startCallback) {
-      this.startCallback(request);
+    if (this.startcallback) {
+      this.startcallback(request);
       return true;
     }
   }
@@ -1757,7 +1767,7 @@ Application.prototype.getInterface = function () {
 Application.prototype.setPresentation = function (presentation) {
   if (false === (presentation instanceof Presentation)) throw new Error('instance of Presentation a required parameter');
   this.presentation = presentation;
-  //if (this.startCallback) { TODO WTF
+  //if (this.startcallback) { TODO WTF
   //  // Interface started so reload
   //  this.primaryInterface.setPresentation(this.presentation);
   //}
@@ -1770,32 +1780,36 @@ Application.prototype.info = function (text) {
   if (!text || typeof text !== 'string') throw new Error('text parameter required');
   this.primaryInterface.info(text);
 };
-Application.prototype.ok = function (prompt, callBack) {
+Application.prototype.ok = function (prompt, callback) {
   if (false === (this.primaryInterface instanceof Interface)) throw new Error('interface not set');
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
-  if (typeof callBack != 'function') throw new Error('callBack required');
-  this.primaryInterface.ok(prompt, callBack);
+  if (typeof callback != 'function') throw new Error('callback required');
+  this.primaryInterface.ok(prompt, callback);
 };
-Application.prototype.yesno = function (prompt, callBack) {
+Application.prototype.yesno = function (prompt, callback) {
   if (false === (this.primaryInterface instanceof Interface)) throw new Error('interface not set');
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
-  if (typeof callBack != 'function') throw new Error('callBack required');
-  this.primaryInterface.yesno(prompt, callBack);
+  if (typeof callback != 'function') throw new Error('callback required');
+  this.primaryInterface.yesno(prompt, callback);
 };
-Application.prototype.ask = function (prompt, attribute, callBack) {
+Application.prototype.ask = function (prompt, attribute, callback) {
   if (false === (this.primaryInterface instanceof Interface)) throw new Error('interface not set');
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
-  if (false === (attribute instanceof Attribute)) throw new Error('instance of Attribute a required parameter');
-  if (typeof callBack != 'function') throw new Error('callBack required');
-  this.primaryInterface.ask(prompt, attribute, callBack);
+  if (typeof attribute == 'function') {
+    this.primaryInterface.ask(prompt, new Attribute({name: 'default'}), attribute);
+    return;
+  }
+  if (false === (attribute instanceof Attribute)) throw new Error('attribute or callback expected');
+  if (typeof callback != 'function') throw new Error('callback required');
+  this.primaryInterface.ask(prompt, attribute, callback);
 };
-Application.prototype.choose = function (prompt, choices, callBack) {
+Application.prototype.choose = function (prompt, choices, callback) {
   if (false === (this.primaryInterface instanceof Interface)) throw new Error('interface not set');
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
   if (false === (choices instanceof Array)) throw new Error('choices array required');
   if (!choices.length) throw new Error('choices array empty');
-  if (typeof callBack != 'function') throw new Error('callBack required');
-  this.primaryInterface.choose(prompt, choices, callBack);
+  if (typeof callback != 'function') throw new Error('callback required');
+  this.primaryInterface.choose(prompt, choices, callback);
 };
 
 /**---------------------------------------------------------------------------------------------------------------------
@@ -1885,9 +1899,9 @@ Presentation.prototype.getObjectStateErrors = function (modelCheckOnly) {
   this.validationMessage = this.validationErrors.length > 0 ? this.validationErrors[0] : '';
   return this.validationErrors;
 };
-Presentation.prototype.validate = function (callBack) {
+Presentation.prototype.validate = function (callback) {
   var presentation = this;
-  if (typeof callBack != 'function') throw new Error('callback is required');
+  if (typeof callback != 'function') throw new Error('callback is required');
   this.getObjectStateErrors();
   var e;
   for (e in this._errorConditions) {
@@ -1924,7 +1938,7 @@ Presentation.prototype.validate = function (callBack) {
       if (gotError)
         presentation.validationErrors.push('contents has validation errors');
       presentation.validationMessage = presentation.validationErrors.length > 0 ? presentation.validationErrors[0] : '';
-      callBack();
+      callback();
     }
   }
 };
@@ -1955,23 +1969,23 @@ Session.prototype = Object.create(Model.prototype);
 /*
  * Methods
  */
-Session.prototype.startSession = function (store, userName, password, ip, callBack) {
+Session.prototype.startSession = function (store, userName, password, ip, callback) {
   if (false === (store instanceof Store)) throw new Error('store required');
   if (typeof userName !== 'string') throw new Error('userName required');
   if (typeof password !== 'string') throw new Error('password required');
   if (typeof ip !== 'string') throw new Error('ip required');
-  if (typeof callBack != 'function') throw new Error('callBack required');
+  if (typeof callback != 'function') throw new Error('callback required');
 
   // Find user in store
   var self = this;
   var userModel = new User();
   store.getList(new List(userModel), {name: userName, password: password}, function (list, error) {
     if (error) {
-      callBack(error);
+      callback(error);
       return;
     }
     if (list.length() != 1) {
-      callBack(new Error('login not found'));
+      callback(new Error('login not found'));
       return;
     }
 
@@ -1989,25 +2003,25 @@ Session.prototype.startSession = function (store, userName, password, ip, callBa
     self.set('passCode', passCode);
     self.set('ipAddress', ip);
     store.putModel(self, function (model, error) {
-      callBack(error, model);
+      callback(error, model);
     });
   });
 };
-Session.prototype.resumeSession = function (store, ip, passCode, callBack) {
+Session.prototype.resumeSession = function (store, ip, passCode, callback) {
   if (false === (store instanceof Store)) throw new Error('store required');
   if (typeof ip !== 'string') throw new Error('ip required');
   if (typeof passCode !== 'string') throw new Error('passCode required');
-  if (typeof callBack != 'function') throw new Error('callBack required');
+  if (typeof callback != 'function') throw new Error('callback required');
 
   // Find the session in store
   var self = this;
   store.getList(new List(self), {ipAddress: ip, passCode: passCode}, function (list, error) {
     if (error) {
-      callBack(error);
+      callback(error);
       return;
     }
     if (list.length() != 1) {
-      callBack(new Error('session not resumed'));
+      callback(new Error('session not resumed'));
       return;
     }
 
@@ -2019,22 +2033,22 @@ Session.prototype.resumeSession = function (store, ip, passCode, callBack) {
     self.set('passCode', list.get('passCode'));
     self.set('active', list.get('active'));
     self.set('ipAddress', list.get('ipAddress'));
-    callBack(error, self);
+    callback(error, self);
   });
 
 };
-Session.prototype.endSession = function (store, callBack) {
+Session.prototype.endSession = function (store, callback) {
   if (false === (store instanceof Store)) throw new Error('store required');
-  if (typeof callBack != 'function') throw new Error('callBack required');
+  if (typeof callback != 'function') throw new Error('callback required');
 
   // If no session ID (never persisted) or is not active then silently return
   if (!this.get('active') || !this.get('id')) {
-    callBack(this);
+    callback(this);
   }
   // Mark inactive and save to store
   this.set('active', false);
   store.putModel(this, function (model, err) {
-    callBack(err, model);
+    callback(err, model);
   });
 };
 /**
@@ -2112,17 +2126,17 @@ var MemoryStore = function (args) {
 };
 MemoryStore.prototype = Object.create(Store.prototype);
 // Methods
-MemoryStore.prototype.getModel = function (model, callBack) {
+MemoryStore.prototype.getModel = function (model, callback) {
   var i, a;
   if (!(model instanceof Model)) throw new Error('argument must be a Model');
   if (model.getObjectStateErrors().length) throw new Error('model has validation errors');
   if (!model.attributes[0].value) throw new Error('ID not set');
-  if (typeof callBack != "function") throw new Error('callBack required');
+  if (typeof callback != "function") throw new Error('callback required');
   // Find model in memorystore, error out if can't find
   var modelIndex = -1;
   for (i = 0; i < this.data.length; i++) if (this.data[i][0] == model.modelType) modelIndex = i;
   if (modelIndex < 0) {
-    callBack(model, new Error('model not found in store'));
+    callback(model, new Error('model not found in store'));
     return;
   }
   // Find the ID now and put in instanceIndex
@@ -2131,7 +2145,7 @@ MemoryStore.prototype.getModel = function (model, callBack) {
   var instanceIndex = -1;
   for (i = 0; instanceIndex < 0 && i < storedPair.length; i++) if (storedPair[i][0] == id) instanceIndex = i;
   if (instanceIndex < 0) {
-    callBack(model, new Error('id not found in store'));
+    callback(model, new Error('id not found in store'));
     return;
   }
   // Copy values from store to ref model
@@ -2139,21 +2153,21 @@ MemoryStore.prototype.getModel = function (model, callBack) {
   for (a in model.attributes) {
     model.attributes[a].value = storeValues[model.attributes[a].name];
   }
-  callBack(model, undefined);
+  callback(model, undefined);
 };
-MemoryStore.prototype.putModel = function (model, callBack) {
+MemoryStore.prototype.putModel = function (model, callback) {
   var i, a, id, modelIndex, ModelValues, theName, theValue;
 
   if (!(model instanceof Model)) throw new Error('argument must be a Model');
   if (model.getObjectStateErrors().length) throw new Error('model has validation errors');
-  if (typeof callBack != "function") throw new Error('callBack required');
+  if (typeof callback != "function") throw new Error('callback required');
   id = model.get('ID');
   if (id) {
     // Find model in memorystore, error out if can't find
     modelIndex = -1;
     for (i = 0; i < this.data.length; i++) if (this.data[i][0] == model.modelType) modelIndex = i;
     if (modelIndex < 0) {
-      callBack(model, new Error('model not found in store'));
+      callback(model, new Error('model not found in store'));
       return;
     }
     // Find the ID now
@@ -2162,7 +2176,7 @@ MemoryStore.prototype.putModel = function (model, callBack) {
     var storedPair = this.data[modelIndex][1];
     for (i = 0; instanceIndex < 0 && i < storedPair.length; i++) if (storedPair[i][0] == id) instanceIndex = i;
     if (instanceIndex < 0) {
-      callBack(model, new Error('id not found in store'));
+      callback(model, new Error('id not found in store'));
       return;
     }
     // Copy from store
@@ -2173,7 +2187,7 @@ MemoryStore.prototype.putModel = function (model, callBack) {
       ModelValues[theName] = theValue;
     }
     storedPair[instanceIndex][1] = ModelValues;
-    callBack(model, undefined);
+    callback(model, undefined);
   } else {
     // Find model in memorystore, add if not found
     modelIndex = -1;
@@ -2192,20 +2206,20 @@ MemoryStore.prototype.putModel = function (model, callBack) {
       ModelValues[theName] = theValue;
     }
     this.data[modelIndex][1].push([newID, ModelValues]);
-    callBack(model, undefined);
+    callback(model, undefined);
   }
 
 };
-MemoryStore.prototype.deleteModel = function (model, callBack) {
+MemoryStore.prototype.deleteModel = function (model, callback) {
   var i, a;
   if (!(model instanceof Model)) throw new Error('argument must be a Model');
   if (model.getObjectStateErrors().length) throw new Error('model has validation errors');
-  if (typeof callBack != "function") throw new Error('callBack required');
+  if (typeof callback != "function") throw new Error('callback required');
   // Find model in memorystore, error out if can't find
   var modelIndex = -1;
   for (i = 0; i < this.data.length; i++) if (this.data[i][0] == model.modelType) modelIndex = i;
   if (modelIndex < 0) {
-    callBack(model, new Error('model not found in store'));
+    callback(model, new Error('model not found in store'));
     return;
   }
   // Find the ID now
@@ -2214,7 +2228,7 @@ MemoryStore.prototype.deleteModel = function (model, callBack) {
   var storedPair = this.data[modelIndex][1];
   for (i = 0; instanceIndex < 0 && i < storedPair.length; i++) if (storedPair[i][0] == id) instanceIndex = i;
   if (instanceIndex < 0) {
-    callBack(model, new Error('id not found in store'));
+    callback(model, new Error('id not found in store'));
     return;
   }
   // Splice out the stored values then prepare that Model for callback with ID stripped
@@ -2225,24 +2239,24 @@ MemoryStore.prototype.deleteModel = function (model, callBack) {
     else
       model.attributes[a].value = storeValues[model.attributes[a].name];
   }
-  callBack(model, undefined);
+  callback(model, undefined);
 };
 MemoryStore.prototype.getList = function (list, filter, arg3, arg4) {
-  var callBack, order, i;
+  var callback, order, i;
   if (typeof(arg4) == 'function') {
-    callBack = arg4;
+    callback = arg4;
     order = arg3;
   } else {
-    callBack = arg3;
+    callback = arg3;
   }
   if (!(list instanceof List)) throw new Error('argument must be a List');
   if (!(filter instanceof Object)) throw new Error('filter argument must be Object');
-  if (typeof callBack != "function") throw new Error('callBack required');
+  if (typeof callback != "function") throw new Error('callback required');
   // Find model in memorystore, error out if can't find
   var modelIndex = -1;
   for (i = 0; i < this.data.length; i++) if (this.data[i][0] == list.model.modelType) modelIndex = i;
   if (modelIndex < 0) {
-    callBack(list);
+    callback(list);
     return;
   }
   list.clear();
@@ -2272,7 +2286,7 @@ MemoryStore.prototype.getList = function (list, filter, arg3, arg4) {
     list.sort(order);
   }
 //  console.log(JSON.stringify(list,null,2));
-  callBack(list);
+  callback(list);
 };
 
 /**---------------------------------------------------------------------------------------------------------------------
