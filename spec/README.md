@@ -40,7 +40,7 @@ this.log(TGI.CORE().version);
 - [String Functions](#-string-functions) description
 
 
-## [&#9664;](#-tgi-core)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-command) &nbsp;Attribute
+## [&#9664;](#-tgi-core)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-command) &nbsp;Attribute
 Attributes are the means for models to represent data of different types.  They have no dependencies on Models however and can be used without creating a model.    
 
 #### CONSTRUCTOR
@@ -726,7 +726,7 @@ function test6() {
 ```
 <blockquote>returns <strong>got milk</strong> as expected
 </blockquote>
-## [&#9664;](#-attribute)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-delta) &nbsp;Command
+## [&#9664;](#-attribute)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-delta) &nbsp;Command
 Command is an abstraction for command execution.  It provides for multi methods of task executionand control over invocation and state monitoring.  The primary use is to have a simple API method to respond to UI tasks.  It can be used for processing / validation / storage / reporting type of use cases since it handles the asynchronous nature of javascript and abstracts in a way to easily incorporate application logic.    
 
 #### CONSTRUCTOR
@@ -1128,7 +1128,7 @@ cmd.execute();
 <blockquote><strong>log: </strong>Procedure Command: procedureCommand<br></blockquote>
 (Better example under `Procedure`)    
 
-## [&#9664;](#-command)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-interface) &nbsp;Delta
+## [&#9664;](#-command)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-interface) &nbsp;Delta
 Deltas represent changes to models.  They can be applied to a store then update the model.  They can be stored in logs as a change audit for the model.    
 
 #### CONSTRUCTOR
@@ -1158,7 +1158,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Fri Feb 13 2015 16:09:01 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Fri Feb 13 2015 16:38:24 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1167,7 +1167,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Fri Feb 13 2015 16:09:01 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Fri Feb 13 2015 16:38:24 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -1179,7 +1179,7 @@ return typeof new Delta(new Attribute.ModelID(new Model())).attributeValues;
 ```
 <blockquote>returns <strong>object</strong> as expected
 </blockquote>
-## [&#9664;](#-delta)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-list) &nbsp;Interface
+## [&#9664;](#-delta)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-list) &nbsp;Interface
 The Interface core constructor is a prototype for user or system interaction with the application. The SurrogateInterface is a reference to Interface being tested in the suite.    
 
 #### CONSTRUCTOR
@@ -1532,7 +1532,7 @@ ok1();
 ```
 <blockquote>returns <strong>The End</strong> as expected
 </blockquote>
-## [&#9664;](#-interface)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-message) &nbsp;List
+## [&#9664;](#-interface)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-message) &nbsp;List
 Lists are an ordered collection of items.  Each item is an array of values that correspond to the attributes for model used in constructor.    
 
 #### CONSTRUCTOR
@@ -1893,7 +1893,7 @@ function getAlphabetical() {
 ```
 <blockquote><strong>log: </strong>storeBeingTested: a MemoryStore<br>returns <strong>true</strong> as expected
 </blockquote>
-## [&#9664;](#-list)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-model) &nbsp;Message
+## [&#9664;](#-list)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-model) &nbsp;Message
 #### Message Class
 Messages are used by Transport to send to host or UI.    
 
@@ -1938,7 +1938,7 @@ This helper function returns an array of valid Message types.  This is just a fu
 this.log(Message.getTypes());
 ```
 <blockquote><strong>log: </strong>Null,Connected,Error,Sent,Ping,PutModel,PutModelAck,GetModel,GetModelAck,DeleteModel,DeleteModelAck,GetList,GetListAck<br></blockquote>
-## [&#9664;](#-message)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-procedure) &nbsp;Model
+## [&#9664;](#-message)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-procedure) &nbsp;Model
 &nbsp;<b><i>model tests applied:</i></b>
 ```javascript
 this.log('Tests Muted: ' + wasMuted);
@@ -1946,7 +1946,7 @@ return wasMuted > 0;
 ```
 <blockquote><strong>log: </strong>Tests Muted: 25<br>returns <strong>true</strong> as expected
 </blockquote>
-## [&#9664;](#-model)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-request) &nbsp;Procedure
+## [&#9664;](#-model)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-request) &nbsp;Procedure
 #### Procedure Class
 The _Procedure_ class manages a set of _Command_ objects.  It provides a pattern for handling asynchronous and synchronous command execution.    
 
@@ -2229,7 +2229,7 @@ cmd.execute();
 ```
 <blockquote>returns <strong>todo: drugs sex rock & roll</strong> as expected
 </blockquote>
-## [&#9664;](#-procedure)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-store) &nbsp;Request
+## [&#9664;](#-procedure)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-store) &nbsp;Request
 Requests handle the Request / Response design pattern.  They are used by the Interface class to communicate with the Application Model    
 
 #### CONSTRUCTOR
@@ -2283,7 +2283,7 @@ return new Request('Null').toString();
 ```
 <blockquote>returns <strong>Null Request</strong> as expected
 </blockquote>
-## [&#9664;](#-request)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-transport) &nbsp;Store
+## [&#9664;](#-request)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-transport) &nbsp;Store
 The store class is used for object persistence.    
 
 #### CONSTRUCTOR
@@ -2602,7 +2602,7 @@ function listReady(list, error) {
 ```
 <blockquote><strong>log: </strong>a Store Store<br><strong>log: </strong>Store is not ready.<br>returns <strong>true</strong> as expected
 </blockquote>
-## [&#9664;](#-store)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-replinterface) &nbsp;Transport
+## [&#9664;](#-store)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-replinterface) &nbsp;Transport
 Handle message passing between host and UI.    
 
 TODO: run these tests in node-make-spec-md with io defined    
@@ -2612,7 +2612,7 @@ Read the source until then...
 https://github.com/tgi-io/tgi-core/blob/master/lib/core/tgi-core-transport.spec.js    
 
 
-## [&#9664;](#-transport)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-application) &nbsp;REPLInterface
+## [&#9664;](#-transport)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-application) &nbsp;REPLInterface
 #### REPLInterface
 The REPLInterface is a Read Evaluate Print Loop Interface.    
 
@@ -2783,7 +2783,7 @@ input('se');
 valid commands:  Rock Paper Scissors SeeYou<br><strong>log: </strong>in> r<br><strong>log: </strong>in> p<br><strong>log: </strong>in> s<br><strong>log: </strong>in> se<br>returns <strong>RockPaperScissors</strong> as expected
 </blockquote>
 
-## [&#9664;](#-replinterface)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-log) &nbsp;Application
+## [&#9664;](#-replinterface)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-log) &nbsp;Application
 #### CONSTRUCTOR
 &nbsp;<b><i>objects created should be an instance of Application:</i></b>
 ```javascript
@@ -3059,7 +3059,7 @@ testInterface.mockRequest(cmds);
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
-## [&#9664;](#-application)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-presentation) &nbsp;Log
+## [&#9664;](#-application)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-presentation) &nbsp;Log
 #### Log Model
 Multi purpose log model.    
 
@@ -3089,7 +3089,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Fri Feb 13 2015 16:09:01 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Fri Feb 13 2015 16:38:24 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -3111,7 +3111,7 @@ return new Log({logType: 'Delta', contents: delta}).toString();
 ```
 <blockquote>returns <strong>Info: (delta)</strong> as expected
 </blockquote>
-## [&#9664;](#-log)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-session) &nbsp;Presentation
+## [&#9664;](#-log)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-session) &nbsp;Presentation
 #### Presentation Model
 The Presentation Model represents the way in which a model is to be presented to the user.  The presentation is meant to be a "hint" to a Interface object.  The specific Interface object will represent the model data according to the Presentation object.    
 
@@ -3206,7 +3206,7 @@ presentation.validate(function () {
 ```
 <blockquote>returns <strong>contents has validation errors</strong> as expected
 </blockquote>
-## [&#9664;](#-presentation)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-user) &nbsp;Session
+## [&#9664;](#-presentation)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-user) &nbsp;Session
 #### Session Model
 The Session Model represents the Session logged into the system. The library uses this for system access, logging and other functions.    
 
@@ -3289,7 +3289,7 @@ this.shouldThrowError(Error('callback required'), function () {
   new Session().endSession(new Store());
 });
 ```
-## [&#9664;](#-session)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-workspace) &nbsp;User
+## [&#9664;](#-session)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-workspace) &nbsp;User
 #### User Model
 The User Model represents the user logged into the system. The library uses this for system access, logging and other functions.    
 
@@ -3320,7 +3320,7 @@ this.shouldBeTrue(user.get('firstName') === null);
 this.shouldBeTrue(user.get('lastName') === null);
 this.shouldBeTrue(user.get('email') === null);
 ```
-## [&#9664;](#-user)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-memorystore) &nbsp;Workspace
+## [&#9664;](#-user)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-memorystore) &nbsp;Workspace
 #### Workspace Model
 A workspace is a collection of active deltas for a user.  The GUI could represent that as opentabs for instance.  Each tab a model view.  The deltas represent the change in model state    
 
@@ -3355,7 +3355,7 @@ sync
 
 #### INTEGRATION
 
-## [&#9664;](#-workspace)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-array-functions) &nbsp;MemoryStore
+## [&#9664;](#-workspace)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-array-functions) &nbsp;MemoryStore
 #### MemoryStore
 The MemoryStore is a simple volatile store. It is the first test standard to define the spec for all Stores to follow.    
 
@@ -3820,7 +3820,7 @@ function listReady(list, error) {
 <blockquote><strong>log: </strong>a MemoryStore MemoryStore<br><strong>log: </strong>0<br><strong>log: </strong>0<br><strong>log: </strong>Moe,Larry,Shemp<br>returns <strong>true</strong> as expected
 </blockquote>
 
-## [&#9664;](#-memorystore)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-object-functions) &nbsp;Array Functions
+## [&#9664;](#-memorystore)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-object-functions) &nbsp;Array Functions
 #### ARRAY FUNCTIONS
 #### contains(array,object)
 This method returns true or false as to whether object is contained in array.    
@@ -3835,7 +3835,7 @@ return contains(['moe', 'larry', 'curley'], 'larry');
 ```javascript
 return contains(['moe', 'larry', 'curley'], 'shemp');
 ```
-## [&#9664;](#-array-functions)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-string-functions) &nbsp;Object Functions
+## [&#9664;](#-array-functions)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-string-functions) &nbsp;Object Functions
 #### inheritPrototype(p)
 kinda sorta class like    
 
@@ -3884,7 +3884,7 @@ return getInvalidProperties({name: 'name', Kahn: 'value'}, ['name', 'value'])[0]
 // no unknown properties
 return getInvalidProperties({name: 'name', value: 'Kahn'}, ['name', 'value']).length;
 ```
-## [&#9664;](#-object-functions)&nbsp;[&#8984;](#table-of-contents)&nbsp;[&#9654;](#-summary) &nbsp;String Functions
+## [&#9664;](#-object-functions)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-summary) &nbsp;String Functions
 #### STRING FUNCTIONS
 #### trim(string)
 &nbsp;<b><i>Remove leading and trailing spaces from string:</i></b>
@@ -3991,5 +3991,5 @@ return ':' + cpad('x',3) + ':';
 ```
 <blockquote>returns <strong>: x :</strong> as expected
 </blockquote>
-## [&#9664;](#-string-functions)&nbsp;[&#8984;](#table-of-contents) &nbsp;Summary
+## [&#9664;](#-string-functions)&nbsp;[&#8984;](#constructors) &nbsp;Summary
 This documentation generated with https://github.com/tgicloud/tgi-spec.<br>TODO put testin stats here.    
