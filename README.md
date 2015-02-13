@@ -8,7 +8,6 @@ Current
 -------
 + have ask() let Attribute be optional so can do quicker ask functions
 - yesno needs cancel / undefined
-- GET FIXED SPEC UPDATE TO FIND AAYNC ERROR!!!
 - Misc remove bucket - replace example with closure variables as needed
 - make Command.prototype.restart work to restart a command
 - command event for error needs to pass error along
