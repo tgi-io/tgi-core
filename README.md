@@ -2,21 +2,31 @@
 
 Core Objects [read the spec](spec/README.md).
 
-To Do
----
+# To Do
+
+Current
+-------
+- have ask() let Attribute be optional so can do quicker ask functions
 - yesno needs cancel / undefined
-- REPLInterface - handle nav and presentation
-- Misc: fix index ⌘ in helps
+- REPLInterface - handle presentation
 - Misc remove bucket - replace example with closure variables as needed
+- make Command.prototype.restart work to restart a command
+- command event for error needs to pass error along
+- REPLInterface needs to add capturePrompt along with captureOutput to signal when to prompt
+
+Later
+-----
 - Review models for completeness esp. Workspace and Session
 - Interface.notify needs review
 - Misc: improve coverage
 - Review tequila for lingering todo
+
+Docs
+----
 - extend spec to external stores & interfaces
-- have ask() let Attribute be optional so can do quicker ask functions
-- make Command.prototype.restart work to restart a command
-- command event for error needs to pass error along
-- REPLInterface needs to add capturePrompt along with captureOutput to signal when to prompt
+- Misc: fix index ⌘ in helps
+
+# Design WIP
 
 Standard Commands
 ---
@@ -28,11 +38,10 @@ Standard Commands
 - WorkspaceCommand ... active models
 - AlertsCommand ... shit you need to deal with
 
-Present
+Present ???
 -------
 - Navigation
 - List
 - View
 - Edit
 - Dialogue
-
