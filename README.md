@@ -21,11 +21,6 @@ Later
 - Misc: improve coverage
 - Review tequila for lingering todo
 
-Docs
-----
-- extend spec to external stores & interfaces
-- Misc: fix index ⌘ in helps
-
 # Design WIP
 
 Standard Commands
