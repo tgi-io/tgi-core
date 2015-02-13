@@ -5,7 +5,7 @@ Core constructors, models, stores and interfaces.  The constructor functions def
 ```javascript
 this.log(TGI.CORE().version);
 ```
-<blockquote><strong>log: </strong>0.2.0<br></blockquote>
+<blockquote><strong>log: </strong>0.2.1<br></blockquote>
 ####Constructors
 
 - [Attribute](#-attribute) defines data types - needed by Model
@@ -1158,7 +1158,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Fri Feb 13 2015 16:38:24 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Fri Feb 13 2015 17:24:44 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1167,7 +1167,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Fri Feb 13 2015 16:38:24 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Fri Feb 13 2015 17:24:44 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -1480,11 +1480,20 @@ var yesno1 = function () {
 var yesno2 = function () {
   app.yesno('Yesno can be false', function (answer) {
     if (!answer)
-      ask1();
+      yesno3();
     else
       callback('fail');
   });
   io.mockRequest(new Request('no'));
+};
+var yesno3 = function () {
+  app.yesno('Yesno can be undefined', function (answer) {
+    if (!answer)
+      ask1();
+    else
+      callback('fail');
+  });
+  io.mockRequest(new Request('cancel'));
 };
 var ask1 = function () {
   var name = new Attribute({name: 'Name'});
@@ -3089,7 +3098,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Fri Feb 13 2015 16:38:24 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Fri Feb 13 2015 17:24:44 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript

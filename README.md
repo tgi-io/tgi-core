@@ -6,9 +6,6 @@ Core Objects [read the spec](spec/README.md).
 
 Current
 -------
-+ have ask() let Attribute be optional so can do quicker ask functions
-- yesno needs cancel / undefined
-- Misc remove bucket - replace example with closure variables as needed
 - make Command.prototype.restart work to restart a command
 - command event for error needs to pass error along
 
@@ -20,6 +17,7 @@ Later
 - Review models for completeness esp. Workspace and Session
 - Interface.notify needs review
 - Misc: improve coverage
+- Misc remove bucket - replace example with closure variables as needed
 - Review tequila for lingering todo
 
 # Design WIP

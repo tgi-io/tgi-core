@@ -10,7 +10,7 @@ var root = this;
 var TGI = {
   CORE: function () {
     return {
-      version: '0.2.0',
+      version: '0.2.1',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -677,7 +677,7 @@ Interface.prototype.canMock = function () {
   return true;
 };
 Interface.prototype.doMock = function () {
-  var callback;
+  var callback, result;
   // If no more elements then we are done
   this.mockPending = false;
   if (this.mocks.length < 1)
@@ -694,14 +694,25 @@ Interface.prototype.doMock = function () {
     }
     return;
   }
-  if (thisMock.type == 'yes' || thisMock.type == 'no') {
+  if (thisMock.type == 'yes' || thisMock.type == 'no' || thisMock.type == 'cancel') {
+    switch (thisMock.type) {
+      case 'yes':
+        result = true;
+        break;
+      case 'no':
+        result = false;
+        break;
+      case 'cancel':
+        result = undefined;
+        break;
+    }
     if (this.yesnocallback) {
       callback = this.yesnocallback;
       delete this.yesnocallback;
-      callback(thisMock.type == 'yes');
+      callback(result);
     } else {
       this.yesnoPending = true;
-      this.yesnoResponse = (thisMock.type == 'yes');
+      this.yesnoResponse = result;
     }
     return;
   }
@@ -830,7 +841,7 @@ Interface.prototype.choose = function (prompt, choices, callback) {
  */
 Interface.firstMatch = function (s, a) { // find first partial match with s in array a
   if (undefined === s)
-  return undefined;
+    return undefined;
   for (var i = 0; i < a.length; i++) {
     var obj = a[i].toLowerCase();
     if (left(obj, s.length) == s.toLowerCase())
@@ -1459,7 +1470,7 @@ REPLInterface.prototype.canMock = function () {
   return true;
 };
 REPLInterface.prototype.doMock = function () {
-  var callback;
+  var callback,result;
   // If no more elements then we are done
   this.mockPending = false;
   if (this.mocks.length < 1)
@@ -1476,14 +1487,25 @@ REPLInterface.prototype.doMock = function () {
     }
     return;
   }
-  if (thisMock.type == 'yes' || thisMock.type == 'no') {
+  if (thisMock.type == 'yes' || thisMock.type == 'no' || thisMock.type == 'cancel') {
+    switch (thisMock.type) {
+      case 'yes':
+        result = true;
+        break;
+      case 'no':
+        result = false;
+        break;
+      case 'cancel':
+        result = undefined;
+        break;
+    }
     if (this.yesnocallback) {
       callback = this.yesnocallback;
       delete this.yesnocallback;
-      callback(thisMock.type == 'yes');
+      callback(result);
     } else {
       this.yesnoPending = true;
-      this.yesnoResponse = (thisMock.type == 'yes');
+      this.yesnoResponse = result;
     }
     return;
   }
