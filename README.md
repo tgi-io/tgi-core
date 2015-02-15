@@ -31,10 +31,7 @@ Standard Commands
 - WorkspaceCommand ... active models
 - AlertsCommand ... shit you need to deal with
 
-Present ???
+Presentation
 -------
-- Navigation
-- List
-- View
-- Edit
-- Dialogue
+- use model property & modelConstructor method or get rid of
+- add type property: Nav, List, View, Edit

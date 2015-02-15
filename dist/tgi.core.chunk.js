@@ -1963,8 +1963,7 @@ Log.prototype.toString = function () {
 };
 
 /**
- * tequila
- * presentation-model
+ * lib/models/tgi-core-model-presentation.source.js
  */
 // Model Constructor
 var Presentation = function (args) {

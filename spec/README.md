@@ -1158,7 +1158,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Fri Feb 13 2015 17:24:44 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Sun Feb 15 2015 18:53:14 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1167,7 +1167,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Fri Feb 13 2015 17:24:44 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Sun Feb 15 2015 18:53:14 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2658,6 +2658,14 @@ return typeof REPLInterface.prototype.captureOutput;
 ```
 <blockquote>returns <strong>function</strong> as expected
 </blockquote>
+capturePrompt(callback)    
+
+&nbsp;<b><i>called when line of input available:</i></b>
+```javascript
+return typeof REPLInterface.prototype.capturePrompt;
+```
+<blockquote>returns <strong>function</strong> as expected
+</blockquote>
 #### INTEGRATION
 &nbsp;<b><i>user queries:</i></b>
 ```javascript
@@ -2730,7 +2738,7 @@ var choose1 = function () {
  */
 ok1();
 ```
-<blockquote><strong>log: </strong>out> input ignored: input ignored if no context for it<br><strong>log: </strong>out> This is a test.<br><strong>log: </strong>in> whatever<br><strong>log: </strong>out> Are we having fun?<br><strong>log: </strong>in> nope<br><strong>log: </strong>out> yes or no response required<br><strong>log: </strong>in> n<br><strong>log: </strong>out> Should I continue?<br><strong>log: </strong>in> yeppers<br><strong>log: </strong>out> yes or no response required<br><strong>log: </strong>in> y<br><strong>log: </strong>out> What is your name?<br><strong>log: </strong>in> Sean<br><strong>log: </strong>out> Nice to meet you Sean.<br><strong>log: </strong>out> Pick one...<br><strong>log: </strong>out>   Eenie<br><strong>log: </strong>out>   Meenie<br><strong>log: </strong>out>   Miney<br><strong>log: </strong>out>   Moe<br><strong>log: </strong>in> m<br>returns <strong>done</strong> as expected
+<blockquote><strong>log: </strong>out> input ignored: input ignored if no context for it<br><strong>log: </strong>out> This is a test.<br><strong>log: </strong>in> whatever<br><strong>log: </strong>in> nope<br><strong>log: </strong>out> yes or no response required<br><strong>log: </strong>in> n<br><strong>log: </strong>in> yeppers<br><strong>log: </strong>out> yes or no response required<br><strong>log: </strong>in> y<br><strong>log: </strong>in> Sean<br><strong>log: </strong>out> Nice to meet you Sean.<br><strong>log: </strong>out> Pick one...<br><strong>log: </strong>out>   Eenie<br><strong>log: </strong>out>   Meenie<br><strong>log: </strong>out>   Miney<br><strong>log: </strong>out>   Moe<br><strong>log: </strong>in> m<br>returns <strong>done</strong> as expected
 </blockquote>
 &nbsp;<b><i>app navigation:</i></b>
 ```javascript
@@ -2788,8 +2796,7 @@ input('p');
 input('s');
 input('se');
 ```
-<blockquote><strong>log: </strong>in> Rockaby<br><strong>log: </strong>out> unrecognized: Rockaby
-valid commands:  Rock Paper Scissors SeeYou<br><strong>log: </strong>in> r<br><strong>log: </strong>in> p<br><strong>log: </strong>in> s<br><strong>log: </strong>in> se<br>returns <strong>RockPaperScissors</strong> as expected
+<blockquote><strong>log: </strong>in> Rockaby<br><strong>log: </strong>out> "Rockaby" not valid<br><strong>log: </strong>in> r<br><strong>log: </strong>in> p<br><strong>log: </strong>in> s<br><strong>log: </strong>in> se<br><strong>log: </strong>out> Rock, Paper, Scissors, SeeYou<br><strong>log: </strong>out> Rock, Paper, Scissors, SeeYou<br><strong>log: </strong>out> Rock, Paper, Scissors, SeeYou<br><strong>log: </strong>out> Rock, Paper, Scissors, SeeYou<br><strong>log: </strong>out> Rock, Paper, Scissors, SeeYou<br><strong>log: </strong>out> Rock, Paper, Scissors, SeeYou<br>returns <strong>RockPaperScissors</strong> as expected
 </blockquote>
 
 ## [&#9664;](#-replinterface)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-log) &nbsp;Application
@@ -3098,7 +3105,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Fri Feb 13 2015 17:24:44 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Sun Feb 15 2015 18:53:14 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
