@@ -1456,6 +1456,7 @@ var REPLInterface = function (args) {
   this.stopcallback = null;
   this.mocks = [];
   this.mockPending = false;
+  this.navStack = [];
   // args ok, now copy to object
   for (i in args) this[i] = args[i];
 };
@@ -1470,7 +1471,7 @@ REPLInterface.prototype.canMock = function () {
   return true;
 };
 REPLInterface.prototype.doMock = function () {
-  var callback,result;
+  var callback, result;
   // If no more elements then we are done
   this.mockPending = false;
   if (this.mocks.length < 1)
@@ -1562,6 +1563,7 @@ REPLInterface.prototype.start = function (application, presentation, callback) {
   this.application = application;
   this.presentation = presentation;
   this.startcallback = callback;
+  this.evaluateInput(); // to trigger first prompt
 };
 REPLInterface.prototype.stop = function (callback) {
   if (typeof callback != 'function') throw new Error('callback required');
@@ -1577,9 +1579,7 @@ REPLInterface.prototype.dispatch = function (request, response) {
 };
 REPLInterface.prototype.notify = function (message) {
   if (false === (message instanceof Message)) throw new Error('Message required');
-  if (this.captureOutputcallback) {
-    this.captureOutputcallback(message);
-  }
+  this._Output(message);
 };
 REPLInterface.prototype.render = function (presentation, callback) {
   if (false === (presentation instanceof Presentation)) throw new Error('Presentation object required');
@@ -1587,16 +1587,12 @@ REPLInterface.prototype.render = function (presentation, callback) {
 };
 REPLInterface.prototype.info = function (text) {
   if (!text || typeof text !== 'string') throw new Error('text required');
-  if (this.captureOutputcallback) {
-    this.captureOutputcallback(text);
-  }
+  this._Output(text);
 };
 REPLInterface.prototype.ok = function (prompt, callback) {
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
   if (typeof callback != 'function') throw new Error('callback required');
-  if (this.captureOutputcallback) {
-    this.captureOutputcallback(prompt);
-  }
+  this._Output(prompt);
   if (this.okPending) {
     delete this.okPending;
     callback();
@@ -1607,9 +1603,8 @@ REPLInterface.prototype.ok = function (prompt, callback) {
 REPLInterface.prototype.yesno = function (prompt, callback) {
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
   if (typeof callback != 'function') throw new Error('callback required');
-  if (this.captureOutputcallback) {
-    this.captureOutputcallback(prompt);
-  }
+  this.yesnoPrompt = prompt;
+  this._setPrompt(this.yesnoPrompt);
   if (this.yesnoPending) {
     delete this.yesnoPending;
     callback(this.yesnoResponse);
@@ -1621,9 +1616,8 @@ REPLInterface.prototype.ask = function (prompt, attribute, callback) {
   if (!prompt || typeof prompt !== 'string') throw new Error('prompt required');
   if (false === (attribute instanceof Attribute)) throw new Error('attribute or callback expected');
   if (typeof callback != 'function') throw new Error('callback required');
-  if (this.captureOutputcallback) {
-    this.captureOutputcallback(prompt);
-  }
+  this.askPrompt = prompt;
+  this._setPrompt(prompt);
   if (this.askPending) {
     delete this.askPending;
     callback(this.askResponse);
@@ -1636,12 +1630,12 @@ REPLInterface.prototype.choose = function (prompt, choices, callback) {
   if (false === (choices instanceof Array)) throw new Error('choices array required');
   if (!choices.length) throw new Error('choices array empty');
   if (typeof callback != 'function') throw new Error('callback required');
-  if (this.captureOutputcallback) {
-    this.captureOutputcallback(prompt);
-    for (var i = 0; i < choices.length; i++) {
-      this.captureOutputcallback('  ' + choices[i]);
-    }
+  this.choosePrompt = prompt;
+  this._Output(prompt);
+  for (var i = 0; i < choices.length; i++) {
+    this._Output('  ' + choices[i]);
   }
+  this._setPrompt('Choice? ');
   if (this.choosePending) {
     delete this.choosePending;
     callback(Interface.firstMatch(this.chooseResponse, choices));
@@ -1654,8 +1648,26 @@ REPLInterface.prototype.choose = function (prompt, choices, callback) {
  * Additional Methods
  */
 REPLInterface.prototype.evaluateInput = function (line) {
+  var self = this;
+  if (undefined !== line)
+    this._evaluateInput(line);
+  setTimeout(function () {
+    var prompt = self.application ? self.application.get('brand') : '?';
+    if (!self.promptText && self.application && self.application.primaryInterface) {
+      self._ShowNav();
+    }
+    if (self.promptText) {
+      prompt = self.promptText;
+      delete self.promptText;
+    }
+    if (self.capturePromptcallback)
+      self.capturePromptcallback(prompt);
+  }, 10);
+};
+REPLInterface.prototype._evaluateInput = function (line) {
   var callback;
   var uLine = ('' + line).toUpperCase();
+  var i;
   /**
    * First priority for input capture - user queries
    */
@@ -1676,9 +1688,14 @@ REPLInterface.prototype.evaluateInput = function (line) {
       delete this.yesnocallback;
       callback(false);
       return;
+    //} else if (line.length > 0) { // todo fixshit
+    //  callback = this.yesnocallback;
+    //  delete this.yesnocallback;
+    //  callback();
+    //  return;
     }
-    if (this.captureOutputcallback)
-      this.captureOutputcallback('yes or no response required');
+    this._Output('yes or no response required');
+    this._setPrompt(this.yesnoPrompt);
     return;
   }
   if (this.askcallback) {
@@ -1689,39 +1706,104 @@ REPLInterface.prototype.evaluateInput = function (line) {
   }
   if (this.choosecallback) {
     callback = this.choosecallback;
-    delete this.choosecallback;
-    callback(Interface.firstMatch(line, this.chooseChoices));
+    var match = Interface.firstMatch(line, this.chooseChoices);
+    if (match) {
+      //match = this.chooseChoices[match]; // todo fixshit
+      delete this.choosecallback;
+      callback(match);
+    } else {
+      if (line.length > 0) {
+        this.application.info('"' + line + '" not valid');
+        this._Output(this.choosePrompt);
+        for (i = 0; i < this.chooseChoices.length; i++)
+          this._Output('  ' + this.chooseChoices[i]);
+        this._setPrompt('Choice? ');
+      } else {
+        delete this.choosecallback;
+        callback();
+      }
+    }
     return;
   }
   /**
    * Do we have a primary navigation?
    */
-  if (this.presentation && line.length) {
+  if (this.presentation) {
     var menu = this.presentation.get('contents');
-    var commands = '';
-    for (var i = 0; i < menu.length; i++) {
+    if (this.navStack.length > 0) {
+      var subMenu = this.navStack[this.navStack.length - 1];
+      menu = subMenu.contents;
+    }
+    for (i = 0; i < menu.length; i++) {
       var m = menu[i];
       if (m instanceof Command) {
         var name = m.name.toUpperCase();
-        if (left(name, uLine.length) == uLine) {
-          m.execute();
+        if (line.length && left(name, uLine.length) == uLine) {
+          switch (m.type) {
+            case 'Stub':
+              this.info(m.description + ' not available.');
+              break;
+            case 'Menu':
+              this.navStack.push(m);
+              break;
+            default:
+              m.execute();
+              break;
+          }
           return;
         }
-        commands += ( ' ' + m.name );
       }
     }
-    if (this.captureOutputcallback) {
-      this.captureOutputcallback('unrecognized: ' + line + '\nvalid commands: ' + commands);
+    if (line.length > 0) {
+      this.application.info('"' + line + '" not valid');
+    } else {
+      this.navStack.pop();
     }
     return;
   }
   /**
    * This should never get this far ...
    */
-  if (this.captureOutputcallback) this.captureOutputcallback('input ignored: ' + line);
+  this._Output('input ignored: ' + line);
+};
+REPLInterface.prototype._ShowNav = function () {
+  var brand = this.application ? this.application.get('brand') : '?';
+  var menu = this.presentation.get('contents');
+  var menuName = '';
+  var commands = '';
+  var prefix = '';
+  var i;
+
+  if (this.navStack.length > 0) {
+    var subMenu = this.navStack[this.navStack.length - 1];
+    menuName = subMenu.name.replace(/\s/g, '') + ': ';
+    menu = subMenu.contents;
+    for (i = 0; i < this.navStack.length; i++) {
+      brand += ' / ' + this.navStack[i].name.replace(/\s/g, '');
+    }
+  }
+  for (i = 0; i < menu.length; i++) {
+    var m = menu[i];
+    if (m instanceof Command) {
+      commands += ( prefix + m.name.replace(/\s/g, '') );
+      prefix = ', ';
+    }
+  }
+  this.application.info(menuName + commands);
+  this._setPrompt(brand + '>');
 };
 REPLInterface.prototype.captureOutput = function (callback) {
   this.captureOutputcallback = callback;
+};
+REPLInterface.prototype.capturePrompt = function (callback) {
+  this.capturePromptcallback = callback;
+};
+REPLInterface.prototype._setPrompt = function (text) {
+  this.promptText = text;
+};
+REPLInterface.prototype._Output = function (text) {
+  if (this.captureOutputcallback)
+    this.captureOutputcallback(text);
 };
 
 /**---------------------------------------------------------------------------------------------------------------------

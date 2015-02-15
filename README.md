@@ -8,9 +8,8 @@ Current
 -------
 - make Command.prototype.restart work to restart a command
 - command event for error needs to pass error along
-
+- REPLInterface - search for  // todo fixshit need to make yesno return undefined pass tests also choice return index or value ???
 - REPLInterface - handle presentation
-- REPLInterface needs to add capturePrompt along with captureOutput to signal when to prompt
 
 Later
 -----

@@ -2819,6 +2819,10 @@ spec.test('tgi-core/lib/interfaces/tgi-core-interfaces-repl.spec.js', 'REPLInter
       spec.example('called when line of input available', 'function', function () {
         return typeof REPLInterface.prototype.captureOutput;
       });
+      spec.paragraph('capturePrompt(callback)');
+      spec.example('called when line of input available', 'function', function () {
+        return typeof REPLInterface.prototype.capturePrompt;
+      });
     });
     spec.heading('INTEGRATION', function () {
       spec.example('user queries', spec.asyncResults('done'), function (callback) {
@@ -2950,7 +2954,11 @@ spec.test('tgi-core/lib/interfaces/tgi-core-interfaces-repl.spec.js', 'REPLInter
     });
   });
 });
-
+/*
+ - REPLInterface needs to add capturePrompt along with captureOutput to signal when to prompt
+ - REPLInterface - handle submenu
+ - REPLInterface - fix queries
+* */
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/models/tgi-core-model-application.test.js
  */
