@@ -727,7 +727,7 @@ function test6() {
 <blockquote>returns <strong>got milk</strong> as expected
 </blockquote>
 ## [&#9664;](#-attribute)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-delta) &nbsp;Command
-Command is an abstraction for command execution.  It provides for multi methods of task executionand control over invocation and state monitoring.  The primary use is to have a simple API method to respond to UI tasks.  It can be used for processing / validation / storage / reporting type of use cases since it handles the asynchronous nature of javascript and abstracts in a way to easily incorporate application logic.    
+Command is an abstraction for task execution.  It provides multiple methods of task execution and manages the overall state of both synchronous and asynchronous processes. The primary use is to have a simple API method to respond to UI tasks. It can be used for processing / validation / storage / reporting type of use cases since it handles the asynchronous nature of javascript and abstracts in a way to easily incorporate application logic.    
 
 #### CONSTRUCTOR
 &nbsp;<b><i>objects created should be an instance of Command:</i></b>
@@ -1158,7 +1158,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Tue Feb 17 2015 19:32:30 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Tue Feb 17 2015 19:51:02 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1167,7 +1167,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Tue Feb 17 2015 19:32:30 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Tue Feb 17 2015 19:51:02 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -3105,7 +3105,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Tue Feb 17 2015 19:32:30 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Tue Feb 17 2015 19:51:02 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
