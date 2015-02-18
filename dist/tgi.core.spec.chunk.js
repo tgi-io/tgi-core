@@ -1916,7 +1916,7 @@ spec.testModel = function (SurrogateModel) {
  */
 spec.test('tgi-core/lib/tgi-core-procedure.spec.js', 'Procedure', 'manages set of Commands synchronous or asynchronous', function (callback) {
   spec.heading('Procedure Class', function () {
-    spec.paragraph('The _Procedure_ class manages a set of _Command_ objects.  It provides a pattern for handling ' +
+    spec.paragraph('`Procedure` manages a set of `Command`s.  It provides a pattern for handling ' +
     'asynchronous and synchronous command execution.');
     spec.paragraph('_Command_ objects create and manage the _Procedure_ object.');
     spec.heading('CONSTRUCTOR', function () {

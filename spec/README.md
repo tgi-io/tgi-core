@@ -1158,7 +1158,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Tue Feb 17 2015 19:18:25 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Tue Feb 17 2015 19:19:01 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1167,7 +1167,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Tue Feb 17 2015 19:18:25 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Tue Feb 17 2015 19:19:01 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -1957,7 +1957,7 @@ return wasMuted > 0;
 </blockquote>
 ## [&#9664;](#-model)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-request) &nbsp;Procedure
 #### Procedure Class
-`Procedure` manages a set of _Command_ objects.  It provides a pattern for handling asynchronous and synchronous command execution.    
+`Procedure` manages a set of `Command`s.  It provides a pattern for handling asynchronous and synchronous command execution.    
 
 _Command_ objects create and manage the _Procedure_ object.    
 
@@ -3105,7 +3105,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Tue Feb 17 2015 19:18:25 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Tue Feb 17 2015 19:19:02 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
