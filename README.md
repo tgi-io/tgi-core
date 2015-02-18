@@ -6,7 +6,6 @@ Core Objects [read the spec](spec/README.md).
 
 Current
 -------
-- wtf fix infterface / app's primary presentaion to primary commands sans presentation pardign ....... design [sic]
 - make Command.prototype.restart work to restart a command
 - REPLInterface - search for  // todo fixshit need to make yesno return undefined pass tests also choice return index or value ???
 - REPLInterface - handle presentation
@@ -33,5 +32,5 @@ Standard Commands
 
 Presentation
 -------
+- add type property: List, View, Edit
 - use model property & modelConstructor method or get rid of
-- add type property: Nav, List, View, Edit
