@@ -582,7 +582,7 @@ spec.test('tgi-core/lib/tgi-core-command.spec.js', 'Command', 'encapsulates task
     spec.example('should make sure argument properties are valid', Error('error creating Command: invalid property: sex'), function () {
       new Command({name: 'name', sex: 'female'});
     });
-    spec.example('defaults name to (unnamed)', '(unnamed)', function () {
+    spec.example('defaults name to a command', 'a command', function () {
       return new Command().name;
     });
     spec.example('defaults type to Stub', 'Stub', function () {
@@ -2201,7 +2201,7 @@ spec.test('tgi-core/lib/tgi-core-request.spec.js', 'Request', 'from Interface - 
     spec.example('Command type requests expect contents to contain a command object', Error('command object required'), function () {
       return new Request({type: 'Command'});
     });
-    spec.example('correct version', 'Command Request: Stub Command: (unnamed)', function () {
+    spec.example('correct version', 'Command Request: Stub Command: a command', function () {
       return new Request({type: 'Command', command: new Command()});
     });
   });

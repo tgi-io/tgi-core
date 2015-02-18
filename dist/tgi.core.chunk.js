@@ -388,7 +388,7 @@ function Command(args) {
   if (errorList.length > 1) throw new Error('error creating Command: multiple errors');
   if (errorList.length) throw new Error('error creating Command: ' + errorList[0]);
   for (i in args) this[i] = args[i];
-  this.name = this.name || "(unnamed)"; // name is optional
+  this.name = this.name || "a command"; // name is optional
   if ('string' != typeof this.name) throw new Error('name must be string');
   if ('undefined' == typeof this.description) this.description = this.name + ' Command';
   if ('undefined' == typeof this.type) this.type = 'Stub';

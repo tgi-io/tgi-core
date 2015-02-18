@@ -748,11 +748,11 @@ new Command({name: 'name', sex: 'female'});
 ```
 <blockquote><strong>Error: error creating Command: invalid property: sex</strong> thrown as expected
 </blockquote>
-&nbsp;<b><i>defaults name to (unnamed):</i></b>
+&nbsp;<b><i>defaults name to a command:</i></b>
 ```javascript
 return new Command().name;
 ```
-<blockquote>returns <strong>(unnamed)</strong> as expected
+<blockquote>returns <strong>a command</strong> as expected
 </blockquote>
 &nbsp;<b><i>defaults type to Stub:</i></b>
 ```javascript
@@ -1158,7 +1158,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Tue Feb 17 2015 19:51:02 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Tue Feb 17 2015 19:55:00 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1167,7 +1167,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Tue Feb 17 2015 19:51:02 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Tue Feb 17 2015 19:55:00 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2282,7 +2282,7 @@ return new Request({type: 'Command'});
 ```javascript
 return new Request({type: 'Command', command: new Command()});
 ```
-<blockquote>returns <strong>Command Request: Stub Command: (unnamed)</strong> as expected
+<blockquote>returns <strong>Command Request: Stub Command: a command</strong> as expected
 </blockquote>
 #### METHODS
 #### toString()
@@ -3105,7 +3105,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Tue Feb 17 2015 19:51:02 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Tue Feb 17 2015 19:55:00 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
