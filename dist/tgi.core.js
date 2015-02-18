@@ -398,18 +398,9 @@ function Command(args) {
   if ('string' != typeof this.name) throw new Error('name must be string');
   if ('undefined' == typeof this.description) this.description = this.name + ' Command';
   if ('undefined' == typeof this.type) this.type = 'Stub';
-  if (!contains(['Stub', 'Menu', 'Presentation', 'Function', 'Procedure'], this.type)) throw new Error('Invalid command type: ' + this.type);
+  if (!contains(['Stub', 'Presentation', 'Function', 'Procedure'], this.type)) throw new Error('Invalid command type: ' + this.type);
   switch (this.type) {
     case 'Stub':
-      break;
-    case 'Menu':
-      if (!(this.contents instanceof Array)) throw new Error('contents must be array of menu items');
-      if (!this.contents.length) throw new Error('contents must be array of menu items');
-      for (i in this.contents) {
-        if (this.contents.hasOwnProperty(i))
-          if (typeof this.contents[i] != 'string' && !(this.contents[i] instanceof Command))
-            throw new Error('contents must be array of menu items');
-      }
       break;
     case 'Presentation':
       if (!(this.contents instanceof Presentation)) throw new Error('contents must be a Presentation');
@@ -520,12 +511,11 @@ Command.prototype.execute = function () {
       self.contents.apply(self, args); // give function this context to command object (self)
     } catch (e) {
       self.error = e;
-      self._emitEvent('Error',e);
+      self._emitEvent('Error', e);
       self._emitEvent('Completed');
       self.status = -1;
     }
   }
-
   function procedureExecuteInit() {
     self.status = 0;
     var tasks = self.contents.tasks || [];
@@ -545,7 +535,6 @@ Command.prototype.execute = function () {
     }
     procedureExecute();
   }
-
   function procedureExecute() {
     var tasks = self.contents.tasks || [];
     for (var t = 0; t < tasks.length; t++) {
@@ -582,13 +571,12 @@ Command.prototype.execute = function () {
       }
     }
   }
-
-  function ProcedureEvents(event,obj) {
+  function ProcedureEvents(event, obj) {
     var tasks = self.contents.tasks;
     var allTasksDone = true; // until proved wrong ...
     switch (event) {
       case 'Error':
-        self._emitEvent('Error',obj);
+        self._emitEvent('Error', obj);
         break;
       case 'Completed':
         for (var t in tasks) {
@@ -615,10 +603,11 @@ Command.prototype.complete = function () {
   this.status = 1;
   this._emitEvent('Completed');
 };
-//Command.prototype.restart = function () {
-//  this.status = undefined;
-//  this._emitEvent('Completed');
-//};
+Command.prototype.restart = function () {
+  this.status = undefined;
+  this._emitEvent('Restarted');
+  this.execute();
+};
 /**
  * Simple functions
  */

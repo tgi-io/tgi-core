@@ -6,7 +6,6 @@ Core Objects [read the spec](spec/README.md).
 
 Current
 -------
-- make Command.prototype.restart work to restart a command
 - REPLInterface - search for  // todo fixshit need to make yesno return undefined pass tests also choice return index or value ???
 - REPLInterface - handle presentation
 
