@@ -1126,8 +1126,25 @@ this.log(cmd);
 cmd.execute();
 ```
 <blockquote><strong>log: </strong>Procedure Command: procedureCommand<br></blockquote>
-(Better example under `Procedure`)    
+(Better example under `Procedure` Constructer)    
 
+More stuff    
+
+&nbsp;<b><i>Error event passes error object:</i></b>
+```javascript
+var cmd = new Command({
+  type: 'Function',
+  contents: function () {
+    throw new Error('boom');
+  }
+});
+cmd.onEvent(['Error'], function (event, err) {
+  callback(err);
+});
+cmd.execute();
+```
+<blockquote>returns <strong>Error: boom</strong> as expected
+</blockquote>
 ## [&#9664;](#-command)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-interface) &nbsp;Delta
 Deltas represent changes to models.  They can be applied to a store then update the model.  They can be stored in logs as a change audit for the model.    
 
@@ -1158,7 +1175,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Tue Feb 17 2015 19:55:00 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Tue Feb 17 2015 21:00:22 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1167,7 +1184,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Tue Feb 17 2015 19:55:00 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Tue Feb 17 2015 21:00:22 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -3105,7 +3122,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Tue Feb 17 2015 19:55:00 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Tue Feb 17 2015 21:00:22 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript

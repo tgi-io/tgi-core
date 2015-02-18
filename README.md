@@ -6,9 +6,10 @@ Core Objects [read the spec](spec/README.md).
 
 Current
 -------
+- command event for error needs to pass error along
+
 - wtf fix infterface / app's primary presentaion to primary commands sans presentation pardign ....... design [sic]
 - make Command.prototype.restart work to restart a command
-- command event for error needs to pass error along
 - REPLInterface - search for  // todo fixshit need to make yesno return undefined pass tests also choice return index or value ???
 - REPLInterface - handle presentation
 
