@@ -961,7 +961,21 @@ spec.test('tgi-core/lib/tgi-core-command.spec.js', 'Command', 'encapsulates task
       this.log(cmd);
       cmd.execute();
     });
-    spec.paragraph('(Better example under `Procedure`)');
+    spec.paragraph('(Better example under `Procedure` Constructer)');
+    spec.paragraph('More stuff');
+    spec.example('Error event passes error object', spec.asyncResults('Error: boom'), function (callback) {
+      var cmd = new Command({
+        type: 'Function',
+        contents: function () {
+          throw new Error('boom');
+        }
+      });
+      cmd.onEvent(['Error'], function (event, err) {
+        callback(err);
+      });
+      cmd.execute();
+    });
+
   });
 });
 

@@ -466,13 +466,13 @@ Command.prototype.onEvent = function (events, callback) {
   // All good add to chain
   this._eventListeners.push({events: events, callback: callback});
 };
-Command.prototype._emitEvent = function (event) {
+Command.prototype._emitEvent = function (event, obj) {
   var i;
   for (i in this._eventListeners) {
     if (this._eventListeners.hasOwnProperty(i)) {
       var subscriber = this._eventListeners[i];
       if ((subscriber.events.length && subscriber.events[0] === '*') || contains(subscriber.events, event)) {
-        subscriber.callback.call(this, event);
+        subscriber.callback.call(this, event, obj);
       }
     }
   }
@@ -509,7 +509,7 @@ Command.prototype.execute = function () {
     }
   } catch (e) {
     this.error = e;
-    this._emitEvent('Error');
+    this._emitEvent('Error', e);
     this._emitEvent('Completed');
     this.status = -1;
   }
@@ -520,11 +520,12 @@ Command.prototype.execute = function () {
       self.contents.apply(self, args); // give function this context to command object (self)
     } catch (e) {
       self.error = e;
-      self._emitEvent('Error');
+      self._emitEvent('Error',e);
       self._emitEvent('Completed');
       self.status = -1;
     }
   }
+
   function procedureExecuteInit() {
     self.status = 0;
     var tasks = self.contents.tasks || [];
@@ -544,6 +545,7 @@ Command.prototype.execute = function () {
     }
     procedureExecute();
   }
+
   function procedureExecute() {
     var tasks = self.contents.tasks || [];
     for (var t = 0; t < tasks.length; t++) {
@@ -581,12 +583,12 @@ Command.prototype.execute = function () {
     }
   }
 
-  function ProcedureEvents(event) {
+  function ProcedureEvents(event,obj) {
     var tasks = self.contents.tasks;
     var allTasksDone = true; // until proved wrong ...
     switch (event) {
       case 'Error':
-        self._emitEvent('Error');
+        self._emitEvent('Error',obj);
         break;
       case 'Completed':
         for (var t in tasks) {
