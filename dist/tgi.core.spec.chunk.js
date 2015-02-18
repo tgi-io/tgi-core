@@ -567,9 +567,10 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
  * tgi-core/lib/tgi-core-command.spec.js
  */
 spec.test('tgi-core/lib/tgi-core-command.spec.js', 'Command', 'encapsulates task execution', function (callback) {
-  spec.paragraph('Command is an abstraction for command execution.  It provides for multi methods of task execution' +
-  'and control over invocation and state monitoring.  The primary use is to have a simple API method to respond to ' +
-  'UI tasks.  It can be used for processing / validation / storage / reporting type of use cases since ' +
+  spec.paragraph('Command is an abstraction for task execution.  It provides multiple methods of task execution ' +
+  'and manages the overall state of both synchronous and asynchronous processes. ' +
+  'The primary use is to have a simple API method to respond to UI tasks. ' +
+  'It can be used for processing / validation / storage / reporting type of use cases since ' +
   'it handles the asynchronous nature of javascript and abstracts in a way to easily incorporate application logic.');
   spec.heading('CONSTRUCTOR', function () {
     spec.example('objects created should be an instance of Command', true, function () {
