@@ -6,11 +6,12 @@ Core Objects [read the spec](spec/README.md).
 
 Current
 -------
-- REPLInterface - search for  // todo fixshit need to make yesno return undefined pass tests also choice return index or value ???
+- Presentation add type property: List, View, Edit
 - REPLInterface - handle presentation
 
 Later
 -----
+- Presentation use model property & modelConstructor method or get rid of
 - Review models for completeness esp. Workspace and Session
 - Interface.notify needs review
 - Misc: improve coverage
@@ -28,8 +29,3 @@ Standard Commands
 - HistoryCommand ... logged activity
 - WorkspaceCommand ... active models
 - AlertsCommand ... shit you need to deal with
-
-Presentation
--------
-- add type property: List, View, Edit
-- use model property & modelConstructor method or get rid of

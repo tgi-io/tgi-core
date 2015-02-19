@@ -864,6 +864,31 @@ return 'bucket of ' + new Command({bucket: 'KFC'}).bucket;
 <blockquote>returns <strong>bucket of KFC</strong> as expected
 </blockquote>
 #### TYPES
+#### menu
+The menu command is passed to _Interface_ for use for in user navigation.  They are embedded in the _Application_ as the primary navigate but can be instantiated and given to _Interface_ in any context.    
+
+The _Command_ contents property is an array _Command_ objects.    
+
+&nbsp;<b><i>constructor validates the contents:</i></b>
+```javascript
+this.shouldThrowError(Error('contents must be array of menu items'), function () {
+  new Command({name: 'options', type: 'Menu'});
+});
+this.shouldThrowError(Error('contents must be array of menu items'), function () {
+  new Command({name: 'options', type: 'Menu', contents: []});
+});
+this.shouldThrowError(Error('contents must be array of menu items'), function () {
+  new Command({name: 'options', type: 'Menu', contents: [42]});
+});
+// This is a working example:
+new Command({
+  name: 'options', type: 'Menu', contents: [
+    'Stooges',                      // strings act as menu titles or non selectable choices
+    '-',                            // dash is menu separator
+    new Command({name: 'Tequila'})  // use commands for actual menu items
+  ]
+});
+```
 #### Presentation
 &nbsp;<b><i>for Presentation type contents is a Presentation object:</i></b>
 ```javascript
@@ -999,6 +1024,19 @@ this.log(cmd);
 cmd.execute();
 ```
 <blockquote><strong>log: </strong>Stub Command: stubCommand<br><strong>Error: command type Stub not implemented</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>Menu:</i></b>
+```javascript
+var cmd = new Command({
+  name: 'menuCommand',
+  description: 'menu command test',
+  type: 'Menu',
+  contents: ['Hello World']
+});
+this.log(cmd);
+cmd.execute();
+```
+<blockquote><strong>log: </strong>Menu Command: menuCommand<br><strong>Error: command type Menu not implemented</strong> thrown as expected
 </blockquote>
 &nbsp;<b><i>Presentation:</i></b>
 ```javascript
@@ -1146,7 +1184,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Wed Feb 18 2015 18:17:13 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Wed Feb 18 2015 19:08:53 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1155,7 +1193,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Wed Feb 18 2015 18:17:13 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Wed Feb 18 2015 19:08:53 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -3093,7 +3131,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Wed Feb 18 2015 18:17:13 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Wed Feb 18 2015 19:08:53 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript

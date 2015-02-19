@@ -688,6 +688,31 @@ spec.test('tgi-core/lib/tgi-core-command.spec.js', 'Command', 'encapsulates task
     });
   });
   spec.heading('TYPES', function () {
+    spec.heading('menu', function () {
+      spec.paragraph('The menu command is passed to _Interface_ for use for in user navigation.  ' +
+      'They are embedded in the _Application_ as the primary navigate but can be instantiated and given to ' +
+      '_Interface_ in any context.');
+      spec.paragraph('The _Command_ contents property is an array _Command_ objects.');
+      spec.example('constructor validates the contents', undefined, function () {
+        this.shouldThrowError(Error('contents must be array of menu items'), function () {
+          new Command({name: 'options', type: 'Menu'});
+        });
+        this.shouldThrowError(Error('contents must be array of menu items'), function () {
+          new Command({name: 'options', type: 'Menu', contents: []});
+        });
+        this.shouldThrowError(Error('contents must be array of menu items'), function () {
+          new Command({name: 'options', type: 'Menu', contents: [42]});
+        });
+        // This is a working example:
+        new Command({
+          name: 'options', type: 'Menu', contents: [
+            'Stooges',                      // strings act as menu titles or non selectable choices
+            '-',                            // dash is menu separator
+            new Command({name: 'Tequila'})  // use commands for actual menu items
+          ]
+        });
+      });
+    });
     spec.heading('Presentation', function () {
       spec.example('for Presentation type contents is a Presentation object', undefined, function () {
         this.shouldThrowError(Error('contents must be a Presentation'), function () {
@@ -790,6 +815,18 @@ spec.test('tgi-core/lib/tgi-core-command.spec.js', 'Command', 'encapsulates task
         name: 'stubCommand',
         description: 'stub command test',
         type: 'Stub'
+      });
+      this.log(cmd);
+      cmd.execute();
+    });
+
+    // Menu todo - placeholder or not needed?
+    spec.example('Menu', Error('command type Menu not implemented'), function () {
+      var cmd = new Command({
+        name: 'menuCommand',
+        description: 'menu command test',
+        type: 'Menu',
+        contents: ['Hello World']
       });
       this.log(cmd);
       cmd.execute();

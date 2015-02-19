@@ -392,9 +392,18 @@ function Command(args) {
   if ('string' != typeof this.name) throw new Error('name must be string');
   if ('undefined' == typeof this.description) this.description = this.name + ' Command';
   if ('undefined' == typeof this.type) this.type = 'Stub';
-  if (!contains(['Stub', 'Presentation', 'Function', 'Procedure'], this.type)) throw new Error('Invalid command type: ' + this.type);
+  if (!contains(['Stub', 'Menu', 'Presentation', 'Function', 'Procedure'], this.type)) throw new Error('Invalid command type: ' + this.type);
   switch (this.type) {
     case 'Stub':
+      break;
+    case 'Menu':
+      if (!(this.contents instanceof Array)) throw new Error('contents must be array of menu items');
+      if (!this.contents.length) throw new Error('contents must be array of menu items');
+      for (i in this.contents) {
+        if (this.contents.hasOwnProperty(i))
+          if (typeof this.contents[i] != 'string' && !(this.contents[i] instanceof Command))
+            throw new Error('contents must be array of menu items');
+      }
       break;
     case 'Presentation':
       if (!(this.contents instanceof Presentation)) throw new Error('contents must be a Presentation');
@@ -1673,11 +1682,11 @@ REPLInterface.prototype._evaluateInput = function (line) {
       delete this.yesnocallback;
       callback(false);
       return;
-    //} else if (line.length > 0) { // todo fixshit
-    //  callback = this.yesnocallback;
-    //  delete this.yesnocallback;
-    //  callback();
-    //  return;
+    } else if (line.length === 0) {
+      callback = this.yesnocallback;
+      delete this.yesnocallback;
+      callback();
+      return;
     }
     this._Output('yes or no response required');
     this._setPrompt(this.yesnoPrompt);
@@ -1693,7 +1702,6 @@ REPLInterface.prototype._evaluateInput = function (line) {
     callback = this.choosecallback;
     var match = Interface.firstMatch(line, this.chooseChoices);
     if (match) {
-      //match = this.chooseChoices[match]; // todo fixshit
       delete this.choosecallback;
       callback(match);
     } else {
