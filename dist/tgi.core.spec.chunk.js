@@ -679,7 +679,15 @@ spec.test('tgi-core/lib/tgi-core-command.spec.js', 'Command', 'encapsulates task
         });
       });
     });
-
+    spec.heading('presentationMode', function () {
+      spec.paragraph('this property is used for presentation commands to specify the mode of presentation');
+      spec.example('default is View', 'View', function () {
+        return new Command({type: 'Presentation', contents: new Presentation()}).presentationMode;
+      });
+      spec.example('can supply in constructor', 'Edit', function () {
+        return new Command({type: 'Presentation', contents: new Presentation(), presentationMode: 'Edit'}).presentationMode;
+      });
+    });
     spec.heading('bucket', function () {
       spec.example('valid property is for app use', 'bucket of KFC', function () {
         // no real test but library will never use this word in general (TODO expand somehow ... ?).
