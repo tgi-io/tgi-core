@@ -382,7 +382,7 @@ function Command(args) {
   args = args || {};
   var i;
   var unusedProperties = getInvalidProperties(args,
-    ['name', 'description', 'type', 'contents', 'scope', 'timeout', 'theme', 'icon', 'bucket']);
+    ['name', 'description', 'type', 'contents', 'scope', 'timeout', 'theme', 'icon', 'bucket', 'presentationMode']);
   var errorList = [];
   for (i = 0; i < unusedProperties.length; i++) errorList.push('invalid property: ' + unusedProperties[i]);
   if (errorList.length > 1) throw new Error('error creating Command: multiple errors');
@@ -407,6 +407,7 @@ function Command(args) {
       break;
     case 'Presentation':
       if (!(this.contents instanceof Presentation)) throw new Error('contents must be a Presentation');
+      this.presentationMode = this.presentationMode || 'View';
       break;
     case 'Function':
       if (typeof this.contents != 'function') throw new Error('contents must be a Function');
