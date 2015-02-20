@@ -398,7 +398,7 @@ function Command(args) {
   if ('string' != typeof this.name) throw new Error('name must be string');
   if ('undefined' == typeof this.description) this.description = this.name + ' Command';
   if ('undefined' == typeof this.type) this.type = 'Stub';
-  if (!contains(['Stub', 'Menu', 'Presentation', 'Function', 'Procedure'], this.type)) throw new Error('Invalid command type: ' + this.type);
+  if (!contains(Command.getTypes(), this.type)) throw new Error('Invalid command type: ' + this.type);
   switch (this.type) {
     case 'Stub':
       break;
@@ -621,7 +621,7 @@ Command.prototype.restart = function () {
  * Simple functions
  */
 Command.getTypes = function () {
-  return ['ID', 'String', 'Date', 'Boolean', 'Number', 'Model', 'Group', 'Table', 'Object'].slice(0); // copy array
+  return ['Stub', 'Menu', 'Presentation', 'Function', 'Procedure'].slice(0); // copy array
 };
 Command.getEvents = function () {
   return ['BeforeExecute', 'AfterExecute', 'Error', 'Aborted', 'Completed'].slice(0); // copy array
