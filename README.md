@@ -6,7 +6,6 @@ Core Objects [read the spec](spec/README.md).
 
 Current
 -------
-- Presentation add type property: List, View, Edit
 - REPLInterface - handle presentation
 
 Later

@@ -725,8 +725,17 @@ spec.test('tgi-core/lib/tgi-core-command.spec.js', 'Command', 'encapsulates task
         return new Command({type: 'Presentation', contents: new Presentation()}).presentationMode;
       });
       spec.example('can supply in constructor', 'Edit', function () {
-        return new Command({type: 'Presentation', contents: new Presentation(), presentationMode: 'Edit'}).presentationMode;
+        return new Command({
+          type: 'Presentation',
+          contents: new Presentation(),
+          presentationMode: 'Edit'
+        }).presentationMode;
       });
+      spec.example('must be valid mode', Error('Invalid presentationMode: Projector'), function () {
+        this.log(Command.getPresentationModes());
+        new Command({type: 'Presentation', contents: new Presentation(), presentationMode: 'Projector'});
+      });
+
     });
     spec.heading('bucket', function () {
       spec.example('valid property is for app use', 'bucket of KFC', function () {

@@ -408,6 +408,8 @@ function Command(args) {
     case 'Presentation':
       if (!(this.contents instanceof Presentation)) throw new Error('contents must be a Presentation');
       this.presentationMode = this.presentationMode || 'View';
+      if (!contains(Command.getPresentationModes(), this.presentationMode)) throw new Error('Invalid presentationMode: ' + this.presentationMode);
+      //['View', 'Edit', 'List']
       break;
     case 'Function':
       if (typeof this.contents != 'function') throw new Error('contents must be a Function');
@@ -520,6 +522,7 @@ Command.prototype.execute = function () {
       self.status = -1;
     }
   }
+
   function procedureExecuteInit() {
     self.status = 0;
     var tasks = self.contents.tasks || [];
@@ -539,6 +542,7 @@ Command.prototype.execute = function () {
     }
     procedureExecute();
   }
+
   function procedureExecute() {
     var tasks = self.contents.tasks || [];
     for (var t = 0; t < tasks.length; t++) {
@@ -575,6 +579,7 @@ Command.prototype.execute = function () {
       }
     }
   }
+
   function ProcedureEvents(event, obj) {
     var tasks = self.contents.tasks;
     var allTasksDone = true; // until proved wrong ...
@@ -620,6 +625,9 @@ Command.getTypes = function () {
 };
 Command.getEvents = function () {
   return ['BeforeExecute', 'AfterExecute', 'Error', 'Aborted', 'Completed'].slice(0); // copy array
+};
+Command.getPresentationModes = function () {
+  return ['View', 'Edit', 'List'].slice(0); // copy array
 };
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-delta.source.js
