@@ -5,7 +5,7 @@ Core constructors, models, stores and interfaces.  The constructor functions def
 ```javascript
 this.log(TGI.CORE().version);
 ```
-<blockquote><strong>log: </strong>0.2.1<br></blockquote>
+<blockquote><strong>log: </strong>0.3.0<br></blockquote>
 ####Constructors
 
 - [Attribute](#-attribute) defines data types - needed by Model
@@ -971,11 +971,17 @@ return cmd.status;
 #### execute
 executes task    
 
-&nbsp;<b><i>see integration tests:</i></b>
+&nbsp;<b><i>see integration tests for usage:</i></b>
 ```javascript
 new Command().execute();
 ```
 <blockquote><strong>Error: command type Stub not implemented</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>presentation commands require interface param:</i></b>
+```javascript
+new Command({type: 'Presentation',contents:new Presentation()}).execute();
+```
+<blockquote><strong>Error: interface param required</strong> thrown as expected
 </blockquote>
 #### restart
 restarts task    
@@ -1210,7 +1216,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Thu Feb 19 2015 20:55:22 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Sat Feb 28 2015 20:32:40 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1219,7 +1225,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Thu Feb 19 2015 20:55:22 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Sat Feb 28 2015 20:32:40 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -1345,9 +1351,21 @@ new SurrogateInterface().render();
 ```
 <blockquote><strong>Error: Presentation object required</strong> thrown as expected
 </blockquote>
+&nbsp;<b><i>second argument must be a valid presentationMode:</i></b>
+```javascript
+new SurrogateInterface().render(new Presentation());
+```
+<blockquote><strong>Error: presentationMode required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>presentationMode must be valid:</i></b>
+```javascript
+new SurrogateInterface().render(new Presentation(), 'Taco');
+```
+<blockquote><strong>Error: Invalid presentationMode: Taco</strong> thrown as expected
+</blockquote>
 &nbsp;<b><i>optional callback must be function:</i></b>
 ```javascript
-new SurrogateInterface().render(new Presentation(), true);
+new SurrogateInterface().render(new Presentation(), 'View', true);
 ```
 <blockquote><strong>Error: optional second argument must a commandRequest callback function</strong> thrown as expected
 </blockquote>
@@ -2685,7 +2703,7 @@ see `Interface` for documentation
 this.log('Tests Muted: ' + wasMuted);
 return wasMuted > 0;
 ```
-<blockquote><strong>log: </strong>Tests Muted: 35<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Tests Muted: 37<br>returns <strong>true</strong> as expected
 </blockquote>
 #### METHODS
 The REPLInterface defines adds the following methods.    
@@ -3157,7 +3175,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Thu Feb 19 2015 20:55:22 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Sat Feb 28 2015 20:32:40 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -3181,7 +3199,7 @@ return new Log({logType: 'Delta', contents: delta}).toString();
 </blockquote>
 ## [&#9664;](#-log)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-session) &nbsp;Presentation
 #### Presentation Model
-The Presentation Model represents the way in which a model is to be presented to the user.  The presentation is meant to be a "hint" to a Interface object.  The specific Interface object will represent the model data according to the Presentation object.    
+The Presentation Model represents the way in which a model is to be presented to the user.  The specific Interface object will represent the model data according to the Presentation object.    
 
 #### CONSTRUCTOR
 &nbsp;<b><i>objects created should be an instance of Presentation:</i></b>
@@ -3264,9 +3282,7 @@ return pres.getObjectStateErrors();
 ```javascript
 var attribute = new Attribute({name: 'test'});
 var presentation = new Presentation(); // default attributes and values
-presentation.set('contents', [
-  attribute
-]);
+presentation.set('contents', [attribute]);
 attribute.setError('test', 'test error');
 presentation.validate(function () {
   callback(presentation.validationMessage);
@@ -3274,6 +3290,60 @@ presentation.validate(function () {
 ```
 <blockquote>returns <strong>contents has validation errors</strong> as expected
 </blockquote>
+&nbsp;<b><i>view mode:</i></b>
+```javascript
+var repl = new REPLInterface();
+var ex = this;
+repl.captureOutput(function (text) {
+  ex.log('out> ' + text);
+  console.log('out> ' + text);
+});
+//repl.capturePrompt(function (text) {
+//  ex.log('prompt> ' + text);
+//  console.log('prompt> ' + text);
+//});
+var input = function (text) {
+  ex.log('in> ' + text);
+  console.log('in> ' + text);
+  repl.evaluateInput(text);
+};
+/**
+ * Here is the presentation
+ */
+var firstName = new Attribute({name: 'firstName'});
+var lastName = new Attribute({name: 'lastName'});
+var presentation = new Presentation();
+presentation.set('contents', [
+  '##TITLE',
+  'Here is **text**.  _Note it uses markdown_.  Eventually this will be **stripped** out!',
+  'Here are some attributes:',
+  firstName,
+  lastName
+]);
+firstName.value = 'Elmer';
+lastName.value = 'Fud';
+/**
+ * Create a command to view it (default mode)
+ */
+var presentationCommand = new Command({name: 'Presentation', type: 'Presentation', contents: presentation});
+presentationCommand.onEvent('*', function (event,err) {
+  console.log(event  + (err || ' ok'));
+});
+presentationCommand.execute(repl);
+/**
+ * Now edit it
+ */
+presentationCommand.presentationMode = 'Edit';
+presentationCommand.execute(repl);
+input('John');
+input('Doe');
+/**
+ * View again
+ */
+presentationCommand.presentationMode = 'View';
+presentationCommand.execute(repl);
+```
+<blockquote><strong>log: </strong>out> ##TITLE<br><strong>log: </strong>out> Here is **text**.  _Note it uses markdown_.  Eventually this will be **stripped** out!<br><strong>log: </strong>out> Here are some attributes:<br><strong>log: </strong>out> FirstName: Elmer<br><strong>log: </strong>out>  LastName: Fud<br><strong>log: </strong>out> ##TITLE<br><strong>log: </strong>out> Here is **text**.  _Note it uses markdown_.  Eventually this will be **stripped** out!<br><strong>log: </strong>out> Here are some attributes:<br><strong>log: </strong>out> FirstName: <br><strong>log: </strong>in> John<br><strong>log: </strong>out> LastName: <br><strong>log: </strong>in> Doe<br><strong>log: </strong>out> ##TITLE<br><strong>log: </strong>out> Here is **text**.  _Note it uses markdown_.  Eventually this will be **stripped** out!<br><strong>log: </strong>out> Here are some attributes:<br><strong>log: </strong>out> FirstName: John<br><strong>log: </strong>out>  LastName: Doe<br></blockquote>
 ## [&#9664;](#-presentation)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-user) &nbsp;Session
 #### Session Model
 The Session Model represents the Session logged into the system. The library uses this for system access, logging and other functions.    

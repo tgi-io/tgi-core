@@ -4,7 +4,7 @@
 var TGI = {
   CORE: function () {
     return {
-      version: '0.2.1',
+      version: '0.3.0',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -476,7 +476,7 @@ Command.prototype._emitEvent = function (event, obj) {
   //if (event == 'Completed') // if command complete release listeners
   //  this._eventListeners = [];
 };
-Command.prototype.execute = function () {
+Command.prototype.execute = function (context) {
   if (!this.type) throw new Error('command not implemented');
   if (!contains(['Function', 'Procedure', 'Presentation'], this.type)) throw new Error('command type ' + this.type + ' not implemented');
   var errors;
@@ -490,6 +490,7 @@ Command.prototype.execute = function () {
         else
           throw new Error('error executing Presentation: ' + errors[0]);
       }
+      if (!(context instanceof Interface)) throw new Error('interface param required');
       break;
   }
   var self = this;
@@ -502,6 +503,9 @@ Command.prototype.execute = function () {
         break;
       case 'Procedure':
         setTimeout(procedureExecuteInit, 0);
+        break;
+      case 'Presentation':
+        context.render(this.contents, this.presentationMode);
         break;
     }
   } catch (e) {
@@ -788,8 +792,10 @@ Interface.prototype.dispatch = function (request, response) {
 Interface.prototype.notify = function (message) {
   if (false === (message instanceof Message)) throw new Error('Message required');
 };
-Interface.prototype.render = function (presentation, callback) {
+Interface.prototype.render = function (presentation, presentationMode, callback) {
   if (false === (presentation instanceof Presentation)) throw new Error('Presentation object required');
+  if (typeof presentationMode !== 'string') throw new Error('presentationMode required');
+  if (!contains(Command.getPresentationModes(), presentationMode)) throw new Error('Invalid presentationMode: ' + presentationMode);
   if (callback && typeof callback != 'function') throw new Error('optional second argument must a commandRequest callback function');
 };
 Interface.prototype.info = function (text) {
@@ -1584,9 +1590,42 @@ REPLInterface.prototype.notify = function (message) {
   if (false === (message instanceof Message)) throw new Error('Message required');
   this._Output(message);
 };
-REPLInterface.prototype.render = function (presentation, callback) {
+REPLInterface.prototype.render = function (presentation, presentationMode, callback) {
   if (false === (presentation instanceof Presentation)) throw new Error('Presentation object required');
+  if (typeof presentationMode !== 'string') throw new Error('presentationMode required');
+  if (!contains(Command.getPresentationModes(), presentationMode)) throw new Error('Invalid presentationMode: ' + presentationMode);
   if (callback && typeof callback != 'function') throw new Error('optional second argument must a commandRequest callback function');
+  var contents = presentation.get('contents');
+  var i;
+  var width = 0;
+  var obj;
+  switch (presentationMode) {
+    case 'View':
+      for (i = 0; i < contents.length; i++)
+        if (contents[i] instanceof Attribute && contents[i].label.length > width)
+          width = contents[i].label.length;
+      for (i = 0; i < contents.length; i++) {
+        obj = contents[i];
+        if (obj instanceof Attribute) {
+          this._Output(lpad(obj.label, width) + ': ' + obj.value);
+        } else {
+          this._Output(obj);
+        }
+      }
+      break;
+    case 'Edit':
+      this.editPresentationContents = contents.slice();
+      while (this.editPresentationContents.length && !(this.editPresentationContents[0] instanceof Attribute)) {
+        var ele = this.editPresentationContents.shift();
+        this._Output(ele);
+      }
+      if (this.editPresentationContents.length && (this.editPresentationContents[0] instanceof Attribute))
+        this._Output(this.editPresentationContents[0].label + ': ');
+
+      break;
+    default:
+      throw new Error('presentationMode not handled: ' + presentationMode);
+  }
 };
 REPLInterface.prototype.info = function (text) {
   if (!text || typeof text !== 'string') throw new Error('text required');
@@ -1652,8 +1691,8 @@ REPLInterface.prototype.choose = function (prompt, choices, callback) {
  */
 REPLInterface.prototype.evaluateInput = function (line) {
   var self = this;
-  if (undefined !== line)
-    this._evaluateInput(line);
+  if (undefined === line) line = '';
+  this._evaluateInput(line);
   setTimeout(function () {
     var prompt = self.application ? self.application.get('brand') : '?';
     if (!self.promptText && self.application && self.application.primaryInterface) {
@@ -1671,6 +1710,7 @@ REPLInterface.prototype._evaluateInput = function (line) {
   var callback;
   var uLine = ('' + line).toUpperCase();
   var i;
+  var ele;
   /**
    * First priority for input capture - user queries
    */
@@ -1728,6 +1768,27 @@ REPLInterface.prototype._evaluateInput = function (line) {
     return;
   }
   /**
+   * Edit Presentation in progress ?
+   */
+  if (this.editPresentationContents) {
+    if (this.editPresentationContents.length && (this.editPresentationContents[0] instanceof Attribute)) {
+      ele = this.editPresentationContents.shift();
+      if (line.length)
+        ele.value = line;
+    }
+    else {
+      throw new Error('editPresentationContents expected attribute');
+    }
+    while (this.editPresentationContents.length && !(this.editPresentationContents[0] instanceof Attribute)) {
+      ele = this.editPresentationContents.shift();
+      this._Output(ele);
+    }
+    if (this.editPresentationContents.length && (this.editPresentationContents[0] instanceof Attribute))
+      this._Output(this.editPresentationContents[0].label + ': ');
+
+    return;
+  }
+  /**
    * Do we have a primary navigation?
    */
   if (this.presentation) {
@@ -1747,6 +1808,10 @@ REPLInterface.prototype._evaluateInput = function (line) {
               break;
             case 'Menu':
               this.navStack.push(m);
+              break;
+            case 'Presentation':
+              m.presentationMode = 'Edit';
+              m.execute(this);
               break;
             default:
               m.execute();
@@ -1775,7 +1840,6 @@ REPLInterface.prototype._ShowNav = function () {
   var commands = '';
   var prefix = '';
   var i;
-
   if (this.navStack.length > 0) {
     var subMenu = this.navStack[this.navStack.length - 1];
     menuName = subMenu.name.replace(/\s/g, '') + ': ';
@@ -1807,7 +1871,6 @@ REPLInterface.prototype._Output = function (text) {
   if (this.captureOutputcallback)
     this.captureOutputcallback(text);
 };
-
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core-model-application.source.js
  */

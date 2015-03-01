@@ -10,7 +10,7 @@ var root = this;
 var TGI = {
   CORE: function () {
     return {
-      version: '0.2.1',
+      version: '0.3.0',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -1630,7 +1630,7 @@ REPLInterface.prototype.render = function (presentation, presentationMode, callb
 
       break;
     default:
-      throw new Error('presentationMode not handled: ' + presentationMode)
+      throw new Error('presentationMode not handled: ' + presentationMode);
   }
 };
 REPLInterface.prototype.info = function (text) {

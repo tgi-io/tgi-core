@@ -1,6 +1,6 @@
 {
   "name": "tgi-core",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "core objects for tgi framework",
   "contributors": [
     {
