@@ -817,8 +817,11 @@ spec.test('tgi-core/lib/tgi-core-command.spec.js', 'Command', 'encapsulates task
     });
     spec.heading('execute', function () {
       spec.paragraph('executes task');
-      spec.example('see integration tests', Error('command type Stub not implemented'), function () {
+      spec.example('see integration tests for usage', Error('command type Stub not implemented'), function () {
         new Command().execute();
+      });
+      spec.example('presentation commands require interface param', Error('interface param required'), function () {
+        new Command({type: 'Presentation',contents:new Presentation()}).execute();
       });
     });
     spec.heading('restart', function () {
@@ -1137,8 +1140,14 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
       spec.example('first argument must be a Presentation instance', Error('Presentation object required'), function () {
         new SurrogateInterface().render();
       });
+      spec.example('second argument must be a valid presentationMode', Error('presentationMode required'), function () {
+        new SurrogateInterface().render(new Presentation());
+      });
+      spec.example('presentationMode must be valid', Error('Invalid presentationMode: Taco'), function () {
+        new SurrogateInterface().render(new Presentation(), 'Taco');
+      });
       spec.example('optional callback must be function', Error('optional second argument must a commandRequest callback function'), function () {
-        new SurrogateInterface().render(new Presentation(), true);
+        new SurrogateInterface().render(new Presentation(), 'View', true);
       });
     });
     spec.heading('canMock()', function () {
@@ -1171,7 +1180,6 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
         new Application({interface: new SurrogateInterface()}).info();
       });
     });
-
     spec.heading('ok(prompt, callback)', function () {
       spec.paragraph('Pause before proceeding');
       spec.example('must set interface before invoking', Error('interface not set'), function () {
@@ -3242,7 +3250,6 @@ spec.test('tgi-core/lib/models/tgi-core-model-log.spec.js', 'Log', 'information 
 spec.test('tgi-core/lib/models/tgi-core-model-presentation.spec.js', 'Presentation', 'used by Interface to render data', function (callback) {
   spec.heading('Presentation Model', function () {
     spec.paragraph('The Presentation Model represents the way in which a model is to be presented to the user.  ' +
-    'The presentation is meant to be a "hint" to a Interface object.  ' +
     'The specific Interface object will represent the model data according to the Presentation object.');
     spec.heading('CONSTRUCTOR', function () {
       spec.example('objects created should be an instance of Presentation', true, function () {
@@ -3309,19 +3316,67 @@ spec.test('tgi-core/lib/models/tgi-core-model-presentation.spec.js', 'Presentati
       });
     });
     spec.heading('INTEGRATION', function () {
-
       spec.example('validation usage demonstrated', spec.asyncResults('contents has validation errors'), function (callback) {
         var attribute = new Attribute({name: 'test'});
         var presentation = new Presentation(); // default attributes and values
-        presentation.set('contents', [
-          attribute
-        ]);
+        presentation.set('contents', [attribute]);
         attribute.setError('test', 'test error');
         presentation.validate(function () {
           callback(presentation.validationMessage);
         });
       });
-
+      spec.example('view mode', undefined, function () {
+        var repl = new REPLInterface();
+        var ex = this;
+        repl.captureOutput(function (text) {
+          ex.log('out> ' + text);
+          console.log('out> ' + text);
+        });
+        //repl.capturePrompt(function (text) {
+        //  ex.log('prompt> ' + text);
+        //  console.log('prompt> ' + text);
+        //});
+        var input = function (text) {
+          ex.log('in> ' + text);
+          console.log('in> ' + text);
+          repl.evaluateInput(text);
+        };
+        /**
+         * Here is the presentation
+         */
+        var firstName = new Attribute({name: 'firstName'});
+        var lastName = new Attribute({name: 'lastName'});
+        var presentation = new Presentation();
+        presentation.set('contents', [
+          '##TITLE',
+          'Here is **text**.  _Note it uses markdown_.  Eventually this will be **stripped** out!',
+          'Here are some attributes:',
+          firstName,
+          lastName
+        ]);
+        firstName.value = 'Elmer';
+        lastName.value = 'Fud';
+        /**
+         * Create a command to view it (default mode)
+         */
+        var presentationCommand = new Command({name: 'Presentation', type: 'Presentation', contents: presentation});
+        presentationCommand.onEvent('*', function (event,err) {
+          console.log(event  + (err || ' ok'));
+        });
+        presentationCommand.execute(repl);
+        /**
+         * Now edit it
+         */
+        presentationCommand.presentationMode = 'Edit';
+        presentationCommand.execute(repl);
+        input('John');
+        input('Doe');
+        /**
+         * View again
+         */
+        presentationCommand.presentationMode = 'View';
+        presentationCommand.execute(repl);
+      });
     });
   });
 });

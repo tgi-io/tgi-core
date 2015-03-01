@@ -5,11 +5,12 @@
  * - creating a CLI with REPLInterface
  */
 
+var readline = require('readline');
+var chalk = require('chalk');
 var tgi = require('../dist/tgi.core').CORE();
 var repl = new tgi.REPLInterface();
 var app = new tgi.Application({interface: repl});
-var readline = require('readline');
-var chalk = require('chalk');
+app.set('brand', 'TEST');
 /**
  * Commands in App
  */
@@ -56,11 +57,12 @@ var userQueryCommand = new tgi.Command({
       },
       function () {
         var task = this;
-        app.choose('OK ' + (isDude ? 'mr. ' : 'ms. ') + name + ', please pick a color.\nany color..\n\nplease pick one now', ['red', 'green', 'blue', 'black', 'white'], function (choice) {
+        var colors = ['red', 'green', 'blue', 'black', 'white'];
+        app.choose('OK ' + (isDude ? 'mr. ' : 'ms. ') + name + ', please pick a color.\nany color..\n\nplease pick one now', colors, function (choice) {
           if (!choice)
             userQueryCommand.abort();
           else {
-            color = choice;
+            color = colors[choice];
             task.complete();
           }
         });
@@ -122,7 +124,6 @@ pres.set('contents', [
   stubMoe,
   stubLarry,
   stubCurly
-
 ]);
 var presCommand = new tgi.Command({name: 'Presentation', type: 'Presentation', contents: pres});
 var commands = new tgi.Command({
@@ -186,7 +187,7 @@ repl.captureOutput(function (text) {
 });
 repl.capturePrompt(function (text) {
   var i = text.indexOf('\n');
-  var atext = text
+  var atext = text;
   if (i >= 0) {
     atext = text.substr(i + 1);
   }

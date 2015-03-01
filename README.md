@@ -6,7 +6,8 @@ Core Objects [read the spec](spec/README.md).
 
 Current
 -------
-- REPLInterface - handle presentation
+- REPLInterface - handle presentation (WIP)
+- Command function should call complete event inherently if function did not call or abort
 
 Later
 -----
