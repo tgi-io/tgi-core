@@ -3215,9 +3215,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-presentation.spec.js', 'Presentati
       spec.example('objects created should be an instance of Presentation', true, function () {
         return new Presentation() instanceof Presentation;
       });
-      spec.heading('Model tests are applied', function () {
-        spec.testModel(Presentation);
-      });
+      spec.testModel(Presentation);
     });
     spec.heading('PROPERTIES', function () {
       spec.heading('model', function () {
@@ -3285,17 +3283,17 @@ spec.test('tgi-core/lib/models/tgi-core-model-presentation.spec.js', 'Presentati
           callback(presentation.validationMessage);
         });
       });
-      spec.example('view mode', undefined, function () {
+      spec.example('use REPLInterface to view and edit', undefined, function () {
         var repl = new REPLInterface();
         var ex = this;
         repl.captureOutput(function (text) {
           ex.log('out> ' + text);
           console.log('out> ' + text);
         });
-        //repl.capturePrompt(function (text) {
-        //  ex.log('prompt> ' + text);
-        //  console.log('prompt> ' + text);
-        //});
+        repl.capturePrompt(function (text) {
+          ex.log('prompt> ' + text);
+          console.log('prompt> ' + text);
+        });
         var input = function (text) {
           ex.log('in> ' + text);
           console.log('in> ' + text);
@@ -3320,8 +3318,10 @@ spec.test('tgi-core/lib/models/tgi-core-model-presentation.spec.js', 'Presentati
          * Create a command to view it (default mode)
          */
         var presentationCommand = new Command({name: 'Presentation', type: 'Presentation', contents: presentation});
-        presentationCommand.onEvent('*', function (event,err) {
-          console.log(event  + (err || ' ok'));
+        presentationCommand.onEvent('*', function (event, err) {
+          var eventDesc = 'event> ' + event + (err || ' ok');
+          ex.log(eventDesc);
+          console.log(eventDesc);
         });
         presentationCommand.execute(repl);
         /**

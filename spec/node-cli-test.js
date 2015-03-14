@@ -48,7 +48,7 @@ var cliServer = function (line, callback) {
 
 testSpec(spec, TGI);
 
-rl._setPrompt(': ');
+//rl._setPrompt(': ');
 rl.prompt();
 rl.on('line', function (line) {
   cliServer(line, function (output) {

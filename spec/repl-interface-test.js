@@ -104,8 +104,8 @@ var stubCurly = new tgi.Command({
 // Create sample presentation
 var pres = new tgi.Presentation();
 pres.set('contents', [
-  '####INSTRUCTIONS\n\n' +
-  'Enter some stuff then push some buttons.',
+  '####tgi.Presentation\n\n' +
+  'Sample Profile',
   '-',
   new tgi.Attribute({name: 'firstName', label: 'First Name', type: 'String(20)', value: 'John'}),
   new tgi.Attribute({name: 'lastName', label: 'Last Name', type: 'String(25)', value: 'Doe'}),

@@ -1626,7 +1626,7 @@ REPLInterface.prototype.render = function (presentation, presentationMode, callb
         this._Output(ele);
       }
       if (this.editPresentationContents.length && (this.editPresentationContents[0] instanceof Attribute))
-        this._Output(this.editPresentationContents[0].label + ': ');
+        this._setPrompt(this.editPresentationContents[0].label + ': ');
 
       break;
     default:
@@ -1790,7 +1790,7 @@ REPLInterface.prototype._evaluateInput = function (line) {
       this._Output(ele);
     }
     if (this.editPresentationContents.length && (this.editPresentationContents[0] instanceof Attribute))
-      this._Output(this.editPresentationContents[0].label + ': ');
+      this._setPrompt(this.editPresentationContents[0].label + ': ');
 
     return;
   }

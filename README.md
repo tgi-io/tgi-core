@@ -7,6 +7,10 @@ Core Objects [read the spec](spec/README.md).
 Current
 -------
 - REPLInterface - handle presentation (WIP)
+    - view shows and leaves
+    - edit edits
+    - if commands present then waits for commands ?
+    - **OR** execute waits ?
 - Command function should call complete event inherently if function did not call or abort
 
 Later
