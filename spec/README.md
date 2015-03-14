@@ -1216,7 +1216,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Sat Mar 14 2015 09:52:34 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Sat Mar 14 2015 09:55:50 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1225,7 +1225,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Sat Mar 14 2015 09:52:34 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Sat Mar 14 2015 09:55:50 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -3175,7 +3175,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Sat Mar 14 2015 09:52:34 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Sat Mar 14 2015 09:55:50 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -3290,7 +3290,7 @@ presentation.validate(function () {
 ```
 <blockquote>returns <strong>contents has validation errors</strong> as expected
 </blockquote>
-&nbsp;<b><i>view mode:</i></b>
+&nbsp;<b><i>use REPLInterface to view and edit:</i></b>
 ```javascript
 var repl = new REPLInterface();
 var ex = this;
@@ -3298,10 +3298,10 @@ repl.captureOutput(function (text) {
   ex.log('out> ' + text);
   console.log('out> ' + text);
 });
-//repl.capturePrompt(function (text) {
-//  ex.log('prompt> ' + text);
-//  console.log('prompt> ' + text);
-//});
+repl.capturePrompt(function (text) {
+  ex.log('prompt> ' + text);
+  console.log('prompt> ' + text);
+});
 var input = function (text) {
   ex.log('in> ' + text);
   console.log('in> ' + text);
@@ -3343,7 +3343,7 @@ input('Doe');
 presentationCommand.presentationMode = 'View';
 presentationCommand.execute(repl);
 ```
-<blockquote><strong>log: </strong>out> ##TITLE<br><strong>log: </strong>out> Here is **text**.  _Note it uses markdown_.  Eventually this will be **stripped** out!<br><strong>log: </strong>out> Here are some attributes:<br><strong>log: </strong>out> FirstName: Elmer<br><strong>log: </strong>out>  LastName: Fud<br><strong>log: </strong>out> ##TITLE<br><strong>log: </strong>out> Here is **text**.  _Note it uses markdown_.  Eventually this will be **stripped** out!<br><strong>log: </strong>out> Here are some attributes:<br><strong>log: </strong>out> FirstName: <br><strong>log: </strong>in> John<br><strong>log: </strong>out> LastName: <br><strong>log: </strong>in> Doe<br><strong>log: </strong>out> ##TITLE<br><strong>log: </strong>out> Here is **text**.  _Note it uses markdown_.  Eventually this will be **stripped** out!<br><strong>log: </strong>out> Here are some attributes:<br><strong>log: </strong>out> FirstName: John<br><strong>log: </strong>out>  LastName: Doe<br></blockquote>
+<blockquote><strong>log: </strong>out> ##TITLE<br><strong>log: </strong>out> Here is **text**.  _Note it uses markdown_.  Eventually this will be **stripped** out!<br><strong>log: </strong>out> Here are some attributes:<br><strong>log: </strong>out> FirstName: Elmer<br><strong>log: </strong>out>  LastName: Fud<br><strong>log: </strong>out> ##TITLE<br><strong>log: </strong>out> Here is **text**.  _Note it uses markdown_.  Eventually this will be **stripped** out!<br><strong>log: </strong>out> Here are some attributes:<br><strong>log: </strong>out> FirstName: <br><strong>log: </strong>in> John<br><strong>log: </strong>out> LastName: <br><strong>log: </strong>in> Doe<br><strong>log: </strong>out> ##TITLE<br><strong>log: </strong>out> Here is **text**.  _Note it uses markdown_.  Eventually this will be **stripped** out!<br><strong>log: </strong>out> Here are some attributes:<br><strong>log: </strong>out> FirstName: John<br><strong>log: </strong>out>  LastName: Doe<br><strong>log: </strong>prompt> ?<br><strong>log: </strong>prompt> ?<br></blockquote>
 ## [&#9664;](#-presentation)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-user) &nbsp;Session
 #### Session Model
 The Session Model represents the Session logged into the system. The library uses this for system access, logging and other functions.    
