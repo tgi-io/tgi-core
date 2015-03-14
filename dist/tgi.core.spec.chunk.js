@@ -1950,9 +1950,8 @@ spec.testModel = function (SurrogateModel) {
   });
   if (SurrogateModel.modelType!='Model') {
     var wasMuted = spec.mute(false).testsCreated;
-    spec.example('model tests applied', true, function () {
-      this.log('Tests Muted: ' + wasMuted);
-      return wasMuted > 0;
+    spec.example('model tests applied', undefined, function () {
+      this.log('tests applied ' + wasMuted);
     });
   }
 };
@@ -3173,9 +3172,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-log.spec.js', 'Log', 'information 
       spec.example('objects created should be an instance of Workspace', true, function () {
         return new Log() instanceof Log;
       });
-      spec.heading('Model tests are applied', function () {
-        spec.testModel(Log);
-      });
+      spec.testModel(Log);
       spec.heading('ATTRIBUTES', function () {
         spec.example('following attributes are defined:', undefined, function () {
           var log = new Log('what up'); // default attributes and values
@@ -3352,9 +3349,7 @@ spec.test('/tgi-core/lib/models/tgi-core-model-session.spec.js', 'Session', 'for
       spec.example('objects created should be an instance of Session', true, function () {
         return new Session() instanceof Session;
       });
-      spec.heading('Model tests are applied', function () {
-        spec.testModel(Session, true);
-      });
+      spec.testModel(Session, true);
     });
     spec.heading('ATTRIBUTES', function () {
       spec.example('following attributes are defined:', undefined, function () {
@@ -3433,9 +3428,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-user.spec.js', 'User', 'access, lo
       spec.example('objects created should be an instance of User', true, function () {
         return new User() instanceof User;
       });
-      spec.heading('Model tests are applied', function () {
-        spec.testModel(User, true);
-      });
+      spec.testModel(User, true);
     });
     spec.heading('ATTRIBUTES', function () {
       spec.example('following attributes are defined:', undefined, function () {
@@ -3463,9 +3456,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-workspace.spec.js', 'Workspace', '
       spec.example('objects created should be an instance of Workspace', true, function () {
         return new Workspace() instanceof Workspace;
       });
-      spec.heading('Model tests are applied', function () {
-        spec.testModel(Workspace, true);
-      });
+      spec.testModel(Workspace, true);
     });
     spec.heading('ATTRIBUTES', function () {
       spec.example('following attributes are defined:', undefined, function () {
