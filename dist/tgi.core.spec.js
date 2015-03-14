@@ -1990,8 +1990,7 @@ spec.testModel = function (SurrogateModel) {
   });
   if (SurrogateModel.modelType!='Model') {
     var wasMuted = spec.mute(false).testsCreated;
-    spec.example(wasMuted + 'model tests applied', undefined, function () {
-    });
+    spec.paragraph(wasMuted + 'model tests applied');
   }
 };
 

@@ -1216,7 +1216,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Sat Mar 14 2015 11:32:40 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Sat Mar 14 2015 11:34:16 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1225,7 +1225,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Sat Mar 14 2015 11:32:40 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Sat Mar 14 2015 11:34:16 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2018,10 +2018,8 @@ this.log(Message.getTypes());
 ```
 <blockquote><strong>log: </strong>Null,Connected,Error,Sent,Ping,PutModel,PutModelAck,GetModel,GetModelAck,DeleteModel,DeleteModelAck,GetList,GetListAck<br></blockquote>
 ## [&#9664;](#-message)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-procedure) &nbsp;Model
-&nbsp;<b><i>25model tests applied:</i></b>
-```javascript
+25model tests applied    
 
-```
 ## [&#9664;](#-model)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-request) &nbsp;Procedure
 #### Procedure Class
 The `Procedure` class manages a set of `Command` objects.  It provides a pattern for handling asynchronous and synchronous command execution.    
@@ -2874,10 +2872,8 @@ return new Application() instanceof Application;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
-&nbsp;<b><i>25model tests applied:</i></b>
-```javascript
+25model tests applied    
 
-```
 &nbsp;<b><i>argument property interface will invoke setInterface method:</i></b>
 ```javascript
 var myInterface = new Interface();
@@ -3150,10 +3146,8 @@ return new Log() instanceof Log;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
-&nbsp;<b><i>25model tests applied:</i></b>
-```javascript
+25model tests applied    
 
-```
 #### ATTRIBUTES
 &nbsp;<b><i>following attributes are defined::</i></b>
 ```javascript
@@ -3165,7 +3159,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Sat Mar 14 2015 11:32:40 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Sat Mar 14 2015 11:34:16 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -3198,10 +3192,8 @@ return new Presentation() instanceof Presentation;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
-&nbsp;<b><i>25model tests applied:</i></b>
-```javascript
+25model tests applied    
 
-```
 #### PROPERTIES
 #### model
 This is a model instance for the presentation instance.    
@@ -3343,10 +3335,8 @@ return new Session() instanceof Session;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
-&nbsp;<b><i>25model tests applied:</i></b>
-```javascript
+25model tests applied    
 
-```
 #### ATTRIBUTES
 &nbsp;<b><i>following attributes are defined::</i></b>
 ```javascript
@@ -3422,10 +3412,8 @@ return new User() instanceof User;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
-&nbsp;<b><i>25model tests applied:</i></b>
-```javascript
+25model tests applied    
 
-```
 #### ATTRIBUTES
 &nbsp;<b><i>following attributes are defined::</i></b>
 ```javascript
@@ -3449,10 +3437,8 @@ return new Workspace() instanceof Workspace;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
-&nbsp;<b><i>25model tests applied:</i></b>
-```javascript
+25model tests applied    
 
-```
 #### ATTRIBUTES
 &nbsp;<b><i>following attributes are defined::</i></b>
 ```javascript
