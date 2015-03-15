@@ -5,7 +5,7 @@ Core constructors, models, stores and interfaces.  The constructor functions def
 ```javascript
 this.log(TGI.CORE().version);
 ```
-<blockquote><strong>log: </strong>0.3.0<br></blockquote>
+<blockquote><strong>log: </strong>0.3.1<br></blockquote>
 ####Constructors
 
 - [Attribute](#-attribute) defines data types - needed by Model
@@ -1216,7 +1216,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Sat Mar 14 2015 11:36:13 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Sun Mar 15 2015 11:32:35 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1225,7 +1225,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Sat Mar 14 2015 11:36:13 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Sun Mar 15 2015 11:32:35 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -3159,7 +3159,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Sat Mar 14 2015 11:36:13 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Sun Mar 15 2015 11:32:35 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -3274,15 +3274,15 @@ var repl = new REPLInterface();
 var ex = this;
 repl.captureOutput(function (text) {
   ex.log('out> ' + text);
-  console.log('out> ' + text);
+  //console.log('out> ' + text);
 });
 repl.capturePrompt(function (text) {
   ex.log('prompt> ' + text);
-  console.log('prompt> ' + text);
+  //console.log('prompt> ' + text);
 });
 var input = function (text) {
   ex.log('in> ' + text);
-  console.log('in> ' + text);
+  //console.log('in> ' + text);
   repl.evaluateInput(text);
 };
 /**
@@ -3307,7 +3307,7 @@ var presentationCommand = new Command({name: 'Presentation', type: 'Presentation
 presentationCommand.onEvent('*', function (event, err) {
   var eventDesc = 'event> ' + event + (err || ' ok');
   ex.log(eventDesc);
-  console.log(eventDesc);
+  //console.log(eventDesc);
 });
 presentationCommand.execute(repl);
 /**

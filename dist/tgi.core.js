@@ -10,7 +10,7 @@ var root = this;
 var TGI = {
   CORE: function () {
     return {
-      version: '0.3.0',
+      version: '0.3.1',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -1623,10 +1623,12 @@ REPLInterface.prototype.render = function (presentation, presentationMode, callb
       this.editPresentationContents = contents.slice();
       while (this.editPresentationContents.length && !(this.editPresentationContents[0] instanceof Attribute)) {
         var ele = this.editPresentationContents.shift();
-        this._Output(ele);
+        if (!(ele instanceof Command))
+          this._Output(ele);
       }
       if (this.editPresentationContents.length && (this.editPresentationContents[0] instanceof Attribute))
         this._setPrompt(this.editPresentationContents[0].label + ': ');
+      if (!this.editPresentationContents.length) delete this.editPresentationContents;
 
       break;
     default:
@@ -1783,15 +1785,18 @@ REPLInterface.prototype._evaluateInput = function (line) {
         ele.value = line;
     }
     else {
+      if (!this.editPresentationContents.length) delete this.editPresentationContents;
       throw new Error('editPresentationContents expected attribute');
     }
     while (this.editPresentationContents.length && !(this.editPresentationContents[0] instanceof Attribute)) {
       ele = this.editPresentationContents.shift();
-      this._Output(ele);
+      if (!(ele instanceof Command))
+        this._Output(ele);
     }
     if (this.editPresentationContents.length && (this.editPresentationContents[0] instanceof Attribute))
       this._setPrompt(this.editPresentationContents[0].label + ': ');
 
+    if (!this.editPresentationContents.length) delete this.editPresentationContents;
     return;
   }
   /**
