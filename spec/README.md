@@ -5,7 +5,7 @@ Core constructors, models, stores and interfaces.  The constructor functions def
 ```javascript
 this.log(TGI.CORE().version);
 ```
-<blockquote><strong>log: </strong>0.3.1<br></blockquote>
+<blockquote><strong>log: </strong>0.3.2<br></blockquote>
 ####Constructors
 
 - [Attribute](#-attribute) defines data types - needed by Model
@@ -1216,7 +1216,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Sun Mar 15 2015 11:32:35 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Sun Mar 15 2015 13:59:59 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1225,7 +1225,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Sun Mar 15 2015 11:32:35 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Sun Mar 15 2015 13:59:59 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -1518,98 +1518,6 @@ for (i = 0; i < 4; i++) {
 testInterface.mockRequest(cmds);
 ```
 <blockquote>returns <strong>true</strong> as expected
-</blockquote>
-&nbsp;<b><i>user queries:</i></b>
-```javascript
-var io = new SurrogateInterface();
-var app = new Application({interface: io});
-/**
- * Each test is a function ...
- */
-var ok1 = function () {
-  io.mockRequest(new Request('ok'));
-  app.ok('You can mock ok() before', function () {
-    ok2();
-  });
-};
-var ok2 = function () {
-  app.ok('You can mock ok() after', function () {
-    yesno1();
-  });
-  io.mockRequest(new Request('ok'));
-};
-var yesno1 = function () {
-  app.yesno('Yesno can be true', function (answer) {
-    if (answer)
-      yesno2();
-    else
-      callback('fail');
-  });
-  io.mockRequest(new Request('yes'));
-};
-var yesno2 = function () {
-  app.yesno('Yesno can be false', function (answer) {
-    if (!answer)
-      yesno3();
-    else
-      callback('fail');
-  });
-  io.mockRequest(new Request('no'));
-};
-var yesno3 = function () {
-  app.yesno('Yesno can be undefined', function (answer) {
-    if (!answer)
-      ask1();
-    else
-      callback('fail');
-  });
-  io.mockRequest(new Request('cancel'));
-};
-var ask1 = function () {
-  var name = new Attribute({name: 'Name'});
-  app.ask('What is your name?', name, function (answer) {
-    app.info('Hello ' + answer);
-    if (answer == 'John Doe')
-      ask2();
-    else
-      callback(answer);
-  });
-  io.mockRequest(new Request({type: 'ask', value: 'John Doe'}));
-};
-var ask2 = function () {
-  var name = new Attribute({name: 'Name'});
-  io.mockRequest(new Request({type: 'ask'})); // no value like canceled dialog
-  app.ask('Vas is das name?', name, function (answer) {
-    if (undefined === answer)
-      choose1();
-    else
-      callback(answer);
-  });
-};
-var choose1 = function () {
-  app.choose('Pick one...', ['chicken', 'beef', 'tofu'], function (choice) {
-    if (choice == 1)
-      choose2();
-    else
-      callback(choice);
-  });
-  io.mockRequest(new Request({type: 'choose', value: 'beef'}));
-};
-var choose2 = function () {
-  io.mockRequest(new Request({type: 'choose'})); // no value like canceled dialog
-  app.choose('Pick one...', ['chicken', 'beef', 'tofu'], function (choice) {
-    if (undefined === choice)
-      callback('The End');
-    else
-      callback(choice);
-  });
-};
-/**
- * Launch test
- */
-ok1();
-```
-<blockquote>returns <strong>The End</strong> as expected
 </blockquote>
 ## [&#9664;](#-interface)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-message) &nbsp;List
 Lists are an ordered collection of items.  Each item is an array of values that correspond to the attributes for model used in constructor.    
@@ -2698,7 +2606,7 @@ see `Interface` for documentation
 this.log('Tests Muted: ' + wasMuted);
 return wasMuted > 0;
 ```
-<blockquote><strong>log: </strong>Tests Muted: 37<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Tests Muted: 36<br>returns <strong>true</strong> as expected
 </blockquote>
 #### METHODS
 The REPLInterface defines adds the following methods.    
@@ -3159,7 +3067,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Sun Mar 15 2015 11:32:35 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Sun Mar 15 2015 13:59:59 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
