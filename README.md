@@ -13,6 +13,18 @@ Current
     - **OR** execute waits ?
 - Command function should call complete event inherently if function did not call or abort
 
+
+ActiveView
+- presentation
+- mode
+- key [ undefined <single view> , null , value ]
+
+Presentation Management
+---
+- presentation = Presentation.activate ( key , mode )
+- close ( key )
+
+
 Later
 -----
 - Presentation use model property & modelConstructor method or get rid of
