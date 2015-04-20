@@ -5,7 +5,7 @@ Core constructors, models, stores and interfaces.  The constructor functions def
 ```javascript
 this.log(TGI.CORE().version);
 ```
-<blockquote><strong>log: </strong>0.3.2<br></blockquote>
+<blockquote><strong>log: </strong>0.3.4<br></blockquote>
 ####Constructors
 
 - [Attribute](#-attribute) defines data types - needed by Model
@@ -861,6 +861,10 @@ this.shouldThrowError(Error('invalid icon'), function () {
 new Command({name: 'options', location: {x: 0, y: 0}});
 ```
 #### images
+&nbsp;<b><i>optional for control graphical representation:</i></b>
+```javascript
+new Command({name: 'options', images: []});
+```
 #### presentationMode
 this property is used for presentation commands to specify the mode of presentation    
 
@@ -1222,7 +1226,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Fri Apr 10 2015 17:17:06 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Mon Apr 20 2015 08:50:13 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1231,7 +1235,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Fri Apr 10 2015 17:17:06 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Mon Apr 20 2015 08:50:13 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -3073,7 +3077,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Fri Apr 10 2015 17:17:06 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Mon Apr 20 2015 08:50:13 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript

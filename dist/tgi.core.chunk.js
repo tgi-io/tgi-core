@@ -4,7 +4,7 @@
 var TGI = {
   CORE: function () {
     return {
-      version: '0.3.2',
+      version: '0.3.4',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -382,7 +382,7 @@ function Command(args) {
   args = args || {};
   var i;
   var unusedProperties = getInvalidProperties(args,
-    ['name', 'description', 'type', 'contents', 'scope', 'timeout', 'theme', 'icon', 'bucket', 'presentationMode']);
+    ['name', 'description', 'type', 'contents', 'scope', 'timeout', 'theme', 'icon', 'bucket', 'presentationMode','location','images']);
   var errorList = [];
   for (i = 0; i < unusedProperties.length; i++) errorList.push('invalid property: ' + unusedProperties[i]);
   if (errorList.length > 1) throw new Error('error creating Command: multiple errors');

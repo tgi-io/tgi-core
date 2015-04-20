@@ -679,6 +679,16 @@ spec.test('tgi-core/lib/tgi-core-command.spec.js', 'Command', 'encapsulates task
         });
       });
     });
+    spec.heading('location', function () {
+      spec.example('optional for control location {x,y}', undefined, function () {
+        new Command({name: 'options', location: {x: 0, y: 0}});
+      });
+    });
+    spec.heading('images', function () {
+      spec.example('optional for control graphical representation', undefined, function () {
+        new Command({name: 'options', images: []});
+      });
+    });
     spec.heading('presentationMode', function () {
       spec.paragraph('this property is used for presentation commands to specify the mode of presentation');
       spec.example('default is View', 'View', function () {
@@ -781,7 +791,7 @@ spec.test('tgi-core/lib/tgi-core-command.spec.js', 'Command', 'encapsulates task
         new Command().execute();
       });
       spec.example('presentation commands require interface param', Error('interface param required'), function () {
-        new Command({type: 'Presentation',contents:new Presentation()}).execute();
+        new Command({type: 'Presentation', contents: new Presentation()}).execute();
       });
     });
     spec.heading('restart', function () {
