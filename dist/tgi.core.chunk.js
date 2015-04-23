@@ -4,7 +4,7 @@
 var TGI = {
   CORE: function () {
     return {
-      version: '0.3.4',
+      version: '0.3.5',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -1112,13 +1112,13 @@ Model.prototype.onEvent = function (events, callback) {
   this._eventListeners.push({events: events, callback: callback});
   return this;
 };
-Model.prototype._emitEvent = function (event) {
+Model.prototype._emitEvent = function (event, meta) { // todo meta is app defined - no test for it
   var i;
   for (i in this._eventListeners) {
     if (this._eventListeners.hasOwnProperty(i)) {
       var subscriber = this._eventListeners[i];
       if ((subscriber.events.length && subscriber.events[0] === '*') || contains(subscriber.events, event)) {
-        subscriber.callback.call(this, event);
+        subscriber.callback.call(this, event, meta);
       }
     }
   }

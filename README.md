@@ -14,13 +14,12 @@ Current
 - Command function should call complete event inherently if function did not call or abort
 
 
-ActiveView
-- presentation
-- mode
-- key [ undefined <single view> , null , value ]
-
 Presentation Management
 ---
+- ActiveView
+    - presentation
+    - mode
+    - key [ undefined <single view> , null , value ]
 - presentation = Presentation.activate ( key , mode )
 - close ( key )
 
