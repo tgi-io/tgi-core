@@ -4,7 +4,7 @@
 var TGI = {
   CORE: function () {
     return {
-      version: '0.3.5',
+      version: '0.3.6',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -478,7 +478,7 @@ Command.prototype._emitEvent = function (event, obj) {
 };
 Command.prototype.execute = function (context) {
   if (!this.type) throw new Error('command not implemented');
-  if (!contains(['Function', 'Procedure', 'Presentation'], this.type)) throw new Error('command type ' + this.type + ' not implemented');
+  if (!contains(['Function', 'Procedure', 'Menu', 'Presentation'], this.type)) throw new Error('command type ' + this.type + ' not implemented');
   var errors;
   switch (this.type) {
     case 'Presentation':
@@ -504,6 +504,7 @@ Command.prototype.execute = function (context) {
       case 'Procedure':
         setTimeout(procedureExecuteInit, 0);
         break;
+      case 'Menu':
       case 'Presentation':
         context.render(this.contents, this.presentationMode);
         break;
