@@ -10,7 +10,7 @@ var root = this;
 var TGI = {
   CORE: function () {
     return {
-      version: '0.3.6',
+      version: '0.3.8',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -511,6 +511,8 @@ Command.prototype.execute = function (context) {
         setTimeout(procedureExecuteInit, 0);
         break;
       case 'Menu':
+        context.render(this, 'View');
+        break;
       case 'Presentation':
         context.render(this.contents, this.presentationMode);
         break;

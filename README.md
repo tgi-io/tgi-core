@@ -6,11 +6,6 @@ Core Objects [read the spec](spec/README.md).
 
 Current
 -------
-- REPLInterface - handle presentation (WIP)
-    - view shows and leaves
-    - edit edits
-    - if commands present then waits for commands ?
-    - **OR** execute waits ?
 - Command function should call complete event inherently if function did not call or abort
 
 
@@ -26,6 +21,12 @@ Presentation Management
 
 Later
 -----
+- REPLInterface - handle presentation (WIP)
+    - view shows and leaves
+    - edit edits
+    - if commands present then waits for commands ?
+    - **OR** execute waits ?
+- app.dispatch(request,response) ... response is not used review design
 - Presentation use model property & modelConstructor method or get rid of
 - Review models for completeness esp. Workspace and Session
 - Interface.notify needs review
