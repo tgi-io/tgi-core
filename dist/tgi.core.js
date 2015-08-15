@@ -10,7 +10,7 @@ var root = this;
 var TGI = {
   CORE: function () {
     return {
-      version: '0.3.8',
+      version: '0.3.9',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -1399,7 +1399,11 @@ function Transport(location, callback) {
     }
   });
   self.socket.on('message', function (obj) {
-    console.log('socket.io (' + self.location + ') message: ' + obj);
+    if (self.rawCallBack) {
+      self.rawCallBack(obj);
+    } else {
+      console.log('socket.io (' + self.location + ') message: ' + obj);
+    }
   });
   self.socket.on('disconnect', function (reason) {
     self.connected = false;
@@ -1426,6 +1430,12 @@ Transport.hostMessageProcess = function (obj, fn) {
  * Methods
  */
 /* istanbul ignore next */
+Transport.prototype.sendRaw = function (message) {
+  this.socket.send(message);
+};
+Transport.prototype.onRaw = function (callback) {
+  this.rawCallBack = callback;
+};
 Transport.prototype.send = function (message, callback) {
   var self = this;
   if (typeof message == 'undefined') throw new Error('message required');

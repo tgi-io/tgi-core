@@ -6,8 +6,7 @@ Core Objects [read the spec](spec/README.md).
 
 Current
 -------
-- Command function should call complete event inherently if function did not call or abort
-
+- Transport sendRaw & onRaw have no tests
 
 Presentation Management
 ---
