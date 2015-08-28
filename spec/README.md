@@ -1,11 +1,11 @@
 #tgi-core
-Core constructors, models, stores and interfaces.  The constructor functions define the object "classes" used by the framework.  The Model Constructor is a key part of the core that defines the system functionality for the framework.  The framework is further extended with a Store and Interface abstract that provides data store and user interface plugins.    
+Core constructors, models, stores and interfaces.  The constructor functions define the object "classes" used by the framework.  The Model Constructor is a key part of the core that defines the system functionality for the framework.  The framework is further extended with a Store and Interface abstract that provides data store and user interface vendor implementations.    
 
 &nbsp;<b><i>TGI.CORE function exposes library:</i></b>
 ```javascript
 this.log(TGI.CORE().version);
 ```
-<blockquote><strong>log: </strong>0.3.8<br></blockquote>
+<blockquote><strong>log: </strong>0.3.10<br></blockquote>
 ####Constructors
 
 - [Attribute](#-attribute) defines data types - needed by Model
@@ -1079,7 +1079,7 @@ this.shouldThrowError(Error('contents must be a Presentation'), function () {
   cmd.contents = 123;
   cmd.execute();
 });
-this.shouldThrowError(Error('error executing Presentation: contents elements must be Command, Attribute or string'), function () {
+this.shouldThrowError(Error('error executing Presentation: contents elements must be Command, Attribute, List or string'), function () {
   cmd.contents = new Presentation();
   cmd.contents.set('contents', [new Command(), new Attribute({name: 'meh'}), true]);
   cmd.execute();
@@ -1213,7 +1213,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Sat Aug 15 2015 19:44:34 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Fri Aug 28 2015 09:27:22 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1222,7 +1222,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Sat Aug 15 2015 19:44:34 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Fri Aug 28 2015 09:27:22 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -3064,7 +3064,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Sat Aug 15 2015 19:44:34 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Fri Aug 28 2015 09:27:22 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -3149,16 +3149,16 @@ return pres.getObjectStateErrors();
 ```
 <blockquote>returns <strong>contents must be Array</strong> as expected
 </blockquote>
-&nbsp;<b><i>array elements must be Command , Attribute or String:</i></b>
+&nbsp;<b><i>contents elements must be Command, Attribute, List or string:</i></b>
 ```javascript
 var pres = new Presentation();
 // strings with prefix # are heading, a dash - by itself is for a visual separator
-pres.set('contents', ['#heading', new Command(), new Attribute({name: 'meh'})]);
+pres.set('contents', ['#heading', new Command(), new Attribute({name: 'meh'}),new List(new Model())]);
 this.shouldBeTrue(pres.getObjectStateErrors().length === 0);
 pres.set('contents', [new Command(), new Attribute({name: 'meh'}), true]);
 return pres.getObjectStateErrors();
 ```
-<blockquote>returns <strong>contents elements must be Command, Attribute or string</strong> as expected
+<blockquote>returns <strong>contents elements must be Command, Attribute, List or string</strong> as expected
 </blockquote>
 #### INTEGRATION
 &nbsp;<b><i>validation usage demonstrated:</i></b>

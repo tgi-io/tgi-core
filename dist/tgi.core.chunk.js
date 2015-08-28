@@ -4,7 +4,7 @@
 var TGI = {
   CORE: function () {
     return {
-      version: '0.3.8',
+      version: '0.3.10',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -1393,7 +1393,11 @@ function Transport(location, callback) {
     }
   });
   self.socket.on('message', function (obj) {
-    console.log('socket.io (' + self.location + ') message: ' + obj);
+    if (self.rawCallBack) {
+      self.rawCallBack(obj);
+    } else {
+      console.log('socket.io (' + self.location + ') message: ' + obj);
+    }
   });
   self.socket.on('disconnect', function (reason) {
     self.connected = false;
@@ -1420,6 +1424,12 @@ Transport.hostMessageProcess = function (obj, fn) {
  * Methods
  */
 /* istanbul ignore next */
+Transport.prototype.sendRaw = function (message) {
+  this.socket.send(message);
+};
+Transport.prototype.onRaw = function (callback) {
+  this.rawCallBack = callback;
+};
 Transport.prototype.send = function (message, callback) {
   var self = this;
   if (typeof message == 'undefined') throw new Error('message required');
@@ -2069,11 +2079,11 @@ Presentation.prototype.getObjectStateErrors = function (modelCheckOnly) {
     var gotError = false;
     if (contents instanceof Array) {
       for (i = 0; i < contents.length; i++) {
-        if (!(contents[i] instanceof Command || contents[i] instanceof Attribute || typeof contents[i] == 'string'))
+        if (!(contents[i] instanceof Command || contents[i] instanceof Attribute || contents[i] instanceof List || typeof contents[i] == 'string'))
           gotError = true;
       }
       if (gotError)
-        this.validationErrors.push('contents elements must be Command, Attribute or string');
+        this.validationErrors.push('contents elements must be Command, Attribute, List or string');
     } else {
       this.validationErrors.push('contents must be Array');
     }
