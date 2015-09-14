@@ -5,7 +5,7 @@ Core constructors, models, stores and interfaces.  The constructor functions def
 ```javascript
 this.log(TGI.CORE().version);
 ```
-<blockquote><strong>log: </strong>0.3.10<br></blockquote>
+<blockquote><strong>log: </strong>0.3.11<br></blockquote>
 ####Constructors
 
 - [Attribute](#-attribute) defines data types - needed by Model
@@ -1213,7 +1213,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Fri Aug 28 2015 09:27:22 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Mon Sep 14 2015 13:53:29 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1222,7 +1222,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Fri Aug 28 2015 09:27:22 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Mon Sep 14 2015 13:53:29 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -1592,6 +1592,14 @@ return list.addItem(new Model()).length(); // returns ref for method chaining
 var list = new List(new Model());
 return list.addItem(new Model()).removeItem().length(); // returns ref for method chaining
 ```
+#### findItemByID(id)
+&nbsp;<b><i>findItemByID returns false if not found:</i></b>
+```javascript
+var list = new List(new Model());
+return list.findItemByID(1) === false;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
 #### moveNext()
 &nbsp;<b><i>move to next item in list:</i></b>
 ```javascript
@@ -1673,6 +1681,7 @@ for (var i in actorsInfo) {
       actors.set('born', actorsInfo[i][1]);
       actors.set('isMale', actorsInfo[i][2]);
     }
+    actors.set('id', i);
   }
 }
 // Test movement thru list
@@ -1689,6 +1698,9 @@ test.shouldBeTrue(actors.get('name') == 'Kate Winslet' || actor.get('name') == '
 actors.sort({born: 1});  // Oldest actor
 actors.moveFirst();
 test.shouldBeTrue(actors.get('name') == 'Marlon Brando');
+// find by id 6 Al Pacino
+test.shouldBeTrue(actors.findItemByID(6));
+test.shouldBeTrue(actors.get('name') == 'Al Pacino');
 ```
 &nbsp;<b><i>Test variations on getList method.:</i></b>
 ```javascript
@@ -3064,7 +3076,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Fri Aug 28 2015 09:27:22 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Mon Sep 14 2015 13:53:29 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
