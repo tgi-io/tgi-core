@@ -1427,6 +1427,12 @@ spec.test('tgi-core/lib/tgi-core-list.spec.js', 'List', 'of items', function (ca
         return list.addItem(new Model()).removeItem().length(); // returns ref for method chaining
       });
     });
+    spec.heading('findItemByID(id)', function () {
+      spec.example('findItemByID returns false if not found', true, function () {
+        var list = new List(new Model());
+        return list.findItemByID(1) === false;
+      });
+    });
     spec.heading('moveNext()', function () {
       spec.example('move to next item in list', false, function () {
         return new List(new Model()).moveNext(); // Returns true when move succeeds
@@ -1461,7 +1467,6 @@ spec.test('tgi-core/lib/tgi-core-list.spec.js', 'List', 'of items', function (ca
         var Actor = function (args) {
           Model.call(this, args);
           this.modelType = "Actor";
-
           this.attributes.push(new Attribute('name'));
           this.attributes.push(new Attribute('born', 'Number'));
           this.attributes.push(new Attribute('isMale', 'Boolean'));
@@ -1509,6 +1514,7 @@ spec.test('tgi-core/lib/tgi-core-list.spec.js', 'List', 'of items', function (ca
               actors.set('born', actorsInfo[i][1]);
               actors.set('isMale', actorsInfo[i][2]);
             }
+            actors.set('id', i);
           }
         }
 
@@ -1527,6 +1533,11 @@ spec.test('tgi-core/lib/tgi-core-list.spec.js', 'List', 'of items', function (ca
         actors.sort({born: 1});  // Oldest actor
         actors.moveFirst();
         test.shouldBeTrue(actors.get('name') == 'Marlon Brando');
+
+        // find by id 6 Al Pacino
+        test.shouldBeTrue(actors.findItemByID(6));
+        test.shouldBeTrue(actors.get('name') == 'Al Pacino');
+
       });
       spec.runnerListStoreIntegration(MemoryStore);
     });

@@ -4,7 +4,7 @@
 var TGI = {
   CORE: function () {
     return {
-      version: '0.3.10',
+      version: '0.3.12',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -887,7 +887,7 @@ List.prototype.get = function (attribute) {
       return this._items[this._itemIndex][i];
   }
 };
-List.prototype.set = function (attribute,value) {
+List.prototype.set = function (attribute, value) {
   if (this._items.length < 1) throw new Error('list is empty');
   for (var i = 0; i < this.model.attributes.length; i++) {
     if (this.model.attributes[i].name.toUpperCase() == attribute.toUpperCase()) {
@@ -913,10 +913,19 @@ List.prototype.addItem = function (item) {
   this._itemIndex = this._items.length - 1;
   return this;
 };
-List.prototype.removeItem = function (item) {
+List.prototype.removeItem = function () {
   this._items.splice(this._itemIndex, 1);
   this._itemIndex--;
   return this;
+};
+List.prototype.findItemByID = function (id) {
+  var gotMore = this.moveFirst();
+  while (gotMore) {
+    if (id == this._items[this._itemIndex][0])
+      return true;
+    gotMore = this.moveNext();
+  }
+  return false;
 };
 List.prototype.indexedItem = function (index) {
   if (this._items.length < 1) return false;
@@ -2091,6 +2100,7 @@ Presentation.prototype.getObjectStateErrors = function (modelCheckOnly) {
   this.validationMessage = this.validationErrors.length > 0 ? this.validationErrors[0] : '';
   return this.validationErrors;
 };
+
 Presentation.prototype.validate = function (callback) {
   var presentation = this;
   if (typeof callback != 'function') throw new Error('callback is required');
@@ -2126,7 +2136,7 @@ Presentation.prototype.validate = function (callback) {
     // this is the attribute TODO this bad usage ?
     if (this.validationMessage) // jshint ignore:line
       gotError = true;
-    if (checkCount==checkCount) {
+    if (attributeCount==checkCount) {
       if (gotError)
         presentation.validationErrors.push('contents has validation errors');
       presentation.validationMessage = presentation.validationErrors.length > 0 ? presentation.validationErrors[0] : '';
