@@ -6,7 +6,8 @@ Core Objects [read the spec](spec/README.md).
 
 Current
 -------
-- Transport sendRaw & onRaw have no tests
+- Attribute needs a set and get and have model invoke so codepath same
+- Attribute and model need to emit when set changes value
 
 Presentation Management
 ---
@@ -20,6 +21,7 @@ Presentation Management
 
 Later
 -----
+- Transport sendRaw & onRaw have no tests
 - REPLInterface - handle presentation (WIP)
     - view shows and leaves
     - edit edits

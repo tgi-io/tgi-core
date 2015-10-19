@@ -5,7 +5,7 @@ Core constructors, models, stores and interfaces.  The constructor functions def
 ```javascript
 this.log(TGI.CORE().version);
 ```
-<blockquote><strong>log: </strong>0.4.2<br></blockquote>
+<blockquote><strong>log: </strong>0.4.3<br></blockquote>
 ####Constructors
 
 - [Attribute](#-attribute) defines data types - needed by Model
@@ -202,7 +202,7 @@ this.shouldBeTrue(new Attribute({name: 'name'}).validationErrors.length === 0);
 ```javascript
 var errs = new Attribute({name: 'name'}).validationMessage;
 this.shouldBeFalsy(errs);
-return cpad(errs,2,'"');
+return cpad(errs, 2, '"');
 ```
 <blockquote>returns <strong>""</strong> as expected
 </blockquote>
@@ -241,14 +241,14 @@ a.validate(function () {
 ```javascript
 var a = new Attribute({name: 'balance', type: 'Number', value: 0, validationRule: {required: true}});
 a.validate(function () {
-  callback( a.validationErrors.length);
+  callback(a.validationErrors.length);
 });
 ```
 &nbsp;<b><i>validationRule.required for Boolean allows false:</i></b>
 ```javascript
 var a = new Attribute({name: 'active', type: 'Boolean', value: false, validationRule: {required: true}});
 a.validate(function () {
-  callback( a.validationErrors.length);
+  callback(a.validationErrors.length);
 });
 ```
 #### validationRule.range
@@ -258,7 +258,7 @@ validationRule.range is used when value must fall within a range of values- use 
 ```javascript
 var a = new Attribute({name: 'age', type: 'Number', value: 17, validationRule: {range: [18, null]}});
 a.validate(function () {
-  callback( a.validationErrors[0]);
+  callback(a.validationErrors[0]);
 });
 ```
 <blockquote>returns <strong>Age must be at least 18</strong> as expected
@@ -267,7 +267,7 @@ a.validate(function () {
 ```javascript
 var a = new Attribute({name: 'age', type: 'Number', value: 77, validationRule: {range: [null, 65]}});
 a.validate(function () {
-  callback( a.validationErrors[0]);
+  callback(a.validationErrors[0]);
 });
 ```
 <blockquote>returns <strong>Age must be no more than 65</strong> as expected
@@ -276,14 +276,14 @@ a.validate(function () {
 ```javascript
 var a = new Attribute({name: 'age', type: 'Number', value: 53, validationRule: {range: [18, 65]}});
 a.validate(function () {
-  callback( a.validationErrors.length);
+  callback(a.validationErrors.length);
 });
 ```
 &nbsp;<b><i>validationRule.range forced to array:</i></b>
 ```javascript
 var a = new Attribute({name: 'age', type: 'Number', value: 53, validationRule: {range: 100}});
 a.validate(function () {
-  callback( a.validationErrors);
+  callback(a.validationErrors);
 });
 ```
 <blockquote>returns <strong>Age must be at least 100</strong> as expected
@@ -295,7 +295,7 @@ validationRule.isOneOf is used when a value is must be on of items in array
 ```javascript
 var a = new Attribute({name: 'age', type: 'Number', value: 2, validationRule: {isOneOf: [1, 3]}});
 a.validate(function () {
-  callback( a.validationErrors[0]);
+  callback(a.validationErrors[0]);
 });
 ```
 <blockquote>returns <strong>Age invalid</strong> as expected
@@ -304,7 +304,7 @@ a.validate(function () {
 ```javascript
 var a = new Attribute({name: 'age', type: 'Number', value: 1, validationRule: {isOneOf: [1, 3]}});
 a.validate(function () {
-  callback( a.validationErrors.length);
+  callback(a.validationErrors.length);
 });
 ```
 #### value
@@ -519,6 +519,22 @@ return new Attribute({name: 'stuff', type: 'Object'}).type;
 <blockquote>returns <strong>Object</strong> as expected
 </blockquote>
 #### METHODS
+#### get()
+&nbsp;<b><i>return value:</i></b>
+```javascript
+return new Attribute({name: 'name', value: 'John'}).get();
+```
+<blockquote>returns <strong>John</strong> as expected
+</blockquote>
+#### set()
+&nbsp;<b><i>set value:</i></b>
+```javascript
+var dude = new Attribute({name: 'name', value: 'John'});
+dude.set('Jack');
+return dude.get();
+```
+<blockquote>returns <strong>Jack</strong> as expected
+</blockquote>
 #### toString()
 &nbsp;<b><i>should return a description of the attribute:</i></b>
 ```javascript
@@ -678,7 +694,7 @@ var attribute = new Attribute({name: 'test'});
 attribute.onEvent('StateChange', function () {
   // When the error is got milk then test is done
   if (attribute.validationMessage === 'got milk')
-    callback( 'got milk');
+    callback('got milk');
 });
 // validate will first make sure the object passes integrity checks
 attribute.name = '';
@@ -1220,7 +1236,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Mon Oct 19 2015 12:10:55 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Mon Oct 19 2015 15:37:10 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1229,7 +1245,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Mon Oct 19 2015 12:10:55 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Mon Oct 19 2015 15:37:10 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -3062,7 +3078,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Mon Oct 19 2015 12:10:55 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Mon Oct 19 2015 15:37:10 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
