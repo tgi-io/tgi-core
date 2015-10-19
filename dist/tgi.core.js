@@ -10,7 +10,7 @@ var root = this;
 var TGI = {
   CORE: function () {
     return {
-      version: '0.4.0',
+      version: '0.4.2',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -181,6 +181,9 @@ Attribute.prototype.onEvent = function (events, callback) {
   // All good add to chain
   this._eventListeners.push({events: events, callback: callback});
   return this;
+};
+Attribute.prototype.offEvent = function () {
+  this._eventListeners = [];
 };
 Attribute.prototype._emitEvent = function (event) {
   var i;
@@ -514,7 +517,7 @@ Command.prototype.execute = function (context) {
         context.render(this, 'View');
         break;
       case 'Presentation':
-        context.render(this.contents, this.presentationMode);
+        context.render(this);
         break;
     }
   } catch (e) {

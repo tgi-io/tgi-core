@@ -5,7 +5,7 @@ Core constructors, models, stores and interfaces.  The constructor functions def
 ```javascript
 this.log(TGI.CORE().version);
 ```
-<blockquote><strong>log: </strong>0.4.0<br></blockquote>
+<blockquote><strong>log: </strong>0.4.2<br></blockquote>
 ####Constructors
 
 - [Attribute](#-attribute) defines data types - needed by Model
@@ -613,6 +613,13 @@ new Attribute({name: 'name'}).onEvent(['Validate'], function () {
 });
 ```
 <blockquote><strong>log: </strong>StateChange,Validate<br></blockquote>
+#### offEvents
+Free all onEvent listeners    
+
+&nbsp;<b><i>example:</i></b>
+```javascript
+new Attribute({name: 'name'}).offEvent();
+```
 #### validate
 check valid object state and value for attribute - invoke callback for results    
 
@@ -1213,7 +1220,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Thu Oct 15 2015 20:57:03 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Mon Oct 19 2015 12:10:55 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1222,7 +1229,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Thu Oct 15 2015 20:57:03 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Mon Oct 19 2015 12:10:55 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -3055,7 +3062,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Thu Oct 15 2015 20:57:03 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Mon Oct 19 2015 12:10:55 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -3219,7 +3226,7 @@ input('Doe');
 presentationCommand.presentationMode = 'View';
 presentationCommand.execute(repl);
 ```
-<blockquote><strong>log: </strong>event> BeforeExecute ok<br><strong>log: </strong>out> ##TITLE<br><strong>log: </strong>out> Here is **text**.  _Note it uses markdown_.  Eventually this will be **stripped** out!<br><strong>log: </strong>out> Here are some attributes:<br><strong>log: </strong>out> FirstName: Elmer<br><strong>log: </strong>out>  LastName: Fud<br><strong>log: </strong>event> AfterExecute ok<br><strong>log: </strong>event> BeforeExecute ok<br><strong>log: </strong>out> ##TITLE<br><strong>log: </strong>out> Here is **text**.  _Note it uses markdown_.  Eventually this will be **stripped** out!<br><strong>log: </strong>out> Here are some attributes:<br><strong>log: </strong>event> AfterExecute ok<br><strong>log: </strong>in> John<br><strong>log: </strong>in> Doe<br><strong>log: </strong>event> BeforeExecute ok<br><strong>log: </strong>out> ##TITLE<br><strong>log: </strong>out> Here is **text**.  _Note it uses markdown_.  Eventually this will be **stripped** out!<br><strong>log: </strong>out> Here are some attributes:<br><strong>log: </strong>out> FirstName: John<br><strong>log: </strong>out>  LastName: Doe<br><strong>log: </strong>event> AfterExecute ok<br><strong>log: </strong>prompt> LastName: <br><strong>log: </strong>prompt> ?<br></blockquote>
+<blockquote><strong>log: </strong>event> BeforeExecute ok<br><strong>log: </strong>event> ErrorError: Presentation object required<br><strong>log: </strong>event> Completed ok<br><strong>log: </strong>event> AfterExecute ok<br><strong>log: </strong>event> BeforeExecute ok<br><strong>log: </strong>event> ErrorError: Presentation object required<br><strong>log: </strong>event> Completed ok<br><strong>log: </strong>event> AfterExecute ok<br><strong>log: </strong>in> John<br><strong>log: </strong>out> input ignored: John<br><strong>log: </strong>in> Doe<br><strong>log: </strong>out> input ignored: Doe<br><strong>log: </strong>event> BeforeExecute ok<br><strong>log: </strong>event> ErrorError: Presentation object required<br><strong>log: </strong>event> Completed ok<br><strong>log: </strong>event> AfterExecute ok<br><strong>log: </strong>prompt> ?<br><strong>log: </strong>prompt> ?<br></blockquote>
 ## [&#9664;](#-presentation)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-user) &nbsp;Session
 #### Session Model
 The Session Model represents the Session logged into the system. The library uses this for system access, logging and other functions.    

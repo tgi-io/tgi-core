@@ -4,7 +4,7 @@
 var TGI = {
   CORE: function () {
     return {
-      version: '0.3.12',
+      version: '0.4.2',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -175,6 +175,9 @@ Attribute.prototype.onEvent = function (events, callback) {
   // All good add to chain
   this._eventListeners.push({events: events, callback: callback});
   return this;
+};
+Attribute.prototype.offEvent = function () {
+  this._eventListeners = [];
 };
 Attribute.prototype._emitEvent = function (event) {
   var i;
@@ -508,7 +511,7 @@ Command.prototype.execute = function (context) {
         context.render(this, 'View');
         break;
       case 'Presentation':
-        context.render(this.contents, this.presentationMode);
+        context.render(this);
         break;
     }
   } catch (e) {
@@ -795,11 +798,10 @@ Interface.prototype.dispatch = function (request, response) {
 Interface.prototype.notify = function (message) {
   if (false === (message instanceof Message)) throw new Error('Message required');
 };
-Interface.prototype.render = function (presentation, presentationMode, callback) {
-  if (false === (presentation instanceof Presentation)) throw new Error('Presentation object required');
-  if (typeof presentationMode !== 'string') throw new Error('presentationMode required');
-  if (!contains(Command.getPresentationModes(), presentationMode)) throw new Error('Invalid presentationMode: ' + presentationMode);
-  if (callback && typeof callback != 'function') throw new Error('optional second argument must a commandRequest callback function');
+Interface.prototype.render = function (command, callback) {
+  if (false === (command instanceof Command)) throw new Error('Command object required');
+  //if (!contains(Command.getPresentationModes(), presentationMode)) throw new Error('Invalid presentationMode: ' + presentationMode);
+  //if (callback && typeof callback != 'function') throw new Error('optional second argument must a commandRequest callback function');
 };
 Interface.prototype.info = function (text) {
   if (!text || typeof text !== 'string') throw new Error('text required');
