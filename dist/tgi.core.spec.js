@@ -22,6 +22,7 @@ var testSpec = function(spec,TGI) {
   var Request = tgiCore.Request;
   var Session = tgiCore.Session;
   var Store = tgiCore.Store;
+  var Text = tgiCore.Text;
   var Transport = tgiCore.Transport;
   var User = tgiCore.User;
   var Workspace = tgiCore.Workspace;
@@ -932,7 +933,7 @@ spec.test('tgi-core/lib/tgi-core-command.spec.js', 'Command', 'encapsulates task
         cmd.contents = 123;
         cmd.execute();
       });
-      this.shouldThrowError(Error('error executing Presentation: contents elements must be Command, Attribute, List or string'), function () {
+      this.shouldThrowError(Error('error executing Presentation: contents elements must be Text, Command, Attribute, List or string'), function () {
         cmd.contents = new Presentation();
         cmd.contents.set('contents', [new Command(), new Attribute({name: 'meh'}), true]);
         cmd.execute();
@@ -2802,6 +2803,30 @@ spec.runnerStoreMethods = function (SurrogateStore) {
 
 };
 /**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/lib/core/tgi-core-text.spec.js
+ */
+spec.test('tgi-core/lib/core/tgi-core-text.spec.js', 'Text', 'text identifier allows interface info', function (callback) {
+  spec.heading('Text Class', function () {
+    spec.paragraph('Text is used to allow display and setting of application / user text.');
+    spec.heading('CONSTRUCTOR', function () {
+      spec.example('objects created should be an instance of Text', true, function () {
+        return new Text('Null') instanceof Text;
+      });
+      spec.example('should make sure new operator used', Error('new operator required'), function () {
+        Text('Null'); // jshint ignore:line
+      });
+    });
+    spec.heading('METHODS', function () {
+      spec.heading('toString()', function () {
+        spec.example('should return a description of the Text', 'Text: \'me\'', function () {
+          return new Text('me').toString();
+        });
+      });
+    });
+  });
+});
+
+/**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/tgi-core-transport.spec.js
  */
 spec.test('tgi-core/lib/tgi-core-transport.spec.js', 'Transport', 'messages between client and host', function (callback) {
@@ -3343,10 +3368,10 @@ spec.test('tgi-core/lib/models/tgi-core-model-presentation.spec.js', 'Presentati
         pres.set('contents', true);
         return pres.getObjectStateErrors();
       });
-      spec.example('contents elements must be Command, Attribute, List or string', 'contents elements must be Command, Attribute, List or string', function () {
+      spec.example('contents elements must be Text, Command, Attribute, List or string', 'contents elements must be Text, Command, Attribute, List or string', function () {
         var pres = new Presentation();
         // strings with prefix # are heading, a dash - by itself is for a visual separator
-        pres.set('contents', ['#heading', new Command(), new Attribute({name: 'meh'}),new List(new Model())]);
+        pres.set('contents', ['#heading', new Text('sup'), new Command(), new Attribute({name: 'meh'}),new List(new Model())]);
         this.shouldBeTrue(pres.getObjectStateErrors().length === 0);
         pres.set('contents', [new Command(), new Attribute({name: 'meh'}), true]);
         return pres.getObjectStateErrors();

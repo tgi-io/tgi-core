@@ -22,6 +22,7 @@ var testSpec = function(spec,TGI) {
   var Request = tgiCore.Request;
   var Session = tgiCore.Session;
   var Store = tgiCore.Store;
+  var Text = tgiCore.Text;
   var Transport = tgiCore.Transport;
   var User = tgiCore.User;
   var Workspace = tgiCore.Workspace;

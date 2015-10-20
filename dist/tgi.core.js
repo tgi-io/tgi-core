@@ -27,6 +27,7 @@ var TGI = {
       Request: Request,
       Session: Session,
       Store: Store,
+      Text: Text,
       Transport: Transport,
       User: User,
       Workspace: Workspace,
@@ -1372,6 +1373,23 @@ Store.prototype.getList = function () {
 };
 
 /**---------------------------------------------------------------------------------------------------------------------
+ * tgi-core/lib/core/tgi-core-text.source.js
+ */
+/**
+ * Constructor
+ */
+function Text(contents) {
+  if (false === (this instanceof Text)) throw new Error('new operator required');
+  this.contents = contents || '';
+}
+/**
+ * Methods
+ */
+Text.prototype.toString = function () {
+  return 'Text: \'' + (this.contents || '') + '\'';
+};
+
+/**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/core/tgi-core-transport.source.js
  */
 /* istanbul ignore next */
@@ -2105,11 +2123,11 @@ Presentation.prototype.getObjectStateErrors = function (modelCheckOnly) {
     var gotError = false;
     if (contents instanceof Array) {
       for (i = 0; i < contents.length; i++) {
-        if (!(contents[i] instanceof Command || contents[i] instanceof Attribute || contents[i] instanceof List || typeof contents[i] == 'string'))
+        if (!(contents[i] instanceof Text || contents[i] instanceof Command || contents[i] instanceof Attribute || contents[i] instanceof List || typeof contents[i] == 'string'))
           gotError = true;
       }
       if (gotError)
-        this.validationErrors.push('contents elements must be Command, Attribute, List or string');
+        this.validationErrors.push('contents elements must be Text, Command, Attribute, List or string');
     } else {
       this.validationErrors.push('contents must be Array');
     }
