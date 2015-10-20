@@ -4,7 +4,7 @@
 var TGI = {
   CORE: function () {
     return {
-      version: '0.4.3',
+      version: '0.4.4',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -1374,13 +1374,13 @@ Store.prototype.getList = function () {
  */
 function Text(contents) {
   if (false === (this instanceof Text)) throw new Error('new operator required');
-  this.contents = contents && '';
+  this.contents = contents || '';
 }
 /**
  * Methods
  */
 Text.prototype.toString = function () {
-  return ' Text: \'' + (this.contents && '') + '\'';
+  return 'Text: \'' + (this.contents || '') + '\'';
 };
 
 /**---------------------------------------------------------------------------------------------------------------------
@@ -2117,11 +2117,11 @@ Presentation.prototype.getObjectStateErrors = function (modelCheckOnly) {
     var gotError = false;
     if (contents instanceof Array) {
       for (i = 0; i < contents.length; i++) {
-        if (!(contents[i] instanceof Command || contents[i] instanceof Attribute || contents[i] instanceof List || typeof contents[i] == 'string'))
+        if (!(contents[i] instanceof Text || contents[i] instanceof Command || contents[i] instanceof Attribute || contents[i] instanceof List || typeof contents[i] == 'string'))
           gotError = true;
       }
       if (gotError)
-        this.validationErrors.push('contents elements must be Command, Attribute, List or string');
+        this.validationErrors.push('contents elements must be Text, Command, Attribute, List or string');
     } else {
       this.validationErrors.push('contents must be Array');
     }

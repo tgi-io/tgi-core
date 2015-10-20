@@ -5,7 +5,7 @@ Core constructors, models, stores and interfaces.  The constructor functions def
 ```javascript
 this.log(TGI.CORE().version);
 ```
-<blockquote><strong>log: </strong>0.4.3<br></blockquote>
+<blockquote><strong>log: </strong>0.4.4<br></blockquote>
 ####Constructors
 
 - [Attribute](#-attribute) defines data types - needed by Model
@@ -18,6 +18,7 @@ this.log(TGI.CORE().version);
 - [Procedure](#-procedure) manages set of Commands synchronous or asynchronous
 - [Request](#-request) from Interface - Application handles response
 - [Store](#-store) holds Model objects for updating and retrieving
+- [Text](#-text) text identifier allows interface info
 - [Transport](#-transport) messages between client and host
 
 #### Interfaces
@@ -1102,7 +1103,7 @@ this.shouldThrowError(Error('contents must be a Presentation'), function () {
   cmd.contents = 123;
   cmd.execute();
 });
-this.shouldThrowError(Error('error executing Presentation: contents elements must be Command, Attribute, List or string'), function () {
+this.shouldThrowError(Error('error executing Presentation: contents elements must be Text, Command, Attribute, List or string'), function () {
   cmd.contents = new Presentation();
   cmd.contents.set('contents', [new Command(), new Attribute({name: 'meh'}), true]);
   cmd.execute();
@@ -1236,7 +1237,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Tue Oct 20 2015 11:26:31 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Tue Oct 20 2015 11:52:19 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1245,7 +1246,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Tue Oct 20 2015 11:26:31 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Tue Oct 20 2015 11:52:19 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2281,7 +2282,7 @@ return new Request('Null').toString();
 ```
 <blockquote>returns <strong>Null Request</strong> as expected
 </blockquote>
-## [&#9664;](#-request)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-transport) &nbsp;Store
+## [&#9664;](#-request)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-text) &nbsp;Store
 The store class is used for object persistence.    
 
 #### CONSTRUCTOR
@@ -2600,7 +2601,32 @@ function listReady(list, error) {
 ```
 <blockquote><strong>log: </strong>a Store Store<br><strong>log: </strong>Store is not ready.<br>returns <strong>true</strong> as expected
 </blockquote>
-## [&#9664;](#-store)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-replinterface) &nbsp;Transport
+## [&#9664;](#-store)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-transport) &nbsp;Text
+#### Text Class
+Text is used to allow display and setting of application / user text.    
+
+#### CONSTRUCTOR
+&nbsp;<b><i>objects created should be an instance of Text:</i></b>
+```javascript
+return new Text('Null') instanceof Text;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>should make sure new operator used:</i></b>
+```javascript
+Text('Null'); // jshint ignore:line
+```
+<blockquote><strong>Error: new operator required</strong> thrown as expected
+</blockquote>
+#### METHODS
+#### toString()
+&nbsp;<b><i>should return a description of the Text:</i></b>
+```javascript
+return new Text('me').toString();
+```
+<blockquote>returns <strong>Text: 'me'</strong> as expected
+</blockquote>
+## [&#9664;](#-text)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-replinterface) &nbsp;Transport
 Handle message passing between host and UI.    
 
 TODO: run these tests in node-make-spec-md with io defined    
@@ -3078,7 +3104,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Tue Oct 20 2015 11:26:31 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Tue Oct 20 2015 11:52:19 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -3163,16 +3189,16 @@ return pres.getObjectStateErrors();
 ```
 <blockquote>returns <strong>contents must be Array</strong> as expected
 </blockquote>
-&nbsp;<b><i>contents elements must be Command, Attribute, List or string:</i></b>
+&nbsp;<b><i>contents elements must be Text, Command, Attribute, List or string:</i></b>
 ```javascript
 var pres = new Presentation();
 // strings with prefix # are heading, a dash - by itself is for a visual separator
-pres.set('contents', ['#heading', new Command(), new Attribute({name: 'meh'}),new List(new Model())]);
+pres.set('contents', ['#heading', new Text('sup'), new Command(), new Attribute({name: 'meh'}),new List(new Model())]);
 this.shouldBeTrue(pres.getObjectStateErrors().length === 0);
 pres.set('contents', [new Command(), new Attribute({name: 'meh'}), true]);
 return pres.getObjectStateErrors();
 ```
-<blockquote>returns <strong>contents elements must be Command, Attribute, List or string</strong> as expected
+<blockquote>returns <strong>contents elements must be Text, Command, Attribute, List or string</strong> as expected
 </blockquote>
 #### INTEGRATION
 &nbsp;<b><i>validation usage demonstrated:</i></b>

@@ -892,7 +892,7 @@ spec.test('tgi-core/lib/tgi-core-command.spec.js', 'Command', 'encapsulates task
         cmd.contents = 123;
         cmd.execute();
       });
-      this.shouldThrowError(Error('error executing Presentation: contents elements must be Command, Attribute, List or string'), function () {
+      this.shouldThrowError(Error('error executing Presentation: contents elements must be Text, Command, Attribute, List or string'), function () {
         cmd.contents = new Presentation();
         cmd.contents.set('contents', [new Command(), new Attribute({name: 'meh'}), true]);
         cmd.execute();
@@ -2777,7 +2777,7 @@ spec.test('tgi-core/lib/core/tgi-core-text.spec.js', 'Text', 'text identifier al
     });
     spec.heading('METHODS', function () {
       spec.heading('toString()', function () {
-        spec.example('should return a description of the Text', 'Null Text', function () {
+        spec.example('should return a description of the Text', 'Text: \'me\'', function () {
           return new Text('me').toString();
         });
       });
@@ -3327,10 +3327,10 @@ spec.test('tgi-core/lib/models/tgi-core-model-presentation.spec.js', 'Presentati
         pres.set('contents', true);
         return pres.getObjectStateErrors();
       });
-      spec.example('contents elements must be Command, Attribute, List or string', 'contents elements must be Command, Attribute, List or string', function () {
+      spec.example('contents elements must be Text, Command, Attribute, List or string', 'contents elements must be Text, Command, Attribute, List or string', function () {
         var pres = new Presentation();
         // strings with prefix # are heading, a dash - by itself is for a visual separator
-        pres.set('contents', ['#heading', new Command(), new Attribute({name: 'meh'}),new List(new Model())]);
+        pres.set('contents', ['#heading', new Text('sup'), new Command(), new Attribute({name: 'meh'}),new List(new Model())]);
         this.shouldBeTrue(pres.getObjectStateErrors().length === 0);
         pres.set('contents', [new Command(), new Attribute({name: 'meh'}), true]);
         return pres.getObjectStateErrors();
