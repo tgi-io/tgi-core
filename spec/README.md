@@ -5,7 +5,7 @@ Core constructors, models, stores and interfaces.  The constructor functions def
 ```javascript
 this.log(TGI.CORE().version);
 ```
-<blockquote><strong>log: </strong>0.4.4<br></blockquote>
+<blockquote><strong>log: </strong>0.4.5<br></blockquote>
 ####Constructors
 
 - [Attribute](#-attribute) defines data types - needed by Model
@@ -1237,7 +1237,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Tue Oct 20 2015 11:52:19 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Tue Oct 20 2015 17:10:25 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1246,7 +1246,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Tue Oct 20 2015 11:52:19 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Tue Oct 20 2015 17:10:25 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2626,6 +2626,56 @@ return new Text('me').toString();
 ```
 <blockquote>returns <strong>Text: 'me'</strong> as expected
 </blockquote>
+#### get()
+&nbsp;<b><i>return value:</i></b>
+```javascript
+return new Text('yo').get();
+```
+<blockquote>returns <strong>yo</strong> as expected
+</blockquote>
+#### set()
+&nbsp;<b><i>set value:</i></b>
+```javascript
+var who = new Text('Me');
+who.set('You');
+return who.get();
+```
+<blockquote>returns <strong>You</strong> as expected
+</blockquote>
+#### onEvent
+Use onEvent(events,callback)    
+
+&nbsp;<b><i>first parameter is a string or array of event subscriptions:</i></b>
+```javascript
+new Text('').onEvent();
+```
+<blockquote><strong>Error: subscription string or array required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>callback is required:</i></b>
+```javascript
+new Text('').onEvent([]);
+```
+<blockquote><strong>Error: callback is required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>events are checked against known types:</i></b>
+```javascript
+new Text('').onEvent(['onDrunk'], function () {
+});
+```
+<blockquote><strong>Error: Unknown command event: onDrunk</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>here is a working version:</i></b>
+```javascript
+new Text('').onEvent(['StateChange'], function () {
+});
+```
+#### offEvents
+Free all onEvent listeners    
+
+&nbsp;<b><i>example:</i></b>
+```javascript
+new Text('').offEvent();
+```
 ## [&#9664;](#-text)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-replinterface) &nbsp;Transport
 Handle message passing between host and UI.    
 
@@ -3104,7 +3154,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Tue Oct 20 2015 11:52:19 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Tue Oct 20 2015 17:10:26 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript

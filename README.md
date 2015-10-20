@@ -6,8 +6,8 @@ Core Objects [read the spec](spec/README.md).
 
 Current
 -------
-- Attribute needs a set and get and have model invoke so codepath same
-- Attribute and model need to emit when set changes value
+- give Text() a set() get() and onEvent() method
+- 
 
 Presentation Management
 ---
