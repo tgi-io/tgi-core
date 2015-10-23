@@ -10,7 +10,7 @@ var root = this;
 var TGI = {
   CORE: function () {
     return {
-      version: '0.4.6',
+      version: '0.4.7',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -2149,7 +2149,6 @@ var Presentation = function (args) {
   args.attributes.push(new Attribute({name: 'contents', type: 'Object', value: []}));
   Model.call(this, args);
   this.modelType = "Presentation";
-  this.presentationMode = "View";
 };
 Presentation.prototype = Object.create(Model.prototype);
 /*
@@ -2186,10 +2185,6 @@ Presentation.prototype.validate = function (callback) {
       this.validationErrors.push(this._errorConditions[e]);
     }
   }
-
-  if (this.presentationMode !== 'View' && this.presentationMode !== 'Edit')
-    this.validationErrors.push('invalid presentationMode');
-
   // validate each attribute in contents
   var i;
   var gotError = false;
