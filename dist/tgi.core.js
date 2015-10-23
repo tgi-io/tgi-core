@@ -10,7 +10,7 @@ var root = this;
 var TGI = {
   CORE: function () {
     return {
-      version: '0.4.5',
+      version: '0.4.6',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -2196,7 +2196,7 @@ Presentation.prototype.validate = function (callback) {
   var attributeCount = 0;
   var checkCount = 0;
   var contents = this.get('contents');
-  if (!contents instanceof Array)
+  if (!(contents instanceof Array))
     contents = [];
 
   // Count first

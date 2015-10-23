@@ -4,7 +4,7 @@
 var TGI = {
   CORE: function () {
     return {
-      version: '0.4.5',
+      version: '0.4.6',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -2143,6 +2143,7 @@ var Presentation = function (args) {
   args.attributes.push(new Attribute({name: 'contents', type: 'Object', value: []}));
   Model.call(this, args);
   this.modelType = "Presentation";
+  this.presentationMode = "View";
 };
 Presentation.prototype = Object.create(Model.prototype);
 /*
@@ -2179,38 +2180,53 @@ Presentation.prototype.validate = function (callback) {
       this.validationErrors.push(this._errorConditions[e]);
     }
   }
+
+  if (this.presentationMode !== 'View' && this.presentationMode !== 'Edit')
+    this.validationErrors.push('invalid presentationMode');
+
   // validate each attribute in contents
   var i;
   var gotError = false;
   var attributeCount = 0;
   var checkCount = 0;
   var contents = this.get('contents');
-  if (contents instanceof Array) {
-    // Count first
-    for (i = 0; i < contents.length; i++) {
-      if (contents[i] instanceof Attribute) {
-        attributeCount++;
-      }
-    }
-    // Launch validations
-    for (i = 0; i < contents.length; i++) {
-      if (contents[i] instanceof Attribute) {
-        contents[i].validate(checkAttrib);
-      }
+  if (!(contents instanceof Array))
+    contents = [];
+
+  // Count first
+  for (i = 0; i < contents.length; i++) {
+    if (contents[i] instanceof Attribute) {
+      attributeCount++;
     }
   }
+  // Launch validations
+  for (i = 0; i < contents.length; i++) {
+    if (contents[i] instanceof Attribute) {
+      contents[i].validate(checkAttrib);
+    }
+  }
+
+  // If no attributes call callback since checkAttrib not called
+  if (contents.length < 1)
+    finishUp();
+
   function checkAttrib() {
     checkCount++;
     // this is the attribute TODO this bad usage ?
     if (this.validationMessage) // jshint ignore:line
       gotError = true;
-    if (attributeCount==checkCount) {
+    if (attributeCount == checkCount) {
       if (gotError)
         presentation.validationErrors.push('contents has validation errors');
-      presentation.validationMessage = presentation.validationErrors.length > 0 ? presentation.validationErrors[0] : '';
-      callback();
+      finishUp();
     }
   }
+
+  function finishUp() {
+    presentation.validationMessage = presentation.validationErrors.length > 0 ? presentation.validationErrors[0] : '';
+    callback();
+  }
+
 };
 
 /**

@@ -3309,7 +3309,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-log.spec.js', 'Log', 'information 
 spec.test('tgi-core/lib/models/tgi-core-model-presentation.spec.js', 'Presentation', 'used by Interface to render data', function (callback) {
   spec.heading('Presentation Model', function () {
     spec.paragraph('The Presentation Model represents the way in which a model is to be presented to the user.  ' +
-    'The specific Interface object will represent the model data according to the Presentation object.');
+      'The specific Interface object will represent the model data according to the Presentation object.');
     spec.heading('CONSTRUCTOR', function () {
       spec.example('objects created should be an instance of Presentation', true, function () {
         return new Presentation() instanceof Presentation;
@@ -3331,10 +3331,22 @@ spec.test('tgi-core/lib/models/tgi-core-model-presentation.spec.js', 'Presentati
           return new Presentation().validationMessage;
         });
       });
+      spec.heading('presentationMode defines mode to render', function () {
+        spec.example('defaults to View', 'View', function () {
+          return new Presentation().presentationMode;
+        });
+        spec.example('presentationMode can be View or Edit', spec.asyncResults('invalid presentationMode'), function (callback) {
+          var presentation = new Presentation();
+          presentation.presentationMode = 'wtf';
+          presentation.validate(function () {
+            callback(presentation.validationMessage);
+          });
+        });
+      });
     });
     spec.heading('ATTRIBUTES', function () {
       spec.paragraph('Presentation extends model and inherits the attributes property.  All Presentation objects ' +
-      'have the following attributes:');
+        'have the following attributes:');
       spec.example('following attributes are defined:', undefined, function () {
         var presentation = new Presentation(); // default attributes and values
         this.shouldBeTrue(presentation.get('id') === null);
@@ -3366,7 +3378,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-presentation.spec.js', 'Presentati
       spec.example('contents elements must be Text, Command, Attribute, List or string', 'contents elements must be Text, Command, Attribute, List or string', function () {
         var pres = new Presentation();
         // strings with prefix # are heading, a dash - by itself is for a visual separator
-        pres.set('contents', ['#heading', new Text('sup'), new Command(), new Attribute({name: 'meh'}),new List(new Model())]);
+        pres.set('contents', ['#heading', new Text('sup'), new Command(), new Attribute({name: 'meh'}), new List(new Model())]);
         this.shouldBeTrue(pres.getObjectStateErrors().length === 0);
         pres.set('contents', [new Command(), new Attribute({name: 'meh'}), true]);
         return pres.getObjectStateErrors();
