@@ -10,7 +10,7 @@ var root = this;
 var TGI = {
   CORE: function () {
     return {
-      version: '0.4.9',
+      version: '0.4.11',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -1495,6 +1495,7 @@ function Transport(location, callback) {
     console.log('socket.io (' + self.location + ') disconnect: ' + reason);
   });
 }
+Transport.showLog=false; // set to true to show message
 /**
  * pub/sub thingies
  */
@@ -1503,6 +1504,8 @@ Transport.setMessageHandler = function (message, handler) {
   Transport.messageHandlers[message] = handler;
 };
 Transport.hostMessageProcess = function (obj, fn) {
+  if (Transport.showLog)
+    console.log('Transport.hostMessageProcess ' + JSON.stringify(obj));
   if (Transport.messageHandlers[obj.type]) {
     Transport.messageHandlers[obj.type](obj.contents, fn);
   } else {
@@ -1531,10 +1534,14 @@ Transport.prototype.send = function (message, callback) {
     return;
   }
   if (typeof callback != 'undefined') {
+    if (Transport.showLog)
+      console.log('Transport emit ' + JSON.stringify(message));
     self.socket.emit('ackmessage', message, function (msg) {
       callback.call(self, msg);
     });
   } else {
+    if (Transport.showLog)
+      console.log('Transport send ' + JSON.stringify(message));
     self.socket.send(message);
   }
 };

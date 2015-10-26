@@ -4,7 +4,7 @@
 var TGI = {
   CORE: function () {
     return {
-      version: '0.4.8',
+      version: '0.4.11',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -27,6 +27,8 @@ var TGI = {
       Workspace: Workspace,
       inheritPrototype: inheritPrototype,
       getInvalidProperties: getInvalidProperties,
+      getConstructorFromModelType: getConstructorFromModelType,
+      createModelFromModelType: createModelFromModelType,
       trim: trim,
       ltrim: ltrim,
       rtrim: rtrim,
@@ -1016,7 +1018,10 @@ var Model = function (args) {
   this._eventListeners = [];
   this._errorConditions = {};
 };
-// Methods
+Model._ModelConstructor = {};
+/**
+ * Methods
+ */
 Model.prototype.toString = function () {
   return "a " + this.modelType;
 };
@@ -1484,6 +1489,7 @@ function Transport(location, callback) {
     console.log('socket.io (' + self.location + ') disconnect: ' + reason);
   });
 }
+Transport.showLog=false; // set to true to show message
 /**
  * pub/sub thingies
  */
@@ -1492,6 +1498,8 @@ Transport.setMessageHandler = function (message, handler) {
   Transport.messageHandlers[message] = handler;
 };
 Transport.hostMessageProcess = function (obj, fn) {
+  if (Transport.showLog)
+    console.log('Transport.hostMessageProcess ' + JSON.stringify(obj));
   if (Transport.messageHandlers[obj.type]) {
     Transport.messageHandlers[obj.type](obj.contents, fn);
   } else {
@@ -1520,10 +1528,14 @@ Transport.prototype.send = function (message, callback) {
     return;
   }
   if (typeof callback != 'undefined') {
+    if (Transport.showLog)
+      console.log('Transport emit ' + JSON.stringify(message));
     self.socket.emit('ackmessage', message, function (msg) {
       callback.call(self, msg);
     });
   } else {
+    if (Transport.showLog)
+      console.log('Transport send ' + JSON.stringify(message));
     self.socket.send(message);
   }
 };
@@ -1995,6 +2007,8 @@ var Application = function (args) {
   this.set('brand', 'NEW APP');
 };
 Application.prototype = Object.create(Model.prototype);
+Model._ModelConstructor.Application = Application;
+
 
 /**
  * Methods
@@ -2121,6 +2135,7 @@ var Log = function (args) {
   this.modelType = "Log";
 };
 Log.prototype = Object.create(Model.prototype);
+Model._ModelConstructor.Log = Log;
 /**
  * Methods
  */
@@ -2148,6 +2163,7 @@ var Presentation = function (args) {
   this.modelType = "Presentation";
 };
 Presentation.prototype = Object.create(Model.prototype);
+Model._ModelConstructor.Presentation = Presentation;
 /*
  * Methods
  */
@@ -2250,6 +2266,7 @@ var Session = function (args) {
   this.set('active', false);
 };
 Session.prototype = Object.create(Model.prototype);
+Model._ModelConstructor.Session = Session;
 /*
  * Methods
  */
@@ -2354,9 +2371,10 @@ var User = function (args) {
   args.attributes.push(new Attribute({name: 'email', type: 'String(20)'}));
   Model.call(this, args);
   this.modelType = "User";
-  this.set('active',false);
+  this.set('active', false);
 };
 User.prototype = Object.create(Model.prototype);
+Model._ModelConstructor.User = User;
 /**
  * tequila
  * workspace-class
@@ -2378,6 +2396,7 @@ function Workspace(args) {
   this.modelType = "Workspace";
 }
 Workspace.prototype = Object.create(Model.prototype);
+Model._ModelConstructor.Workspace = Workspace;
 /*
  * Methods
  */
@@ -2618,6 +2637,23 @@ var getInvalidProperties = function (args, allowedProperties) {
   }
   return props;
 };
+
+/**
+ * getConstructorFromModelType(modelType)
+ */
+var getConstructorFromModelType = function (modelType) {
+  return Model._ModelConstructor[modelType] || Model;
+};
+
+/**
+ * createModelFromModelType(modelType)
+ */
+var createModelFromModelType = function (modelType) {
+  var ProxyModel = getConstructorFromModelType(modelType);
+  return new ProxyModel();
+};
+
+
 
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/utility/tgi-core-strings.source.js
