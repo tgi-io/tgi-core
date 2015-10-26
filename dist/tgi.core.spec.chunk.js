@@ -1763,14 +1763,14 @@ spec.test('tgi-core/lib/tgi-core-message.spec.js', 'Message', 'between host and 
  * tgi-core/lib/tgi-core-model.spec.js
  */
 spec.test('tgi-core/lib/tgi-core-model.spec.js', 'Model', 'abstracts entities using a collection of attributes', function (callback) {
-  spec.testModel(Model);
+  spec.testModel(Model,true);
 });
 
 /**
  * test Model and Models
  */
-spec.testModel = function (SurrogateModel) {
-  if (SurrogateModel.modelType!='Model') {
+spec.testModel = function (SurrogateModel,root) {
+  if (!root) {
     spec.mute(true);
   }
   spec.heading('CONSTRUCTOR', function () {
@@ -1992,7 +1992,7 @@ spec.testModel = function (SurrogateModel) {
       }
     });
   });
-  if (SurrogateModel.modelType!='Model') {
+  if (SurrogateModel.modelType != 'Model') {
     var wasMuted = spec.mute(false).testsCreated;
     spec.paragraph('*' + wasMuted + ' model tests applied*');
   }
@@ -3713,7 +3713,7 @@ spec.test('tgi-utility/lib/tgi-utility-arrays.test.js', 'Array Functions', 'desc
  */
 spec.test('tgi-utility/lib/tgi-utility-objects.test.js', 'Object Functions', 'description', function (callback) {
   spec.heading('inheritPrototype(p)', function () {
-    spec.paragraph('kinda sorta class like');
+    spec.paragraph('[deprecated] ex: User.prototype = Object.create(Model.prototype);');
     spec.example('Cannot pass null', undefined, function () {
       this.shouldThrowError('*', function () {
         inheritPrototype(null);
@@ -3753,6 +3753,35 @@ spec.test('tgi-utility/lib/tgi-utility-objects.test.js', 'Object Functions', 'de
     spec.example('invalid property', 0, function () {
       // no unknown properties
       return getInvalidProperties({name: 'name', value: 'Kahn'}, ['name', 'value']).length;
+    });
+  });
+  spec.heading('getConstructorFromModelType(modelType)', function () {
+    spec.example('returns Model constructor if type not registered', Model, function () {
+      return getConstructorFromModelType();
+    });
+    spec.example('registered models return the constructor function', User, function () {
+      return getConstructorFromModelType('User');
+    });
+    spec.example('objects created utilize proper constructor', false, function () {
+      var ProxyModel = getConstructorFromModelType('User');
+      var proxyModel = new ProxyModel();
+      return proxyModel.get('active');
+    });
+    spec.example('Core models are known', undefined, function () {
+      this.shouldBeTrue(getConstructorFromModelType('User') == User);
+      this.shouldBeTrue(getConstructorFromModelType('Session') == Session);
+      this.shouldBeTrue(getConstructorFromModelType('Workspace') == Workspace);
+      this.shouldBeTrue(getConstructorFromModelType('Presentation') == Presentation);
+      this.shouldBeTrue(getConstructorFromModelType('Log') == Log);
+      this.shouldBeTrue(getConstructorFromModelType('Application') == Application);
+    });
+  });
+  spec.heading('createModelFromModelType', function () {
+    spec.example('returns instance of Model if type not registered', 'Model', function () {
+      return createModelFromModelType().modelType;
+    });
+    spec.example('objects created utilize proper constructor', false, function () {
+      return createModelFromModelType('User').get('active');
     });
   });
 });

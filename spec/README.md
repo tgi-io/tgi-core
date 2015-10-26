@@ -5,7 +5,7 @@ Core constructors, models, stores and interfaces.  The constructor functions def
 ```javascript
 this.log(TGI.CORE().version);
 ```
-<blockquote><strong>log: </strong>0.4.8<br></blockquote>
+<blockquote><strong>log: </strong>0.4.9<br></blockquote>
 ####Constructors
 
 - [Attribute](#-attribute) defines data types - needed by Model
@@ -1237,7 +1237,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Sun Oct 25 2015 23:49:24 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Mon Oct 26 2015 14:06:29 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1246,7 +1246,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Sun Oct 25 2015 23:49:24 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Mon Oct 26 2015 14:06:29 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -3420,7 +3420,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Sun Oct 25 2015 23:49:24 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Mon Oct 26 2015 14:06:29 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -5077,7 +5077,7 @@ return contains(['moe', 'larry', 'curley'], 'shemp');
 ```
 ## [&#9664;](#-array-functions)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-string-functions) &nbsp;Object Functions
 #### inheritPrototype(p)
-kinda sorta class like    
+[deprecated] ex: User.prototype = Object.create(Model.prototype);    
 
 &nbsp;<b><i>Cannot pass null:</i></b>
 ```javascript
@@ -5123,6 +5123,80 @@ return getInvalidProperties({name: 'name', Kahn: 'value'}, ['name', 'value'])[0]
 ```javascript
 // no unknown properties
 return getInvalidProperties({name: 'name', value: 'Kahn'}, ['name', 'value']).length;
+```
+#### getConstructorFromModelType(modelType)
+&nbsp;<b><i>returns Model constructor if type not registered:</i></b>
+```javascript
+return getConstructorFromModelType();
+```
+<blockquote>returns <strong>function (args) {
+  var i;
+  if (false === (this instanceof Model)) throw new Error('new operator required');
+  this.modelType = "Model";
+  this.attributes = [new Attribute('id', 'ID')];
+  args = args || {};
+  if (args.attributes) {
+    for (i in args.attributes) {
+      if (args.attributes.hasOwnProperty(i))
+        this.attributes.push(args.attributes[i]);
+    }
+  }
+  var unusedProperties = getInvalidProperties(args, ['attributes']);
+  var errorList = this.getObjectStateErrors(); // before leaving make sure valid Model
+  for (i = 0; i < unusedProperties.length; i++) errorList.push('invalid property: ' + unusedProperties[i]);
+  if (errorList.length > 1) throw new Error('error creating Model: multiple errors');
+  if (errorList.length) throw new Error('error creating Model: ' + errorList[0]);
+  // Validations done
+  this._eventListeners = [];
+  this._errorConditions = {};
+}</strong> as expected
+</blockquote>
+&nbsp;<b><i>registered models return the constructor function:</i></b>
+```javascript
+return getConstructorFromModelType('User');
+```
+<blockquote>returns <strong>function (args) {
+  if (false === (this instanceof User)) throw new Error('new operator required');
+  args = args || {};
+  if (!args.attributes) {
+    args.attributes = [];
+  }
+  args.attributes.push(new Attribute({name: 'name', type: 'String(20)'}));
+  args.attributes.push(new Attribute({name: 'active', type: 'Boolean'}));
+  args.attributes.push(new Attribute({name: 'password', type: 'String(20)'}));
+  args.attributes.push(new Attribute({name: 'firstName', type: 'String(35)'}));
+  args.attributes.push(new Attribute({name: 'lastName', type: 'String(35)'}));
+  args.attributes.push(new Attribute({name: 'email', type: 'String(20)'}));
+  Model.call(this, args);
+  this.modelType = "User";
+  this.set('active', false);
+}</strong> as expected
+</blockquote>
+&nbsp;<b><i>objects created utilize proper constructor:</i></b>
+```javascript
+var ProxyModel = getConstructorFromModelType('User');
+var proxyModel = new ProxyModel();
+return proxyModel.get('active');
+```
+&nbsp;<b><i>Core models are known:</i></b>
+```javascript
+this.shouldBeTrue(getConstructorFromModelType('User') == User);
+this.shouldBeTrue(getConstructorFromModelType('Session') == Session);
+this.shouldBeTrue(getConstructorFromModelType('Workspace') == Workspace);
+this.shouldBeTrue(getConstructorFromModelType('Presentation') == Presentation);
+this.shouldBeTrue(getConstructorFromModelType('Log') == Log);
+this.shouldBeTrue(getConstructorFromModelType('Application') == Application);
+```
+#### createModelFromModelType
+&nbsp;<b><i>returns instance of Model if type not registered:</i></b>
+```javascript
+return createModelFromModelType().modelType;
+```
+<blockquote>returns <strong>Model</strong> as expected
+</blockquote>
+&nbsp;<b><i>objects created utilize proper constructor:</i></b>
+```javascript
+return createModelFromModelType('User').get('active');
 ```
 ## [&#9664;](#-object-functions)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-summary) &nbsp;String Functions
 #### STRING FUNCTIONS

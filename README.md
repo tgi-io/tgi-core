@@ -6,8 +6,6 @@ Core Objects [read the spec](spec/README.md).
 
 Current
 -------
-- give Text() a set() get() and onEvent() method
-- 
 
 Presentation Management
 ---
@@ -17,7 +15,6 @@ Presentation Management
     - key [ undefined <single view> , null , value ]
 - presentation = Presentation.activate ( key , mode )
 - close ( key )
-
 
 Later
 -----

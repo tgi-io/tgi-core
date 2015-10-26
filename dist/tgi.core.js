@@ -10,7 +10,7 @@ var root = this;
 var TGI = {
   CORE: function () {
     return {
-      version: '0.4.8',
+      version: '0.4.9',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -33,6 +33,8 @@ var TGI = {
       Workspace: Workspace,
       inheritPrototype: inheritPrototype,
       getInvalidProperties: getInvalidProperties,
+      getConstructorFromModelType: getConstructorFromModelType,
+      createModelFromModelType: createModelFromModelType,
       trim: trim,
       ltrim: ltrim,
       rtrim: rtrim,
@@ -1022,7 +1024,10 @@ var Model = function (args) {
   this._eventListeners = [];
   this._errorConditions = {};
 };
-// Methods
+Model._ModelConstructor = {};
+/**
+ * Methods
+ */
 Model.prototype.toString = function () {
   return "a " + this.modelType;
 };
@@ -2001,6 +2006,8 @@ var Application = function (args) {
   this.set('brand', 'NEW APP');
 };
 Application.prototype = Object.create(Model.prototype);
+Model._ModelConstructor.Application = Application;
+
 
 /**
  * Methods
@@ -2127,6 +2134,7 @@ var Log = function (args) {
   this.modelType = "Log";
 };
 Log.prototype = Object.create(Model.prototype);
+Model._ModelConstructor.Log = Log;
 /**
  * Methods
  */
@@ -2154,6 +2162,7 @@ var Presentation = function (args) {
   this.modelType = "Presentation";
 };
 Presentation.prototype = Object.create(Model.prototype);
+Model._ModelConstructor.Presentation = Presentation;
 /*
  * Methods
  */
@@ -2256,6 +2265,7 @@ var Session = function (args) {
   this.set('active', false);
 };
 Session.prototype = Object.create(Model.prototype);
+Model._ModelConstructor.Session = Session;
 /*
  * Methods
  */
@@ -2360,9 +2370,10 @@ var User = function (args) {
   args.attributes.push(new Attribute({name: 'email', type: 'String(20)'}));
   Model.call(this, args);
   this.modelType = "User";
-  this.set('active',false);
+  this.set('active', false);
 };
 User.prototype = Object.create(Model.prototype);
+Model._ModelConstructor.User = User;
 /**
  * tequila
  * workspace-class
@@ -2384,6 +2395,7 @@ function Workspace(args) {
   this.modelType = "Workspace";
 }
 Workspace.prototype = Object.create(Model.prototype);
+Model._ModelConstructor.Workspace = Workspace;
 /*
  * Methods
  */
@@ -2624,6 +2636,23 @@ var getInvalidProperties = function (args, allowedProperties) {
   }
   return props;
 };
+
+/**
+ * getConstructorFromModelType(modelType)
+ */
+var getConstructorFromModelType = function (modelType) {
+  return Model._ModelConstructor[modelType] || Model;
+};
+
+/**
+ * createModelFromModelType(modelType)
+ */
+var createModelFromModelType = function (modelType) {
+  var ProxyModel = getConstructorFromModelType(modelType);
+  return new ProxyModel();
+};
+
+
 
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/utility/tgi-core-strings.source.js
