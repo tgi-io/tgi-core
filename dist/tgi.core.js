@@ -10,7 +10,7 @@ var root = this;
 var TGI = {
   CORE: function () {
     return {
-      version: '0.4.7',
+      version: '0.4.8',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -611,6 +611,9 @@ Command.prototype.execute = function (context) {
     switch (event) {
       case 'Error':
         self._emitEvent('Error', obj);
+        break;
+      case 'Aborted':
+        self.abort();
         break;
       case 'Completed':
         for (var t in tasks) {
