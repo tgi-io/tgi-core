@@ -10,7 +10,7 @@ var root = this;
 var TGI = {
   CORE: function () {
     return {
-      version: '0.4.12',
+      version: '0.4.13',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -824,6 +824,9 @@ Interface.prototype.render = function (command, callback) {
   //if (callback && typeof callback != 'function') throw new Error('optional second argument must a commandRequest callback function');
 };
 Interface.prototype.info = function (text) {
+  if (!text || typeof text !== 'string') throw new Error('text required');
+};
+Interface.prototype.done = function (text) {
   if (!text || typeof text !== 'string') throw new Error('text required');
 };
 Interface.prototype.warn = function (text) {
@@ -2078,6 +2081,11 @@ Application.prototype.info = function (text) {
   if (false === (this.primaryInterface instanceof Interface)) throw new Error('interface not set');
   if (!text || typeof text !== 'string') throw new Error('text parameter required');
   this.primaryInterface.info(text);
+};
+Application.prototype.done = function (text) {
+  if (false === (this.primaryInterface instanceof Interface)) throw new Error('interface not set');
+  if (!text || typeof text !== 'string') throw new Error('text parameter required');
+  this.primaryInterface.done(text);
 };
 Application.prototype.warn = function (text) {
   if (false === (this.primaryInterface instanceof Interface)) throw new Error('interface not set');
