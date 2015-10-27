@@ -1217,6 +1217,24 @@ spec.runnerInterfaceMethods = function (SurrogateInterface) {
         new Application({interface: new SurrogateInterface()}).info();
       });
     });
+    spec.heading('warn(text)', function () {
+      spec.paragraph('Display warning to user in background of primary presentation.');
+      spec.example('must set interface before invoking', Error('interface not set'), function () {
+        new Application().warn();
+      });
+      spec.example('must supply the text info', Error('text parameter required'), function () {
+        new Application({interface: new SurrogateInterface()}).warn();
+      });
+    });
+    spec.heading('err(text)', function () {
+      spec.paragraph('Display error to user in background of primary presentation.');
+      spec.example('must set interface before invoking', Error('interface not set'), function () {
+        new Application().err();
+      });
+      spec.example('must supply the text info', Error('text parameter required'), function () {
+        new Application({interface: new SurrogateInterface()}).err();
+      });
+    });
     spec.heading('ok(prompt, callback)', function () {
       spec.paragraph('Pause before proceeding');
       spec.example('must set interface before invoking', Error('interface not set'), function () {
@@ -3196,6 +3214,24 @@ spec.test('tgi-core/lib/models/tgi-core-model-application.spec.js', 'Application
       });
       spec.example('optional second parameter is the response callback', Error('response callback is not a function'), function () {
         new Application().dispatch(new Request({type: 'Command', command: new Command()}), true);
+      });
+    });
+    spec.heading('info(text)', function () {
+      spec.paragraph('Display info to user in background of primary presentation.');
+      spec.example('must set interface before invoking', Error('interface not set'), function () {
+        new Application().info(); // see Interface for more info
+      });
+    });
+    spec.heading('warn(text)', function () {
+      spec.paragraph('Display info to user in background of primary presentation.');
+      spec.example('must set interface before invoking', Error('interface not set'), function () {
+        new Application().warn(); // see Interface for more info
+      });
+    });
+    spec.heading('err(text)', function () {
+      spec.paragraph('Display info to user in background of primary presentation.');
+      spec.example('must set interface before invoking', Error('interface not set'), function () {
+        new Application().err(); // see Interface for more info
       });
     });
     spec.heading('ok(prompt, callback)', function () {
