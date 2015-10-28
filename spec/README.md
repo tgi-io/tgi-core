@@ -5,7 +5,7 @@ Core constructors, models, stores and interfaces.  The constructor functions def
 ```javascript
 this.log(TGI.CORE().version);
 ```
-<blockquote><strong>log: </strong>0.4.13<br></blockquote>
+<blockquote><strong>log: </strong>0.4.14<br></blockquote>
 ####Constructors
 
 - [Attribute](#-attribute) defines data types - needed by Model
@@ -1237,7 +1237,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Tue Oct 27 2015 11:21:52 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Wed Oct 28 2015 14:59:18 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1246,7 +1246,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Tue Oct 27 2015 11:21:52 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Wed Oct 28 2015 14:59:18 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -3501,7 +3501,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Tue Oct 27 2015 11:21:53 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Wed Oct 28 2015 14:59:18 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -3551,6 +3551,9 @@ this.shouldBeTrue(new Presentation().validationErrors.length === 0);
 ```javascript
 return new Presentation().validationMessage;
 ```
+#### preRenderCallback
+preRenderCallback can be set to prepare presentation prior to Interface render    
+
 #### ATTRIBUTES
 Presentation extends model and inherits the attributes property.  All Presentation objects have the following attributes:    
 
