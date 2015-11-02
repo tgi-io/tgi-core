@@ -3355,7 +3355,7 @@ spec.test('tgi-core/lib/models/tgi-core-model-log.spec.js', 'Log', 'information 
 });
 
 /**---------------------------------------------------------------------------------------------------------------------
- * tgi-core/lib/models/tgi-core-model-presentation.test.js
+ * tgi-core/lib/models/tgi-core-model-presentation.spec.js
  */
 spec.test('tgi-core/lib/models/tgi-core-model-presentation.spec.js', 'Presentation', 'used by Interface to render data', function (callback) {
   spec.heading('Presentation Model', function () {
@@ -3381,6 +3381,9 @@ spec.test('tgi-core/lib/models/tgi-core-model-presentation.spec.js', 'Presentati
         spec.example('string description of error(s)', '', function () {
           return new Presentation().validationMessage;
         });
+      });
+      spec.heading('preRenderCallback', function () {
+        spec.paragraph('preRenderCallback can be set to prepare presentation prior to Interface render');
       });
     });
     spec.heading('ATTRIBUTES', function () {
