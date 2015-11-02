@@ -1237,7 +1237,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Wed Oct 28 2015 14:59:18 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Mon Nov 02 2015 17:47:58 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1246,7 +1246,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Wed Oct 28 2015 14:59:18 GMT-0400 (EDT)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Mon Nov 02 2015 17:47:58 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2129,6 +2129,35 @@ new Model().onEvent(['Validate'], function () {
 });
 ```
 <blockquote><strong>log: </strong>T.getAttributeEvents()<br></blockquote>
+#### getShortName
+&nbsp;<b><i>returns short description of model, defaults to first string attribute:</i></b>
+```javascript
+var question = new SurrogateModel({attributes: [new Attribute('name')]});
+question.attributes[1].value = 'Shorty';
+return question.getShortName();
+```
+<blockquote>returns <strong>Shorty</strong> as expected
+</blockquote>
+&nbsp;<b><i>first attribute other than ID is returned if no string found:</i></b>
+```javascript
+// Test for model since models may provide attributes to fail this test
+var question = new Model({attributes: [new Attribute('answer', 'Number')]});
+question.attributes[1].value = 42;
+return question.getShortName();
+```
+<blockquote>returns <strong>42</strong> as expected
+</blockquote>
+#### getLongName
+note - both getShortName and getLongName should be overriden with method returning desired results when needed.    
+
+&nbsp;<b><i>return a more verbose name for model than getShortName:</i></b>
+```javascript
+var question = new SurrogateModel({attributes: [new Attribute('name')]});
+question.attributes[1].value = 'Shorty';
+return question.getLongName();
+```
+<blockquote>returns <strong>Shorty</strong> as expected
+</blockquote>
 #### get(attributeName)
 &nbsp;<b><i>returns undefined if the attribute does not exist:</i></b>
 ```javascript
@@ -2145,7 +2174,7 @@ return question.get('answer');
 #### getAttributeType(attributeName)
 &nbsp;<b><i>returns attribute type for given attribute name:</i></b>
 ```javascript
-return new Model({attributes: [new Attribute('born', 'Date')]}).getAttributeType('born');
+return new SurrogateModel({attributes: [new Attribute('born', 'Date')]}).getAttributeType('born');
 ```
 <blockquote>returns <strong>Date</strong> as expected
 </blockquote>
@@ -3178,7 +3207,7 @@ return new Application() instanceof Application;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
-*25 model tests applied*    
+*28 model tests applied*    
 
 &nbsp;<b><i>argument property interface will invoke setInterface method:</i></b>
 ```javascript
@@ -3488,7 +3517,7 @@ return new Log() instanceof Log;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
-*25 model tests applied*    
+*28 model tests applied*    
 
 #### ATTRIBUTES
 &nbsp;<b><i>following attributes are defined::</i></b>
@@ -3501,7 +3530,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Wed Oct 28 2015 14:59:18 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Mon Nov 02 2015 17:47:58 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -3534,7 +3563,7 @@ return new Presentation() instanceof Presentation;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
-*25 model tests applied*    
+*28 model tests applied*    
 
 #### PROPERTIES
 #### model
@@ -3821,6 +3850,35 @@ new Model().onEvent(['Validate'], function () {
 });
 ```
 <blockquote><strong>log: </strong>T.getAttributeEvents()<br></blockquote>
+#### getShortName
+&nbsp;<b><i>returns short description of model, defaults to first string attribute:</i></b>
+```javascript
+var question = new SurrogateModel({attributes: [new Attribute('name')]});
+question.attributes[1].value = 'Shorty';
+return question.getShortName();
+```
+<blockquote>returns <strong>Shorty</strong> as expected
+</blockquote>
+&nbsp;<b><i>first attribute other than ID is returned if no string found:</i></b>
+```javascript
+// Test for model since models may provide attributes to fail this test
+var question = new Model({attributes: [new Attribute('answer', 'Number')]});
+question.attributes[1].value = 42;
+return question.getShortName();
+```
+<blockquote>returns <strong>42</strong> as expected
+</blockquote>
+#### getLongName
+note - both getShortName and getLongName should be overriden with method returning desired results when needed.    
+
+&nbsp;<b><i>return a more verbose name for model than getShortName:</i></b>
+```javascript
+var question = new SurrogateModel({attributes: [new Attribute('name')]});
+question.attributes[1].value = 'Shorty';
+return question.getLongName();
+```
+<blockquote>returns <strong>Shorty</strong> as expected
+</blockquote>
 #### get(attributeName)
 &nbsp;<b><i>returns undefined if the attribute does not exist:</i></b>
 ```javascript
@@ -3837,7 +3895,7 @@ return question.get('answer');
 #### getAttributeType(attributeName)
 &nbsp;<b><i>returns attribute type for given attribute name:</i></b>
 ```javascript
-return new Model({attributes: [new Attribute('born', 'Date')]}).getAttributeType('born');
+return new SurrogateModel({attributes: [new Attribute('born', 'Date')]}).getAttributeType('born');
 ```
 <blockquote>returns <strong>Date</strong> as expected
 </blockquote>
@@ -3946,7 +4004,7 @@ function test4() {
 ```
 <blockquote>returns <strong>test4: 0</strong> as expected
 </blockquote>
-*25 model tests applied*    
+*28 model tests applied*    
 
 #### ATTRIBUTES
 &nbsp;<b><i>following attributes are defined::</i></b>
@@ -4245,6 +4303,35 @@ new Model().onEvent(['Validate'], function () {
 });
 ```
 <blockquote><strong>log: </strong>T.getAttributeEvents()<br></blockquote>
+#### getShortName
+&nbsp;<b><i>returns short description of model, defaults to first string attribute:</i></b>
+```javascript
+var question = new SurrogateModel({attributes: [new Attribute('name')]});
+question.attributes[1].value = 'Shorty';
+return question.getShortName();
+```
+<blockquote>returns <strong>Shorty</strong> as expected
+</blockquote>
+&nbsp;<b><i>first attribute other than ID is returned if no string found:</i></b>
+```javascript
+// Test for model since models may provide attributes to fail this test
+var question = new Model({attributes: [new Attribute('answer', 'Number')]});
+question.attributes[1].value = 42;
+return question.getShortName();
+```
+<blockquote>returns <strong>42</strong> as expected
+</blockquote>
+#### getLongName
+note - both getShortName and getLongName should be overriden with method returning desired results when needed.    
+
+&nbsp;<b><i>return a more verbose name for model than getShortName:</i></b>
+```javascript
+var question = new SurrogateModel({attributes: [new Attribute('name')]});
+question.attributes[1].value = 'Shorty';
+return question.getLongName();
+```
+<blockquote>returns <strong>Shorty</strong> as expected
+</blockquote>
 #### get(attributeName)
 &nbsp;<b><i>returns undefined if the attribute does not exist:</i></b>
 ```javascript
@@ -4261,7 +4348,7 @@ return question.get('answer');
 #### getAttributeType(attributeName)
 &nbsp;<b><i>returns attribute type for given attribute name:</i></b>
 ```javascript
-return new Model({attributes: [new Attribute('born', 'Date')]}).getAttributeType('born');
+return new SurrogateModel({attributes: [new Attribute('born', 'Date')]}).getAttributeType('born');
 ```
 <blockquote>returns <strong>Date</strong> as expected
 </blockquote>
@@ -4370,7 +4457,7 @@ function test4() {
 ```
 <blockquote>returns <strong>test4: 0</strong> as expected
 </blockquote>
-*25 model tests applied*    
+*28 model tests applied*    
 
 #### ATTRIBUTES
 &nbsp;<b><i>following attributes are defined::</i></b>
@@ -4536,6 +4623,35 @@ new Model().onEvent(['Validate'], function () {
 });
 ```
 <blockquote><strong>log: </strong>T.getAttributeEvents()<br></blockquote>
+#### getShortName
+&nbsp;<b><i>returns short description of model, defaults to first string attribute:</i></b>
+```javascript
+var question = new SurrogateModel({attributes: [new Attribute('name')]});
+question.attributes[1].value = 'Shorty';
+return question.getShortName();
+```
+<blockquote>returns <strong>Shorty</strong> as expected
+</blockquote>
+&nbsp;<b><i>first attribute other than ID is returned if no string found:</i></b>
+```javascript
+// Test for model since models may provide attributes to fail this test
+var question = new Model({attributes: [new Attribute('answer', 'Number')]});
+question.attributes[1].value = 42;
+return question.getShortName();
+```
+<blockquote>returns <strong>42</strong> as expected
+</blockquote>
+#### getLongName
+note - both getShortName and getLongName should be overriden with method returning desired results when needed.    
+
+&nbsp;<b><i>return a more verbose name for model than getShortName:</i></b>
+```javascript
+var question = new SurrogateModel({attributes: [new Attribute('name')]});
+question.attributes[1].value = 'Shorty';
+return question.getLongName();
+```
+<blockquote>returns <strong>Shorty</strong> as expected
+</blockquote>
 #### get(attributeName)
 &nbsp;<b><i>returns undefined if the attribute does not exist:</i></b>
 ```javascript
@@ -4552,7 +4668,7 @@ return question.get('answer');
 #### getAttributeType(attributeName)
 &nbsp;<b><i>returns attribute type for given attribute name:</i></b>
 ```javascript
-return new Model({attributes: [new Attribute('born', 'Date')]}).getAttributeType('born');
+return new SurrogateModel({attributes: [new Attribute('born', 'Date')]}).getAttributeType('born');
 ```
 <blockquote>returns <strong>Date</strong> as expected
 </blockquote>
@@ -4661,7 +4777,7 @@ function test4() {
 ```
 <blockquote>returns <strong>test4: 0</strong> as expected
 </blockquote>
-*25 model tests applied*    
+*28 model tests applied*    
 
 #### ATTRIBUTES
 &nbsp;<b><i>following attributes are defined::</i></b>
