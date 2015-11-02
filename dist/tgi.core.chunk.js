@@ -4,7 +4,7 @@
 var TGI = {
   CORE: function () {
     return {
-      version: '0.4.14',
+      version: '0.4.15',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -147,6 +147,7 @@ Attribute.ModelID = function (model) {
   if (false === (this instanceof Attribute.ModelID)) throw new Error('new operator required');
   if (false === (model instanceof Model)) throw new Error('must be constructed with Model');
   this.value = model.get('id');
+  this.name = model.getShortName();
   this.constructorFunction = model.constructor;
   this.modelType = model.modelType;
 };
@@ -1074,6 +1075,16 @@ Model.prototype.get = function (attribute) {
     if (this.attributes[i].name.toUpperCase() == attribute.toUpperCase())
       return this.attributes[i].get();
   }
+};
+Model.prototype.getShortName = function () {
+  for (var i = 0; i < this.attributes.length; i++) {
+    if (this.attributes[i].type == 'String')
+      return this.attributes[i].get();
+  }
+  return this.attributes[this.attributes.length>1 ? 1 : 0].get();
+};
+Model.prototype.getLongName = function () {
+  return this.getShortName();
 };
 Model.prototype.getAttributeType = function (attribute) {
   for (var i = 0; i < this.attributes.length; i++) {

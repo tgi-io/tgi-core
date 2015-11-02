@@ -1790,13 +1790,13 @@ spec.test('tgi-core/lib/tgi-core-message.spec.js', 'Message', 'between host and 
  * tgi-core/lib/tgi-core-model.spec.js
  */
 spec.test('tgi-core/lib/tgi-core-model.spec.js', 'Model', 'abstracts entities using a collection of attributes', function (callback) {
-  spec.testModel(Model,true);
+  spec.testModel(Model, true);
 });
 
 /**
  * test Model and Models
  */
-spec.testModel = function (SurrogateModel,root) {
+spec.testModel = function (SurrogateModel, root) {
   if (!root) {
     spec.mute(true);
   }
@@ -1910,6 +1910,27 @@ spec.testModel = function (SurrogateModel,root) {
         });
       });
     });
+    spec.heading('getShortName', function () {
+      spec.example('returns short description of model, defaults to first string attribute', 'Shorty', function () {
+        var question = new SurrogateModel({attributes: [new Attribute('name')]});
+        question.attributes[1].value = 'Shorty';
+        return question.getShortName();
+      });
+      spec.example('first attribute other than ID is returned if no string found', 42, function () {
+        // Test for model since models may provide attributes to fail this test
+        var question = new Model({attributes: [new Attribute('answer', 'Number')]});
+        question.attributes[1].value = 42;
+        return question.getShortName();
+      });
+    });
+    spec.heading('getLongName', function () {
+      spec.paragraph('note - both getShortName and getLongName should be overriden with method returning desired results when needed.');
+      spec.example('return a more verbose name for model than getShortName', 'Shorty', function () {
+        var question = new SurrogateModel({attributes: [new Attribute('name')]});
+        question.attributes[1].value = 'Shorty';
+        return question.getLongName();
+      });
+    });
     spec.heading('get(attributeName)', function () {
       spec.example('returns undefined if the attribute does not exist', undefined, function () {
         this.shouldBeTrue(new SurrogateModel().get('whatever') === undefined);
@@ -1922,7 +1943,7 @@ spec.testModel = function (SurrogateModel,root) {
     });
     spec.heading('getAttributeType(attributeName)', function () {
       spec.example('returns attribute type for given attribute name', 'Date', function () {
-        return new Model({attributes: [new Attribute('born', 'Date')]}).getAttributeType('born');
+        return new SurrogateModel({attributes: [new Attribute('born', 'Date')]}).getAttributeType('born');
       });
     });
     spec.heading('set(attributeName,value)', function () {
