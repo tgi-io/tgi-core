@@ -5,7 +5,7 @@ Core constructors, models, stores and interfaces.  The constructor functions def
 ```javascript
 this.log(TGI.CORE().version);
 ```
-<blockquote><strong>log: </strong>0.4.15<br></blockquote>
+<blockquote><strong>log: </strong>0.4.16<br></blockquote>
 ####Constructors
 
 - [Attribute](#-attribute) defines data types - needed by Model
@@ -120,7 +120,15 @@ var model = new Model();
 model.set('id', 123);
 return new Attribute.ModelID(model).toString();
 ```
-<blockquote>returns <strong>ModelID(Model:123)</strong> as expected
+<blockquote>returns <strong>Model 123</strong> as expected
+</blockquote>
+&nbsp;<b><i>model short name used in string description if applies:</i></b>
+```javascript
+var user = new User();
+user.set('name','Error');
+return new Attribute.ModelID(user).toString();
+```
+<blockquote>returns <strong>User Error</strong> as expected
 </blockquote>
 #### PROPERTIES
 #### name
@@ -1237,7 +1245,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Mon Nov 02 2015 18:03:13 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Thu Nov 05 2015 09:35:21 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1246,7 +1254,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Mon Nov 02 2015 18:03:13 GMT-0500 (EST)<br>returns <strong>ModelID(Model:null)</strong> as expected
+<blockquote><strong>log: </strong>Thu Nov 05 2015 09:35:21 GMT-0500 (EST)<br>returns <strong>Model null</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2138,15 +2146,13 @@ return question.getShortName();
 ```
 <blockquote>returns <strong>Shorty</strong> as expected
 </blockquote>
-&nbsp;<b><i>first attribute other than ID is returned if no string found:</i></b>
+&nbsp;<b><i>if no string attribute found empty string returned:</i></b>
 ```javascript
 // Test for model since models may provide attributes to fail this test
 var question = new Model({attributes: [new Attribute('answer', 'Number')]});
 question.attributes[1].value = 42;
 return question.getShortName();
 ```
-<blockquote>returns <strong>42</strong> as expected
-</blockquote>
 #### getLongName
 note - both getShortName and getLongName should be overriden with method returning desired results when needed.    
 
@@ -3530,7 +3536,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Mon Nov 02 2015 18:03:13 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Thu Nov 05 2015 09:35:21 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -3859,15 +3865,13 @@ return question.getShortName();
 ```
 <blockquote>returns <strong>Shorty</strong> as expected
 </blockquote>
-&nbsp;<b><i>first attribute other than ID is returned if no string found:</i></b>
+&nbsp;<b><i>if no string attribute found empty string returned:</i></b>
 ```javascript
 // Test for model since models may provide attributes to fail this test
 var question = new Model({attributes: [new Attribute('answer', 'Number')]});
 question.attributes[1].value = 42;
 return question.getShortName();
 ```
-<blockquote>returns <strong>42</strong> as expected
-</blockquote>
 #### getLongName
 note - both getShortName and getLongName should be overriden with method returning desired results when needed.    
 
@@ -4312,15 +4316,13 @@ return question.getShortName();
 ```
 <blockquote>returns <strong>Shorty</strong> as expected
 </blockquote>
-&nbsp;<b><i>first attribute other than ID is returned if no string found:</i></b>
+&nbsp;<b><i>if no string attribute found empty string returned:</i></b>
 ```javascript
 // Test for model since models may provide attributes to fail this test
 var question = new Model({attributes: [new Attribute('answer', 'Number')]});
 question.attributes[1].value = 42;
 return question.getShortName();
 ```
-<blockquote>returns <strong>42</strong> as expected
-</blockquote>
 #### getLongName
 note - both getShortName and getLongName should be overriden with method returning desired results when needed.    
 
@@ -4632,15 +4634,13 @@ return question.getShortName();
 ```
 <blockquote>returns <strong>Shorty</strong> as expected
 </blockquote>
-&nbsp;<b><i>first attribute other than ID is returned if no string found:</i></b>
+&nbsp;<b><i>if no string attribute found empty string returned:</i></b>
 ```javascript
 // Test for model since models may provide attributes to fail this test
 var question = new Model({attributes: [new Attribute('answer', 'Number')]});
 question.attributes[1].value = 42;
 return question.getShortName();
 ```
-<blockquote>returns <strong>42</strong> as expected
-</blockquote>
 #### getLongName
 note - both getShortName and getLongName should be overriden with method returning desired results when needed.    
 

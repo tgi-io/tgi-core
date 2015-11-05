@@ -101,10 +101,15 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
       spec.example('modelType is set from model in constructor', 'Model', function () {
         return new Attribute.ModelID(new Model()).modelType;
       });
-      spec.example('toString is more descriptive', "ModelID(Model:123)", function () {
+      spec.example('toString is more descriptive', "Model 123", function () {
         var model = new Model();
         model.set('id', 123);
         return new Attribute.ModelID(model).toString();
+      });
+      spec.example('model short name used in string description if applies', 'User Error', function () {
+        var user = new User();
+        user.set('name','Error');
+        return new Attribute.ModelID(user).toString();
       });
     });
   });
@@ -1062,7 +1067,7 @@ spec.test('tgi-core/lib/tgi-core-delta.spec.js', 'Delta', 'represents changes to
       });
     });
     spec.heading('modelID', function () {
-      spec.example('set from constructor', "ModelID(Model:null)", function () {
+      spec.example('set from constructor', "Model null", function () {
         var delta = new Delta(new Attribute.ModelID(new Model()));
         this.log(delta.dateCreated);
         return delta.modelID.toString();
@@ -1959,7 +1964,7 @@ spec.testModel = function (SurrogateModel, root) {
         question.attributes[1].value = 'Shorty';
         return question.getShortName();
       });
-      spec.example('first attribute other than ID is returned if no string found', 42, function () {
+      spec.example('if no string attribute found empty string returned', '', function () {
         // Test for model since models may provide attributes to fail this test
         var question = new Model({attributes: [new Attribute('answer', 'Number')]});
         question.attributes[1].value = 42;

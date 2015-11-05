@@ -10,7 +10,7 @@ var root = this;
 var TGI = {
   CORE: function () {
     return {
-      version: '0.4.15',
+      version: '0.4.16',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -152,16 +152,25 @@ function Attribute(args, arg2) {
 Attribute.ModelID = function (model) {
   if (false === (this instanceof Attribute.ModelID)) throw new Error('new operator required');
   if (false === (model instanceof Model)) throw new Error('must be constructed with Model');
-  this.value = model.get('id');
-  this.name = model.getShortName();
+  var shorty = model.getShortName();
+  if (shorty)
+    this.value = [model.get('id'), shorty];
+  else
+    this.value = model.get('id');
   this.constructorFunction = model.constructor;
   this.modelType = model.modelType;
 };
 Attribute.ModelID.prototype.toString = function () {
-  if (typeof this.value == 'string')
-    return 'ModelID(' + this.modelType + ':\'' + this.value + '\')';
+
+  if (this.value instanceof Array)
+    return this.modelType + ' ' + this.value[1];
   else
-    return 'ModelID(' + this.modelType + ':' + this.value + ')';
+    return this.modelType + ' ' + this.value;
+
+  //if (typeof this.value == 'string')
+  //  return 'ModelID(' + this.modelType + ':\'' + this.value + '\')';
+  //else
+  //  return this.modelType + ' ' + this.value;
 };
 /**
  * Methods
@@ -1087,7 +1096,7 @@ Model.prototype.getShortName = function () {
     if (this.attributes[i].type == 'String')
       return this.attributes[i].get();
   }
-  return this.attributes[this.attributes.length>1 ? 1 : 0].get();
+  return '';
 };
 Model.prototype.getLongName = function () {
   return this.getShortName();
