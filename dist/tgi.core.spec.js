@@ -271,7 +271,7 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
           var myModel = new Model();
           var myGroup = new Attribute({name: 'columns', type: 'Group', value: [new Attribute("Name")]});
           var myTable = new Attribute({name: 'bills', type: 'Table', group: myGroup});
-          var myValues = ['Jane Doe', new Date(), true, 18, new Attribute.ModelID(new Model()), [], myTable];
+          var myValues = ['Jane Doe', new Date(), true, 18, new Attribute.ModelID(myModel), [], myTable];
 
           // Loop thru each type
           var theGood = 0;
@@ -368,6 +368,15 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
             type: 'Model',
             value: new Attribute.ModelID(new Model())
           }).modelType;
+      });
+      spec.example('set method usage checks for valid type', Error('set error: value must be Attribute.ModelID'), function () {
+        new Attribute(
+          {
+            name: 'Twiggy',
+            type: 'Model',
+            value: new Attribute.ModelID(new Model())
+          }).set(1);
+
       });
     });
     spec.heading('Group', function () {

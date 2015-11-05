@@ -4,7 +4,7 @@
 var TGI = {
   CORE: function () {
     return {
-      version: '0.4.15',
+      version: '0.4.17',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -146,16 +146,25 @@ function Attribute(args, arg2) {
 Attribute.ModelID = function (model) {
   if (false === (this instanceof Attribute.ModelID)) throw new Error('new operator required');
   if (false === (model instanceof Model)) throw new Error('must be constructed with Model');
-  this.value = model.get('id');
-  this.name = model.getShortName();
+  var shorty = model.getShortName();
+  if (shorty)
+    this.value = [model.get('id'), shorty];
+  else
+    this.value = model.get('id');
   this.constructorFunction = model.constructor;
   this.modelType = model.modelType;
 };
 Attribute.ModelID.prototype.toString = function () {
-  if (typeof this.value == 'string')
-    return 'ModelID(' + this.modelType + ':\'' + this.value + '\')';
+
+  if (this.value instanceof Array)
+    return this.modelType + ' ' + this.value[1];
   else
-    return 'ModelID(' + this.modelType + ':' + this.value + ')';
+    return this.modelType + ' ' + this.value;
+
+  //if (typeof this.value == 'string')
+  //  return 'ModelID(' + this.modelType + ':\'' + this.value + '\')';
+  //else
+  //  return this.modelType + ' ' + this.value;
 };
 /**
  * Methods
@@ -198,7 +207,17 @@ Attribute.prototype.get = function () {
   return this.value;
 };
 Attribute.prototype.set = function (newValue) {
-  this.value = newValue;
+  switch (this.type) {
+    case 'Model':
+      if (newValue instanceof Attribute.ModelID)
+        this.value = newValue;
+      else {
+        throw new Error('set error: value must be Attribute.ModelID');
+      }
+      break;
+    default:
+      this.value = newValue;
+  }
   this._emitEvent('StateChange');
   return this.value;
 };
@@ -1081,7 +1100,7 @@ Model.prototype.getShortName = function () {
     if (this.attributes[i].type == 'String')
       return this.attributes[i].get();
   }
-  return this.attributes[this.attributes.length>1 ? 1 : 0].get();
+  return '';
 };
 Model.prototype.getLongName = function () {
   return this.getShortName();
@@ -2342,7 +2361,7 @@ Session.prototype.startSession = function (store, userName, password, ip, callba
     // Got user create new session
     // TODO: Make this server side tied to yet to be designed store integrated authentication
     list.moveFirst();
-    self.set('userID', list.get('id'));
+    self.set('userID', new Attribute.ModelID(list.model));
     self.set('active', true);
     self.set('passCode', passCode);
     self.set('ipAddress', ip);

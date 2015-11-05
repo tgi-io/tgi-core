@@ -10,7 +10,7 @@ var root = this;
 var TGI = {
   CORE: function () {
     return {
-      version: '0.4.16',
+      version: '0.4.17',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -213,7 +213,17 @@ Attribute.prototype.get = function () {
   return this.value;
 };
 Attribute.prototype.set = function (newValue) {
-  this.value = newValue;
+  switch (this.type) {
+    case 'Model':
+      if (newValue instanceof Attribute.ModelID)
+        this.value = newValue;
+      else {
+        throw new Error('set error: value must be Attribute.ModelID');
+      }
+      break;
+    default:
+      this.value = newValue;
+  }
   this._emitEvent('StateChange');
   return this.value;
 };
@@ -2357,7 +2367,7 @@ Session.prototype.startSession = function (store, userName, password, ip, callba
     // Got user create new session
     // TODO: Make this server side tied to yet to be designed store integrated authentication
     list.moveFirst();
-    self.set('userID', list.get('id'));
+    self.set('userID', new Attribute.ModelID(list.model));
     self.set('active', true);
     self.set('passCode', passCode);
     self.set('ipAddress', ip);

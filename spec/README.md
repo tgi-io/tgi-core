@@ -5,7 +5,7 @@ Core constructors, models, stores and interfaces.  The constructor functions def
 ```javascript
 this.log(TGI.CORE().version);
 ```
-<blockquote><strong>log: </strong>0.4.16<br></blockquote>
+<blockquote><strong>log: </strong>0.4.17<br></blockquote>
 ####Constructors
 
 - [Attribute](#-attribute) defines data types - needed by Model
@@ -339,7 +339,7 @@ this.log(myTypes);
 var myModel = new Model();
 var myGroup = new Attribute({name: 'columns', type: 'Group', value: [new Attribute("Name")]});
 var myTable = new Attribute({name: 'bills', type: 'Table', group: myGroup});
-var myValues = ['Jane Doe', new Date(), true, 18, new Attribute.ModelID(new Model()), [], myTable];
+var myValues = ['Jane Doe', new Date(), true, 18, new Attribute.ModelID(myModel), [], myTable];
 // Loop thru each type
 var theGood = 0;
 var theBad = 0;
@@ -463,6 +463,17 @@ return new Attribute(
   }).modelType;
 ```
 <blockquote>returns <strong>Model</strong> as expected
+</blockquote>
+&nbsp;<b><i>set method usage checks for valid type:</i></b>
+```javascript
+new Attribute(
+  {
+    name: 'Twiggy',
+    type: 'Model',
+    value: new Attribute.ModelID(new Model())
+  }).set(1);
+```
+<blockquote><strong>Error: set error: value must be Attribute.ModelID</strong> thrown as expected
 </blockquote>
 #### Group
 Groups are used to keep attributes together for presentation purposes.    
@@ -1245,7 +1256,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Thu Nov 05 2015 09:35:21 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Thu Nov 05 2015 11:23:16 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1254,7 +1265,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Thu Nov 05 2015 09:35:21 GMT-0500 (EST)<br>returns <strong>Model null</strong> as expected
+<blockquote><strong>log: </strong>Thu Nov 05 2015 11:23:16 GMT-0500 (EST)<br>returns <strong>Model null</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -3536,7 +3547,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Thu Nov 05 2015 09:35:21 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Thu Nov 05 2015 11:23:16 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
