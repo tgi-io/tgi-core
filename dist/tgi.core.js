@@ -10,7 +10,7 @@ var root = this;
 var TGI = {
   CORE: function () {
     return {
-      version: '0.4.17',
+      version: '0.4.19',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -154,16 +154,15 @@ Attribute.ModelID = function (model) {
   if (false === (model instanceof Model)) throw new Error('must be constructed with Model');
   var shorty = model.getShortName();
   if (shorty)
-    this.value = [model.get('id'), shorty];
-  else
-    this.value = model.get('id');
+    this.name = shorty;
+  this.value = model.get('id');
   this.constructorFunction = model.constructor;
   this.modelType = model.modelType;
 };
 Attribute.ModelID.prototype.toString = function () {
 
-  if (this.value instanceof Array)
-    return this.modelType + ' ' + this.value[1];
+  if (this.name)
+    return this.modelType + ' ' + this.name;
   else
     return this.modelType + ' ' + this.value;
 
@@ -2367,6 +2366,8 @@ Session.prototype.startSession = function (store, userName, password, ip, callba
     // Got user create new session
     // TODO: Make this server side tied to yet to be designed store integrated authentication
     list.moveFirst();
+    list.model.set('id', list.get('id')); // todo look how shitty List is designed - fix is to make moveFirst etc
+    list.model.set('name', list.get('name')); // todo (ctd) set model attribs from list or remove model from list
     self.set('userID', new Attribute.ModelID(list.model));
     self.set('active', true);
     self.set('passCode', passCode);
