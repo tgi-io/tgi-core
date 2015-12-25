@@ -1766,7 +1766,7 @@ spec.runnerListStoreIntegration = function (SurrogateStore) {
     // test filter 2 properties (logical AND)
     function getRZ() {
       try {
-        storeBeingTested.getList(test.list, {name: /^R/, isMale: false}, function (list, error) {
+        storeBeingTested.getList(test.list, {name: /^r/i, isMale: false}, function (list, error) {
           if (typeof error != 'undefined') {
             callback(error);
             return;
@@ -2610,9 +2610,9 @@ spec.runnerStoreMethods = function (SurrogateStore) {
     });
     spec.heading('getList(model, filter, order)', function () {
       spec.paragraph('This method will clear and populate the list with collection from store.  ' +
-      'The **filter** property can be used to query the store.  ' +
-      'The **order** property can specify the sort order of the list.  ' +
-      '_See integration test for more info._');
+        'The **filter** property can be used to query the store.  ' +
+        'The **order** property can specify the sort order of the list.  ' +
+        '_See integration test for more info._');
       if (services['isReady'] && services['canGetList']) {
         spec.example('returns a List populated from store', undefined, function () {
           this.shouldThrowError(Error('argument must be a List'), function () {
@@ -2636,6 +2636,40 @@ spec.runnerStoreMethods = function (SurrogateStore) {
     });
   });
   spec.heading('Store Integration', function () {
+    spec.example('Check each type', spec.asyncResults(true), function (callback) {
+      var self = this;
+      spec.integrationStore = new SurrogateStore();
+      // If store is not ready then get out...
+      if (!spec.integrationStore.getServices().isReady) {
+        self.log('Store is not ready.');
+        callback(true);
+        return;
+      }
+      self.Types = function (args) {
+        Model.call(this, args);
+        this.modelType = "_tempTypes";
+        this.attributes.push(new Attribute({name: 'String', type: 'String', value: 'cheese'}));
+        this.attributes.push(new Attribute({name: 'Date', type: 'Date', value: new Date()}));
+        this.attributes.push(new Attribute({name: 'Boolean', type: 'Boolean', value: true}));
+        this.attributes.push(new Attribute({name: 'Number', type: 'Number', value: 42}));
+      };
+      self.Types.prototype = Object.create(Model.prototype);
+      self.types = new self.Types();
+      self.types2 = new self.Types();
+      self.types2.copy(self.types);
+      spec.integrationStore.putModel(self.types, function (model, error) {
+        if (typeof error != 'undefined') {
+          callback(error);
+          return;
+        }
+        self.shouldBeTrue(model.get('String') == self.types2.get('String'));
+        self.shouldBeTrue(model.get('Date') == self.types2.get('Date'));
+        self.shouldBeTrue(model.get('Date') instanceof Date);
+        self.shouldBeTrue(model.get('Boolean') == self.types2.get('Boolean'));
+        self.shouldBeTrue(model.get('Number') == self.types2.get('Number'));
+        callback(true);
+      });
+    });
     spec.heading('CRUD (Create Read Update Delete)', function () {
       spec.example('Exercise all store function for one store.', spec.asyncResults(true), function (callback) {
         var self = this;
@@ -2725,7 +2759,7 @@ spec.runnerStoreMethods = function (SurrogateStore) {
           try {
             self.stoogeIDsStored.push(model.get('id'));
             if (self.stoogeIDsStored.length == 3) {
-              self.shouldBeTrue(true,'here');
+              self.shouldBeTrue(true, 'here');
               // Now that first 3 stooges are stored lets retrieve and verify
               var actors = [];
               for (var i = 0; i < 3; i++) {
@@ -2748,10 +2782,10 @@ spec.runnerStoreMethods = function (SurrogateStore) {
           }
           self.stoogesRetrieved.push(model);
           if (self.stoogesRetrieved.length == 3) {
-            self.shouldBeTrue(true,'here');
+            self.shouldBeTrue(true, 'here');
             // Now we have stored and retrieved (via IDs into new objects).  So verify the stooges made it
             self.shouldBeTrue(self.stoogesRetrieved[0] !== self.moe && // Make sure not a reference but a copy
-            self.stoogesRetrieved[0] !== self.larry && self.stoogesRetrieved[0] !== self.shemp,'copy');
+              self.stoogesRetrieved[0] !== self.larry && self.stoogesRetrieved[0] !== self.shemp, 'copy');
             var s = []; // get list of names to see if all stooges made it
             for (var i = 0; i < 3; i++) s.push(self.stoogesRetrieved[i].get('name'));
             self.log(s);
@@ -2782,7 +2816,7 @@ spec.runnerStoreMethods = function (SurrogateStore) {
             callback(error);
             return;
           }
-          self.shouldBeTrue(model.get('name') == 'Curly','Curly');
+          self.shouldBeTrue(model.get('name') == 'Curly', 'Curly');
           var curly = new self.Stooge();
           curly.set('id', model.get('id'));
           try {
@@ -2799,7 +2833,7 @@ spec.runnerStoreMethods = function (SurrogateStore) {
             callback(error);
             return;
           }
-          self.shouldBeTrue(model.get('name') == 'Curly','Curly');
+          self.shouldBeTrue(model.get('name') == 'Curly', 'Curly');
           // Now test delete
           self.deletedModelId = model.get('id'); // Remember this
           spec.integrationStore.deleteModel(model, stoogeDeleted);
@@ -2838,7 +2872,7 @@ spec.runnerStoreMethods = function (SurrogateStore) {
             // Now create a list from the stooge store
             var list = new List(new self.Stooge());
             try {
-              spec.integrationStore.getList(list, {}, {name:1}, listReady);
+              spec.integrationStore.getList(list, {}, {name: 1}, listReady);
             }
             catch (err) {
               callback(err);
@@ -2853,12 +2887,12 @@ spec.runnerStoreMethods = function (SurrogateStore) {
             callback(error);
             return;
           }
-          self.shouldBeTrue(list instanceof List,'is list');
-          self.shouldBeTrue(list.length() == 2,'is 2');
+          self.shouldBeTrue(list instanceof List, 'is list');
+          self.shouldBeTrue(list.length() == 2, 'is 2');
           list.moveFirst();
-          self.shouldBeTrue(list.get('name') == 'Larry','larry');
+          self.shouldBeTrue(list.get('name') == 'Larry', 'larry');
           list.moveNext();
-          self.shouldBeTrue(list.get('name') == 'Moe','moe');
+          self.shouldBeTrue(list.get('name') == 'Moe', 'moe');
           callback(true);
         }
       });

@@ -5,7 +5,7 @@ Core constructors, models, stores and interfaces.  The constructor functions def
 ```javascript
 this.log(TGI.CORE().version);
 ```
-<blockquote><strong>log: </strong>0.4.19<br></blockquote>
+<blockquote><strong>log: </strong>0.4.22<br></blockquote>
 ####Constructors
 
 - [Attribute](#-attribute) defines data types - needed by Model
@@ -1256,7 +1256,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Fri Nov 06 2015 17:30:12 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Mon Nov 09 2015 11:25:53 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1265,7 +1265,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Fri Nov 06 2015 17:30:12 GMT-0500 (EST)<br>returns <strong>Model null</strong> as expected
+<blockquote><strong>log: </strong>Mon Nov 09 2015 11:25:53 GMT-0500 (EST)<br>returns <strong>Model null</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2742,6 +2742,43 @@ new SurrogateStore().deleteModel();
 This method will clear and populate the list with collection from store.  The **filter** property can be used to query the store.  The **order** property can specify the sort order of the list.  _See integration test for more info._    
 
 #### Store Integration
+&nbsp;<b><i>Check each type:</i></b>
+```javascript
+var self = this;
+spec.integrationStore = new SurrogateStore();
+// If store is not ready then get out...
+if (!spec.integrationStore.getServices().isReady) {
+  self.log('Store is not ready.');
+  callback(true);
+  return;
+}
+self.Types = function (args) {
+  Model.call(this, args);
+  this.modelType = "_tempTypes";
+  this.attributes.push(new Attribute({name: 'String', type: 'String', value: 'cheese'}));
+  this.attributes.push(new Attribute({name: 'Date', type: 'Date', value: new Date()}));
+  this.attributes.push(new Attribute({name: 'Boolean', type: 'Boolean', value: true}));
+  this.attributes.push(new Attribute({name: 'Number', type: 'Number', value: 42}));
+};
+self.Types.prototype = Object.create(Model.prototype);
+self.types = new self.Types();
+self.types2 = new self.Types();
+self.types2.copy(self.types);
+spec.integrationStore.putModel(self.types, function (model, error) {
+  if (typeof error != 'undefined') {
+    callback(error);
+    return;
+  }
+  self.shouldBeTrue(model.get('String') == self.types2.get('String'));
+  self.shouldBeTrue(model.get('Date') == self.types2.get('Date'));
+  self.shouldBeTrue(model.get('Date') instanceof Date);
+  self.shouldBeTrue(model.get('Boolean') == self.types2.get('Boolean'));
+  self.shouldBeTrue(model.get('Number') == self.types2.get('Number'));
+  callback(true);
+});
+```
+<blockquote><strong>log: </strong>Store is not ready.<br>returns <strong>true</strong> as expected
+</blockquote>
 #### CRUD (Create Read Update Delete)
 &nbsp;<b><i>Exercise all store function for one store.:</i></b>
 ```javascript
@@ -2825,7 +2862,7 @@ function stoogeStored(model, error) {
   try {
     self.stoogeIDsStored.push(model.get('id'));
     if (self.stoogeIDsStored.length == 3) {
-      self.shouldBeTrue(true,'here');
+      self.shouldBeTrue(true, 'here');
       // Now that first 3 stooges are stored lets retrieve and verify
       var actors = [];
       for (var i = 0; i < 3; i++) {
@@ -2847,10 +2884,10 @@ function stoogeRetrieved(model, error) {
   }
   self.stoogesRetrieved.push(model);
   if (self.stoogesRetrieved.length == 3) {
-    self.shouldBeTrue(true,'here');
+    self.shouldBeTrue(true, 'here');
     // Now we have stored and retrieved (via IDs into new objects).  So verify the stooges made it
     self.shouldBeTrue(self.stoogesRetrieved[0] !== self.moe && // Make sure not a reference but a copy
-    self.stoogesRetrieved[0] !== self.larry && self.stoogesRetrieved[0] !== self.shemp,'copy');
+      self.stoogesRetrieved[0] !== self.larry && self.stoogesRetrieved[0] !== self.shemp, 'copy');
     var s = []; // get list of names to see if all stooges made it
     for (var i = 0; i < 3; i++) s.push(self.stoogesRetrieved[i].get('name'));
     self.log(s);
@@ -2880,7 +2917,7 @@ function stoogeChanged(model, error) {
     callback(error);
     return;
   }
-  self.shouldBeTrue(model.get('name') == 'Curly','Curly');
+  self.shouldBeTrue(model.get('name') == 'Curly', 'Curly');
   var curly = new self.Stooge();
   curly.set('id', model.get('id'));
   try {
@@ -2896,7 +2933,7 @@ function storeChangedShempToCurly(model, error) {
     callback(error);
     return;
   }
-  self.shouldBeTrue(model.get('name') == 'Curly','Curly');
+  self.shouldBeTrue(model.get('name') == 'Curly', 'Curly');
   // Now test delete
   self.deletedModelId = model.get('id'); // Remember this
   spec.integrationStore.deleteModel(model, stoogeDeleted);
@@ -2933,7 +2970,7 @@ function hesDeadJim(model, error) {
     // Now create a list from the stooge store
     var list = new List(new self.Stooge());
     try {
-      spec.integrationStore.getList(list, {}, {name:1}, listReady);
+      spec.integrationStore.getList(list, {}, {name: 1}, listReady);
     }
     catch (err) {
       callback(err);
@@ -2947,12 +2984,12 @@ function listReady(list, error) {
     callback(error);
     return;
   }
-  self.shouldBeTrue(list instanceof List,'is list');
-  self.shouldBeTrue(list.length() == 2,'is 2');
+  self.shouldBeTrue(list instanceof List, 'is list');
+  self.shouldBeTrue(list.length() == 2, 'is 2');
   list.moveFirst();
-  self.shouldBeTrue(list.get('name') == 'Larry','larry');
+  self.shouldBeTrue(list.get('name') == 'Larry', 'larry');
   list.moveNext();
-  self.shouldBeTrue(list.get('name') == 'Moe','moe');
+  self.shouldBeTrue(list.get('name') == 'Moe', 'moe');
   callback(true);
 }
 ```
@@ -3547,7 +3584,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Fri Nov 06 2015 17:30:12 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Mon Nov 09 2015 11:25:53 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -5054,6 +5091,43 @@ this.shouldThrowError(Error('callback required'), function () {
 // See integration tests for examples of usage
 ```
 #### Store Integration
+&nbsp;<b><i>Check each type:</i></b>
+```javascript
+var self = this;
+spec.integrationStore = new SurrogateStore();
+// If store is not ready then get out...
+if (!spec.integrationStore.getServices().isReady) {
+  self.log('Store is not ready.');
+  callback(true);
+  return;
+}
+self.Types = function (args) {
+  Model.call(this, args);
+  this.modelType = "_tempTypes";
+  this.attributes.push(new Attribute({name: 'String', type: 'String', value: 'cheese'}));
+  this.attributes.push(new Attribute({name: 'Date', type: 'Date', value: new Date()}));
+  this.attributes.push(new Attribute({name: 'Boolean', type: 'Boolean', value: true}));
+  this.attributes.push(new Attribute({name: 'Number', type: 'Number', value: 42}));
+};
+self.Types.prototype = Object.create(Model.prototype);
+self.types = new self.Types();
+self.types2 = new self.Types();
+self.types2.copy(self.types);
+spec.integrationStore.putModel(self.types, function (model, error) {
+  if (typeof error != 'undefined') {
+    callback(error);
+    return;
+  }
+  self.shouldBeTrue(model.get('String') == self.types2.get('String'));
+  self.shouldBeTrue(model.get('Date') == self.types2.get('Date'));
+  self.shouldBeTrue(model.get('Date') instanceof Date);
+  self.shouldBeTrue(model.get('Boolean') == self.types2.get('Boolean'));
+  self.shouldBeTrue(model.get('Number') == self.types2.get('Number'));
+  callback(true);
+});
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
 #### CRUD (Create Read Update Delete)
 &nbsp;<b><i>Exercise all store function for one store.:</i></b>
 ```javascript
@@ -5137,7 +5211,7 @@ function stoogeStored(model, error) {
   try {
     self.stoogeIDsStored.push(model.get('id'));
     if (self.stoogeIDsStored.length == 3) {
-      self.shouldBeTrue(true,'here');
+      self.shouldBeTrue(true, 'here');
       // Now that first 3 stooges are stored lets retrieve and verify
       var actors = [];
       for (var i = 0; i < 3; i++) {
@@ -5159,10 +5233,10 @@ function stoogeRetrieved(model, error) {
   }
   self.stoogesRetrieved.push(model);
   if (self.stoogesRetrieved.length == 3) {
-    self.shouldBeTrue(true,'here');
+    self.shouldBeTrue(true, 'here');
     // Now we have stored and retrieved (via IDs into new objects).  So verify the stooges made it
     self.shouldBeTrue(self.stoogesRetrieved[0] !== self.moe && // Make sure not a reference but a copy
-    self.stoogesRetrieved[0] !== self.larry && self.stoogesRetrieved[0] !== self.shemp,'copy');
+      self.stoogesRetrieved[0] !== self.larry && self.stoogesRetrieved[0] !== self.shemp, 'copy');
     var s = []; // get list of names to see if all stooges made it
     for (var i = 0; i < 3; i++) s.push(self.stoogesRetrieved[i].get('name'));
     self.log(s);
@@ -5192,7 +5266,7 @@ function stoogeChanged(model, error) {
     callback(error);
     return;
   }
-  self.shouldBeTrue(model.get('name') == 'Curly','Curly');
+  self.shouldBeTrue(model.get('name') == 'Curly', 'Curly');
   var curly = new self.Stooge();
   curly.set('id', model.get('id'));
   try {
@@ -5208,7 +5282,7 @@ function storeChangedShempToCurly(model, error) {
     callback(error);
     return;
   }
-  self.shouldBeTrue(model.get('name') == 'Curly','Curly');
+  self.shouldBeTrue(model.get('name') == 'Curly', 'Curly');
   // Now test delete
   self.deletedModelId = model.get('id'); // Remember this
   spec.integrationStore.deleteModel(model, stoogeDeleted);
@@ -5245,7 +5319,7 @@ function hesDeadJim(model, error) {
     // Now create a list from the stooge store
     var list = new List(new self.Stooge());
     try {
-      spec.integrationStore.getList(list, {}, {name:1}, listReady);
+      spec.integrationStore.getList(list, {}, {name: 1}, listReady);
     }
     catch (err) {
       callback(err);
@@ -5259,12 +5333,12 @@ function listReady(list, error) {
     callback(error);
     return;
   }
-  self.shouldBeTrue(list instanceof List,'is list');
-  self.shouldBeTrue(list.length() == 2,'is 2');
+  self.shouldBeTrue(list instanceof List, 'is list');
+  self.shouldBeTrue(list.length() == 2, 'is 2');
   list.moveFirst();
-  self.shouldBeTrue(list.get('name') == 'Larry','larry');
+  self.shouldBeTrue(list.get('name') == 'Larry', 'larry');
   list.moveNext();
-  self.shouldBeTrue(list.get('name') == 'Moe','moe');
+  self.shouldBeTrue(list.get('name') == 'Moe', 'moe');
   callback(true);
 }
 ```
