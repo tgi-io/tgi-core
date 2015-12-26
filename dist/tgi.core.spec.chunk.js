@@ -1723,7 +1723,7 @@ spec.runnerListStoreIntegration = function (SurrogateStore) {
     // test filter 2 properties (logical AND)
     function getRZ() {
       try {
-        storeBeingTested.getList(test.list, {name: /^r/, isMale: false}, function (list, error) {
+        storeBeingTested.getList(test.list, {name: /^r/i, isMale: false}, function (list, error) {
           if (typeof error != 'undefined') {
             callback(error);
             return;

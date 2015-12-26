@@ -10,7 +10,7 @@ var root = this;
 var TGI = {
   CORE: function () {
     return {
-      version: '0.4.22',
+      version: '0.4.25',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
