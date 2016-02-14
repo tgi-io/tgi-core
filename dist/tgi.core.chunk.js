@@ -4,7 +4,7 @@
 var TGI = {
   CORE: function () {
     return {
-      version: '0.4.22',
+      version: '0.4.25',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -75,7 +75,7 @@ function Attribute(args, arg2) {
   this.hint = args.hint || {};
   this.validationRule = args.validationRule || {};
   var unusedProperties = [];
-  var standardProperties = ['name', 'type', 'label', 'hint', 'value', 'validationRule'];
+  var standardProperties = ['name', 'type', 'label', 'hint', 'hidden', 'value', 'validationRule'];
   switch (this.type) {
     case 'ID':
       unusedProperties = getInvalidProperties(args, standardProperties);

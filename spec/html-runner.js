@@ -15,7 +15,7 @@ spec.runTests(function (msg) {
     else
       logSuccess(msg.testsCreated + ' Tests completed with no errors');
   } else if (msg.log) {
-    //log(msg.log);
+    log(msg.log);
   }
   /**
    * DOM rendering functions
