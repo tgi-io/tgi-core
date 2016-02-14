@@ -5,7 +5,7 @@ Core constructors, models, stores and interfaces.  The constructor functions def
 ```javascript
 this.log(TGI.CORE().version);
 ```
-<blockquote><strong>log: </strong>0.4.25<br></blockquote>
+<blockquote><strong>log: </strong>0.4.27<br></blockquote>
 ####Constructors
 
 - [Attribute](#-attribute) defines data types - needed by Model
@@ -193,6 +193,13 @@ return typeof new Attribute({name: 'name', label: 'Name'}).hint;
 ```
 <blockquote>returns <strong>object</strong> as expected
 </blockquote>
+#### hidden
+Attribute hidden by default    
+
+&nbsp;<b><i>hidden set in constructor:</i></b>
+```javascript
+new Attribute({name: 'name', label: 'Name', hidden: '*'});
+```
 #### quickPick
 &nbsp;<b><i>list of values to pick from typically invoked from dropdown:</i></b>
 ```javascript
@@ -593,9 +600,9 @@ this.shouldBeTrue(myBool.coerce() === false && myBool.coerce(null) === false && 
 this.shouldBeTrue(myBool.coerce(true) === true && myBool.coerce(1) === true);
 this.shouldBeTrue(myBool.coerce('y') && myBool.coerce('yEs') && myBool.coerce('t') && myBool.coerce('TRUE') && myBool.coerce('1'));
 this.shouldBeTrue(!((myBool.coerce('') || (myBool.coerce('yep')))));
-//// Date {todo this will break in 2016}
-this.shouldBeTrue(myDate.coerce('2/21/2015').getTime() === new Date('2/21/2015').getTime());
-this.shouldBeTrue(myDate.coerce('2/21').getTime() === new Date('2/21/2015').getTime());
+//// Date {todo this will break in 2017}
+this.shouldBeTrue(myDate.coerce('2/21/2016').getTime() === new Date('2/21/2016').getTime());
+this.shouldBeTrue(myDate.coerce('2/21').getTime() === new Date('2/21/2016').getTime());
 // TODO
 this.shouldThrowError(Error('coerce cannot determine appropriate value'), function () {
   new Attribute({name: 'Twiggy', type: 'Model', value: new Attribute.ModelID(new Model())}).coerce();
@@ -1256,7 +1263,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Sat Dec 26 2015 09:54:17 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Sun Feb 14 2016 15:02:27 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1265,7 +1272,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Sat Dec 26 2015 09:54:17 GMT-0500 (EST)<br>returns <strong>Model null</strong> as expected
+<blockquote><strong>log: </strong>Sun Feb 14 2016 15:02:27 GMT-0500 (EST)<br>returns <strong>Model null</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -3584,7 +3591,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Sat Dec 26 2015 09:54:17 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Sun Feb 14 2016 15:02:27 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
