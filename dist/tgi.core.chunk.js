@@ -4,7 +4,7 @@
 var TGI = {
   CORE: function () {
     return {
-      version: '0.4.25',
+      version: '0.4.28',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -73,6 +73,8 @@ function Attribute(args, arg2) {
   }(this.type);
   this.type = splitTypes[0];
   this.hint = args.hint || {};
+  if (args.hidden !== undefined)
+    this.hidden = args.hidden;
   this.validationRule = args.validationRule || {};
   var unusedProperties = [];
   var standardProperties = ['name', 'type', 'label', 'hint', 'hidden', 'value', 'validationRule'];
