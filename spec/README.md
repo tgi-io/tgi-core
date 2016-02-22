@@ -5,7 +5,7 @@ Core constructors, models, stores and interfaces.  The constructor functions def
 ```javascript
 this.log(TGI.CORE().version);
 ```
-<blockquote><strong>log: </strong>0.4.30<br></blockquote>
+<blockquote><strong>log: </strong>0.4.31<br></blockquote>
 ####Constructors
 
 - [Attribute](#-attribute) defines data types - needed by Model
@@ -1263,7 +1263,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Mon Feb 22 2016 09:32:07 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Mon Feb 22 2016 09:50:27 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1272,7 +1272,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Mon Feb 22 2016 09:32:07 GMT-0500 (EST)<br>returns <strong>Model null</strong> as expected
+<blockquote><strong>log: </strong>Mon Feb 22 2016 09:50:27 GMT-0500 (EST)<br>returns <strong>Model null</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2077,17 +2077,6 @@ this.shouldBeTrue(model.getObjectStateErrors(true).length === 0);
 model.attributes = [new Attribute("ID", "ID"), new SurrogateModel(), 0, 'a', {}, [], null];
 this.shouldBeTrue(model.getObjectStateErrors(true).length == 6);
 ```
-#### _
-&nbsp;<b><i>underscore used form direct access to attribute by name:</i></b>
-```javascript
-var attribute = new Attribute('d00dName');
-var model = new SurrogateModel({attributes: [attribute]});
-attribute.value = 'John';
-this.shouldBeTrue(attribute === model._.d00dName);
-return model._.d00dName.value;
-```
-<blockquote>returns <strong>John</strong> as expected
-</blockquote>
 #### METHODS
 #### toString()
 &nbsp;<b><i>should return a description of the model:</i></b>
@@ -3278,7 +3267,7 @@ return new Application() instanceof Application;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
-*29 model tests applied*    
+*28 model tests applied*    
 
 &nbsp;<b><i>argument property interface will invoke setInterface method:</i></b>
 ```javascript
@@ -3588,7 +3577,7 @@ return new Log() instanceof Log;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
-*29 model tests applied*    
+*28 model tests applied*    
 
 #### ATTRIBUTES
 &nbsp;<b><i>following attributes are defined::</i></b>
@@ -3601,7 +3590,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Mon Feb 22 2016 09:32:07 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Mon Feb 22 2016 09:50:27 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -3634,7 +3623,7 @@ return new Presentation() instanceof Presentation;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
-*29 model tests applied*    
+*28 model tests applied*    
 
 #### PROPERTIES
 #### model
@@ -3843,17 +3832,6 @@ this.shouldBeTrue(model.getObjectStateErrors(true).length === 0);
 model.attributes = [new Attribute("ID", "ID"), new SurrogateModel(), 0, 'a', {}, [], null];
 this.shouldBeTrue(model.getObjectStateErrors(true).length == 6);
 ```
-#### _
-&nbsp;<b><i>underscore used form direct access to attribute by name:</i></b>
-```javascript
-var attribute = new Attribute('d00dName');
-var model = new SurrogateModel({attributes: [attribute]});
-attribute.value = 'John';
-this.shouldBeTrue(attribute === model._.d00dName);
-return model._.d00dName.value;
-```
-<blockquote>returns <strong>John</strong> as expected
-</blockquote>
 #### METHODS
 #### toString()
 &nbsp;<b><i>should return a description of the model:</i></b>
@@ -4083,7 +4061,7 @@ function test4() {
 ```
 <blockquote>returns <strong>test4: 0</strong> as expected
 </blockquote>
-*29 model tests applied*    
+*28 model tests applied*    
 
 #### ATTRIBUTES
 &nbsp;<b><i>following attributes are defined::</i></b>
@@ -4304,17 +4282,6 @@ this.shouldBeTrue(model.getObjectStateErrors(true).length === 0);
 model.attributes = [new Attribute("ID", "ID"), new SurrogateModel(), 0, 'a', {}, [], null];
 this.shouldBeTrue(model.getObjectStateErrors(true).length == 6);
 ```
-#### _
-&nbsp;<b><i>underscore used form direct access to attribute by name:</i></b>
-```javascript
-var attribute = new Attribute('d00dName');
-var model = new SurrogateModel({attributes: [attribute]});
-attribute.value = 'John';
-this.shouldBeTrue(attribute === model._.d00dName);
-return model._.d00dName.value;
-```
-<blockquote>returns <strong>John</strong> as expected
-</blockquote>
 #### METHODS
 #### toString()
 &nbsp;<b><i>should return a description of the model:</i></b>
@@ -4544,7 +4511,7 @@ function test4() {
 ```
 <blockquote>returns <strong>test4: 0</strong> as expected
 </blockquote>
-*29 model tests applied*    
+*28 model tests applied*    
 
 #### ATTRIBUTES
 &nbsp;<b><i>following attributes are defined::</i></b>
@@ -4632,17 +4599,6 @@ this.shouldBeTrue(model.getObjectStateErrors(true).length === 0);
 model.attributes = [new Attribute("ID", "ID"), new SurrogateModel(), 0, 'a', {}, [], null];
 this.shouldBeTrue(model.getObjectStateErrors(true).length == 6);
 ```
-#### _
-&nbsp;<b><i>underscore used form direct access to attribute by name:</i></b>
-```javascript
-var attribute = new Attribute('d00dName');
-var model = new SurrogateModel({attributes: [attribute]});
-attribute.value = 'John';
-this.shouldBeTrue(attribute === model._.d00dName);
-return model._.d00dName.value;
-```
-<blockquote>returns <strong>John</strong> as expected
-</blockquote>
 #### METHODS
 #### toString()
 &nbsp;<b><i>should return a description of the model:</i></b>
@@ -4872,7 +4828,7 @@ function test4() {
 ```
 <blockquote>returns <strong>test4: 0</strong> as expected
 </blockquote>
-*29 model tests applied*    
+*28 model tests applied*    
 
 #### ATTRIBUTES
 &nbsp;<b><i>following attributes are defined::</i></b>
@@ -5481,11 +5437,6 @@ return getConstructorFromModelType();
   // Validations done
   this._eventListeners = [];
   this._errorConditions = {};
-  this._ = {};
-  for (i in this.attributes) {
-    if (this.attributes.hasOwnProperty(i))
-      this._[this.attributes[i].name] = this.attributes[i];
-  }
 }</strong> as expected
 </blockquote>
 &nbsp;<b><i>registered models return the constructor function:</i></b>
