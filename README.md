@@ -32,7 +32,7 @@ Later
 - Misc: improve coverage
 - Misc remove bucket - replace example with closure variables as needed
 - Review tequila for lingering todo
-- model tests don't use SurrogateModel as much as should
+- model tests don't use SurrogateModel as much as it should
 
 # Design WIP
 
