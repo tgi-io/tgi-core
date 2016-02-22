@@ -10,7 +10,7 @@ var root = this;
 var TGI = {
   CORE: function () {
     return {
-      version: '0.4.28',
+      version: '0.4.29',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -1066,6 +1066,11 @@ var Model = function (args) {
   // Validations done
   this._eventListeners = [];
   this._errorConditions = {};
+  this._ = {};
+  for (i in this.attributes) {
+    if (this.attributes.hasOwnProperty(i))
+      this._[this.attributes[i].name] = this.attributes[i];
+  }
 };
 Model._ModelConstructor = {};
 /**

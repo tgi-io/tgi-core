@@ -18,6 +18,7 @@ Presentation Management
 
 Later
 -----
+- coerce() useless since have to have attribute instances limits - make util func ?
 - Transport sendRaw & onRaw have no tests
 - REPLInterface - handle presentation (WIP)
     - view shows and leaves
@@ -31,6 +32,7 @@ Later
 - Misc: improve coverage
 - Misc remove bucket - replace example with closure variables as needed
 - Review tequila for lingering todo
+- model tests don't use SurrogateModel as much as should
 
 # Design WIP
 
