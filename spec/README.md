@@ -1263,7 +1263,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Mon Feb 22 2016 09:50:27 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Tue Mar 01 2016 10:01:55 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1272,7 +1272,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Mon Feb 22 2016 09:50:27 GMT-0500 (EST)<br>returns <strong>Model null</strong> as expected
+<blockquote><strong>log: </strong>Tue Mar 01 2016 10:01:55 GMT-0500 (EST)<br>returns <strong>Model null</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2154,6 +2154,15 @@ new Model().onEvent(['Validate'], function () {
 });
 ```
 <blockquote><strong>log: </strong>T.getAttributeEvents()<br></blockquote>
+#### attribute
+&nbsp;<b><i>return attribute by name:</i></b>
+```javascript
+var attrib = new Attribute("Sue");
+var model = new Model({attributes: [attrib]});
+return model.attribute("Sue") == attrib;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
 #### getShortName
 &nbsp;<b><i>returns short description of model, defaults to first string attribute:</i></b>
 ```javascript
@@ -3267,7 +3276,7 @@ return new Application() instanceof Application;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
-*28 model tests applied*    
+*29 model tests applied*    
 
 &nbsp;<b><i>argument property interface will invoke setInterface method:</i></b>
 ```javascript
@@ -3577,7 +3586,7 @@ return new Log() instanceof Log;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
-*28 model tests applied*    
+*29 model tests applied*    
 
 #### ATTRIBUTES
 &nbsp;<b><i>following attributes are defined::</i></b>
@@ -3590,7 +3599,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Mon Feb 22 2016 09:50:27 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Tue Mar 01 2016 10:01:55 GMT-0500 (EST)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -3623,7 +3632,7 @@ return new Presentation() instanceof Presentation;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
-*28 model tests applied*    
+*29 model tests applied*    
 
 #### PROPERTIES
 #### model
@@ -3909,6 +3918,15 @@ new Model().onEvent(['Validate'], function () {
 });
 ```
 <blockquote><strong>log: </strong>T.getAttributeEvents()<br></blockquote>
+#### attribute
+&nbsp;<b><i>return attribute by name:</i></b>
+```javascript
+var attrib = new Attribute("Sue");
+var model = new Model({attributes: [attrib]});
+return model.attribute("Sue") == attrib;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
 #### getShortName
 &nbsp;<b><i>returns short description of model, defaults to first string attribute:</i></b>
 ```javascript
@@ -4061,7 +4079,7 @@ function test4() {
 ```
 <blockquote>returns <strong>test4: 0</strong> as expected
 </blockquote>
-*28 model tests applied*    
+*29 model tests applied*    
 
 #### ATTRIBUTES
 &nbsp;<b><i>following attributes are defined::</i></b>
@@ -4359,6 +4377,15 @@ new Model().onEvent(['Validate'], function () {
 });
 ```
 <blockquote><strong>log: </strong>T.getAttributeEvents()<br></blockquote>
+#### attribute
+&nbsp;<b><i>return attribute by name:</i></b>
+```javascript
+var attrib = new Attribute("Sue");
+var model = new Model({attributes: [attrib]});
+return model.attribute("Sue") == attrib;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
 #### getShortName
 &nbsp;<b><i>returns short description of model, defaults to first string attribute:</i></b>
 ```javascript
@@ -4511,7 +4538,7 @@ function test4() {
 ```
 <blockquote>returns <strong>test4: 0</strong> as expected
 </blockquote>
-*28 model tests applied*    
+*29 model tests applied*    
 
 #### ATTRIBUTES
 &nbsp;<b><i>following attributes are defined::</i></b>
@@ -4676,6 +4703,15 @@ new Model().onEvent(['Validate'], function () {
 });
 ```
 <blockquote><strong>log: </strong>T.getAttributeEvents()<br></blockquote>
+#### attribute
+&nbsp;<b><i>return attribute by name:</i></b>
+```javascript
+var attrib = new Attribute("Sue");
+var model = new Model({attributes: [attrib]});
+return model.attribute("Sue") == attrib;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
 #### getShortName
 &nbsp;<b><i>returns short description of model, defaults to first string attribute:</i></b>
 ```javascript
@@ -4828,7 +4864,7 @@ function test4() {
 ```
 <blockquote>returns <strong>test4: 0</strong> as expected
 </blockquote>
-*28 model tests applied*    
+*29 model tests applied*    
 
 #### ATTRIBUTES
 &nbsp;<b><i>following attributes are defined::</i></b>

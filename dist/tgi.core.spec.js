@@ -1909,15 +1909,6 @@ spec.testModel = function (SurrogateModel, root) {
         this.shouldBeTrue(model.getObjectStateErrors(true).length == 6);
       });
     });
-    spec.heading('_', function () {
-      spec.example('underscore used form direct access to attribute by name', 'John', function () {
-        var attribute = new Attribute('d00dName');
-        var model = new SurrogateModel({attributes: [attribute]});
-        attribute.value = 'John';
-        this.shouldBeTrue(attribute === model._.d00dName);
-        return model._.d00dName.value;
-      });
-    });
   });
   spec.heading('METHODS', function () {
     spec.heading('toString()', function () {
@@ -1978,6 +1969,13 @@ spec.testModel = function (SurrogateModel, root) {
         // StateChange -- callback when state of object (value or validation state) has changed
         new Model().onEvent(['Validate'], function () {
         });
+      });
+    });
+    spec.heading('attribute', function () {
+      spec.example('return attribute by name', true, function () {
+        var attrib = new Attribute("Sue");
+        var model = new Model({attributes: [attrib]});
+        return model.attribute("Sue") == attrib;
       });
     });
     spec.heading('getShortName', function () {
