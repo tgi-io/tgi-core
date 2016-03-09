@@ -10,7 +10,7 @@ var root = this;
 var TGI = {
   CORE: function () {
     return {
-      version: '0.4.31',
+      version: '0.4.33',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -177,7 +177,7 @@ Attribute.ModelID.prototype.toString = function () {
  * Methods
  */
 Attribute.prototype.toString = function () {
-  return this.name === null ? 'new Attribute' : 'Attribute: ' + this.name;
+  return this.name === null ? 'new Attribute' : 'Attribute: ' + this.name + ' = ' + this.value;
 };
 Attribute.prototype.onEvent = function (events, callback) {
   if (!(events instanceof Array)) {
@@ -945,7 +945,10 @@ List.prototype.get = function (attribute) {
   for (var i = 0; i < this.model.attributes.length; i++) {
     if (this.model.attributes[i].name.toUpperCase() == attribute.toUpperCase()) {
       if (this.model.attributes[i].type == 'Date' && !(this._items[this._itemIndex][i] instanceof Date)) {
-        return new Date(this._items[this._itemIndex][i]); // todo problem with stores not keeping date type (mongo or host) kludge fix for now
+        if (this._items[this._itemIndex][i] === null || this._items[this._itemIndex][i] === undefined)
+          return null;
+        else
+          return new Date(this._items[this._itemIndex][i]); // todo problem with stores not keeping date type (mongo or host) kludge fix for now
       } else {
         return this._items[this._itemIndex][i];
       }
