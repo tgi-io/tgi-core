@@ -312,6 +312,20 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
           return theGood + ' correct assignments ' + theBad + ' errors thrown';
         });
     });
+    spec.heading('model', function () {
+      spec.example('a reference to model', undefined, function () {
+        return new Attribute({name: 'derp'}).model; // undefined when not part of model
+      });
+      spec.example('defined by model', 'I am a Model', function () {
+        var attrib = new Attribute("Sue");
+        new Model({attributes: [attrib]});
+        return 'I am ' + attrib.model;
+      });
+      spec.example('user example', 'You are a User', function () {
+        return 'You are ' + new User().attribute('name').model;
+      });
+
+    });
   });
   spec.heading('TYPES', function () {
     spec.heading('ID', function () {
@@ -835,6 +849,9 @@ spec.test('tgi-core/lib/tgi-core-command.spec.js', 'Command', 'encapsulates task
           new Command({name: 'options', type: 'Function'});
         });
       });
+      spec.example('shorthand version', 'Function', function () {
+        return new Command(function () {}).type;
+      });
     });
     spec.heading('Procedure', function () {
       spec.example('for Procedure type contents is a Procedure object', undefined, function () {
@@ -842,6 +859,10 @@ spec.test('tgi-core/lib/tgi-core-command.spec.js', 'Command', 'encapsulates task
           new Command({name: 'options', type: 'Procedure'});
         });
       });
+      spec.example('shorthand version', 'Procedure', function () {
+        return new Command(new Procedure()).type;
+      });
+
     });
   });
   spec.heading('METHODS', function () {
@@ -1933,12 +1954,10 @@ spec.testModel = function (SurrogateModel, root) {
         this.shouldBeTrue(m1 === m3); // assigning one model to variable references same instance
         this.shouldBeTrue(m3.get('name') === 'Bar'); // m3 changed when m1 changed
         this.shouldBeTrue(m1 !== m2); // 2 models are not the same instance
-        this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m2)); // but they are identical
         // clone m1 into m4 and demonstrate that contents equal but not same ref to object
         var m4 = new Foo();
         m4.copy(m1);
         this.shouldBeTrue(m1 !== m4); // 2 models are not the same instance
-        this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m4)); // but they are identical
       });
     });
     spec.heading('getObjectStateErrors()', function () {
@@ -2120,7 +2139,7 @@ spec.testModel = function (SurrogateModel, root) {
 spec.test('tgi-core/lib/tgi-core-procedure.spec.js', 'Procedure', 'manages set of Commands synchronous or asynchronous', function (callback) {
   spec.heading('Procedure Class', function () {
     spec.paragraph('The `Procedure` class manages a set of `Command` objects.  It provides a pattern for handling ' +
-    'asynchronous and synchronous command execution.');
+      'asynchronous and synchronous command execution.');
     spec.paragraph('`Command` objects create and manage the `Procedure` object.');
     spec.heading('CONSTRUCTOR', function () {
       spec.example('objects created should be an instance of Procedure', true, function () {
@@ -2136,7 +2155,7 @@ spec.test('tgi-core/lib/tgi-core-procedure.spec.js', 'Procedure', 'manages set o
     spec.heading('PROPERTIES', function () {
       spec.heading('tasks', function () {
         spec.paragraph('Tasks is an array of objects that represent each step of the procedure.  See TASKS section ' +
-        'below for each property of this unnamed object (task array element).');
+          'below for each property of this unnamed object (task array element).');
         spec.example('tasks can be falsy if no tasks defined otherwise it has to be an array',
           Error('error creating Procedure: tasks is not an array'), function () {
             new Procedure({tasks: true});
@@ -2170,6 +2189,10 @@ spec.test('tgi-core/lib/tgi-core-procedure.spec.js', 'Procedure', 'manages set o
             ]
           });
         });
+        spec.example('shorthand version', undefined, function () {
+          new Procedure([function () {
+          }]);
+        });
       });
       spec.heading('command', function () {
         spec.paragraph('Command to execute for this task');
@@ -2183,8 +2206,8 @@ spec.test('tgi-core/lib/tgi-core-procedure.spec.js', 'Procedure', 'manages set o
       });
       spec.heading('requires', function () {
         spec.paragraph('Establish other tasks that must be complete before this task is executed.  ' +
-        'Pass as array of or single element. Can be string(for label label) or number(for array index).  ' +
-        'Use -1 for previous task, null for no dependencies');
+          'Pass as array of or single element. Can be string(for label label) or number(for array index).  ' +
+          'Use -1 for previous task, null for no dependencies');
         spec.example('test it', undefined, function () {
           this.shouldThrowError(Error('invalid type for requires in task[0]'), function () {
             new Procedure({

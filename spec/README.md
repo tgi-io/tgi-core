@@ -381,6 +381,25 @@ return theGood + ' correct assignments ' + theBad + ' errors thrown';
 ```
 <blockquote><strong>log: </strong>String,Date,Boolean,Number,Model,Group,Table<br>returns <strong>7 correct assignments 91 errors thrown</strong> as expected
 </blockquote>
+#### model
+&nbsp;<b><i>a reference to model:</i></b>
+```javascript
+return new Attribute({name: 'derp'}).model; // undefined when not part of model
+```
+&nbsp;<b><i>defined by model:</i></b>
+```javascript
+var attrib = new Attribute("Sue");
+new Model({attributes: [attrib]});
+return 'I am ' + attrib.model;
+```
+<blockquote>returns <strong>I am a Model</strong> as expected
+</blockquote>
+&nbsp;<b><i>user example:</i></b>
+```javascript
+return 'You are ' + new User().attribute('name').model;
+```
+<blockquote>returns <strong>You are a User</strong> as expected
+</blockquote>
 #### TYPES
 #### ID
 &nbsp;<b><i>should have type of 'ID':</i></b>
@@ -1275,7 +1294,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Wed Mar 09 2016 14:35:40 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Mon Mar 21 2016 16:03:35 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1284,7 +1303,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Wed Mar 09 2016 14:35:40 GMT-0500 (EST)<br>returns <strong>Model null</strong> as expected
+<blockquote><strong>log: </strong>Mon Mar 21 2016 16:03:35 GMT-0400 (EDT)<br>returns <strong>Model null</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2115,12 +2134,10 @@ m2.set('name', 'Bar');
 this.shouldBeTrue(m1 === m3); // assigning one model to variable references same instance
 this.shouldBeTrue(m3.get('name') === 'Bar'); // m3 changed when m1 changed
 this.shouldBeTrue(m1 !== m2); // 2 models are not the same instance
-this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m2)); // but they are identical
 // clone m1 into m4 and demonstrate that contents equal but not same ref to object
 var m4 = new Foo();
 m4.copy(m1);
 this.shouldBeTrue(m1 !== m4); // 2 models are not the same instance
-this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m4)); // but they are identical
 ```
 #### getObjectStateErrors()
 &nbsp;<b><i>should return array of validation errors:</i></b>
@@ -3616,7 +3633,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Wed Mar 09 2016 14:35:40 GMT-0500 (EST)<br></blockquote>
+<blockquote><strong>log: </strong>Mon Mar 21 2016 16:03:35 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -3884,12 +3901,10 @@ m2.set('name', 'Bar');
 this.shouldBeTrue(m1 === m3); // assigning one model to variable references same instance
 this.shouldBeTrue(m3.get('name') === 'Bar'); // m3 changed when m1 changed
 this.shouldBeTrue(m1 !== m2); // 2 models are not the same instance
-this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m2)); // but they are identical
 // clone m1 into m4 and demonstrate that contents equal but not same ref to object
 var m4 = new Foo();
 m4.copy(m1);
 this.shouldBeTrue(m1 !== m4); // 2 models are not the same instance
-this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m4)); // but they are identical
 ```
 #### getObjectStateErrors()
 &nbsp;<b><i>should return array of validation errors:</i></b>
@@ -4343,12 +4358,10 @@ m2.set('name', 'Bar');
 this.shouldBeTrue(m1 === m3); // assigning one model to variable references same instance
 this.shouldBeTrue(m3.get('name') === 'Bar'); // m3 changed when m1 changed
 this.shouldBeTrue(m1 !== m2); // 2 models are not the same instance
-this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m2)); // but they are identical
 // clone m1 into m4 and demonstrate that contents equal but not same ref to object
 var m4 = new Foo();
 m4.copy(m1);
 this.shouldBeTrue(m1 !== m4); // 2 models are not the same instance
-this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m4)); // but they are identical
 ```
 #### getObjectStateErrors()
 &nbsp;<b><i>should return array of validation errors:</i></b>
@@ -4669,12 +4682,10 @@ m2.set('name', 'Bar');
 this.shouldBeTrue(m1 === m3); // assigning one model to variable references same instance
 this.shouldBeTrue(m3.get('name') === 'Bar'); // m3 changed when m1 changed
 this.shouldBeTrue(m1 !== m2); // 2 models are not the same instance
-this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m2)); // but they are identical
 // clone m1 into m4 and demonstrate that contents equal but not same ref to object
 var m4 = new Foo();
 m4.copy(m1);
 this.shouldBeTrue(m1 !== m4); // 2 models are not the same instance
-this.shouldBeTrue(JSON.stringify(m1) === JSON.stringify(m4)); // but they are identical
 ```
 #### getObjectStateErrors()
 &nbsp;<b><i>should return array of validation errors:</i></b>
@@ -5490,6 +5501,9 @@ return getConstructorFromModelType();
   // Validations done
   this._eventListeners = [];
   this._errorConditions = {};
+  for (i = 0; i < this.attributes.length; i++) {
+    this.attributes[i].model = this;
+  }
 }</strong> as expected
 </blockquote>
 &nbsp;<b><i>registered models return the constructor function:</i></b>

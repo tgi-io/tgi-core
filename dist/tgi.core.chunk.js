@@ -4,7 +4,7 @@
 var TGI = {
   CORE: function () {
     return {
-      version: '0.4.33',
+      version: '0.4.36',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -411,8 +411,10 @@ Attribute.getEvents = function () {
 function Command(args) {
   if (false === (this instanceof Command)) throw new Error('new operator required');
   if (typeof args == 'function') { // shorthand for function command
-    var theFunc = args;
-    args = {type: 'Function', contents: theFunc};
+    args = {type: 'Function', contents: args};
+  }
+  if (args instanceof Procedure) { // shorthand for Procedure command
+    args = {type: 'Procedure', contents: args};
   }
   args = args || {};
   var i;
@@ -1063,6 +1065,9 @@ var Model = function (args) {
   // Validations done
   this._eventListeners = [];
   this._errorConditions = {};
+  for (i = 0; i < this.attributes.length; i++) {
+    this.attributes[i].model = this;
+  }
 };
 Model._ModelConstructor = {};
 /**
@@ -1283,6 +1288,9 @@ Message.getTypes = function () {
  */
 var Procedure = function (args) {
   if (false === (this instanceof Procedure)) throw new Error('new operator required');
+  if (args instanceof Array) { // shorthand for Procedure command
+    args = {tasks: args};
+  }
   args = args || {};
   var i;
   var unusedProperties = getInvalidProperties(args, ['tasks', 'tasksNeeded', 'tasksCompleted']);
