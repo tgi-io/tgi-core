@@ -19,13 +19,12 @@ Presentation Management
 View
 ---
 + Add reference from Attribute when models created
-- View created with:
-    - new View(primaryModel, relatedModels, relatedIDs, attributeArray);
-    - Primary model
-    - Related models {'Customer': customerModel, 'Etc': etcModel} ... values are actual models 
-    - Related IDs {'Customer': customerID, 'Etc': etcID} // values are attributes in Primary model
-    - Array of attributes (must have model ref / can't be standalone attribute)
-- Add to getlist as parm instead of Model    
++ View created with:
+    + new View(primaryModel, relatedModels, relatedIDs, attributeArray);
+    + Primary model
+    + Related models {'Customer': {model:customerModel, id: 'CustomerID'} 
+    + Array of attributes (must have model ref / can't be standalone attribute)
+- Add to getList as parm instead of Model    
 
 Later
 -----

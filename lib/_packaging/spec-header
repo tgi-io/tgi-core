@@ -25,6 +25,7 @@ var testSpec = function(spec,TGI) {
   var Text = tgiCore.Text;
   var Transport = tgiCore.Transport;
   var User = tgiCore.User;
+  var View = tgiCore.View;
   var Workspace = tgiCore.Workspace;
   var inheritPrototype = tgiCore.inheritPrototype;
   var getInvalidProperties = tgiCore.getInvalidProperties;
