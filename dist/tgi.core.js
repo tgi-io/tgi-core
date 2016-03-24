@@ -10,7 +10,7 @@ var root = this;
 var TGI = {
   CORE: function () {
     return {
-      version: '0.4.36',
+      version: '0.4.41',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -928,11 +928,17 @@ Interface.firstMatch = function (s, a) { // find first partial match with s in a
  * tgi-core/lib/tgi-core-list.source.js
  */
 // Constructor
-var List = function (model) {
+var List = function (source) {
   if (false === (this instanceof List)) throw new Error('new operator required');
-  if (!(model instanceof Model || model instanceof View)) throw new Error('argument required: model');
-  this.model = model;
-  this.attributes = model.attributes;
+  if (source instanceof Model) {
+    this.model = source;
+  } else if (source instanceof View) {
+    this.view = source;
+    this.model = this.view.primaryModel;
+  } else {
+    throw new Error('argument required: model');
+  }
+  this.attributes = source.attributes;
   this._items = [];
   this._itemIndex = -1;
 };
@@ -1101,16 +1107,16 @@ Message.getTypes = function () {
 var Model = function (args) {
   var i;
   if (false === (this instanceof Model)) throw new Error('new operator required');
-  this.modelType = "Model";
   this.attributes = [new Attribute('id', 'ID')];
   args = args || {};
+  this.modelType = args.modelType || "Model";
   if (args.attributes) {
     for (i in args.attributes) {
       if (args.attributes.hasOwnProperty(i))
         this.attributes.push(args.attributes[i]);
     }
   }
-  var unusedProperties = getInvalidProperties(args, ['attributes']);
+  var unusedProperties = getInvalidProperties(args, ['modelType', 'attributes']);
   var errorList = this.getObjectStateErrors(); // before leaving make sure valid Model
   for (i = 0; i < unusedProperties.length; i++) errorList.push('invalid property: ' + unusedProperties[i]);
   if (errorList.length > 1) throw new Error('error creating Model: multiple errors');
@@ -1429,7 +1435,7 @@ Store.prototype.toString = function () {
   if (this.name == 'a ' + this.storeType) {
     return this.name;
   } else {
-    return this.storeType + ': ' +this.name;
+    return this.storeType + ': ' + this.name;
   }
 };
 Store.prototype.getServices = function () {
@@ -1452,7 +1458,60 @@ Store.prototype.deleteModel = function () {
 Store.prototype.getList = function () {
   throw new Error('Store does not provide getList');
 };
+Store.prototype.getViewList = function (viewList, filter, arg3, arg4) {
+  var callback, order, i;
+  if (typeof(arg4) == 'function') {
+    callback = arg4;
+    order = arg3;
+  } else {
+    callback = arg3;
+  }
+  if (!(viewList instanceof List)) throw new Error('argument must be a List');
+  if (!viewList.view) throw new Error('List is Model type use getList');
+  if (!(filter instanceof Object)) throw new Error('filter argument must be Object');
+  if (typeof callback != "function") throw new Error('callback required');
 
+  /**
+   * use getList to populate initial rows
+   */
+  console.log('*** use getList to populate initial rows ***');
+  var proxyList = new List(viewList.model);
+  if (order)
+    this.getList(proxyList, filter, order, gotProxyList);
+  else
+    this.getList(proxyList, filter, gotProxyList);
+
+  /**
+   * Process proxy list and populate list
+   */
+  function gotProxyList(plist, error) {
+    /**
+     * zip target list and make sure no errors
+     */
+    viewList.clear();
+    if (typeof error != 'undefined') {
+      callback(viewList, error);
+      return;
+    }
+    /**
+     * Move through each row
+     */
+    var moreRows = proxyList.moveFirst();
+    while (moreRows) {
+      viewList.addItem();
+      // Populate from primary row
+      for (i = 0; i < viewList.attributes.length; i++) {
+        var col = viewList.attributes[i];
+        if (col.model == viewList.model) {
+          viewList.set(col.name, proxyList.get(col.name));
+        }
+      }
+      moreRows = proxyList.moveNext();
+    }
+    callback(viewList);
+  }
+
+};
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/core/tgi-core-text.source.js
  */
@@ -1639,6 +1698,10 @@ function View(primaryModel, relatedModels, attributes) {
   this.primaryModel = primaryModel;
   this.relatedModels = relatedModels;
   this.attributes = attributes;
+  var id = new Attribute('id', 'ID');
+  id.model = primaryModel;
+  this.attributes.unshift(id);
+
   /**
    * Make sure relatedModels valid
    */
@@ -1660,7 +1723,10 @@ function View(primaryModel, relatedModels, attributes) {
   for (var i = 0; i < attributes.length; i++) {
     var attribute = attributes[i];
     if (!(attribute instanceof Attribute)) throw new Error('attribute array must contain Attributes');
-    if (!(attribute.model instanceof Attribute)) throw new Error('attribute array must contain Attributes with model references');
+    if (!(attribute.model instanceof Model)) {
+      throw new Error('attribute array must contain Attributes with model references');
+    }
+
   }
 }
 /**
@@ -2694,6 +2760,7 @@ MemoryStore.prototype.getList = function (list, filter, arg3, arg4) {
     callback = arg3;
   }
   if (!(list instanceof List)) throw new Error('argument must be a List');
+  if (list.view) throw new Error('List is View type use getViewList');
   if (!(filter instanceof Object)) throw new Error('filter argument must be Object');
   if (typeof callback != "function") throw new Error('callback required');
   // Find model in memorystore, error out if can't find

@@ -28,6 +28,7 @@ View
 
 Later
 -----
+- make a putList like getList
 - coerce() useless since have to have attribute instances limits - make util func ?
 - Transport sendRaw & onRaw have no tests
 - REPLInterface - handle presentation (WIP)
