@@ -1478,9 +1478,9 @@ Store.prototype.getViewList = function (viewList, filter, arg3, arg4) {
   /**
    * Process proxy list and populate list
    */
-  function gotProxyList(plist, error) {
+  function gotProxyList(list, error) {
     /**
-     * zip target list and make sure no errors
+     * clear target list and make sure no errors
      */
     viewList.clear();
     if (typeof error != 'undefined') {
@@ -1491,7 +1491,7 @@ Store.prototype.getViewList = function (viewList, filter, arg3, arg4) {
      * Move through each row
      */
     var moreRows = proxyList.moveFirst();
-    while (moreRows) {
+/*    while (moreRows) {
       viewList.addItem();
       // Populate from primary row
       for (i = 0; i < viewList.attributes.length; i++) {
@@ -1502,9 +1502,26 @@ Store.prototype.getViewList = function (viewList, filter, arg3, arg4) {
       }
       moreRows = proxyList.moveNext();
     }
-    callback(viewList);
-  }
+    callback(viewList);*/
 
+    /**
+     * Process each row in proxy list fetch any related models
+     */
+    processRow();
+
+    /**
+     * Process Row
+     */
+    function processRow() {
+      callback(viewList); // wip
+    }
+
+    /**
+     * Process Column
+     */
+    function processColumn() {
+    }
+  }
 };
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/core/tgi-core-text.source.js

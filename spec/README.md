@@ -5,7 +5,7 @@ Core constructors, models, stores and interfaces.  The constructor functions def
 ```javascript
 this.log(TGI.CORE().version);
 ```
-<blockquote><strong>log: </strong>0.4.36<br></blockquote>
+<blockquote><strong>log: </strong>0.4.41<br></blockquote>
 ####Constructors
 
 - [Attribute](#-attribute) defines data types - needed by Model
@@ -20,6 +20,7 @@ this.log(TGI.CORE().version);
 - [Store](#-store) holds Model objects for updating and retrieving
 - [Text](#-text) text identifier allows interface info
 - [Transport](#-transport) messages between client and host
+- [View](#-view) related models
 
 #### Interfaces
 - [REPLInterface](#-replinterface) Read Evaluate Print Loop Interface
@@ -1294,7 +1295,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Mon Mar 21 2016 16:03:35 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Tue Mar 29 2016 11:05:36 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1303,7 +1304,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Mon Mar 21 2016 16:03:35 GMT-0400 (EDT)<br>returns <strong>Model null</strong> as expected
+<blockquote><strong>log: </strong>Tue Mar 29 2016 11:05:36 GMT-0400 (EDT)<br>returns <strong>Model null</strong> as expected
 </blockquote>
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -2787,8 +2788,11 @@ new SurrogateStore().deleteModel();
 ```
 <blockquote><strong>Error: Store does not provide deleteModel</strong> thrown as expected
 </blockquote>
-#### getList(model, filter, order)
+#### getList(list, filter, [optional order], callback)
 This method will clear and populate the list with collection from store.  The **filter** property can be used to query the store.  The **order** property can specify the sort order of the list.  _See integration test for more info._    
+
+#### getViewList(list, filter, [optional order], callback)
+This method provides getList() for View type Lists.  _See integration test for more info._    
 
 #### Store Integration
 &nbsp;<b><i>Check each type:</i></b>
@@ -2801,13 +2805,16 @@ if (!spec.integrationStore.getServices().isReady) {
   callback(true);
   return;
 }
-self.Types = function (args) {
-  Model.call(this, args);
-  this.modelType = "_tempTypes";
-  this.attributes.push(new Attribute({name: 'String', type: 'String', value: 'cheese'}));
-  this.attributes.push(new Attribute({name: 'Date', type: 'Date', value: new Date()}));
-  this.attributes.push(new Attribute({name: 'Boolean', type: 'Boolean', value: true}));
-  this.attributes.push(new Attribute({name: 'Number', type: 'Number', value: 42}));
+self.Types = function () {
+  Model.call(this, {
+    modelType: '_tempTypes',
+    attributes: [
+      new Attribute({name: 'String', type: 'String', value: 'cheese'}),
+      new Attribute({name: 'Date', type: 'Date', value: new Date()}),
+      new Attribute({name: 'Boolean', type: 'Boolean', value: true}),
+      new Attribute({name: 'Number', type: 'Number', value: 42})
+    ]
+  });
 };
 self.Types.prototype = Object.create(Model.prototype);
 self.types = new self.Types();
@@ -2828,8 +2835,7 @@ spec.integrationStore.putModel(self.types, function (model, error) {
 ```
 <blockquote><strong>log: </strong>Store is not ready.<br>returns <strong>true</strong> as expected
 </blockquote>
-#### CRUD (Create Read Update Delete)
-&nbsp;<b><i>Exercise all store function for one store.:</i></b>
+&nbsp;<b><i>CRUD (Create Read Update Delete) Exercise all store function for one store.:</i></b>
 ```javascript
 var self = this;
 spec.integrationStore = new SurrogateStore();
@@ -2842,12 +2848,22 @@ if (!spec.integrationStore.getServices().isReady) {
   return;
 }
 // setup stooge class
-self.Stooge = function (args) {
-  Model.call(this, args);
-  this.modelType = "_tempTest_Stooge";
-  this.attributes.push(new Attribute('name'));
+self.Stooge = function () {
+  Model.call(this, {modelType: "_tempTest_Stooge", attributes: [new Attribute('name')]});
 };
-self.Stooge.prototype = inheritPrototype(Model.prototype);
+self.Stooge.prototype = Object.create(Model.prototype);
+// setup StoogeLine class to track their dialogue in script
+self.StoogeLine = function () {
+  Model.call(this, {
+    modelType: "_tempTest_StoogeLines",
+    attributes: [
+      new Attribute({name: 'Scene', type: 'Number'}),
+      new Attribute({name: 'StoogeID', type: 'ID'}),
+      new Attribute({name: 'Line', type: 'String'})
+    ]
+  });
+};
+self.StoogeLine.prototype = inheritPrototype(Model.prototype);
 // create initial stooges
 self.moe = new self.Stooge();
 self.moe.set('name', 'Moe');
@@ -2910,8 +2926,9 @@ function stoogeStored(model, error) {
   }
   try {
     self.stoogeIDsStored.push(model.get('id'));
+    //console.log('Now we have moe ' + self.moe.get('id'));
+    //console.log('model says ' + model.get('id'));
     if (self.stoogeIDsStored.length == 3) {
-      self.shouldBeTrue(true, 'here');
       // Now that first 3 stooges are stored lets retrieve and verify
       var actors = [];
       for (var i = 0; i < 3; i++) {
@@ -2933,7 +2950,6 @@ function stoogeRetrieved(model, error) {
   }
   self.stoogesRetrieved.push(model);
   if (self.stoogesRetrieved.length == 3) {
-    self.shouldBeTrue(true, 'here');
     // Now we have stored and retrieved (via IDs into new objects).  So verify the stooges made it
     self.shouldBeTrue(self.stoogesRetrieved[0] !== self.moe && // Make sure not a reference but a copy
       self.stoogesRetrieved[0] !== self.larry && self.stoogesRetrieved[0] !== self.shemp, 'copy');
@@ -3028,7 +3044,6 @@ function hesDeadJim(model, error) {
 }
 // callback after list created from store
 function listReady(list, error) {
-//          list.sort({name:1});
   if (typeof error != 'undefined') {
     callback(error);
     return;
@@ -3039,6 +3054,74 @@ function listReady(list, error) {
   self.shouldBeTrue(list.get('name') == 'Larry', 'larry');
   list.moveNext();
   self.shouldBeTrue(list.get('name') == 'Moe', 'moe');
+  createLines();
+}
+/**
+ * Prepare the rest of the store for testing getList with View type list
+ */
+function createLines() {
+  var moesLine = new self.StoogeLine();
+  moesLine.set('Scene', 1);
+  moesLine.set('StoogeID', self.moe.get('id'));
+  moesLine.set('Line', 'To be or not to be?');
+  var larrysLine = new self.StoogeLine();
+  larrysLine.set('Scene', 1);
+  larrysLine.set('StoogeID', self.larry.get('id'));
+  larrysLine.set('Line', 'That is the question!');
+  spec.integrationStore.putModel(moesLine, function (model, error) {
+    if (typeof error != 'undefined') {
+      callback(error);
+    } else {
+      spec.integrationStore.putModel(larrysLine, function (model, error) {
+        if (typeof error != 'undefined') {
+          callback(error);
+        } else {
+          createView();
+        }
+      });
+    }
+  });
+}
+/**
+ * create View
+ */
+function createView() {
+  var line = new self.StoogeLine();
+  var stooge = new self.Stooge();
+  var scriptView = new View(line,
+    {
+      'Line': {id: line.attribute('StoogeID'), model: stooge}
+    },
+    [
+      line.attribute('Scene'),
+      stooge.attribute('name'),
+      line.attribute('Line')
+    ]);
+  // Now create a list from view
+  var list = new List(scriptView);
+  //callback(true);
+  spec.integrationStore.getViewList(list, {}, {Scene: 1}, viewListReady);
+}
+/**
+ * callback after list created from store
+ */
+function viewListReady(list, error) {
+  if (typeof error != 'undefined') {
+    callback(error);
+    return;
+  }
+  if (list.moveFirst())
+    console.log('got some');
+  //console.log('Scene ' + list.get('Scene'));
+  //console.log('name ' + list.get('name'));
+  //console.log('Line ' + list.get('Line'));
+  //self.shouldBeTrue(list instanceof List, 'is list');
+  //self.shouldBeTrue(list.length() == 2, 'is 2');
+  //list.moveFirst();
+  //self.shouldBeTrue(list.get('name') == 'Larry', 'larry');
+  //list.moveNext();
+  //self.shouldBeTrue(list.get('name') == 'Moe', 'moe');
+  //createLines();
   callback(true);
 }
 ```
@@ -3119,7 +3202,7 @@ Free all onEvent listeners
 ```javascript
 new Text('').offEvent();
 ```
-## [&#9664;](#-text)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-replinterface) &nbsp;Transport
+## [&#9664;](#-text)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-view) &nbsp;Transport
 Handle message passing between host and UI.    
 
 TODO: run these tests in node-make-spec-md with io defined    
@@ -3128,8 +3211,81 @@ Read the source until then...
 
 https://github.com/tgi-io/tgi-core/blob/master/lib/core/tgi-core-transport.spec.js    
 
+## [&#9664;](#-transport)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-replinterface) &nbsp;View
+#### View
+Does stuff    
 
-## [&#9664;](#-transport)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-application) &nbsp;REPLInterface
+#### CONSTRUCTOR
+&nbsp;<b><i>objects created should be an instance of View:</i></b>
+```javascript
+return new View(new Model(), {}, []) instanceof View;
+```
+<blockquote>returns <strong>true</strong> as expected
+</blockquote>
+&nbsp;<b><i>should make sure new operator used:</i></b>
+```javascript
+View(); // jshint ignore:line
+```
+<blockquote><strong>Error: new operator required</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>first parameter is primary model:</i></b>
+```javascript
+new View();
+```
+<blockquote><strong>Error: argument must be a Model</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>second parameter is object with related models:</i></b>
+```javascript
+new View(new Model());
+```
+<blockquote><strong>Error: object expected</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>third parameter is array of attributes making up view:</i></b>
+```javascript
+new View(new Model(), {});
+```
+<blockquote><strong>Error: array of attributes expected</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>related models are named objects with id & model:</i></b>
+```javascript
+this.shouldThrowError('Error: relatedModel key values expect object', function () {
+  new View(new Model(), {eat: 'me'}, []);
+});
+this.shouldThrowError('Error: relatedModel key values expect object with id key', function () {
+  new View(new Model(), {eat: {}}, []);
+});
+this.shouldThrowError('Error: relatedModel key values expect object with model key', function () {
+  new View(new Model(), {eat: {id: 1}}, []);
+});
+this.shouldThrowError('Error: relatedModel id must be a Attribute', function () {
+  new View(new Model(), {eat: {id: 1, model: new Model()}}, []);
+});
+this.shouldThrowError('Error: relatedModel model must be a Model', function () {
+  new View(new Model(), {eat: {id: new Attribute({name: 'eatID'}), model: 2}}, []);
+});
+```
+&nbsp;<b><i>attributes must be valid attribute:</i></b>
+```javascript
+new View(new Model(), {}, ['this is so wrong']);
+```
+<blockquote><strong>Error: attribute array must contain Attributes</strong> thrown as expected
+</blockquote>
+&nbsp;<b><i>attributes must be valid attribute:</i></b>
+```javascript
+new View(new Model(), {}, [new Attribute({name: 'x'})]);
+```
+<blockquote><strong>Error: attribute array must contain Attributes with model references</strong> thrown as expected
+</blockquote>
+#### METHODS
+#### toString()
+&nbsp;<b><i>should return a description of the view:</i></b>
+```javascript
+return new View(new Model(), {}, []).toString();
+```
+<blockquote>returns <strong>a Model View</strong> as expected
+</blockquote>
+
+## [&#9664;](#-view)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-application) &nbsp;REPLInterface
 #### REPLInterface
 The REPLInterface is a Read Evaluate Print Loop Interface.    
 
@@ -3633,7 +3789,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Mon Mar 21 2016 16:03:35 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Tue Mar 29 2016 11:05:36 GMT-0400 (EDT)<br></blockquote>
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
 ```javascript
@@ -5141,7 +5297,7 @@ new SurrogateStore().deleteModel(m, function (mod, err) {
 ```
 <blockquote>returns <strong>Error: model not found in store</strong> as expected
 </blockquote>
-#### getList(model, filter, order)
+#### getList(list, filter, [optional order], callback)
 This method will clear and populate the list with collection from store.  The **filter** property can be used to query the store.  The **order** property can specify the sort order of the list.  _See integration test for more info._    
 
 &nbsp;<b><i>returns a List populated from store:</i></b>
@@ -5149,11 +5305,33 @@ This method will clear and populate the list with collection from store.  The **
 this.shouldThrowError(Error('argument must be a List'), function () {
   new SurrogateStore().getList();
 });
+this.shouldThrowError(Error('List is View type use getViewList'), function () {
+  new SurrogateStore().getList(new List(new View(new Model(), {}, [])));
+});
 this.shouldThrowError(Error('filter argument must be Object'), function () {
   new SurrogateStore().getList(new List(new Model()));
 });
 this.shouldThrowError(Error('callback required'), function () {
   new SurrogateStore().getList(new List(new Model()), []);
+});
+// See integration tests for examples of usage
+```
+#### getViewList(list, filter, [optional order], callback)
+This method provides getList() for View type Lists.  _See integration test for more info._    
+
+&nbsp;<b><i>returns a List populated from store:</i></b>
+```javascript
+this.shouldThrowError(Error('argument must be a List'), function () {
+  new SurrogateStore().getViewList();
+});
+this.shouldThrowError(Error('List is Model type use getList'), function () {
+  new SurrogateStore().getViewList(new List(new Model()));
+});
+this.shouldThrowError(Error('filter argument must be Object'), function () {
+  new SurrogateStore().getViewList(new List(new View(new Model(), {}, [])));
+});
+this.shouldThrowError(Error('callback required'), function () {
+  new SurrogateStore().getViewList(new List(new View(new Model(), {}, [])), []);
 });
 // See integration tests for examples of usage
 ```
@@ -5168,13 +5346,16 @@ if (!spec.integrationStore.getServices().isReady) {
   callback(true);
   return;
 }
-self.Types = function (args) {
-  Model.call(this, args);
-  this.modelType = "_tempTypes";
-  this.attributes.push(new Attribute({name: 'String', type: 'String', value: 'cheese'}));
-  this.attributes.push(new Attribute({name: 'Date', type: 'Date', value: new Date()}));
-  this.attributes.push(new Attribute({name: 'Boolean', type: 'Boolean', value: true}));
-  this.attributes.push(new Attribute({name: 'Number', type: 'Number', value: 42}));
+self.Types = function () {
+  Model.call(this, {
+    modelType: '_tempTypes',
+    attributes: [
+      new Attribute({name: 'String', type: 'String', value: 'cheese'}),
+      new Attribute({name: 'Date', type: 'Date', value: new Date()}),
+      new Attribute({name: 'Boolean', type: 'Boolean', value: true}),
+      new Attribute({name: 'Number', type: 'Number', value: 42})
+    ]
+  });
 };
 self.Types.prototype = Object.create(Model.prototype);
 self.types = new self.Types();
@@ -5195,8 +5376,7 @@ spec.integrationStore.putModel(self.types, function (model, error) {
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
-#### CRUD (Create Read Update Delete)
-&nbsp;<b><i>Exercise all store function for one store.:</i></b>
+&nbsp;<b><i>CRUD (Create Read Update Delete) Exercise all store function for one store.:</i></b>
 ```javascript
 var self = this;
 spec.integrationStore = new SurrogateStore();
@@ -5209,12 +5389,22 @@ if (!spec.integrationStore.getServices().isReady) {
   return;
 }
 // setup stooge class
-self.Stooge = function (args) {
-  Model.call(this, args);
-  this.modelType = "_tempTest_Stooge";
-  this.attributes.push(new Attribute('name'));
+self.Stooge = function () {
+  Model.call(this, {modelType: "_tempTest_Stooge", attributes: [new Attribute('name')]});
 };
-self.Stooge.prototype = inheritPrototype(Model.prototype);
+self.Stooge.prototype = Object.create(Model.prototype);
+// setup StoogeLine class to track their dialogue in script
+self.StoogeLine = function () {
+  Model.call(this, {
+    modelType: "_tempTest_StoogeLines",
+    attributes: [
+      new Attribute({name: 'Scene', type: 'Number'}),
+      new Attribute({name: 'StoogeID', type: 'ID'}),
+      new Attribute({name: 'Line', type: 'String'})
+    ]
+  });
+};
+self.StoogeLine.prototype = inheritPrototype(Model.prototype);
 // create initial stooges
 self.moe = new self.Stooge();
 self.moe.set('name', 'Moe');
@@ -5277,8 +5467,9 @@ function stoogeStored(model, error) {
   }
   try {
     self.stoogeIDsStored.push(model.get('id'));
+    //console.log('Now we have moe ' + self.moe.get('id'));
+    //console.log('model says ' + model.get('id'));
     if (self.stoogeIDsStored.length == 3) {
-      self.shouldBeTrue(true, 'here');
       // Now that first 3 stooges are stored lets retrieve and verify
       var actors = [];
       for (var i = 0; i < 3; i++) {
@@ -5300,7 +5491,6 @@ function stoogeRetrieved(model, error) {
   }
   self.stoogesRetrieved.push(model);
   if (self.stoogesRetrieved.length == 3) {
-    self.shouldBeTrue(true, 'here');
     // Now we have stored and retrieved (via IDs into new objects).  So verify the stooges made it
     self.shouldBeTrue(self.stoogesRetrieved[0] !== self.moe && // Make sure not a reference but a copy
       self.stoogesRetrieved[0] !== self.larry && self.stoogesRetrieved[0] !== self.shemp, 'copy');
@@ -5395,7 +5585,6 @@ function hesDeadJim(model, error) {
 }
 // callback after list created from store
 function listReady(list, error) {
-//          list.sort({name:1});
   if (typeof error != 'undefined') {
     callback(error);
     return;
@@ -5406,6 +5595,74 @@ function listReady(list, error) {
   self.shouldBeTrue(list.get('name') == 'Larry', 'larry');
   list.moveNext();
   self.shouldBeTrue(list.get('name') == 'Moe', 'moe');
+  createLines();
+}
+/**
+ * Prepare the rest of the store for testing getList with View type list
+ */
+function createLines() {
+  var moesLine = new self.StoogeLine();
+  moesLine.set('Scene', 1);
+  moesLine.set('StoogeID', self.moe.get('id'));
+  moesLine.set('Line', 'To be or not to be?');
+  var larrysLine = new self.StoogeLine();
+  larrysLine.set('Scene', 1);
+  larrysLine.set('StoogeID', self.larry.get('id'));
+  larrysLine.set('Line', 'That is the question!');
+  spec.integrationStore.putModel(moesLine, function (model, error) {
+    if (typeof error != 'undefined') {
+      callback(error);
+    } else {
+      spec.integrationStore.putModel(larrysLine, function (model, error) {
+        if (typeof error != 'undefined') {
+          callback(error);
+        } else {
+          createView();
+        }
+      });
+    }
+  });
+}
+/**
+ * create View
+ */
+function createView() {
+  var line = new self.StoogeLine();
+  var stooge = new self.Stooge();
+  var scriptView = new View(line,
+    {
+      'Line': {id: line.attribute('StoogeID'), model: stooge}
+    },
+    [
+      line.attribute('Scene'),
+      stooge.attribute('name'),
+      line.attribute('Line')
+    ]);
+  // Now create a list from view
+  var list = new List(scriptView);
+  //callback(true);
+  spec.integrationStore.getViewList(list, {}, {Scene: 1}, viewListReady);
+}
+/**
+ * callback after list created from store
+ */
+function viewListReady(list, error) {
+  if (typeof error != 'undefined') {
+    callback(error);
+    return;
+  }
+  if (list.moveFirst())
+    console.log('got some');
+  //console.log('Scene ' + list.get('Scene'));
+  //console.log('name ' + list.get('name'));
+  //console.log('Line ' + list.get('Line'));
+  //self.shouldBeTrue(list instanceof List, 'is list');
+  //self.shouldBeTrue(list.length() == 2, 'is 2');
+  //list.moveFirst();
+  //self.shouldBeTrue(list.get('name') == 'Larry', 'larry');
+  //list.moveNext();
+  //self.shouldBeTrue(list.get('name') == 'Moe', 'moe');
+  //createLines();
   callback(true);
 }
 ```
@@ -5484,16 +5741,16 @@ return getConstructorFromModelType();
 <blockquote>returns <strong>function (args) {
   var i;
   if (false === (this instanceof Model)) throw new Error('new operator required');
-  this.modelType = "Model";
   this.attributes = [new Attribute('id', 'ID')];
   args = args || {};
+  this.modelType = args.modelType || "Model";
   if (args.attributes) {
     for (i in args.attributes) {
       if (args.attributes.hasOwnProperty(i))
         this.attributes.push(args.attributes[i]);
     }
   }
-  var unusedProperties = getInvalidProperties(args, ['attributes']);
+  var unusedProperties = getInvalidProperties(args, ['modelType', 'attributes']);
   var errorList = this.getObjectStateErrors(); // before leaving make sure valid Model
   for (i = 0; i < unusedProperties.length; i++) errorList.push('invalid property: ' + unusedProperties[i]);
   if (errorList.length > 1) throw new Error('error creating Model: multiple errors');
