@@ -953,7 +953,19 @@ List.prototype.clear = function () {
 List.prototype.get = function (attribute) {
   if (this._items.length < 1) throw new Error('list is empty');
   for (var i = 0; i < this.attributes.length; i++) {
-    if (this.attributes[i].name.toUpperCase() == attribute.toUpperCase()) {
+    var curName = this.attributes[i].name.toUpperCase();
+    var wantedName = attribute.toUpperCase();
+    var splitName = wantedName.split('.');
+    //console.log('curName : ' + curName);
+    //console.log('wantedName : ' + wantedName + ' size ' + splitName.length);
+    var matches = (curName == wantedName);
+    if (splitName.length == 2) {
+      wantedName = splitName[1];
+      var wantedModel = splitName[0];
+      var curModel = this.attributes[i].model.modelType.toUpperCase();
+      matches = (curName == wantedName) && (wantedModel==curModel);
+    }
+    if (matches) {
       if (this.attributes[i].type == 'Date' && !(this._items[this._itemIndex][i] instanceof Date)) {
         if (this._items[this._itemIndex][i] === null || this._items[this._itemIndex][i] === undefined)
           return null;
@@ -968,7 +980,20 @@ List.prototype.get = function (attribute) {
 List.prototype.set = function (attribute, value) {
   if (this._items.length < 1) throw new Error('list is empty');
   for (var i = 0; i < this.attributes.length; i++) {
-    if (this.attributes[i].name.toUpperCase() == attribute.toUpperCase()) {
+    var curName = this.attributes[i].name.toUpperCase();
+    var wantedName = attribute.toUpperCase();
+    var splitName = wantedName.split('.');
+    //console.log('curName : ' + curName);
+    //console.log('wantedName : ' + wantedName + ' size ' + splitName.length);
+    var matches = (curName == wantedName);
+    if (splitName.length == 2) {
+      wantedName = splitName[1];
+      var wantedModel = splitName[0];
+      var curModel = this.attributes[i].model.modelType.toUpperCase();
+      matches = (curName == wantedName) && (wantedModel==curModel);
+    }
+    if (matches) {
+
       this._items[this._itemIndex][i] = value;
       return;
     }
@@ -1459,6 +1484,7 @@ Store.prototype.getList = function () {
   throw new Error('Store does not provide getList');
 };
 Store.prototype.getViewList = function (viewList, filter, arg3, arg4) {
+  var store = this;
   var callback, order, i;
   if (typeof(arg4) == 'function') {
     callback = arg4;
@@ -1474,7 +1500,6 @@ Store.prototype.getViewList = function (viewList, filter, arg3, arg4) {
   /**
    * use getList to populate initial rows
    */
-  console.log('*** use getList to populate initial rows ***');
   var proxyList = new List(viewList.model);
   if (order)
     this.getList(proxyList, filter, order, gotProxyList);
@@ -1497,8 +1522,19 @@ Store.prototype.getViewList = function (viewList, filter, arg3, arg4) {
      * Move through each row
      */
     var moreRows = proxyList.moveFirst();
-/*    while (moreRows) {
+    var relatedModelNames = [];
+    processRow();
+
+    /**
+     * Process Row
+     */
+    function processRow() {
+      if (!moreRows) { // Are we done?
+        callback(viewList);
+        return;
+      }
       viewList.addItem();
+
       // Populate from primary row
       for (i = 0; i < viewList.attributes.length; i++) {
         var col = viewList.attributes[i];
@@ -1506,29 +1542,45 @@ Store.prototype.getViewList = function (viewList, filter, arg3, arg4) {
           viewList.set(col.name, proxyList.get(col.name));
         }
       }
-      moreRows = proxyList.moveNext();
-    }
-    callback(viewList);*/
-
-    /**
-     * Process each row in proxy list fetch any related models
-     */
-    processRow();
-
-    /**
-     * Process Row
-     */
-    function processRow() {
-      callback(viewList); // wip
+      relatedModelNames = [];
+      for (var relatedModel in viewList.view.relatedModels)
+        if (viewList.view.relatedModels.hasOwnProperty(relatedModel))
+          relatedModelNames.push(relatedModel);
+      getRelatedModel();
     }
 
-    /**
-     * Process Column
-     */
-    function processColumn() {
+    function getRelatedModel() {
+      if (!relatedModelNames.length) {
+        moreRows = proxyList.moveNext();
+        processRow();
+        return;
+      }
+      //console.log('*** GETTING relatedModelNames ***');
+
+      var foreignAttribute = relatedModelNames.shift();
+      var relatedModel = viewList.view.relatedModels[foreignAttribute];
+      var foreignID = proxyList.get(relatedModel.id.name);
+      relatedModel.model.set('id', foreignID);
+      store.getModel(relatedModel.model, function (model, error) {
+        if (typeof error != 'undefined') {
+          callback(error);
+          return;
+        }
+        // Populate from primary row
+        for (var i = 0; i < viewList.attributes.length; i++) {
+          var col = viewList.attributes[i];
+          if (col.model == model) {
+            //console.log('Setting col.name ' + col.name + ' ' + model.get(col.name));
+            viewList.set(model.modelType + '.' + col.name, model.get(col.name));
+          }
+        }
+        getRelatedModel();
+      });
     }
   }
 };
+
+
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/core/tgi-core-text.source.js
  */

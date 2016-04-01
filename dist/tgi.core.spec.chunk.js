@@ -2978,7 +2978,6 @@ spec.runnerStoreMethods = function (SurrogateStore) {
         spec.integrationStore.getViewList(list, {}, {Scene: 1}, viewListReady);
       }
 
-
       /**
        * callback after list created from store
        */
@@ -2989,9 +2988,11 @@ spec.runnerStoreMethods = function (SurrogateStore) {
         }
         if (list.moveFirst())
           console.log('got some');
-        console.log('Scene ' + list.get('Scene'));
-        console.log('name ' + list.get('name'));
-        console.log('Line ' + list.get('Line'));
+
+        //console.log('Scene ' + list.get('Scene'));
+        //console.log('name ' + list.get('name'));
+        //console.log('Line ' + list.get('Line'));
+
         //self.shouldBeTrue(list instanceof List, 'is list');
         //self.shouldBeTrue(list.length() == 2, 'is 2');
         //list.moveFirst();
