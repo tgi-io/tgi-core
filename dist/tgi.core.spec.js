@@ -314,15 +314,15 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
         });
     });
     spec.heading('model', function () {
-      spec.example('a reference to model', undefined, function () {
+      spec.xexample('a reference to model', undefined, function () {
         return new Attribute({name: 'derp'}).model; // undefined when not part of model
       });
-      spec.example('defined by model', 'I am a Model', function () {
+      spec.xexample('defined by model', 'I am a Model', function () {
         var attrib = new Attribute("Sue");
         new Model({attributes: [attrib]});
         return 'I am ' + attrib.model;
       });
-      spec.example('user example', 'You are a User', function () {
+      spec.xexample('user example', 'You are a User', function () {
         return 'You are ' + new User().attribute('name').model;
       });
 
@@ -2737,7 +2737,7 @@ spec.runnerStoreMethods = function (SurrogateStore) {
         callback(true);
       });
     });
-    spec.example('CRUD (Create Read Update Delete) Exercise all store function for one store.', spec.asyncResults(true), function (callback) {
+    spec.xexample('CRUD (Create Read Update Delete) Exercise all store function for one store.', spec.asyncResults(true), function (callback) {
       var self = this;
       spec.integrationStore = new SurrogateStore();
       var storeBeingTested = spec.integrationStore.name + ' ' + spec.integrationStore.storeType;
