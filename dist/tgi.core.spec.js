@@ -53,7 +53,7 @@ spec.test('lib/tgi-spec-intro', 'tgi-core', 'Core Repository', function (callbac
   spec.example('TGI.CORE function exposes library', undefined, function () {
     this.log(TGI.CORE().version);
   });
-  spec.index('##Constructors');
+  spec.index('Constructors');
 });
 
 /**---------------------------------------------------------------------------------------------------------------------
