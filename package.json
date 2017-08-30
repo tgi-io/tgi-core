@@ -11,7 +11,7 @@
   "dependencies": {
     "coveralls": "*",
     "sprintf-js": "*",
-    "tgi-spec": "*"
+    "tgi-spec": "^0.1.39"
   },
   "main": "./dist/tgi.core",
   "scripts": {
@@ -32,14 +32,14 @@
   "author": "Sean Smith <sean@tgicloud.com>",
   "license": "MIT",
   "devDependencies": {
-    "chalk": "*",
+    "chalk": "^2.1.0",
+    "graceful-fs": "*",
     "gulp": "*",
     "gulp-concat": "*",
     "gulp-jshint": "*",
     "gulp-rename": "*",
     "gulp-uglify": "*",
     "jshint": "*",
-    "graceful-fs": "*",
     "jshint-stylish": "*",
     "minimatch": "*"
   }

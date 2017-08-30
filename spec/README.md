@@ -7,7 +7,8 @@ Core constructors, models, stores and interfaces.  The constructor functions def
 this.log(TGI.CORE().version);
 ```
 <blockquote><strong>log: </strong>0.4.43<br></blockquote>
-## Constructors
+
+## ##Constructors
 
 - [Attribute](#-attribute) defines data types - needed by Model
 - [Command](#-command) encapsulates task execution
@@ -55,6 +56,7 @@ return new Attribute({name: 'name'}) instanceof Attribute;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure new operator used:</i></b>
 
 ```javascript
@@ -62,6 +64,7 @@ Attribute({name: 'name'}); // jshint ignore:line
 ```
 <blockquote><strong>Error: new operator required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure properties are valid:</i></b>
 
 ```javascript
@@ -69,6 +72,7 @@ new Attribute({name: 'name', sex: 'female'});
 ```
 <blockquote><strong>Error: error creating Attribute: invalid property: sex</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>should validate and throw errors before returning from constructor:</i></b>
 
 ```javascript
@@ -76,6 +80,7 @@ new Attribute({eman: 'the'}); // 2 errors: name missing and eman an unknown prop
 ```
 <blockquote><strong>Error: error creating Attribute: multiple errors</strong> thrown as expected
 </blockquote>
+
 
 #### Attribute.ModelID
 Attribute.ModelID is a constructor that is used as a special type for references to IDs in external models.  Note it is a function embedded as a member of the Attribute to encapsulate it.    
@@ -87,6 +92,7 @@ return new Attribute.ModelID(new Model()) instanceof Attribute.ModelID;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure new operator used:</i></b>
 
 ```javascript
@@ -94,6 +100,7 @@ Attribute.ModelID();
 ```
 <blockquote><strong>Error: new operator required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>constructor must pass instance of model:</i></b>
 
 ```javascript
@@ -101,6 +108,7 @@ new Attribute.ModelID();
 ```
 <blockquote><strong>Error: must be constructed with Model</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>value is set to value of ID in constructor:</i></b>
 
 ```javascript
@@ -110,6 +118,7 @@ return new Attribute.ModelID(model).value;
 ```
 <blockquote>returns <strong>123</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>constructorFunction is set to constructor of model:</i></b>
 
 ```javascript
@@ -121,6 +130,7 @@ return newModel instanceof Model;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>modelType is set from model in constructor:</i></b>
 
 ```javascript
@@ -128,6 +138,7 @@ return new Attribute.ModelID(new Model()).modelType;
 ```
 <blockquote>returns <strong>Model</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>toString is more descriptive:</i></b>
 
 ```javascript
@@ -137,6 +148,7 @@ return new Attribute.ModelID(model).toString();
 ```
 <blockquote>returns <strong>Model 123</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>model short name used in string description if applies:</i></b>
 
 ```javascript
@@ -146,6 +158,7 @@ return new Attribute.ModelID(user).toString();
 ```
 <blockquote>returns <strong>User Error</strong> as expected
 </blockquote>
+
 
 #### PROPERTIES
 
@@ -157,6 +170,7 @@ new Attribute();
 ```
 <blockquote><strong>Error: error creating Attribute: name required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>should allow shorthand string constructor for name property:</i></b>
 
 ```javascript
@@ -164,6 +178,7 @@ return new Attribute('favoriteActorName');
 ```
 <blockquote>returns <strong>Attribute: favoriteActorName = null</strong> as expected
 </blockquote>
+
 
 #### type
 &nbsp;<b><i>should default to 'String':</i></b>
@@ -173,6 +188,7 @@ return new Attribute({name: 'name'}).type;
 ```
 <blockquote>returns <strong>String</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>should be a valid attribute type:</i></b>
 
 ```javascript
@@ -181,6 +197,7 @@ new Attribute({name: 'Bogus', type: "Dude"});
 ```
 <blockquote><strong>log: </strong>ID,String,Date,Boolean,Number,Model,Group,Table,Object<br><strong>Error: error creating Attribute: Invalid type: Dude</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>should allow shorthand string constructor for type property:</i></b>
 
 ```javascript
@@ -188,6 +205,7 @@ return new Attribute('favoriteActorBorn', 'Date').type;
 ```
 <blockquote>returns <strong>Date</strong> as expected
 </blockquote>
+
 
 #### label
 &nbsp;<b><i>should default to name property capitalized:</i></b>
@@ -197,6 +215,7 @@ return new Attribute({name: 'name'}).label;
 ```
 <blockquote>returns <strong>Name</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>should be optional in constructor:</i></b>
 
 ```javascript
@@ -204,6 +223,7 @@ return new Attribute({name: 'name', label: 'Name'}).label;
 ```
 <blockquote>returns <strong>Name</strong> as expected
 </blockquote>
+
 
 #### placeHolder
 &nbsp;<b><i>pass through to Interface used as visual cue to user for input:</i></b>
@@ -213,6 +233,7 @@ return new Attribute({name: 'ssn', placeHolder: '###-##-####'}).placeHolder;
 ```
 <blockquote>returns <strong>###-##-####</strong> as expected
 </blockquote>
+
 
 #### hint
 hint properties give guidance in handling of the attribute    
@@ -224,6 +245,7 @@ return typeof new Attribute({name: 'name', label: 'Name'}).hint;
 ```
 <blockquote>returns <strong>object</strong> as expected
 </blockquote>
+
 
 #### hidden
 Attribute hidden by default    
@@ -242,6 +264,7 @@ return new Attribute({name: 'stooge', quickPick: ['moe', 'larry', 'curly']}).qui
 ```
 <blockquote>returns <strong>3</strong> as expected
 </blockquote>
+
 
 #### validationErrors
 &nbsp;<b><i>Array of errors:</i></b>
@@ -262,6 +285,7 @@ return cpad(errs, 2, '"');
 <blockquote>returns <strong>""</strong> as expected
 </blockquote>
 
+
 #### validationRule
 The validationRule property provides validation rules for attribute.  For additional validation see the *Validate* event in onEvent method.    
 
@@ -272,6 +296,7 @@ return typeof new Attribute({name: 'name'}).validationRule;
 ```
 <blockquote>returns <strong>object</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>can be passed to constructor:</i></b>
 
 ```javascript
@@ -284,6 +309,7 @@ new Attribute({name: 'name', validationRule: {age: 18, required: true}});
 ```
 <blockquote><strong>Error: error creating Attribute: invalid validationRule: age</strong> thrown as expected
 </blockquote>
+
 
 #### validationRule.required
 validationRule.required is used when a value is required for attribute    
@@ -298,6 +324,7 @@ a.validate(function () {
 ```
 <blockquote>returns <strong>Name required</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>validationRule.required for Number allows 0:</i></b>
 
 ```javascript
@@ -328,6 +355,7 @@ a.validate(function () {
 ```
 <blockquote>returns <strong>Age must be at least 18</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>validationRule.range upper bound only:</i></b>
 
 ```javascript
@@ -338,6 +366,7 @@ a.validate(function () {
 ```
 <blockquote>returns <strong>Age must be no more than 65</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>validationRule.range pass:</i></b>
 
 ```javascript
@@ -357,6 +386,7 @@ a.validate(function () {
 <blockquote>returns <strong>Age must be at least 100</strong> as expected
 </blockquote>
 
+
 #### validationRule.isOneOf
 validationRule.isOneOf is used when a value is must be on of items in array    
 
@@ -370,6 +400,7 @@ a.validate(function () {
 ```
 <blockquote>returns <strong>Age invalid</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>validationRule.isOneOf pass:</i></b>
 
 ```javascript
@@ -392,6 +423,7 @@ this.log(record);
 // It's the default and it passes constructor validation
 ```
 <blockquote><strong>log: </strong>ID:null String:null Date:null Boolean:null Number:null Model:null Group:null Table:null Object:null <br></blockquote>
+
 &nbsp;<b><i>should accept assignment of correct type and validate incorrect attributeTypes:</i></b>
 
 ```javascript
@@ -440,6 +472,7 @@ return theGood + ' correct assignments ' + theBad + ' errors thrown';
 <blockquote><strong>log: </strong>String,Date,Boolean,Number,Model,Group,Table<br>returns <strong>7 correct assignments 91 errors thrown</strong> as expected
 </blockquote>
 
+
 #### model
 
 #### TYPES
@@ -453,6 +486,7 @@ return new Attribute({name: 'CustomerID', type: 'ID'}).type;
 <blockquote>returns <strong>ID</strong> as expected
 </blockquote>
 
+
 #### String
 &nbsp;<b><i>should have type of 'String':</i></b>
 
@@ -461,6 +495,7 @@ return new Attribute({name: 'Cheese', type: 'String'}).type;
 ```
 <blockquote>returns <strong>String</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>should have size property:</i></b>
 
 ```javascript
@@ -469,6 +504,7 @@ return new Attribute({name: 'zipCode', size: 10}).size;
 ```
 <blockquote>returns <strong>10</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>size should default to 50:</i></b>
 
 ```javascript
@@ -476,6 +512,7 @@ return new Attribute({name: 'stuff'}).size;
 ```
 <blockquote>returns <strong>50</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>size should be an integer:</i></b>
 
 ```javascript
@@ -483,6 +520,7 @@ new Attribute({name: 'zipCode', size: "10"});
 ```
 <blockquote><strong>Error: error creating Attribute: size must be a number from 1 to 255</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>size should be between 1 and 255:</i></b>
 
 ```javascript
@@ -501,6 +539,7 @@ return new Attribute({name: 'comments', type: 'String(255)'}).size;
 <blockquote>returns <strong>255</strong> as expected
 </blockquote>
 
+
 #### Number
 &nbsp;<b><i>type should be 'Number':</i></b>
 
@@ -509,6 +548,7 @@ return new Attribute({name: 'healthPoints', type: 'Number'}).type;
 ```
 <blockquote>returns <strong>Number</strong> as expected
 </blockquote>
+
 
 #### Date
 &nbsp;<b><i>type should be 'Date':</i></b>
@@ -519,6 +559,7 @@ return new Attribute({name: 'born', type: 'Date'}).type;
 <blockquote>returns <strong>Date</strong> as expected
 </blockquote>
 
+
 #### Boolean
 &nbsp;<b><i>type should be 'Boolean':</i></b>
 
@@ -527,6 +568,7 @@ return new Attribute({name: 'bored', type: 'Boolean'}).type;
 ```
 <blockquote>returns <strong>Boolean</strong> as expected
 </blockquote>
+
 
 #### Model
 Parameter type Model is used to store a reference to another model instance.  The value attribute is a Attribute.ModelID reference to the Model.    
@@ -538,6 +580,7 @@ new Attribute({name: 'Twiggy', type: 'Model'});
 ```
 <blockquote><strong>Error: error creating Attribute: value must be Attribute.ModelID</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>modelType property set from constructor:</i></b>
 
 ```javascript
@@ -550,6 +593,7 @@ return new Attribute(
 ```
 <blockquote>returns <strong>Model</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>set method usage checks for valid type:</i></b>
 
 ```javascript
@@ -563,6 +607,7 @@ new Attribute(
 <blockquote><strong>Error: set error: value must be Attribute.ModelID</strong> thrown as expected
 </blockquote>
 
+
 #### Group
 Groups are used to keep attributes together for presentation purposes.    
 
@@ -573,6 +618,7 @@ return new Attribute({name: 'stuff', type: 'Group'}).type;
 ```
 <blockquote>returns <strong>Group</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>deep check value for valid Attributes that pass getObjectStateErrors() test:</i></b>
 
 ```javascript
@@ -596,6 +642,7 @@ return myStuff.getObjectStateErrors().length;
 <blockquote><strong>log: </strong><br><strong>log: </strong>group contains invalid members<br>returns <strong>1</strong> as expected
 </blockquote>
 
+
 #### Table
 Table types are used to store an array of values (rows) each of which is an array of values (columns).  Each column value is associated with the corresponding element in the Table property group which is set when creating a Table.    
 
@@ -608,6 +655,7 @@ return new Attribute({name: 'bills', type: 'Table', group: cols}).type;
 ```
 <blockquote>returns <strong>Table</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>group property must be defined:</i></b>
 
 ```javascript
@@ -615,6 +663,7 @@ new Attribute({name: 'details', type: 'Table'});
 ```
 <blockquote><strong>Error: error creating Attribute: group property required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>group property must not be empty array:</i></b>
 
 ```javascript
@@ -623,6 +672,7 @@ new Attribute({name: 'details', type: 'Table', group: cols});
 ```
 <blockquote><strong>Error: error creating Attribute: group property value must contain at least one Attribute</strong> thrown as expected
 </blockquote>
+
 
 #### Object
 Javascript objects ... structure user defined    
@@ -635,6 +685,7 @@ return new Attribute({name: 'stuff', type: 'Object'}).type;
 <blockquote>returns <strong>Object</strong> as expected
 </blockquote>
 
+
 #### METHODS
 
 #### get()
@@ -645,6 +696,7 @@ return new Attribute({name: 'name', value: 'John'}).get();
 ```
 <blockquote>returns <strong>John</strong> as expected
 </blockquote>
+
 
 #### set()
 &nbsp;<b><i>set value:</i></b>
@@ -657,6 +709,7 @@ return dude.get();
 <blockquote>returns <strong>Jack</strong> as expected
 </blockquote>
 
+
 #### toString()
 &nbsp;<b><i>should return a description of the attribute:</i></b>
 
@@ -665,6 +718,7 @@ return new Attribute({name: 'name'}).toString();
 ```
 <blockquote>returns <strong>Attribute: name = null</strong> as expected
 </blockquote>
+
 
 #### coerce(newValue)
 Method returns the type equivalent of newValue for the owner objects type.    
@@ -736,6 +790,7 @@ new Attribute({name: 'name'}).onEvent();
 ```
 <blockquote><strong>Error: subscription string or array required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>callback is required:</i></b>
 
 ```javascript
@@ -743,6 +798,7 @@ new Attribute({name: 'name'}).onEvent([]);
 ```
 <blockquote><strong>Error: callback is required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>events are checked against known types:</i></b>
 
 ```javascript
@@ -751,6 +807,7 @@ new Attribute({name: 'name'}).onEvent(['onDrunk'], function () {
 ```
 <blockquote><strong>Error: Unknown command event: onDrunk</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>here is a working version:</i></b>
 
 ```javascript
@@ -761,6 +818,7 @@ new Attribute({name: 'name'}).onEvent(['Validate'], function () {
 });
 ```
 <blockquote><strong>log: </strong>StateChange,Validate<br></blockquote>
+
 
 #### offEvents
 Free all onEvent listeners    
@@ -782,6 +840,7 @@ new Attribute({name: 'name'}).validate();
 <blockquote><strong>Error: callback is required</strong> thrown as expected
 </blockquote>
 
+
 #### setError
 Set a error condition and descriptive message    
 
@@ -792,6 +851,7 @@ new Attribute({name: 'status'}).setError();
 ```
 <blockquote><strong>Error: condition required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>second argument description required:</i></b>
 
 ```javascript
@@ -799,6 +859,7 @@ new Attribute({name: 'status'}).setError('login');
 ```
 <blockquote><strong>Error: description required</strong> thrown as expected
 </blockquote>
+
 
 #### clearError
 Clear a error condition    
@@ -811,6 +872,7 @@ new Attribute({name: 'status'}).clearError();
 <blockquote><strong>Error: condition required</strong> thrown as expected
 </blockquote>
 
+
 #### Attribute.getTypes
 This helper function returns an array of valid Attribute types.  This is just a function - not a prototype method.    
 
@@ -821,6 +883,7 @@ this.log(Attribute.getTypes());
 ```
 <blockquote><strong>log: </strong>ID,String,Date,Boolean,Number,Model,Group,Table,Object<br></blockquote>
 
+
 #### Attribute.getEvents
 This helper function returns an array of valid Attribute events.  This is just a function - not a prototype method.    
 
@@ -830,6 +893,7 @@ This helper function returns an array of valid Attribute events.  This is just a
 this.log(Attribute.getEvents());
 ```
 <blockquote><strong>log: </strong>StateChange,Validate<br></blockquote>
+
 
 #### INTEGRATION
 &nbsp;<b><i>validation usage demonstrated:</i></b>
@@ -896,6 +960,7 @@ function test6() {
 ```
 <blockquote>returns <strong>got milk</strong> as expected
 </blockquote>
+
 ## [&#9664;](#-attribute)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-delta) &nbsp;Command
 Command is an abstraction for task execution.  It provides multiple methods of task execution and manages the overall state of both synchronous and asynchronous processes. The primary use is to have a simple API method to respond to UI tasks. It can be used for processing / validation / storage / reporting type of use cases since it handles the asynchronous nature of javascript and abstracts in a way to easily incorporate application logic.    
 
@@ -908,6 +973,7 @@ return new Command({name: 'about'}) instanceof Command;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure new operator used:</i></b>
 
 ```javascript
@@ -915,6 +981,7 @@ Command({name: 'about'}); // jshint ignore:line
 ```
 <blockquote><strong>Error: new operator required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure argument properties are valid:</i></b>
 
 ```javascript
@@ -922,6 +989,7 @@ new Command({name: 'name', sex: 'female'});
 ```
 <blockquote><strong>Error: error creating Command: invalid property: sex</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>defaults name to a command:</i></b>
 
 ```javascript
@@ -929,6 +997,7 @@ return new Command().name;
 ```
 <blockquote>returns <strong>a command</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>defaults type to Stub:</i></b>
 
 ```javascript
@@ -936,6 +1005,7 @@ return new Command({name: 'about'}).type;
 ```
 <blockquote>returns <strong>Stub</strong> as expected
 </blockquote>
+
 
 #### PROPERTIES
 
@@ -951,6 +1021,7 @@ return new Command({name: 'about'}).name;
 <blockquote>returns <strong>about</strong> as expected
 </blockquote>
 
+
 #### description
 &nbsp;<b><i>more descriptive than name:</i></b>
 
@@ -962,6 +1033,7 @@ return new Command({name: 'Tequila'}).description + ' : ' +
 <blockquote>returns <strong>Tequila Command : Tequila is a beverage made from blue agave.</strong> as expected
 </blockquote>
 
+
 #### type
 &nbsp;<b><i>type of command must be valid:</i></b>
 
@@ -971,6 +1043,7 @@ new Command({name: 'about', type: 'magic'});
 ```
 <blockquote><strong>log: </strong>Stub,Menu,Presentation,Function,Procedure<br><strong>Error: Invalid command type: magic</strong> thrown as expected
 </blockquote>
+
 
 #### contents
 Contents is based on the type of command.  See TYPE section for more information for how it applies to each type    
@@ -986,6 +1059,7 @@ new Command({name: 'archiveData', scope: true});
 ```
 <blockquote><strong>Error: optional scope property must be Model or List</strong> thrown as expected
 </blockquote>
+
 
 #### status
 The status property is a Number defined as negative(FAIL) positive(SUCCESS) zero(executing) null/undefined(not executing).    
@@ -1003,6 +1077,7 @@ new Command({name: 'options', timeout: true});
 ```
 <blockquote><strong>Error: timeout must be a Number</strong> thrown as expected
 </blockquote>
+
 
 #### theme
 Valid themes listed in example.  These were inspired by bootstrap so fit that well and is optional for implementation but should follow if possible.  Example PDF is b/w and may ignore ot more likely will never apply.    
@@ -1073,6 +1148,7 @@ return new Command({type: 'Presentation', contents: new Presentation()}).present
 ```
 <blockquote>returns <strong>View</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>can supply in constructor:</i></b>
 
 ```javascript
@@ -1084,6 +1160,7 @@ return new Command({
 ```
 <blockquote>returns <strong>Edit</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>must be valid mode:</i></b>
 
 ```javascript
@@ -1092,6 +1169,7 @@ new Command({type: 'Presentation', contents: new Presentation(), presentationMod
 ```
 <blockquote><strong>log: </strong>View,Edit,List<br><strong>Error: Invalid presentationMode: Projector</strong> thrown as expected
 </blockquote>
+
 
 #### bucket
 &nbsp;<b><i>valid property is for app use:</i></b>
@@ -1102,6 +1180,7 @@ return 'bucket of ' + new Command({bucket: 'KFC'}).bucket;
 ```
 <blockquote>returns <strong>bucket of KFC</strong> as expected
 </blockquote>
+
 
 #### TYPES
 
@@ -1159,6 +1238,7 @@ return new Command(function () {}).type;
 <blockquote>returns <strong>Function</strong> as expected
 </blockquote>
 
+
 #### Procedure
 &nbsp;<b><i>for Procedure type contents is a Procedure object:</i></b>
 
@@ -1175,6 +1255,7 @@ return new Command(new Procedure()).type;
 <blockquote>returns <strong>Procedure</strong> as expected
 </blockquote>
 
+
 #### METHODS
 
 #### toString
@@ -1185,6 +1266,7 @@ return 'I am a ' + new Command({name: 'Customer'});
 ```
 <blockquote>returns <strong>I am a Stub Command: Customer</strong> as expected
 </blockquote>
+
 
 #### abort
 aborts task    
@@ -1199,6 +1281,7 @@ return cmd.status;
 <blockquote>returns <strong>-1</strong> as expected
 </blockquote>
 
+
 #### complete
 completes task    
 
@@ -1212,6 +1295,7 @@ return cmd.status;
 <blockquote>returns <strong>1</strong> as expected
 </blockquote>
 
+
 #### execute
 executes task    
 
@@ -1222,6 +1306,7 @@ new Command().execute();
 ```
 <blockquote><strong>Error: command type Stub not implemented</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>presentation commands require interface param:</i></b>
 
 ```javascript
@@ -1229,6 +1314,7 @@ new Command({type: 'Presentation', contents: new Presentation()}).execute();
 ```
 <blockquote><strong>Error: interface param required</strong> thrown as expected
 </blockquote>
+
 
 #### restart
 restarts task    
@@ -1241,6 +1327,7 @@ new Command().restart();
 <blockquote><strong>Error: command type Stub not implemented</strong> thrown as expected
 </blockquote>
 
+
 #### onEvent
 Use onEvent(events,callback)    
 
@@ -1251,6 +1338,7 @@ new Command().onEvent();
 ```
 <blockquote><strong>Error: subscription string or array required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>callback is required:</i></b>
 
 ```javascript
@@ -1258,6 +1346,7 @@ new Command().onEvent([]);
 ```
 <blockquote><strong>Error: callback is required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>events are checked against known types:</i></b>
 
 ```javascript
@@ -1266,6 +1355,7 @@ new Command().onEvent(['onDrunk'], function () {
 ```
 <blockquote><strong>Error: Unknown command event: onDrunk</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>here is a working version:</i></b>
 
 ```javascript
@@ -1280,6 +1370,7 @@ new Command().onEvent(['Completed'], function () {
 ```
 <blockquote><strong>log: </strong>BeforeExecute,AfterExecute,Error,Aborted,Completed<br></blockquote>
 
+
 #### Command.getTypes
 This helper function returns an array of valid Command types.  This is just a function - not a prototype method.    
 
@@ -1290,6 +1381,7 @@ this.log(Command.getTypes());
 ```
 <blockquote><strong>log: </strong>Stub,Menu,Presentation,Function,Procedure<br></blockquote>
 
+
 #### Command.getEvents
 This helper function returns an array of valid Command events.  This is just a function - not a prototype method.    
 
@@ -1299,6 +1391,7 @@ This helper function returns an array of valid Command events.  This is just a f
 this.log(Command.getEvents());
 ```
 <blockquote><strong>log: </strong>BeforeExecute,AfterExecute,Error,Aborted,Completed<br></blockquote>
+
 
 #### INTEGRATION
 test each command type    
@@ -1316,6 +1409,7 @@ cmd.execute();
 ```
 <blockquote><strong>log: </strong>Stub Command: stubCommand<br><strong>Error: command type Stub not implemented</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>Presentation:</i></b>
 
 ```javascript
@@ -1363,6 +1457,7 @@ cmd.bucket += ' Adious!';
 ```
 <blockquote>returns <strong>Hola! BeforeExecute AfterExecute Adious! funk Completed BeforeExecute AfterExecute funk Completed</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>Function test with error:</i></b>
 
 ```javascript
@@ -1384,6 +1479,7 @@ cmd.bucket += ' Adious!';
 ```
 <blockquote>returns <strong>Hola! BeforeExecute AfterExecute Adious! funk Error Completed</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>Function test with abort:</i></b>
 
 ```javascript
@@ -1405,6 +1501,7 @@ cmd.bucket += ' Adious!';
 ```
 <blockquote>returns <strong>Hola! BeforeExecute AfterExecute Adious! funk Aborted Completed</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>Procedure:</i></b>
 
 ```javascript
@@ -1418,6 +1515,7 @@ this.log(cmd);
 cmd.execute();
 ```
 <blockquote><strong>log: </strong>Procedure Command: procedureCommand<br></blockquote>
+
 (Better example under `Procedure` Constructer)    
 
 More stuff    
@@ -1438,6 +1536,7 @@ cmd.execute();
 ```
 <blockquote>returns <strong>Error: boom</strong> as expected
 </blockquote>
+
 ## [&#9664;](#-command)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-interface) &nbsp;Delta
 Deltas represent changes to models.  They can be applied to a store then update the model.  They can be stored in logs as a change audit for the model.    
 
@@ -1450,6 +1549,7 @@ return new Delta(new Attribute.ModelID(new Model())) instanceof Delta;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure new operator used:</i></b>
 
 ```javascript
@@ -1457,6 +1557,7 @@ Delta(); // jshint ignore:line
 ```
 <blockquote><strong>Error: new operator required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>Attribute.ModelID required in constructor:</i></b>
 
 ```javascript
@@ -1464,6 +1565,7 @@ new Delta();
 ```
 <blockquote><strong>Error: Attribute.ModelID required in constructor</strong> thrown as expected
 </blockquote>
+
 
 #### PROPERTIES
 
@@ -1475,8 +1577,9 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Wed Aug 30 2017 11:44:41 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Wed Aug 30 2017 11:48:48 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
+
 
 #### modelID
 &nbsp;<b><i>set from constructor:</i></b>
@@ -1486,8 +1589,9 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Wed Aug 30 2017 11:44:41 GMT-0400 (EDT)<br>returns <strong>Model null</strong> as expected
+<blockquote><strong>log: </strong>Wed Aug 30 2017 11:48:48 GMT-0400 (EDT)<br>returns <strong>Model null</strong> as expected
 </blockquote>
+
 
 #### attributeValues
 &nbsp;<b><i>created as empty object:</i></b>
@@ -1500,6 +1604,7 @@ return typeof new Delta(new Attribute.ModelID(new Model())).attributeValues;
 ```
 <blockquote>returns <strong>object</strong> as expected
 </blockquote>
+
 ## [&#9664;](#-delta)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-list) &nbsp;Interface
 The Interface core constructor is a prototype for user or system interaction with the application. The SurrogateInterface is a reference to Interface being tested in the suite.    
 
@@ -1513,6 +1618,7 @@ return (i instanceof SurrogateInterface) && (i instanceof Interface);
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure new operator used:</i></b>
 
 ```javascript
@@ -1520,6 +1626,7 @@ SurrogateInterface(); // jshint ignore:line
 ```
 <blockquote><strong>Error: new operator required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure argument properties are valid:</i></b>
 
 ```javascript
@@ -1527,6 +1634,7 @@ new SurrogateInterface({yo: 'whatup'});
 ```
 <blockquote><strong>Error: error creating Interface: invalid property: yo</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>allowable properties:</i></b>
 
 ```javascript
@@ -1544,6 +1652,7 @@ return new SurrogateInterface().name;
 <blockquote>returns <strong>(unnamed)</strong> as expected
 </blockquote>
 
+
 #### description
 &nbsp;<b><i>defaults to Interface implementation:</i></b>
 
@@ -1551,6 +1660,7 @@ return new SurrogateInterface().name;
 this.log(new SurrogateInterface().description);
 ```
 <blockquote><strong>log: </strong>a Interface<br></blockquote>
+
 
 #### METHODS
 
@@ -1563,6 +1673,7 @@ return new SurrogateInterface({description: 'Punched Card Interface'}).toString(
 <blockquote>returns <strong>Punched Card Interface</strong> as expected
 </blockquote>
 
+
 #### start()
 The start method initiates the interface and passes a callback for the interface to submit requests. The callback must pass a Request object followed by an optional callback for responses to the request e.g. interface.start ( function ( request, response(callback) ) ) {}    
 
@@ -1573,6 +1684,7 @@ new SurrogateInterface().start();
 ```
 <blockquote><strong>Error: Application required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>presentation parameter is required:</i></b>
 
 ```javascript
@@ -1580,6 +1692,7 @@ new SurrogateInterface().start(new Application());
 ```
 <blockquote><strong>Error: presentation required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>callback parameter required:</i></b>
 
 ```javascript
@@ -1587,6 +1700,7 @@ new SurrogateInterface().start(new Application(), new Presentation());
 ```
 <blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
+
 
 #### stop()
 calling stop will end the start() processing and release any resources    
@@ -1599,6 +1713,7 @@ new SurrogateInterface().stop();
 <blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
 
+
 #### dispatch()
 The dispatch method will accept a request and act on it or pass it to the app.    
 
@@ -1609,6 +1724,7 @@ new SurrogateInterface().dispatch();
 ```
 <blockquote><strong>Error: Request required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>send command without callback when no response needed:</i></b>
 
 ```javascript
@@ -1622,6 +1738,7 @@ new SurrogateInterface().dispatch(new Request({type: 'Command', command: new Com
 <blockquote><strong>Error: response callback is not a function</strong> thrown as expected
 </blockquote>
 
+
 #### notify()
 The notify method sends a `Message` to the Interface.  This can be the result of a request sent from the start() callback.    
 
@@ -1633,6 +1750,7 @@ new SurrogateInterface().notify();
 <blockquote><strong>Error: Message required</strong> thrown as expected
 </blockquote>
 
+
 #### render()
 &nbsp;<b><i>first argument must be a Command instance:</i></b>
 
@@ -1641,6 +1759,7 @@ new SurrogateInterface().render();
 ```
 <blockquote><strong>Error: Command object required</strong> thrown as expected
 </blockquote>
+
 todo: cleanup fix tests since render is hacked/changed    
 
 
@@ -1653,6 +1772,7 @@ return typeof canMock;
 ```
 <blockquote>returns <strong>boolean</strong> as expected
 </blockquote>
+
 
 #### mockRequest()
 &nbsp;<b><i>parameter must be request or array of requests:</i></b>
@@ -1681,6 +1801,7 @@ new Application().info();
 ```
 <blockquote><strong>Error: interface not set</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>must supply the text info:</i></b>
 
 ```javascript
@@ -1688,6 +1809,7 @@ new Application({interface: new SurrogateInterface()}).info();
 ```
 <blockquote><strong>Error: text parameter required</strong> thrown as expected
 </blockquote>
+
 
 #### done(text)
 Display done to user in background of primary presentation.    
@@ -1699,6 +1821,7 @@ new Application().done();
 ```
 <blockquote><strong>Error: interface not set</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>must supply the text info:</i></b>
 
 ```javascript
@@ -1706,6 +1829,7 @@ new Application({interface: new SurrogateInterface()}).done();
 ```
 <blockquote><strong>Error: text parameter required</strong> thrown as expected
 </blockquote>
+
 
 #### warn(text)
 Display warning to user in background of primary presentation.    
@@ -1717,6 +1841,7 @@ new Application().warn();
 ```
 <blockquote><strong>Error: interface not set</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>must supply the text info:</i></b>
 
 ```javascript
@@ -1724,6 +1849,7 @@ new Application({interface: new SurrogateInterface()}).warn();
 ```
 <blockquote><strong>Error: text parameter required</strong> thrown as expected
 </blockquote>
+
 
 #### err(text)
 Display error to user in background of primary presentation.    
@@ -1735,6 +1861,7 @@ new Application().err();
 ```
 <blockquote><strong>Error: interface not set</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>must supply the text info:</i></b>
 
 ```javascript
@@ -1742,6 +1869,7 @@ new Application({interface: new SurrogateInterface()}).err();
 ```
 <blockquote><strong>Error: text parameter required</strong> thrown as expected
 </blockquote>
+
 
 #### ok(prompt, callback)
 Pause before proceeding    
@@ -1753,6 +1881,7 @@ new Application().ok();
 ```
 <blockquote><strong>Error: interface not set</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>must provide the text prompt param:</i></b>
 
 ```javascript
@@ -1760,6 +1889,7 @@ new Application({interface: new SurrogateInterface()}).ok();
 ```
 <blockquote><strong>Error: prompt required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>must provide callback param:</i></b>
 
 ```javascript
@@ -1767,6 +1897,7 @@ new Application({interface: new SurrogateInterface()}).ok('You are about to ente
 ```
 <blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
+
 
 #### yesno(prompt, callback)
 Query user with a yes no question.    
@@ -1778,6 +1909,7 @@ new Application().yesno();
 ```
 <blockquote><strong>Error: interface not set</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>must provide the text question param:</i></b>
 
 ```javascript
@@ -1785,6 +1917,7 @@ new Application({interface: new SurrogateInterface()}).yesno();
 ```
 <blockquote><strong>Error: prompt required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>must provide callback param:</i></b>
 
 ```javascript
@@ -1792,6 +1925,7 @@ new Application({interface: new SurrogateInterface()}).yesno('Are we there yet?'
 ```
 <blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
+
 
 #### ask(prompt, attribute, callback)
 Simple single item prompt.    
@@ -1803,6 +1937,7 @@ new SurrogateInterface().ask();
 ```
 <blockquote><strong>Error: prompt required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>next param is attribute or callback:</i></b>
 
 ```javascript
@@ -1810,6 +1945,7 @@ new SurrogateInterface().ask('What it do');
 ```
 <blockquote><strong>Error: attribute or callback expected</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>must provide callback param:</i></b>
 
 ```javascript
@@ -1817,6 +1953,7 @@ new SurrogateInterface().ask('Please enter your name', new Attribute({name: 'Nam
 ```
 <blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
+
 
 #### choose(prompt, choices, callback)
 prompt to choose an item    
@@ -1828,6 +1965,7 @@ new SurrogateInterface().choose();
 ```
 <blockquote><strong>Error: prompt required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>must supply array of choices:</i></b>
 
 ```javascript
@@ -1848,6 +1986,7 @@ new SurrogateInterface().choose('choose wisely', ['rock', 'paper', 'scissors']);
 ```
 <blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
+
 
 #### Interface Integration
 &nbsp;<b><i>Test command execution mocking:</i></b>
@@ -1872,6 +2011,7 @@ testInterface.mockRequest(cmds);
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 ## [&#9664;](#-interface)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-message) &nbsp;List
 Lists are an ordered collection of items.  Each item is an array of values that correspond to the attributes for model used in constructor.    
 
@@ -1886,6 +2026,7 @@ return new SurrogateListClass(new Model()) instanceof List;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure new operator used:</i></b>
 
 ```javascript
@@ -1893,6 +2034,7 @@ List(); // jshint ignore:line
 ```
 <blockquote><strong>Error: new operator required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>must be instantiated with model parameter.  The model attributes represent the list columns.:</i></b>
 
 ```javascript
@@ -1900,6 +2042,7 @@ new List();
 ```
 <blockquote><strong>Error: argument required: model</strong> thrown as expected
 </blockquote>
+
 
 #### PROPERTIES
 
@@ -1930,6 +2073,7 @@ new List(new Model()).get('id'); // see integration tests
 <blockquote><strong>Error: list is empty</strong> thrown as expected
 </blockquote>
 
+
 #### set(attributeName,value)
 Sets value of attribute for given item.    
 
@@ -1940,6 +2084,7 @@ new List(new Model()).set('id'); // see integration tests
 ```
 <blockquote><strong>Error: list is empty</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>throws an error if the attribute does not exists:</i></b>
 
 ```javascript
@@ -1950,6 +2095,7 @@ list.set('whatever');
 <blockquote><strong>Error: attribute not valid for list model</strong> thrown as expected
 </blockquote>
 
+
 #### addItem()
 &nbsp;<b><i>add item to list verify length is correct.:</i></b>
 
@@ -1959,6 +2105,7 @@ return list.addItem(new Model()).length(); // returns ref for method chaining
 ```
 <blockquote>returns <strong>1</strong> as expected
 </blockquote>
+
 
 #### removeItem()
 &nbsp;<b><i>add then item to list verify length is correct.:</i></b>
@@ -1977,6 +2124,7 @@ return list.findItemByID(1) === false;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 
 #### moveNext()
 &nbsp;<b><i>move to next item in list:</i></b>
@@ -2014,6 +2162,7 @@ new List(new Model()).sort(); // see integration tests
 ```
 <blockquote><strong>Error: sort order required</strong> thrown as expected
 </blockquote>
+
 
 #### List Integration
 
@@ -2280,6 +2429,7 @@ function getAlphabetical() {
 ```
 <blockquote><strong>log: </strong>storeBeingTested: a MemoryStore<br>returns <strong>true</strong> as expected
 </blockquote>
+
 ## [&#9664;](#-list)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-model) &nbsp;Message
 
 #### Message Class
@@ -2294,6 +2444,7 @@ return new Message('Null') instanceof Message;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure new operator used:</i></b>
 
 ```javascript
@@ -2301,6 +2452,7 @@ Message('Null'); // jshint ignore:line
 ```
 <blockquote><strong>Error: new operator required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>first parameter is required:</i></b>
 
 ```javascript
@@ -2308,6 +2460,7 @@ new Message();
 ```
 <blockquote><strong>Error: message type required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>first parameter must be valid message type:</i></b>
 
 ```javascript
@@ -2315,6 +2468,7 @@ new Message('http://www.youtube.com/watch?v=2o7V1f7lbk4');
 ```
 <blockquote><strong>Error: Invalid message type: http://www.youtube.com/watch?v=2o7V1f7lbk4</strong> thrown as expected
 </blockquote>
+
 
 #### METHODS
 
@@ -2327,6 +2481,7 @@ return new Message('Null').toString();
 <blockquote>returns <strong>Null Message</strong> as expected
 </blockquote>
 
+
 #### Attribute.getTypes
 This helper function returns an array of valid Message types.  This is just a function - not a prototype method.    
 
@@ -2336,6 +2491,7 @@ This helper function returns an array of valid Message types.  This is just a fu
 this.log(Message.getTypes());
 ```
 <blockquote><strong>log: </strong>Null,Connected,Error,Sent,Ping,PutModel,PutModelAck,GetModel,GetModelAck,DeleteModel,DeleteModelAck,GetList,GetListAck<br></blockquote>
+
 ## [&#9664;](#-message)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-procedure) &nbsp;Model
 
 #### CONSTRUCTOR
@@ -2348,6 +2504,7 @@ return new SurrogateModel() instanceof Model;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure new operator used:</i></b>
 
 ```javascript
@@ -2355,6 +2512,7 @@ SurrogateModel(); // jshint ignore:line
 ```
 <blockquote><strong>Error: new operator required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure properties are valid:</i></b>
 
 ```javascript
@@ -2362,6 +2520,7 @@ new SurrogateModel({sup: 'yo'});
 ```
 <blockquote><strong>Error: error creating Model: invalid property: sup</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>can supply attributes in constructor in addition to ID default:</i></b>
 
 ```javascript
@@ -2371,6 +2530,7 @@ return play.get('game');
 ```
 <blockquote>returns <strong>scrabble</strong> as expected
 </blockquote>
+
 
 #### PROPERTIES
 
@@ -2400,6 +2560,7 @@ return (goodModel.getObjectStateErrors().length === 0 && badModel.getObjectState
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>elements of array must be instance of Attribute:</i></b>
 
 ```javascript
@@ -2422,6 +2583,7 @@ return new SurrogateModel().toString().length > 0;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 
 #### copy(sourceModel)
 &nbsp;<b><i>copy all attribute values of a model:</i></b>
@@ -2464,6 +2626,7 @@ return m.getObjectStateErrors();
 <blockquote>returns <strong>first attribute must be ID</strong> as expected
 </blockquote>
 
+
 #### onEvent
 Use onEvent(events,callback)    
 
@@ -2474,6 +2637,7 @@ new SurrogateModel().onEvent();
 ```
 <blockquote><strong>Error: subscription string or array required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>callback is required:</i></b>
 
 ```javascript
@@ -2481,6 +2645,7 @@ new SurrogateModel().onEvent([]);
 ```
 <blockquote><strong>Error: callback is required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>events are checked against known types:</i></b>
 
 ```javascript
@@ -2489,6 +2654,7 @@ new SurrogateModel().onEvent(['onDrunk'], function () {
 ```
 <blockquote><strong>Error: Unknown command event: onDrunk</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>here is a working version:</i></b>
 
 ```javascript
@@ -2499,6 +2665,7 @@ new Model().onEvent(['Validate'], function () {
 });
 ```
 <blockquote><strong>log: </strong>T.getAttributeEvents()<br></blockquote>
+
 
 #### attribute
 &nbsp;<b><i>return attribute by name:</i></b>
@@ -2511,6 +2678,7 @@ return model.attribute("Sue") == attrib;
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
 
+
 #### getShortName
 &nbsp;<b><i>returns short description of model, defaults to first string attribute:</i></b>
 
@@ -2521,6 +2689,7 @@ return question.getShortName();
 ```
 <blockquote>returns <strong>Shorty</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>if no string attribute found empty string returned:</i></b>
 
 ```javascript
@@ -2543,6 +2712,7 @@ return question.getLongName();
 <blockquote>returns <strong>Shorty</strong> as expected
 </blockquote>
 
+
 #### get(attributeName)
 &nbsp;<b><i>returns undefined if the attribute does not exist:</i></b>
 
@@ -2559,6 +2729,7 @@ return question.get('answer');
 <blockquote>returns <strong>42</strong> as expected
 </blockquote>
 
+
 #### getAttributeType(attributeName)
 &nbsp;<b><i>returns attribute type for given attribute name:</i></b>
 
@@ -2568,6 +2739,7 @@ return new SurrogateModel({attributes: [new Attribute('born', 'Date')]}).getAttr
 <blockquote>returns <strong>Date</strong> as expected
 </blockquote>
 
+
 #### set(attributeName,value)
 &nbsp;<b><i>throws an error if the attribute does not exists:</i></b>
 
@@ -2576,6 +2748,7 @@ new SurrogateModel().set('whatever');
 ```
 <blockquote><strong>Error: attribute not valid for model</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>sets the value for given attribute:</i></b>
 
 ```javascript
@@ -2585,6 +2758,7 @@ return question.attributes[1].value;
 ```
 <blockquote>returns <strong>42</strong> as expected
 </blockquote>
+
 
 #### validate
 check valid object state and value for attribute - invoke callback for results    
@@ -2597,6 +2771,7 @@ new Model().validate();
 <blockquote><strong>Error: callback is required</strong> thrown as expected
 </blockquote>
 
+
 #### setError
 Set a error condition and descriptive message    
 
@@ -2607,6 +2782,7 @@ new Model().setError();
 ```
 <blockquote><strong>Error: condition required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>second argument description required:</i></b>
 
 ```javascript
@@ -2614,6 +2790,7 @@ new Model().setError('login');
 ```
 <blockquote><strong>Error: description required</strong> thrown as expected
 </blockquote>
+
 
 #### clearError
 Clear a error condition    
@@ -2625,6 +2802,7 @@ new Model().clearError();
 ```
 <blockquote><strong>Error: condition required</strong> thrown as expected
 </blockquote>
+
 
 #### INTEGRATION
 &nbsp;<b><i>model validation usage demonstrated:</i></b>
@@ -2684,6 +2862,7 @@ function test4() {
 ```
 <blockquote>returns <strong>test4: 0</strong> as expected
 </blockquote>
+
 *0 model tests applied*    
 
 ## [&#9664;](#-model)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-request) &nbsp;Procedure
@@ -2702,6 +2881,7 @@ return new Procedure() instanceof Procedure;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure new operator used:</i></b>
 
 ```javascript
@@ -2709,6 +2889,7 @@ Procedure(); // jshint ignore:line
 ```
 <blockquote><strong>Error: new operator required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure argument properties are valid:</i></b>
 
 ```javascript
@@ -2716,6 +2897,7 @@ new Procedure({yo: 'whatup'});
 ```
 <blockquote><strong>Error: error creating Procedure: invalid property: yo</strong> thrown as expected
 </blockquote>
+
 
 #### PROPERTIES
 
@@ -2729,6 +2911,7 @@ new Procedure({tasks: true});
 ```
 <blockquote><strong>Error: error creating Procedure: tasks is not an array</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>the parameters must be valid for the object in each element of the array:</i></b>
 
 ```javascript
@@ -2740,6 +2923,7 @@ new Procedure({
 ```
 <blockquote><strong>Error: error creating Procedure: invalid task[0] property: clean</strong> thrown as expected
 </blockquote>
+
 
 #### tasksNeeded
 Total tasks that will execute (does not include skipped tasks).    
@@ -2771,6 +2955,7 @@ new Procedure({
 ```
 <blockquote><strong>Error: error creating Procedure: task[0].label must be string</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>shorthand version:</i></b>
 
 ```javascript
@@ -2792,6 +2977,7 @@ new Procedure({
 ```
 <blockquote><strong>Error: error creating Procedure: task[0].command must be a Command object</strong> thrown as expected
 </blockquote>
+
 
 #### requires
 Establish other tasks that must be complete before this task is executed.  Pass as array of or single element. Can be string(for label label) or number(for array index).  Use -1 for previous task, null for no dependencies    
@@ -2843,6 +3029,7 @@ if (!new Procedure().getObjectStateErrors()) return 'falsy';
 <blockquote>returns <strong>falsy</strong> as expected
 </blockquote>
 
+
 #### INTEGRATION
 &nbsp;<b><i>synchronous sequential tasks are the default when tasks has no requires property:</i></b>
 
@@ -2886,6 +3073,7 @@ cmd.execute();
 ```
 <blockquote>returns <strong>abc123</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>async tasks are designated when requires is set to null:</i></b>
 
 ```javascript
@@ -2933,6 +3121,7 @@ cmd.execute();
 ```
 <blockquote>returns <strong>eenie meenie miney mo miney mo</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>this example shows multiple dependencies:</i></b>
 
 ```javascript
@@ -3000,6 +3189,7 @@ cmd.execute();
 ```
 <blockquote>returns <strong>todo: drugs sex rock & roll</strong> as expected
 </blockquote>
+
 ## [&#9664;](#-procedure)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-store) &nbsp;Request
 Requests handle the Request / Response design pattern.  They are used by the Interface class to communicate with the Application Model    
 
@@ -3012,6 +3202,7 @@ return new Request('Null') instanceof Request;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure new operator used:</i></b>
 
 ```javascript
@@ -3019,6 +3210,7 @@ Request('Null'); // jshint ignore:line
 ```
 <blockquote><strong>Error: new operator required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>request type must be specified:</i></b>
 
 ```javascript
@@ -3026,6 +3218,7 @@ new Request();
 ```
 <blockquote><strong>Error: Request type required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>simple string parameter creates request of named type:</i></b>
 
 ```javascript
@@ -3033,6 +3226,7 @@ return new Request('example').type;
 ```
 <blockquote>returns <strong>example</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>type can be specified when object passed:</i></b>
 
 ```javascript
@@ -3040,6 +3234,7 @@ return new Request({type: 'example'}).type;
 ```
 <blockquote>returns <strong>example</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>Command type requests expect contents to contain a command object:</i></b>
 
 ```javascript
@@ -3047,6 +3242,7 @@ return new Request({type: 'Command'});
 ```
 <blockquote><strong>Error: command object required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>correct version:</i></b>
 
 ```javascript
@@ -3054,6 +3250,7 @@ return new Request({type: 'Command', command: new Command()});
 ```
 <blockquote>returns <strong>Command Request: Stub Command: a command</strong> as expected
 </blockquote>
+
 
 #### METHODS
 
@@ -3065,6 +3262,7 @@ return new Request('Null').toString();
 ```
 <blockquote>returns <strong>Null Request</strong> as expected
 </blockquote>
+
 ## [&#9664;](#-request)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-text) &nbsp;Store
 The store class is used for object persistence.    
 
@@ -3077,6 +3275,7 @@ return new SurrogateStore() instanceof Store;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure new operator used:</i></b>
 
 ```javascript
@@ -3084,6 +3283,7 @@ SurrogateStore(); // jshint ignore:line
 ```
 <blockquote><strong>Error: new operator required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure properties are valid:</i></b>
 
 ```javascript
@@ -3091,6 +3291,7 @@ new SurrogateStore({food: 'twinkies'});
 ```
 <blockquote><strong>Error: error creating Store: invalid property: food</strong> thrown as expected
 </blockquote>
+
 
 #### PROPERTIES
 
@@ -3103,6 +3304,7 @@ return new SurrogateStore({name: 'punchedCards'}).name;
 <blockquote>returns <strong>punchedCards</strong> as expected
 </blockquote>
 
+
 #### storeType
 storeType defaults to Store Class Name but can be set to suite the app architecture.    
 
@@ -3113,6 +3315,7 @@ return new SurrogateStore({storeType: 'legacyStorage'}).storeType;
 ```
 <blockquote>returns <strong>legacyStorage</strong> as expected
 </blockquote>
+
 
 #### METHODS
 &nbsp;<b><i>getServices() returns an object with interface for the Store.:</i></b>
@@ -3128,6 +3331,7 @@ this.shouldBeTrue(typeof services['canGetList'] == 'boolean');
 ```
 <blockquote><strong>log: </strong>{"isReady":false,"canGetModel":false,"canPutModel":false,"canDeleteModel":false,"canGetList":false}<br></blockquote>
 
+
 #### toString()
 &nbsp;<b><i>should return a description of the Store:</i></b>
 
@@ -3142,6 +3346,7 @@ return cStore.toString();
 <blockquote><strong>log: </strong>a Store<br><strong>log: </strong>ConvenienceStore: 7-Eleven<br>returns <strong>ConvenienceStore: 7-Eleven</strong> as expected
 </blockquote>
 
+
 #### onConnect()
 &nbsp;<b><i>must pass url string:</i></b>
 
@@ -3150,6 +3355,7 @@ new SurrogateStore().onConnect();
 ```
 <blockquote><strong>Error: argument must a url string</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>must pass callback function:</i></b>
 
 ```javascript
@@ -3157,6 +3363,7 @@ new SurrogateStore().onConnect("");
 ```
 <blockquote><strong>Error: argument must a callback</strong> thrown as expected
 </blockquote>
+
 see integration test for Store    
 
 
@@ -3169,6 +3376,7 @@ new SurrogateStore().getModel();
 <blockquote><strong>Error: Store does not provide getModel</strong> thrown as expected
 </blockquote>
 
+
 #### putModel(model)
 &nbsp;<b><i>putModel() is not implemented for virtual class:</i></b>
 
@@ -3178,6 +3386,7 @@ new SurrogateStore().putModel();
 <blockquote><strong>Error: Store does not provide putModel</strong> thrown as expected
 </blockquote>
 
+
 #### deleteModel(model)
 &nbsp;<b><i>deleteModel() is not implemented for virtual class:</i></b>
 
@@ -3186,6 +3395,7 @@ new SurrogateStore().deleteModel();
 ```
 <blockquote><strong>Error: Store does not provide deleteModel</strong> thrown as expected
 </blockquote>
+
 
 #### getList(list, filter, [optional order], callback)
 This method will clear and populate the list with collection from store.  The **filter** property can be used to query the store.  The **order** property can specify the sort order of the list.  _See integration test for more info._    
@@ -3237,6 +3447,7 @@ spec.integrationStore.putModel(self.types, function (model, error) {
 ```
 <blockquote><strong>log: </strong>Store is not ready.<br>returns <strong>true</strong> as expected
 </blockquote>
+
 ## [&#9664;](#-store)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-transport) &nbsp;Text
 
 #### Text Class
@@ -3251,6 +3462,7 @@ return new Text('Null') instanceof Text;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure new operator used:</i></b>
 
 ```javascript
@@ -3258,6 +3470,7 @@ Text('Null'); // jshint ignore:line
 ```
 <blockquote><strong>Error: new operator required</strong> thrown as expected
 </blockquote>
+
 
 #### METHODS
 
@@ -3270,6 +3483,7 @@ return new Text('me').toString();
 <blockquote>returns <strong>Text: 'me'</strong> as expected
 </blockquote>
 
+
 #### get()
 &nbsp;<b><i>return value:</i></b>
 
@@ -3278,6 +3492,7 @@ return new Text('yo').get();
 ```
 <blockquote>returns <strong>yo</strong> as expected
 </blockquote>
+
 
 #### set()
 &nbsp;<b><i>set value:</i></b>
@@ -3290,6 +3505,7 @@ return who.get();
 <blockquote>returns <strong>You</strong> as expected
 </blockquote>
 
+
 #### onEvent
 Use onEvent(events,callback)    
 
@@ -3300,6 +3516,7 @@ new Text('').onEvent();
 ```
 <blockquote><strong>Error: subscription string or array required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>callback is required:</i></b>
 
 ```javascript
@@ -3307,6 +3524,7 @@ new Text('').onEvent([]);
 ```
 <blockquote><strong>Error: callback is required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>events are checked against known types:</i></b>
 
 ```javascript
@@ -3315,6 +3533,7 @@ new Text('').onEvent(['onDrunk'], function () {
 ```
 <blockquote><strong>Error: Unknown command event: onDrunk</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>here is a working version:</i></b>
 
 ```javascript
@@ -3353,6 +3572,7 @@ return new View(new Model(), {}, []) instanceof View;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure new operator used:</i></b>
 
 ```javascript
@@ -3360,6 +3580,7 @@ View(); // jshint ignore:line
 ```
 <blockquote><strong>Error: new operator required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>first parameter is primary model:</i></b>
 
 ```javascript
@@ -3367,6 +3588,7 @@ new View();
 ```
 <blockquote><strong>Error: argument must be a Model</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>second parameter is object with related models:</i></b>
 
 ```javascript
@@ -3374,6 +3596,7 @@ new View(new Model());
 ```
 <blockquote><strong>Error: object expected</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>third parameter is array of attributes making up view:</i></b>
 
 ```javascript
@@ -3381,6 +3604,7 @@ new View(new Model(), {});
 ```
 <blockquote><strong>Error: array of attributes expected</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>related models are named objects with id & model:</i></b>
 
 ```javascript
@@ -3407,6 +3631,7 @@ new View(new Model(), {}, ['this is so wrong']);
 ```
 <blockquote><strong>Error: attribute array must contain Attributes</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>attributes must be valid attribute:</i></b>
 
 ```javascript
@@ -3414,6 +3639,7 @@ new View(new Model(), {}, [new Attribute({name: 'x'})]);
 ```
 <blockquote><strong>Error: attribute array must contain Attributes with model references</strong> thrown as expected
 </blockquote>
+
 
 #### METHODS
 
@@ -3425,6 +3651,7 @@ return new View(new Model(), {}, []).toString();
 ```
 <blockquote>returns <strong>a Model View</strong> as expected
 </blockquote>
+
 
 ## [&#9664;](#-view)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-application) &nbsp;REPLInterface
 
@@ -3450,6 +3677,7 @@ return typeof REPLInterface.prototype.evaluateInput;
 ```
 <blockquote>returns <strong>function</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>if no input state error generated:</i></b>
 
 ```javascript
@@ -3464,6 +3692,7 @@ return typeof REPLInterface.prototype.captureOutput;
 ```
 <blockquote>returns <strong>function</strong> as expected
 </blockquote>
+
 capturePrompt(callback)    
 
 &nbsp;<b><i>called when line of input available:</i></b>
@@ -3473,6 +3702,7 @@ return typeof REPLInterface.prototype.capturePrompt;
 ```
 <blockquote>returns <strong>function</strong> as expected
 </blockquote>
+
 
 #### INTEGRATION
 &nbsp;<b><i>user queries:</i></b>
@@ -3549,6 +3779,7 @@ ok1();
 ```
 <blockquote><strong>log: </strong>out> input ignored: input ignored if no context for it<br><strong>log: </strong>out> This is a test.<br><strong>log: </strong>in> whatever<br><strong>log: </strong>in> nope<br><strong>log: </strong>out> yes or no response required<br><strong>log: </strong>in> n<br><strong>log: </strong>in> yeppers<br><strong>log: </strong>out> yes or no response required<br><strong>log: </strong>in> y<br><strong>log: </strong>in> Sean<br><strong>log: </strong>out> Nice to meet you Sean.<br><strong>log: </strong>out> Pick one...<br><strong>log: </strong>out>   Eenie<br><strong>log: </strong>out>   Meenie<br><strong>log: </strong>out>   Miney<br><strong>log: </strong>out>   Moe<br><strong>log: </strong>in> m<br>returns <strong>done</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>app navigation:</i></b>
 
 ```javascript
@@ -3609,6 +3840,7 @@ input('se');
 <blockquote><strong>log: </strong>in> Rockaby<br><strong>log: </strong>out> "Rockaby" not valid<br><strong>log: </strong>in> r<br><strong>log: </strong>in> p<br><strong>log: </strong>in> s<br><strong>log: </strong>in> se<br><strong>log: </strong>out> Rock, Paper, Scissors, SeeYou<br><strong>log: </strong>out> Rock, Paper, Scissors, SeeYou<br><strong>log: </strong>out> Rock, Paper, Scissors, SeeYou<br><strong>log: </strong>out> Rock, Paper, Scissors, SeeYou<br><strong>log: </strong>out> Rock, Paper, Scissors, SeeYou<br><strong>log: </strong>out> Rock, Paper, Scissors, SeeYou<br>returns <strong>RockPaperScissors</strong> as expected
 </blockquote>
 
+
 ## [&#9664;](#-replinterface)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-log) &nbsp;Application
 
 #### CONSTRUCTOR
@@ -3619,6 +3851,7 @@ return new Application() instanceof Application;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 *29 model tests applied*    
 
 &nbsp;<b><i>argument property interface will invoke setInterface method:</i></b>
@@ -3630,6 +3863,7 @@ return (myApplication.getInterface() === myInterface);
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 
 #### ATTRIBUTES
 Application extends model and inherits the attributes property.  All Application objects have the following attributes:    
@@ -3655,6 +3889,7 @@ new Application().setInterface();
 <blockquote><strong>Error: instance of Interface a required parameter</strong> thrown as expected
 </blockquote>
 
+
 #### getInterface()
 returns primary user interface for application    
 
@@ -3665,6 +3900,7 @@ return new Application().getInterface() === undefined;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>returns value set by set Interface:</i></b>
 
 ```javascript
@@ -3675,6 +3911,7 @@ return (myApplication.getInterface() === myInterface);
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 
 #### setPresentation(presentation)
 Setting the presentation for the application determines the primary commands available to the user.    
@@ -3687,6 +3924,7 @@ new Application().setPresentation();
 <blockquote><strong>Error: instance of Presentation a required parameter</strong> thrown as expected
 </blockquote>
 
+
 #### getPresentation()
 returns primary user presentation for application    
 
@@ -3697,6 +3935,7 @@ return new Application().getPresentation() === undefined;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>returns value set by set Presentation:</i></b>
 
 ```javascript
@@ -3708,6 +3947,7 @@ return (myApplication.getPresentation() === myPresentation);
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
 
+
 #### start()
 The start method executes the application.    
 
@@ -3718,6 +3958,7 @@ new Application().start();
 ```
 <blockquote><strong>Error: error starting application: interface not set</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>callback parameter required:</i></b>
 
 ```javascript
@@ -3725,6 +3966,7 @@ new Application({interface: new Interface()}).start();
 ```
 <blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
+
 
 #### dispatch()
 The dispatch method will accept a request and act on it or pass it to the app.    
@@ -3736,6 +3978,7 @@ new Application().dispatch();
 ```
 <blockquote><strong>Error: Request required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>send command without callback when no response needed:</i></b>
 
 ```javascript
@@ -3747,6 +3990,7 @@ new Application().dispatch(new Request({
 }));
 ```
 <blockquote><strong>log: </strong>PEACE<br></blockquote>
+
 &nbsp;<b><i>optional second parameter is the response callback:</i></b>
 
 ```javascript
@@ -3754,6 +3998,7 @@ new Application().dispatch(new Request({type: 'Command', command: new Command()}
 ```
 <blockquote><strong>Error: response callback is not a function</strong> thrown as expected
 </blockquote>
+
 
 #### info(text)
 Display info to user in background of primary presentation.    
@@ -3766,6 +4011,7 @@ new Application().info(); // see Interface for more info
 <blockquote><strong>Error: interface not set</strong> thrown as expected
 </blockquote>
 
+
 #### done(text)
 Display done to user in background of primary presentation.    
 
@@ -3776,6 +4022,7 @@ new Application().done(); // see Interface for more info
 ```
 <blockquote><strong>Error: interface not set</strong> thrown as expected
 </blockquote>
+
 
 #### warn(text)
 Display info to user in background of primary presentation.    
@@ -3788,6 +4035,7 @@ new Application().warn(); // see Interface for more info
 <blockquote><strong>Error: interface not set</strong> thrown as expected
 </blockquote>
 
+
 #### err(text)
 Display info to user in background of primary presentation.    
 
@@ -3799,6 +4047,7 @@ new Application().err(); // see Interface for more info
 <blockquote><strong>Error: interface not set</strong> thrown as expected
 </blockquote>
 
+
 #### ok(prompt, callback)
 Pause before proceeding    
 
@@ -3809,6 +4058,7 @@ new Application().ok();
 ```
 <blockquote><strong>Error: interface not set</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>must provide the text prompt param:</i></b>
 
 ```javascript
@@ -3816,6 +4066,7 @@ new Application({interface: new Interface()}).ok();
 ```
 <blockquote><strong>Error: prompt required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>must provide callback param:</i></b>
 
 ```javascript
@@ -3823,6 +4074,7 @@ new Application({interface: new Interface()}).ok('You are about to enter the twi
 ```
 <blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
+
 
 #### yesno(prompt, callback)
 Query user with a yes no question.    
@@ -3834,6 +4086,7 @@ new Application().yesno();
 ```
 <blockquote><strong>Error: interface not set</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>must provide the text question param:</i></b>
 
 ```javascript
@@ -3841,6 +4094,7 @@ new Application({interface: new Interface()}).yesno();
 ```
 <blockquote><strong>Error: prompt required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>must provide callback param:</i></b>
 
 ```javascript
@@ -3848,6 +4102,7 @@ new Application({interface: new Interface()}).yesno('ok?');
 ```
 <blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
+
 
 #### ask(prompt, attribute, callback)
 Simple single item prompt.    
@@ -3859,6 +4114,7 @@ new Application().ask();
 ```
 <blockquote><strong>Error: interface not set</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>must provide the text question param:</i></b>
 
 ```javascript
@@ -3866,6 +4122,7 @@ new Application({interface: new Interface()}).ask();
 ```
 <blockquote><strong>Error: prompt required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>next param is attribute or callback:</i></b>
 
 ```javascript
@@ -3873,6 +4130,7 @@ new Application({interface: new Interface()}).ask('sup');
 ```
 <blockquote><strong>Error: attribute or callback expected</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>must provide callback param:</i></b>
 
 ```javascript
@@ -3881,6 +4139,7 @@ new Application({interface: new Interface()}).
 ```
 <blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
+
 
 #### choose
 prompt to choose an item    
@@ -3892,6 +4151,7 @@ new Application().choose();
 ```
 <blockquote><strong>Error: interface not set</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>must provide text prompt first:</i></b>
 
 ```javascript
@@ -3899,6 +4159,7 @@ new Application({interface: new Interface()}).choose();
 ```
 <blockquote><strong>Error: prompt required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>must supply array of choices:</i></b>
 
 ```javascript
@@ -3923,6 +4184,7 @@ myApplication.choose('choose wisely', ['rock', 'paper', 'scissors']);
 <blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
 
+
 #### Application Integration
 &nbsp;<b><i>minimal app:</i></b>
 
@@ -3941,6 +4203,7 @@ ui.mockRequest(new Request({type: 'Command', command: helloWorldCommand}));
 ```
 <blockquote>returns <strong>hello world</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>little app with command execution mocking:</i></b>
 
 ```javascript
@@ -3968,6 +4231,7 @@ testInterface.mockRequest(cmds);
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 ## [&#9664;](#-application)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-presentation) &nbsp;Log
 
 #### Log Model
@@ -3982,6 +4246,7 @@ return new Log() instanceof Log;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 *29 model tests applied*    
 
 
@@ -3997,7 +4262,8 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Wed Aug 30 2017 11:44:41 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Wed Aug 30 2017 11:48:48 GMT-0400 (EDT)<br></blockquote>
+
 
 #### LOG TYPES
 &nbsp;<b><i>must be valid:</i></b>
@@ -4008,6 +4274,7 @@ new Log({logType: 'wood'}); // default attributes and values
 ```
 <blockquote><strong>log: </strong>T.getLogTypes()<br><strong>Error: Unknown log type: wood</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>Text simple text message:</i></b>
 
 ```javascript
@@ -4015,6 +4282,7 @@ return new Log('sup');
 ```
 <blockquote>returns <strong>Info: sup</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>Delta logged Delta (see in Core):</i></b>
 
 ```javascript
@@ -4023,6 +4291,7 @@ return new Log({logType: 'Delta', contents: delta}).toString();
 ```
 <blockquote>returns <strong>Info: (delta)</strong> as expected
 </blockquote>
+
 ## [&#9664;](#-log)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-session) &nbsp;Presentation
 
 #### Presentation Model
@@ -4037,6 +4306,7 @@ return new Presentation() instanceof Presentation;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 *29 model tests applied*    
 
 
@@ -4095,6 +4365,7 @@ new Presentation().validate();
 <blockquote><strong>Error: callback is required</strong> thrown as expected
 </blockquote>
 
+
 #### CONTENTS
 The contents attributes provides the structure for the presentation.    
 
@@ -4107,6 +4378,7 @@ return pres.getObjectStateErrors();
 ```
 <blockquote>returns <strong>contents must be Array</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>contents elements must be Text, Command, Attribute, List or string:</i></b>
 
 ```javascript
@@ -4119,6 +4391,7 @@ return pres.getObjectStateErrors();
 ```
 <blockquote>returns <strong>contents elements must be Text, Command, Attribute, List or string</strong> as expected
 </blockquote>
+
 
 #### INTEGRATION
 &nbsp;<b><i>validation usage demonstrated:</i></b>
@@ -4134,6 +4407,7 @@ presentation.validate(function () {
 ```
 <blockquote>returns <strong>contents has validation errors</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>use REPLInterface to view and edit:</i></b>
 
 ```javascript
@@ -4191,6 +4465,7 @@ presentationCommand.presentationMode = 'View';
 presentationCommand.execute(repl);
 ```
 <blockquote><strong>log: </strong>event> BeforeExecute ok<br><strong>log: </strong>event> ErrorError: Presentation object required<br><strong>log: </strong>event> Completed ok<br><strong>log: </strong>event> AfterExecute ok<br><strong>log: </strong>event> BeforeExecute ok<br><strong>log: </strong>event> ErrorError: Presentation object required<br><strong>log: </strong>event> Completed ok<br><strong>log: </strong>event> AfterExecute ok<br><strong>log: </strong>in> John<br><strong>log: </strong>out> input ignored: John<br><strong>log: </strong>in> Doe<br><strong>log: </strong>out> input ignored: Doe<br><strong>log: </strong>event> BeforeExecute ok<br><strong>log: </strong>event> ErrorError: Presentation object required<br><strong>log: </strong>event> Completed ok<br><strong>log: </strong>event> AfterExecute ok<br><strong>log: </strong>prompt> ?<br><strong>log: </strong>prompt> ?<br></blockquote>
+
 ## [&#9664;](#-presentation)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-user) &nbsp;Session
 
 #### Session Model
@@ -4206,6 +4481,7 @@ return new Session() instanceof Session;
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
 
+
 #### CONSTRUCTOR
 Creation of all Models must adhere to following examples:    
 
@@ -4216,6 +4492,7 @@ return new SurrogateModel() instanceof Model;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure new operator used:</i></b>
 
 ```javascript
@@ -4223,6 +4500,7 @@ SurrogateModel(); // jshint ignore:line
 ```
 <blockquote><strong>Error: new operator required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure properties are valid:</i></b>
 
 ```javascript
@@ -4230,6 +4508,7 @@ new SurrogateModel({sup: 'yo'});
 ```
 <blockquote><strong>Error: error creating Model: invalid property: sup</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>can supply attributes in constructor in addition to ID default:</i></b>
 
 ```javascript
@@ -4239,6 +4518,7 @@ return play.get('game');
 ```
 <blockquote>returns <strong>scrabble</strong> as expected
 </blockquote>
+
 
 #### PROPERTIES
 
@@ -4268,6 +4548,7 @@ return (goodModel.getObjectStateErrors().length === 0 && badModel.getObjectState
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>elements of array must be instance of Attribute:</i></b>
 
 ```javascript
@@ -4290,6 +4571,7 @@ return new SurrogateModel().toString().length > 0;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 
 #### copy(sourceModel)
 &nbsp;<b><i>copy all attribute values of a model:</i></b>
@@ -4332,6 +4614,7 @@ return m.getObjectStateErrors();
 <blockquote>returns <strong>first attribute must be ID</strong> as expected
 </blockquote>
 
+
 #### onEvent
 Use onEvent(events,callback)    
 
@@ -4342,6 +4625,7 @@ new SurrogateModel().onEvent();
 ```
 <blockquote><strong>Error: subscription string or array required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>callback is required:</i></b>
 
 ```javascript
@@ -4349,6 +4633,7 @@ new SurrogateModel().onEvent([]);
 ```
 <blockquote><strong>Error: callback is required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>events are checked against known types:</i></b>
 
 ```javascript
@@ -4357,6 +4642,7 @@ new SurrogateModel().onEvent(['onDrunk'], function () {
 ```
 <blockquote><strong>Error: Unknown command event: onDrunk</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>here is a working version:</i></b>
 
 ```javascript
@@ -4367,6 +4653,7 @@ new Model().onEvent(['Validate'], function () {
 });
 ```
 <blockquote><strong>log: </strong>T.getAttributeEvents()<br></blockquote>
+
 
 #### attribute
 &nbsp;<b><i>return attribute by name:</i></b>
@@ -4379,6 +4666,7 @@ return model.attribute("Sue") == attrib;
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
 
+
 #### getShortName
 &nbsp;<b><i>returns short description of model, defaults to first string attribute:</i></b>
 
@@ -4389,6 +4677,7 @@ return question.getShortName();
 ```
 <blockquote>returns <strong>Shorty</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>if no string attribute found empty string returned:</i></b>
 
 ```javascript
@@ -4411,6 +4700,7 @@ return question.getLongName();
 <blockquote>returns <strong>Shorty</strong> as expected
 </blockquote>
 
+
 #### get(attributeName)
 &nbsp;<b><i>returns undefined if the attribute does not exist:</i></b>
 
@@ -4427,6 +4717,7 @@ return question.get('answer');
 <blockquote>returns <strong>42</strong> as expected
 </blockquote>
 
+
 #### getAttributeType(attributeName)
 &nbsp;<b><i>returns attribute type for given attribute name:</i></b>
 
@@ -4436,6 +4727,7 @@ return new SurrogateModel({attributes: [new Attribute('born', 'Date')]}).getAttr
 <blockquote>returns <strong>Date</strong> as expected
 </blockquote>
 
+
 #### set(attributeName,value)
 &nbsp;<b><i>throws an error if the attribute does not exists:</i></b>
 
@@ -4444,6 +4736,7 @@ new SurrogateModel().set('whatever');
 ```
 <blockquote><strong>Error: attribute not valid for model</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>sets the value for given attribute:</i></b>
 
 ```javascript
@@ -4453,6 +4746,7 @@ return question.attributes[1].value;
 ```
 <blockquote>returns <strong>42</strong> as expected
 </blockquote>
+
 
 #### validate
 check valid object state and value for attribute - invoke callback for results    
@@ -4465,6 +4759,7 @@ new Model().validate();
 <blockquote><strong>Error: callback is required</strong> thrown as expected
 </blockquote>
 
+
 #### setError
 Set a error condition and descriptive message    
 
@@ -4475,6 +4770,7 @@ new Model().setError();
 ```
 <blockquote><strong>Error: condition required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>second argument description required:</i></b>
 
 ```javascript
@@ -4482,6 +4778,7 @@ new Model().setError('login');
 ```
 <blockquote><strong>Error: description required</strong> thrown as expected
 </blockquote>
+
 
 #### clearError
 Clear a error condition    
@@ -4493,6 +4790,7 @@ new Model().clearError();
 ```
 <blockquote><strong>Error: condition required</strong> thrown as expected
 </blockquote>
+
 
 #### INTEGRATION
 &nbsp;<b><i>model validation usage demonstrated:</i></b>
@@ -4552,6 +4850,7 @@ function test4() {
 ```
 <blockquote>returns <strong>test4: 0</strong> as expected
 </blockquote>
+
 *29 model tests applied*    
 
 
@@ -4710,6 +5009,7 @@ function sessionResumed_Test4(err, session) {
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 ## [&#9664;](#-session)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-workspace) &nbsp;User
 
 #### User Model
@@ -4725,6 +5025,7 @@ return new User() instanceof User;
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
 
+
 #### CONSTRUCTOR
 Creation of all Models must adhere to following examples:    
 
@@ -4735,6 +5036,7 @@ return new SurrogateModel() instanceof Model;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure new operator used:</i></b>
 
 ```javascript
@@ -4742,6 +5044,7 @@ SurrogateModel(); // jshint ignore:line
 ```
 <blockquote><strong>Error: new operator required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure properties are valid:</i></b>
 
 ```javascript
@@ -4749,6 +5052,7 @@ new SurrogateModel({sup: 'yo'});
 ```
 <blockquote><strong>Error: error creating Model: invalid property: sup</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>can supply attributes in constructor in addition to ID default:</i></b>
 
 ```javascript
@@ -4758,6 +5062,7 @@ return play.get('game');
 ```
 <blockquote>returns <strong>scrabble</strong> as expected
 </blockquote>
+
 
 #### PROPERTIES
 
@@ -4787,6 +5092,7 @@ return (goodModel.getObjectStateErrors().length === 0 && badModel.getObjectState
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>elements of array must be instance of Attribute:</i></b>
 
 ```javascript
@@ -4809,6 +5115,7 @@ return new SurrogateModel().toString().length > 0;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 
 #### copy(sourceModel)
 &nbsp;<b><i>copy all attribute values of a model:</i></b>
@@ -4851,6 +5158,7 @@ return m.getObjectStateErrors();
 <blockquote>returns <strong>first attribute must be ID</strong> as expected
 </blockquote>
 
+
 #### onEvent
 Use onEvent(events,callback)    
 
@@ -4861,6 +5169,7 @@ new SurrogateModel().onEvent();
 ```
 <blockquote><strong>Error: subscription string or array required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>callback is required:</i></b>
 
 ```javascript
@@ -4868,6 +5177,7 @@ new SurrogateModel().onEvent([]);
 ```
 <blockquote><strong>Error: callback is required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>events are checked against known types:</i></b>
 
 ```javascript
@@ -4876,6 +5186,7 @@ new SurrogateModel().onEvent(['onDrunk'], function () {
 ```
 <blockquote><strong>Error: Unknown command event: onDrunk</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>here is a working version:</i></b>
 
 ```javascript
@@ -4886,6 +5197,7 @@ new Model().onEvent(['Validate'], function () {
 });
 ```
 <blockquote><strong>log: </strong>T.getAttributeEvents()<br></blockquote>
+
 
 #### attribute
 &nbsp;<b><i>return attribute by name:</i></b>
@@ -4898,6 +5210,7 @@ return model.attribute("Sue") == attrib;
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
 
+
 #### getShortName
 &nbsp;<b><i>returns short description of model, defaults to first string attribute:</i></b>
 
@@ -4908,6 +5221,7 @@ return question.getShortName();
 ```
 <blockquote>returns <strong>Shorty</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>if no string attribute found empty string returned:</i></b>
 
 ```javascript
@@ -4930,6 +5244,7 @@ return question.getLongName();
 <blockquote>returns <strong>Shorty</strong> as expected
 </blockquote>
 
+
 #### get(attributeName)
 &nbsp;<b><i>returns undefined if the attribute does not exist:</i></b>
 
@@ -4946,6 +5261,7 @@ return question.get('answer');
 <blockquote>returns <strong>42</strong> as expected
 </blockquote>
 
+
 #### getAttributeType(attributeName)
 &nbsp;<b><i>returns attribute type for given attribute name:</i></b>
 
@@ -4955,6 +5271,7 @@ return new SurrogateModel({attributes: [new Attribute('born', 'Date')]}).getAttr
 <blockquote>returns <strong>Date</strong> as expected
 </blockquote>
 
+
 #### set(attributeName,value)
 &nbsp;<b><i>throws an error if the attribute does not exists:</i></b>
 
@@ -4963,6 +5280,7 @@ new SurrogateModel().set('whatever');
 ```
 <blockquote><strong>Error: attribute not valid for model</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>sets the value for given attribute:</i></b>
 
 ```javascript
@@ -4972,6 +5290,7 @@ return question.attributes[1].value;
 ```
 <blockquote>returns <strong>42</strong> as expected
 </blockquote>
+
 
 #### validate
 check valid object state and value for attribute - invoke callback for results    
@@ -4984,6 +5303,7 @@ new Model().validate();
 <blockquote><strong>Error: callback is required</strong> thrown as expected
 </blockquote>
 
+
 #### setError
 Set a error condition and descriptive message    
 
@@ -4994,6 +5314,7 @@ new Model().setError();
 ```
 <blockquote><strong>Error: condition required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>second argument description required:</i></b>
 
 ```javascript
@@ -5001,6 +5322,7 @@ new Model().setError('login');
 ```
 <blockquote><strong>Error: description required</strong> thrown as expected
 </blockquote>
+
 
 #### clearError
 Clear a error condition    
@@ -5012,6 +5334,7 @@ new Model().clearError();
 ```
 <blockquote><strong>Error: condition required</strong> thrown as expected
 </blockquote>
+
 
 #### INTEGRATION
 &nbsp;<b><i>model validation usage demonstrated:</i></b>
@@ -5071,6 +5394,7 @@ function test4() {
 ```
 <blockquote>returns <strong>test4: 0</strong> as expected
 </blockquote>
+
 *29 model tests applied*    
 
 
@@ -5102,6 +5426,7 @@ return new Workspace() instanceof Workspace;
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
 
+
 #### CONSTRUCTOR
 Creation of all Models must adhere to following examples:    
 
@@ -5112,6 +5437,7 @@ return new SurrogateModel() instanceof Model;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure new operator used:</i></b>
 
 ```javascript
@@ -5119,6 +5445,7 @@ SurrogateModel(); // jshint ignore:line
 ```
 <blockquote><strong>Error: new operator required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure properties are valid:</i></b>
 
 ```javascript
@@ -5126,6 +5453,7 @@ new SurrogateModel({sup: 'yo'});
 ```
 <blockquote><strong>Error: error creating Model: invalid property: sup</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>can supply attributes in constructor in addition to ID default:</i></b>
 
 ```javascript
@@ -5135,6 +5463,7 @@ return play.get('game');
 ```
 <blockquote>returns <strong>scrabble</strong> as expected
 </blockquote>
+
 
 #### PROPERTIES
 
@@ -5164,6 +5493,7 @@ return (goodModel.getObjectStateErrors().length === 0 && badModel.getObjectState
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>elements of array must be instance of Attribute:</i></b>
 
 ```javascript
@@ -5186,6 +5516,7 @@ return new SurrogateModel().toString().length > 0;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 
 #### copy(sourceModel)
 &nbsp;<b><i>copy all attribute values of a model:</i></b>
@@ -5228,6 +5559,7 @@ return m.getObjectStateErrors();
 <blockquote>returns <strong>first attribute must be ID</strong> as expected
 </blockquote>
 
+
 #### onEvent
 Use onEvent(events,callback)    
 
@@ -5238,6 +5570,7 @@ new SurrogateModel().onEvent();
 ```
 <blockquote><strong>Error: subscription string or array required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>callback is required:</i></b>
 
 ```javascript
@@ -5245,6 +5578,7 @@ new SurrogateModel().onEvent([]);
 ```
 <blockquote><strong>Error: callback is required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>events are checked against known types:</i></b>
 
 ```javascript
@@ -5253,6 +5587,7 @@ new SurrogateModel().onEvent(['onDrunk'], function () {
 ```
 <blockquote><strong>Error: Unknown command event: onDrunk</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>here is a working version:</i></b>
 
 ```javascript
@@ -5263,6 +5598,7 @@ new Model().onEvent(['Validate'], function () {
 });
 ```
 <blockquote><strong>log: </strong>T.getAttributeEvents()<br></blockquote>
+
 
 #### attribute
 &nbsp;<b><i>return attribute by name:</i></b>
@@ -5275,6 +5611,7 @@ return model.attribute("Sue") == attrib;
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
 
+
 #### getShortName
 &nbsp;<b><i>returns short description of model, defaults to first string attribute:</i></b>
 
@@ -5285,6 +5622,7 @@ return question.getShortName();
 ```
 <blockquote>returns <strong>Shorty</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>if no string attribute found empty string returned:</i></b>
 
 ```javascript
@@ -5307,6 +5645,7 @@ return question.getLongName();
 <blockquote>returns <strong>Shorty</strong> as expected
 </blockquote>
 
+
 #### get(attributeName)
 &nbsp;<b><i>returns undefined if the attribute does not exist:</i></b>
 
@@ -5323,6 +5662,7 @@ return question.get('answer');
 <blockquote>returns <strong>42</strong> as expected
 </blockquote>
 
+
 #### getAttributeType(attributeName)
 &nbsp;<b><i>returns attribute type for given attribute name:</i></b>
 
@@ -5332,6 +5672,7 @@ return new SurrogateModel({attributes: [new Attribute('born', 'Date')]}).getAttr
 <blockquote>returns <strong>Date</strong> as expected
 </blockquote>
 
+
 #### set(attributeName,value)
 &nbsp;<b><i>throws an error if the attribute does not exists:</i></b>
 
@@ -5340,6 +5681,7 @@ new SurrogateModel().set('whatever');
 ```
 <blockquote><strong>Error: attribute not valid for model</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>sets the value for given attribute:</i></b>
 
 ```javascript
@@ -5349,6 +5691,7 @@ return question.attributes[1].value;
 ```
 <blockquote>returns <strong>42</strong> as expected
 </blockquote>
+
 
 #### validate
 check valid object state and value for attribute - invoke callback for results    
@@ -5361,6 +5704,7 @@ new Model().validate();
 <blockquote><strong>Error: callback is required</strong> thrown as expected
 </blockquote>
 
+
 #### setError
 Set a error condition and descriptive message    
 
@@ -5371,6 +5715,7 @@ new Model().setError();
 ```
 <blockquote><strong>Error: condition required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>second argument description required:</i></b>
 
 ```javascript
@@ -5378,6 +5723,7 @@ new Model().setError('login');
 ```
 <blockquote><strong>Error: description required</strong> thrown as expected
 </blockquote>
+
 
 #### clearError
 Clear a error condition    
@@ -5389,6 +5735,7 @@ new Model().clearError();
 ```
 <blockquote><strong>Error: condition required</strong> thrown as expected
 </blockquote>
+
 
 #### INTEGRATION
 &nbsp;<b><i>model validation usage demonstrated:</i></b>
@@ -5448,6 +5795,7 @@ function test4() {
 ```
 <blockquote>returns <strong>test4: 0</strong> as expected
 </blockquote>
+
 *29 model tests applied*    
 
 
@@ -5486,6 +5834,7 @@ return new SurrogateStore() instanceof Store;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure new operator used:</i></b>
 
 ```javascript
@@ -5493,6 +5842,7 @@ SurrogateStore(); // jshint ignore:line
 ```
 <blockquote><strong>Error: new operator required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>should make sure properties are valid:</i></b>
 
 ```javascript
@@ -5500,6 +5850,7 @@ new SurrogateStore({food: 'twinkies'});
 ```
 <blockquote><strong>Error: error creating Store: invalid property: food</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>objects created should be an instance of MemoryStore:</i></b>
 
 ```javascript
@@ -5507,6 +5858,7 @@ return new MemoryStore() instanceof MemoryStore;
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 
 #### Store tests are applied
 
@@ -5521,6 +5873,7 @@ return new SurrogateStore({name: 'punchedCards'}).name;
 <blockquote>returns <strong>punchedCards</strong> as expected
 </blockquote>
 
+
 #### storeType
 storeType defaults to Store Class Name but can be set to suite the app architecture.    
 
@@ -5531,6 +5884,7 @@ return new SurrogateStore({storeType: 'legacyStorage'}).storeType;
 ```
 <blockquote>returns <strong>legacyStorage</strong> as expected
 </blockquote>
+
 
 #### METHODS
 &nbsp;<b><i>getServices() returns an object with interface for the Store.:</i></b>
@@ -5546,6 +5900,7 @@ this.shouldBeTrue(typeof services['canGetList'] == 'boolean');
 ```
 <blockquote><strong>log: </strong>{"isReady":true,"canGetModel":true,"canPutModel":true,"canDeleteModel":true,"canGetList":true}<br></blockquote>
 
+
 #### toString()
 &nbsp;<b><i>should return a description of the Store:</i></b>
 
@@ -5560,6 +5915,7 @@ return cStore.toString();
 <blockquote><strong>log: </strong>a MemoryStore<br><strong>log: </strong>ConvenienceStore: 7-Eleven<br>returns <strong>ConvenienceStore: 7-Eleven</strong> as expected
 </blockquote>
 
+
 #### onConnect()
 &nbsp;<b><i>must pass url string:</i></b>
 
@@ -5568,6 +5924,7 @@ new SurrogateStore().onConnect();
 ```
 <blockquote><strong>Error: argument must a url string</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>must pass callback function:</i></b>
 
 ```javascript
@@ -5575,6 +5932,7 @@ new SurrogateStore().onConnect("");
 ```
 <blockquote><strong>Error: argument must a callback</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>return store and undefined error upon successful connection to remote store.:</i></b>
 
 ```javascript
@@ -5589,6 +5947,7 @@ new SurrogateStore().onConnect('', function (store, err) {
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
 
+
 #### getModel()
 &nbsp;<b><i>must pass valid model:</i></b>
 
@@ -5597,6 +5956,7 @@ new SurrogateStore().getModel();
 ```
 <blockquote><strong>Error: argument must be a Model</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>model must have no validation errors:</i></b>
 
 ```javascript
@@ -5606,6 +5966,7 @@ new SurrogateStore().getModel(m);
 ```
 <blockquote><strong>Error: model has validation errors</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>ID attribute must have truthy value:</i></b>
 
 ```javascript
@@ -5613,6 +5974,7 @@ new SurrogateStore().getModel(new Model());
 ```
 <blockquote><strong>Error: ID not set</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>callback function required:</i></b>
 
 ```javascript
@@ -5622,6 +5984,7 @@ new SurrogateStore().getModel(m);
 ```
 <blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>returns error when model not found:</i></b>
 
 ```javascript
@@ -5639,6 +6002,7 @@ new SurrogateStore().getModel(m, function (mod, err) {
 <blockquote>returns <strong>Error: model not found in store</strong> as expected
 </blockquote>
 
+
 #### putModel(model)
 &nbsp;<b><i>must pass valid model:</i></b>
 
@@ -5647,6 +6011,7 @@ new SurrogateStore().putModel();
 ```
 <blockquote><strong>Error: argument must be a Model</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>model must have no validation errors:</i></b>
 
 ```javascript
@@ -5656,6 +6021,7 @@ new SurrogateStore().putModel(m);
 ```
 <blockquote><strong>Error: model has validation errors</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>callback function required:</i></b>
 
 ```javascript
@@ -5665,6 +6031,7 @@ new SurrogateStore().putModel(m);
 ```
 <blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>returns error when model not found:</i></b>
 
 ```javascript
@@ -5681,6 +6048,7 @@ new SurrogateStore().putModel(m, function (mod, err) {
 ```
 <blockquote>returns <strong>Error: model not found in store</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>creates new model when ID is not set:</i></b>
 
 ```javascript
@@ -5697,6 +6065,7 @@ new SurrogateStore().putModel(m, function (mod, err) {
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
 
+
 #### deleteModel(model)
 &nbsp;<b><i>must pass valid model:</i></b>
 
@@ -5705,6 +6074,7 @@ new SurrogateStore().deleteModel();
 ```
 <blockquote><strong>Error: argument must be a Model</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>model must have no validation errors:</i></b>
 
 ```javascript
@@ -5714,6 +6084,7 @@ new SurrogateStore().deleteModel(m);
 ```
 <blockquote><strong>Error: model has validation errors</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>callback function required:</i></b>
 
 ```javascript
@@ -5723,6 +6094,7 @@ new SurrogateStore().deleteModel(m);
 ```
 <blockquote><strong>Error: callback required</strong> thrown as expected
 </blockquote>
+
 &nbsp;<b><i>returns error when model not found:</i></b>
 
 ```javascript
@@ -5739,6 +6111,7 @@ new SurrogateStore().deleteModel(m, function (mod, err) {
 ```
 <blockquote>returns <strong>Error: model not found in store</strong> as expected
 </blockquote>
+
 
 #### getList(list, filter, [optional order], callback)
 This method will clear and populate the list with collection from store.  The **filter** property can be used to query the store.  The **order** property can specify the sort order of the list.  _See integration test for more info._    
@@ -5825,6 +6198,7 @@ spec.integrationStore.putModel(self.types, function (model, error) {
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
 
+
 ## [&#9664;](#-memorystore)&nbsp;[&#8984;](#constructors)&nbsp;[&#9654;](#-object-functions) &nbsp;Array Functions
 
 #### ARRAY FUNCTIONS
@@ -5839,6 +6213,7 @@ return contains(['moe', 'larry', 'curley'], 'larry');
 ```
 <blockquote>returns <strong>true</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>object does not exist in array:</i></b>
 
 ```javascript
@@ -5882,6 +6257,7 @@ return daffy.sound();
 <blockquote>returns <strong>quack</strong> as expected
 </blockquote>
 
+
 #### getInvalidProperties(args,allowedProperties)
 Functions that take an object as it's parameter use this to validate the properties of the parameter by returning any invalid properties    
 
@@ -5893,6 +6269,7 @@ return getInvalidProperties({name: 'name', Kahn: 'value'}, ['name', 'value'])[0]
 ```
 <blockquote>returns <strong>Kahn</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>invalid property:</i></b>
 
 ```javascript
@@ -5931,6 +6308,7 @@ return getConstructorFromModelType();
   //}
 }</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>registered models return the constructor function:</i></b>
 
 ```javascript
@@ -5953,6 +6331,7 @@ return getConstructorFromModelType('User');
   this.set('active', false);
 }</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>objects created utilize proper constructor:</i></b>
 
 ```javascript
@@ -5979,6 +6358,7 @@ return createModelFromModelType().modelType;
 ```
 <blockquote>returns <strong>Model</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>objects created utilize proper constructor:</i></b>
 
 ```javascript
@@ -5997,6 +6377,7 @@ return '(' + trim(' hello ') + ')';
 <blockquote>returns <strong>(hello)</strong> as expected
 </blockquote>
 
+
 #### ltrim(string)
 &nbsp;<b><i>Remove leading spaces from string:</i></b>
 
@@ -6005,6 +6386,7 @@ return '(' + ltrim(' hello ') + ')';
 ```
 <blockquote>returns <strong>(hello )</strong> as expected
 </blockquote>
+
 
 #### rtrim(string)
 &nbsp;<b><i>Remove trailing spaces from string:</i></b>
@@ -6015,6 +6397,7 @@ return '(' + rtrim(' hello ') + ')';
 <blockquote>returns <strong>( hello)</strong> as expected
 </blockquote>
 
+
 #### left(string)
 &nbsp;<b><i>return left part of string:</i></b>
 
@@ -6023,6 +6406,7 @@ return left('12345',3);
 ```
 <blockquote>returns <strong>123</strong> as expected
 </blockquote>
+
 
 #### right(string)
 &nbsp;<b><i>return right part of string:</i></b>
@@ -6033,6 +6417,7 @@ return right('12345',3);
 <blockquote>returns <strong>345</strong> as expected
 </blockquote>
 
+
 #### center(string)
 &nbsp;<b><i>return center part of string:</i></b>
 
@@ -6041,6 +6426,7 @@ return center('12345',3);
 ```
 <blockquote>returns <strong>234</strong> as expected
 </blockquote>
+
 
 #### lpad(string, length, fillChar)
 Return string size length with fillChar padded on left.  fillChar is optional and defaults to space.    
@@ -6052,6 +6438,7 @@ return lpad('42', 10, '*');
 ```
 <blockquote>returns <strong>********42</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>truncate when length is less than string length:</i></b>
 
 ```javascript
@@ -6059,6 +6446,7 @@ return lpad('okay', 2);
 ```
 <blockquote>returns <strong>ok</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>fillChar defaults to space:</i></b>
 
 ```javascript
@@ -6066,6 +6454,7 @@ return ':' + lpad('x',2) + ':';
 ```
 <blockquote>returns <strong>: x:</strong> as expected
 </blockquote>
+
 
 #### rpad(string, length, fillChar)
 Return string size length with fillChar padded on right.  fillChar is optional and defaults to space.    
@@ -6077,6 +6466,7 @@ return rpad('etc', 6, '.');
 ```
 <blockquote>returns <strong>etc...</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>truncate when length is less than string length:</i></b>
 
 ```javascript
@@ -6084,6 +6474,7 @@ return rpad('wassup', 3);
 ```
 <blockquote>returns <strong>sup</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>fillChar defaults to space:</i></b>
 
 ```javascript
@@ -6091,6 +6482,7 @@ return ':' + rpad('x',2) + ':';
 ```
 <blockquote>returns <strong>:x :</strong> as expected
 </blockquote>
+
 
 #### cpad(string, length, fillChar)
 Return string size length with fillChar padded on left and right.  fillChar is optional and defaults to space.    
@@ -6102,6 +6494,7 @@ return cpad('center', 13, '.');
 ```
 <blockquote>returns <strong>...center....</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>truncate when length is less than string length:</i></b>
 
 ```javascript
@@ -6109,6 +6502,7 @@ return cpad('abcdef', 2);
 ```
 <blockquote>returns <strong>cd</strong> as expected
 </blockquote>
+
 &nbsp;<b><i>fillChar defaults to space:</i></b>
 
 ```javascript
@@ -6116,5 +6510,6 @@ return ':' + cpad('x',3) + ':';
 ```
 <blockquote>returns <strong>: x :</strong> as expected
 </blockquote>
+
 ## [&#9664;](#-string-functions)&nbsp;[&#8984;](#constructors) &nbsp;Summary
 This documentation generated with https://github.com/tgicloud/tgi-spec.<br>TODO put testin stats here.    
