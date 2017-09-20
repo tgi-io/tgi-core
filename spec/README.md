@@ -1577,7 +1577,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Wed Aug 30 2017 11:50:12 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Wed Sep 20 2017 10:40:07 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
 </blockquote>
 
 
@@ -1589,7 +1589,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Wed Aug 30 2017 11:50:12 GMT-0400 (EDT)<br>returns <strong>Model null</strong> as expected
+<blockquote><strong>log: </strong>Wed Sep 20 2017 10:40:07 GMT-0400 (EDT)<br>returns <strong>Model null</strong> as expected
 </blockquote>
 
 
@@ -4262,7 +4262,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Wed Aug 30 2017 11:50:12 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Wed Sep 20 2017 10:40:07 GMT-0400 (EDT)<br></blockquote>
 
 
 #### LOG TYPES
