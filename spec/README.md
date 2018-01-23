@@ -6,7 +6,7 @@ Core constructors, models, stores and interfaces.  The constructor functions def
 ```javascript
 this.log(TGI.CORE().version);
 ```
-<blockquote><strong>log: </strong>0.4.43<br></blockquote>
+<blockquote><strong>log: </strong>0.4.44<br></blockquote>
 
 ## Constructors
 
@@ -753,8 +753,8 @@ this.shouldBeTrue(myBool.coerce(true) === true && myBool.coerce(1) === true);
 this.shouldBeTrue(myBool.coerce('y') && myBool.coerce('yEs') && myBool.coerce('t') && myBool.coerce('TRUE') && myBool.coerce('1'));
 this.shouldBeTrue(!((myBool.coerce('') || (myBool.coerce('yep')))));
 //// Date {todo this will break in 2018}
-this.shouldBeTrue(myDate.coerce('2/21/2017').getTime() === new Date('2/21/2017').getTime());
-this.shouldBeTrue(myDate.coerce('2/21').getTime() === new Date('2/21/2017').getTime());
+this.shouldBeTrue(myDate.coerce('2/21/2018').getTime() === new Date('2/21/2018').getTime());
+this.shouldBeTrue(myDate.coerce('2/21').getTime() === new Date('2/21/2018').getTime());
 // TODO
 this.shouldThrowError(Error('coerce cannot determine appropriate value'), function () {
   new Attribute({name: 'Twiggy', type: 'Model', value: new Attribute.ModelID(new Model())}).coerce();
@@ -1577,7 +1577,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.dateCreated instanceof Date;
 ```
-<blockquote><strong>log: </strong>Wed Sep 20 2017 10:40:07 GMT-0400 (EDT)<br>returns <strong>true</strong> as expected
+<blockquote><strong>log: </strong>Tue Jan 23 2018 13:21:11 GMT-0500 (EST)<br>returns <strong>true</strong> as expected
 </blockquote>
 
 
@@ -1589,7 +1589,7 @@ var delta = new Delta(new Attribute.ModelID(new Model()));
 this.log(delta.dateCreated);
 return delta.modelID.toString();
 ```
-<blockquote><strong>log: </strong>Wed Sep 20 2017 10:40:07 GMT-0400 (EDT)<br>returns <strong>Model null</strong> as expected
+<blockquote><strong>log: </strong>Tue Jan 23 2018 13:21:11 GMT-0500 (EST)<br>returns <strong>Model null</strong> as expected
 </blockquote>
 
 
@@ -4262,7 +4262,7 @@ this.shouldBeTrue(log.get('logType') == 'Text');
 this.shouldBeTrue(log.get('importance') == 'Info');
 this.shouldBeTrue(log.get('contents') == 'what up');
 ```
-<blockquote><strong>log: </strong>Wed Sep 20 2017 10:40:07 GMT-0400 (EDT)<br></blockquote>
+<blockquote><strong>log: </strong>Tue Jan 23 2018 13:21:11 GMT-0500 (EST)<br></blockquote>
 
 
 #### LOG TYPES

@@ -1,6 +1,6 @@
 {
   "name": "tgi-core",
-  "version": "0.4.43",
+  "version": "0.4.44",
   "description": "core objects for tgi framework",
   "contributors": [
     {
@@ -11,7 +11,7 @@
   "dependencies": {
     "coveralls": "*",
     "sprintf-js": "*",
-    "tgi-spec": "^0.1.39"
+    "tgi-spec": "*"
   },
   "main": "./dist/tgi.core",
   "scripts": {
@@ -32,15 +32,15 @@
   "author": "Sean Smith <sean@tgicloud.com>",
   "license": "MIT",
   "devDependencies": {
-    "chalk": "^2.1.0",
-    "graceful-fs": "*",
-    "gulp": "*",
+    "chalk": "*",
+    "graceful-fs": "^3.0.11",
+    "gulp": "^3.9.1",
     "gulp-concat": "*",
     "gulp-jshint": "*",
     "gulp-rename": "*",
     "gulp-uglify": "*",
     "jshint": "*",
     "jshint-stylish": "*",
-    "minimatch": "*"
+    "minimatch": "^3.0.2"
   }
 }

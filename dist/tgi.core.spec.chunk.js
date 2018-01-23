@@ -456,8 +456,8 @@ spec.test('tgi-core/lib/tgi-core-attribute.spec.js', 'Attribute', 'defines data 
         this.shouldBeTrue(myBool.coerce('y') && myBool.coerce('yEs') && myBool.coerce('t') && myBool.coerce('TRUE') && myBool.coerce('1'));
         this.shouldBeTrue(!((myBool.coerce('') || (myBool.coerce('yep')))));
         //// Date {todo this will break in 2018}
-        this.shouldBeTrue(myDate.coerce('2/21/2017').getTime() === new Date('2/21/2017').getTime());
-        this.shouldBeTrue(myDate.coerce('2/21').getTime() === new Date('2/21/2017').getTime());
+        this.shouldBeTrue(myDate.coerce('2/21/2018').getTime() === new Date('2/21/2018').getTime());
+        this.shouldBeTrue(myDate.coerce('2/21').getTime() === new Date('2/21/2018').getTime());
 
         // TODO
         this.shouldThrowError(Error('coerce cannot determine appropriate value'), function () {
@@ -2693,6 +2693,7 @@ spec.runnerStoreMethods = function (SurrogateStore) {
         callback(true);
       });
     });
+    // broken!!!
     spec.xexample('CRUD (Create Read Update Delete) Exercise all store function for one store.', spec.asyncResults(true), function (callback) {
       var self = this;
       spec.integrationStore = new SurrogateStore();
@@ -2999,6 +3000,7 @@ spec.runnerStoreMethods = function (SurrogateStore) {
         var set = new self.StoogeSet();
         var line = new self.StoogeLine();
         var stooge = new self.Stooge();
+        console.log('b4');
         var scriptView = new View(line,
           {
             'Stooge': {id: line.attribute('StoogeID'), model: stooge},
@@ -3010,7 +3012,7 @@ spec.runnerStoreMethods = function (SurrogateStore) {
             stooge.attribute('name'),
             line.attribute('Line')
           ]);
-
+        console.log('after');
 
         // Now create a list from view
         var list = new List(scriptView);
