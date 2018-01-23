@@ -6,7 +6,6 @@ Core Objects [read the spec](spec/README.md).
 
 Current
 -------
-- see // broken!!!
 - Views have name conflict with foreign models having same names with attributes gonna need some design to have related model name distinguished from view attributes list name
 
 Presentation Management

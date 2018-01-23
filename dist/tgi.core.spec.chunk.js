@@ -2694,7 +2694,7 @@ spec.runnerStoreMethods = function (SurrogateStore) {
       });
     });
     // broken!!!
-    spec.xexample('CRUD (Create Read Update Delete) Exercise all store function for one store.', spec.asyncResults(true), function (callback) {
+    spec.example('CRUD (Create Read Update Delete) Exercise all store function for one store.', spec.asyncResults(true), function (callback) {
       var self = this;
       spec.integrationStore = new SurrogateStore();
       var storeBeingTested = spec.integrationStore.name + ' ' + spec.integrationStore.storeType;
@@ -3000,7 +3000,6 @@ spec.runnerStoreMethods = function (SurrogateStore) {
         var set = new self.StoogeSet();
         var line = new self.StoogeLine();
         var stooge = new self.Stooge();
-        console.log('b4');
         var scriptView = new View(line,
           {
             'Stooge': {id: line.attribute('StoogeID'), model: stooge},
@@ -3012,11 +3011,9 @@ spec.runnerStoreMethods = function (SurrogateStore) {
             stooge.attribute('name'),
             line.attribute('Line')
           ]);
-        console.log('after');
 
         // Now create a list from view
         var list = new List(scriptView);
-        //callback(true);
         spec.integrationStore.getViewList(list, {}, {Scene: 1}, viewListReady);
       }
 
@@ -3035,30 +3032,18 @@ spec.runnerStoreMethods = function (SurrogateStore) {
 
         var set = new self.StoogeSet();
         var stooge = new self.Stooge();
-
         self.shouldBeTrue('indoor' == list.get(set.modelType + '.' + 'name'));
         self.shouldBeTrue('1' == list.get('Scene'));
         self.shouldBeTrue('Moe' == list.get(stooge.modelType + '.' + 'name'));
         self.shouldBeTrue('To be or not to be?' == list.get('Line'));
-        //console.log('Set ' + list.get(set.modelType + '.' + 'name'));
-        //console.log('Scene ' + list.get('Scene'));
-        //console.log('Stooge ' + list.get(stooge.modelType + '.' + 'name'));
-        //console.log('Line ' + list.get('Line'));
-
         if (!list.moveNext()) {
           callback(Error('no more records!'));
           return;
         }
-
         self.shouldBeTrue('desert' == list.get(set.modelType + '.' + 'name'));
         self.shouldBeTrue('2' == list.get('Scene'));
         self.shouldBeTrue('Larry' == list.get(stooge.modelType + '.' + 'name'));
         self.shouldBeTrue('That is the question!' == list.get('Line'));
-        //console.log('Set ' + list.get(set.modelType + '.' + 'name'));
-        //console.log('Scene ' + list.get('Scene'));
-        //console.log('Stooge ' + list.get(stooge.modelType + '.' + 'name'));
-        //console.log('Line ' + list.get('Line'));
-
         callback(true);
       }
 
