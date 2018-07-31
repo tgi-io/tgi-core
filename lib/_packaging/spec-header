@@ -31,6 +31,7 @@ var testSpec = function(spec,TGI) {
   var getInvalidProperties = tgiCore.getInvalidProperties;
   var getConstructorFromModelType = tgiCore.getConstructorFromModelType;
   var createModelFromModelType = tgiCore.createModelFromModelType;
+  var getObjectFromCPON = tgiCore.getObjectFromCPON;
   var trim = tgiCore.trim;
   var ltrim = tgiCore.ltrim;
   var rtrim = tgiCore.rtrim;

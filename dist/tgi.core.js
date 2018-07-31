@@ -10,7 +10,7 @@ var root = this;
 var TGI = {
   CORE: function () {
     return {
-      version: '0.4.45',
+      version: '0.4.46',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -36,6 +36,7 @@ var TGI = {
       getInvalidProperties: getInvalidProperties,
       getConstructorFromModelType: getConstructorFromModelType,
       createModelFromModelType: createModelFromModelType,
+      getObjectFromCPON: getObjectFromCPON,
       trim: trim,
       ltrim: ltrim,
       rtrim: rtrim,
@@ -2894,6 +2895,7 @@ var inheritPrototype = function (p) {
   if (Object.create) return Object.create(p);
   var t = typeof p;
   if (t !== "object" && typeof t !== "function") throw new TypeError();
+
   function F() {
   }
 
@@ -2930,7 +2932,31 @@ var createModelFromModelType = function (modelType) {
   return new ProxyModel();
 };
 
+/**
+ * getObjectFromCPON
+ */
 
+var getObjectFromCPON = function (cpon, obj) {
+  if (typeof cpon !== 'string')
+    throw new Error('expected CPON string');
+
+  if (obj === undefined)
+    obj = {};
+
+  var caret = cpon.indexOf('^');
+  if (caret < 0)
+    throw new Error('caret (^) not found in garden');
+
+  var key = left(cpon, caret);
+  var value = cpon.substring(caret + 1);
+  var pipe = value.indexOf('|');
+  if (pipe > -1) {
+    obj = getObjectFromCPON(value.substring(pipe + 1),obj);
+    value = left(value,pipe);
+  }
+  obj[key] = value;
+  return obj;
+};
 
 /**---------------------------------------------------------------------------------------------------------------------
  * tgi-core/lib/utility/tgi-core-strings.source.js

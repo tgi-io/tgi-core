@@ -31,6 +31,7 @@ var testSpec = function(spec,TGI) {
   var getInvalidProperties = tgiCore.getInvalidProperties;
   var getConstructorFromModelType = tgiCore.getConstructorFromModelType;
   var createModelFromModelType = tgiCore.createModelFromModelType;
+  var getObjectFromCPON = tgiCore.getObjectFromCPON;
   var trim = tgiCore.trim;
   var ltrim = tgiCore.ltrim;
   var rtrim = tgiCore.rtrim;
@@ -4162,7 +4163,7 @@ spec.test('tgi-utility/lib/tgi-utility-objects.test.js', 'Object Functions', 'de
   });
   spec.heading('getInvalidProperties(args,allowedProperties)', function () {
     spec.paragraph('Functions that take an object as it\'s parameter use this to validate the ' +
-    'properties of the parameter by returning any invalid properties');
+      'properties of the parameter by returning any invalid properties');
     spec.example('valid property', 'Kahn', function () {
       // got Kahn and value backwards so Kahn is an unknown property
       return getInvalidProperties({name: 'name', Kahn: 'value'}, ['name', 'value'])[0];
@@ -4199,6 +4200,22 @@ spec.test('tgi-utility/lib/tgi-utility-objects.test.js', 'Object Functions', 'de
     });
     spec.example('objects created utilize proper constructor', false, function () {
       return createModelFromModelType('User').get('active');
+    });
+  });
+  spec.heading('getObjectFromCPON', function () {
+    spec.paragraph('A character string with representing object with pipe (|) delineating members and caret (^) delineating key from value.');
+    spec.example('expects a string with CPON data', 'I\'m just a a cook.', function () {
+      this.shouldThrowError(Error('expected CPON string'), function () {
+        getObjectFromCPON();
+      });
+      this.shouldThrowError(Error('caret (^) not found in garden'), function () {
+        getObjectFromCPON('garden');
+      });
+      this.shouldBeTrue(getObjectFromCPON('x^1') instanceof Object);
+      this.shouldBeTrue(getObjectFromCPON('abc^123').abc === '123');
+      this.shouldBeTrue(getObjectFromCPON('x^1|y^2').x === '1');
+      this.shouldBeTrue(getObjectFromCPON('x^1|y^2').y === '2');
+      return getObjectFromCPON('name^Sean|age^57|job^I\'m just a a cook.').job;
     });
   });
 });
