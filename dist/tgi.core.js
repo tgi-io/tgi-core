@@ -10,7 +10,7 @@ var root = this;
 var TGI = {
   CORE: function () {
     return {
-      version: '0.4.47',
+      version: '0.4.48',
       Application: Application,
       Attribute: Attribute,
       Command: Command,
@@ -1655,7 +1655,7 @@ function Transport(location, callback) {
   self.socket.on('connect', function () {
     self.connected = true;
     self.initialConnect = false;
-    console.log('socket.io (' + self.location + ') connected');
+    // console.log('socket.io (' + self.location + ') connected');
     callback.call(self, new Message('Connected', ''));
   });
   self.socket.on('connecting', function () {
