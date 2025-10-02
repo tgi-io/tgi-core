@@ -70,113 +70,123 @@ var specFiles = [
 var specPackaging = ['lib/_packaging/spec-header'].concat(specFiles).concat(['lib/_packaging/spec-footer']);
 
 // Build Quick (for test)
-gulp.task('_buildLibQuick', function () {
+function _buildLibQuick() {
   return gulp.src(libPackaging)
     .pipe(concat('tgi.core.js'))
-    .pipe(gulp.dest('dist'))
-});
-gulp.task('_buildSpecQuick', function () {
+    .pipe(gulp.dest('dist'));
+}
+function _buildSpecQuick() {
   return gulp.src(specPackaging)
     .pipe(concat('tgi.core.spec.js'))
-    .pipe(gulp.dest('dist'))
-});
-gulp.task('_buildQuick',  ['_buildLibQuick', '_buildSpecQuick'], function (callback) {
-  callback();
-});
+    .pipe(gulp.dest('dist'));
+}
+const _buildQuick = gulp.parallel(_buildLibQuick, _buildSpecQuick);
 
 // Build Lib
-gulp.task('_buildLib', function () {
+function _buildLib() {
   return gulp.src(libPackaging)
     .pipe(concat('tgi.core.js'))
     .pipe(gulp.dest('dist'))
     .pipe(rename('tgi.core.min.js'))
     .pipe(uglify())
     .pipe(gulp.dest('dist'));
-});
-
+}
 // Build Lib Chunk
-gulp.task('_buildLibChunk', function () {
+function _buildLibChunk() {
   return gulp.src(libFiles)
     .pipe(concat('tgi.core.chunk.js'))
     .pipe(gulp.dest('dist'));
-});
-
+}
 // Build Spec
-gulp.task('_buildSpec', function () {
+function _buildSpec() {
   return gulp.src(specPackaging)
     .pipe(concat('tgi.core.spec.js'))
     .pipe(gulp.dest('dist'));
-});
-
+}
 // Build Spec Chunk
-gulp.task('_buildSpecChunk', function () {
+function _buildSpecChunk() {
   return gulp.src(specFiles)
     .pipe(concat('tgi.core.spec.chunk.js'))
     .pipe(gulp.dest('dist'));
-});
-
-// Build Task
-gulp.task('build', ['_buildLibChunk', '_buildLib', '_buildSpecChunk', '_buildSpec'], function (callback) {
-  callback();
-});
+}
+const build = gulp.series(
+  gulp.parallel(_buildLibChunk, _buildLib, _buildSpecChunk, _buildSpec)
+);
 
 // Lint Lib
-gulp.task('_lintLib', ['_buildLibChunk', '_buildLib'], function (callback) {
+function _lintLib() {
   return gulp.src('dist/tgi.core.js')
     .pipe(jshint())
     .pipe(jshint.reporter('jshint-stylish'))
     .pipe(jshint.reporter('fail'));
-});
-
+}
 // Lint Spec
-gulp.task('_lintSpec', ['_buildSpecChunk', '_buildSpec'], function (callback) {
+function _lintSpec() {
   return gulp.src('dist/tgi.core.spec.js')
     .pipe(jshint({validthis: true, sub: true}))
     .pipe(jshint.reporter('jshint-stylish'))
     .pipe(jshint.reporter('fail'));
-});
-
-// Lint Task
-gulp.task('lint', ['_lintLib', '_lintSpec'], function (callback) {
-  callback();
-});
+}
+const lint = gulp.series(
+  gulp.parallel(
+    gulp.series(_buildLibChunk, _buildLib, _lintLib),
+    gulp.series(_buildSpecChunk, _buildSpec, _lintSpec)
+  )
+);
 
 // Quick Test Task
-gulp.task('quickTest', ['_buildQuick'], function (callback) {
-  childProcess.exec('node spec/node-runner.js', function (error, stdout, stderr) {
-    console.log(stdout);
-    console.error(stderr);
-    callback(error);
+function quickTest(cb) {
+  _buildQuick(function() {
+    childProcess.exec('node spec/node-runner.js', function (error, stdout, stderr) {
+      console.log(stdout);
+      console.error(stderr);
+      cb(error);
+    });
   });
-});
-
+}
 // Test Task
-gulp.task('test', ['lint'], function (callback) {
-  childProcess.exec('node spec/node-runner.js', function (error, stdout, stderr) {
-    console.log(stdout);
-    callback(error);
+function test(cb) {
+  lint(function() {
+    childProcess.exec('node spec/node-runner.js', function (error, stdout, stderr) {
+      console.log(stdout);
+      cb(error);
+    });
   });
-});
-
+}
 // Coverage Task
-gulp.task('cover', function (callback) {
+function cover(cb) {
   childProcess.exec('istanbul cover spec/node-runner.js', function (error, stdout, stderr) {
     console.log(stdout);
     console.error(stderr);
-    callback(error);
+    cb(error);
   });
-});
-
+}
 // Spec Task
-gulp.task('spec', ['lint'], function (callback) {
-  setTimeout(function () {
-    childProcess.exec('node spec/node-make-spec-md.js', function (error, stdout, stderr) {
-      console.log(stdout);
-      callback(error);
-    });
-  }, 100); // Without this sometimes the exec runs before script is written/flushed ?
-});
+function spec(cb) {
+  lint(function() {
+    setTimeout(function () {
+      childProcess.exec('node spec/node-make-spec-md.js', function (error, stdout, stderr) {
+        console.log(stdout);
+        cb(error);
+      });
+    }, 100);
+  });
+}
 
-// Default & Travis CI Task
-gulp.task('default', ['test']);
-gulp.task('travis', ['test']);
+exports._buildLibQuick = _buildLibQuick;
+exports._buildSpecQuick = _buildSpecQuick;
+exports._buildQuick = _buildQuick;
+exports._buildLib = _buildLib;
+exports._buildLibChunk = _buildLibChunk;
+exports._buildSpec = _buildSpec;
+exports._buildSpecChunk = _buildSpecChunk;
+exports.build = build;
+exports._lintLib = _lintLib;
+exports._lintSpec = _lintSpec;
+exports.lint = lint;
+exports.quickTest = quickTest;
+exports.test = test;
+exports.cover = cover;
+exports.spec = spec;
+exports.default = test;
+exports.travis = test;

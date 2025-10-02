@@ -1651,7 +1651,7 @@ function Transport(location, callback) {
   self.initialConnect = true;
   self.location = location;
   if (self.location === '') self.location = 'http host';
-  self.socket = io.connect(location, {reconnection: false});
+  self.socket = io.connect(location, {reconnection: true});
   self.socket.on('connect', function () {
     self.connected = true;
     self.initialConnect = false;
